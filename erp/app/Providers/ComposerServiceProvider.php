@@ -1,0 +1,63 @@
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+
+use App\Repositories\OptionRepository;
+
+use App\Repositories\PageRepository;
+
+use App\Repositories\TaxRateRepository;
+
+class ComposerServiceProvider extends ServiceProvider
+{
+    /**
+     * 在容器內註冊所有綁定。
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        // 使用物件型態的視圖組件...
+        // view()->composer(
+        //     '*', 'App\Http\ViewComposers\PageComposer'
+        // );
+        // 使用閉包型態的視圖組件...
+        view()->composer('layouts.app', function ($view) {
+            $view->with('website_title', OptionRepository::getWebSiteTitle());
+            $view->with('WebRoute', PageRepository::getCurrentWebRoute());
+        });
+
+        $for_purchase_order = [
+            'purchase_orders.create',
+            'purchase_orders.edit',
+            'billsOfPurchase.create',
+            'billsOfPurchase.edit',
+        ];
+        view()->composer($for_purchase_order, function ($view) {
+            $view->with('settings', OptionRepository::getPurchaseOrderSettings());
+        });
+
+        //把單位渲染到stocks底下所有程式
+        $for_units = [
+            'stocks.create',
+            'stocks.edit',
+        ];
+        view()->composer($for_units, function ($view) {
+            //$view->with('ids', OptionRepository::getAllOptionsId('warehouses'));
+            $view->with('units', OptionRepository::getAllOptionsPair('units'));
+            $view->with('stock_classes', OptionRepository::getAllOptionsPair('stock_classes'));
+        });
+    }
+
+    /**
+     * 註冊服務提供者。
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
+}
