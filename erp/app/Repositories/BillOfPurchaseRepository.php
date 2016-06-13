@@ -14,9 +14,6 @@ class BillOfPurchaseRepository
 {
     protected $billOfPurchaseMaster;
     protected $billOfPurchaseDetail;
-
-    protected $columnsOfMaster;
-    protected $columnsOfDetail;
     /**
      * BillOfPurchaseRepository constructor.
      *
@@ -27,9 +24,6 @@ class BillOfPurchaseRepository
     {
         $this->billOfPurchaseMaster = $billOfPurchaseMaster;
         $this->billOfPurchaseDetail = $billOfPurchaseDetail;
-
-        $this->columnsOfMaster = $this->getTableColumnList($this->billOfPurchaseMaster);
-        $this->columnsOfDetail = $this->getTableColumnList($this->billOfPurchaseDetail);
     }
 
     /**
@@ -109,10 +103,11 @@ class BillOfPurchaseRepository
      */
     public function storeBillOfPurchaseMaster($billOfPurchaseMaster)
     {
-        $this->billOfPurchaseMaster = new BillOfPurchaseMaster;
+        $columnsOfMaster = $this->getTableColumnList($this->billOfPurchaseMaster);
 
+        $this->billOfPurchaseMaster = new BillOfPurchaseMaster;
         //判斷request傳來的欄位是否存在，有才存入此欄位數值
-        foreach($this->columnsOfMaster as $key) {
+        foreach($columnsOfMaster as $key) {
             if (isset($billOfPurchaseMaster[$key])) {
                 $this->billOfPurchaseMaster->{$key} = $billOfPurchaseMaster[$key];
             }
@@ -129,10 +124,12 @@ class BillOfPurchaseRepository
      */
     public function storeBillOfPurchaseDetail($billOfPurchaseDetail, $code)
     {
+        $columnsOfDetail = $this->getTableColumnList($this->billOfPurchaseDetail);
+
         $this->billOfPurchaseDetail = new BillOfPurchaseDetail;
         $this->billOfPurchaseDetail->master_code  = $code;
         //dd($billOfPurchaseDetail);
-        foreach ($this->columnsOfDetail as $key) {
+        foreach ($columnsOfDetail as $key) {
             //echo $key."<br>";
             if (isset($billOfPurchaseDetail[$key])) {
                 $this->billOfPurchaseDetail->{$key} = $billOfPurchaseDetail[$key];
@@ -150,12 +147,14 @@ class BillOfPurchaseRepository
      */
     public function updateBillOfPurchaseMaster($billOfPurchaseMaster, $code)
     {
+        $columnsOfMaster = $this->getTableColumnList($this->billOfPurchaseMaster);
+
         $this->billOfPurchaseMaster = $this->billOfPurchaseMaster
             ->where('code', $code)
             ->first();
 
         //有這個欄位才存入
-        foreach($this->columnsOfMaster as $key) {
+        foreach($columnsOfMaster as $key) {
             if (isset($billOfPurchaseMaster[$key])) {
                 $this->billOfPurchaseMaster->{$key} = $billOfPurchaseMaster[$key];
             }
@@ -170,10 +169,11 @@ class BillOfPurchaseRepository
      */
     public function updateBillOfPurchaseDetail($billOfPurchaseDetail, $code)
     {
+        $columnsOfDetail = $this->getTableColumnList($this->billOfPurchaseDetail);
 
         $this->billOfPurchaseDetail = new BillOfPurchaseDetail;
         $this->billOfPurchaseDetail->master_code  = $this->billOfPurchaseMaster->code;
-        foreach ($this->columnsOfDetail as $key2) {
+        foreach ($columnsOfDetail as $key2) {
             if (isset($billOfPurchaseDetail[$key2])) {
                 $this->billOfPurchaseDetail->{$key2} = $billOfPurchaseDetail[$key2];
             }

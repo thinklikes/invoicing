@@ -8,38 +8,31 @@ use App\Repositories\BillOfPurchaseRepository;
 
 use App\Repositories\WarehouseRepository;
 
-//use App\Http\Requests\ErpRequest;
+use App\Repositories\StockWarehouseRepository;
 
-use App\Http\Requests\RequestFactory;
+use App\Contracts\FormRequestInterface;
 
-use App\Http\Requests\RequestInterface;
-
-use App\Providers\BillOfPurchaseServiceProvider;
+use Cache;
 
 class BillOfPurchaseController extends Controller
 {
-    protected $serviceProvider;
     protected $billOfPurchaseRepository;
     protected $warehouseRepository;
     protected $stockWarehouseRepository;
-    protected $requestFactory;
-    protected $requestMethod = 'BillOfPurchaseRequest';
     /**
      * SupplierController constructor.
      *
      * @param SupplierRepository $supplierRepository
      */
     public function __construct(BillOfPurchaseRepository $billOfPurchaseRepository,
-        RequestFactory $requestFactory,
         WarehouseRepository $warehouseRepository,
-        BillOfPurchaseServiceProvider $billOfPurchaseServiceProvider)
+        StockWarehouseRepository $stockWarehouseRepository)
     {
         $this->billOfPurchaseRepository = $billOfPurchaseRepository;
-        $this->requestFactory           = $requestFactory;
         $this->warehouseRepository      = $warehouseRepository;
-        $this->requestFactory->create($this->requestMethod);
-        $this->serviceProvider = $billOfPurchaseServiceProvider;
-        //$this->stockWarehouseRepository = $this->app->make('StockWarehouseRepository');
+        $this->stockWarehouseRepository = $stockWarehouseRepository;
+
+        Cache::put('className', BillOfPurchaseController::class, 1);
     }
 
     /**
@@ -84,7 +77,7 @@ class BillOfPurchaseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(RequestInterface $request)
+    public function store(FormRequestInterface $request)
     {
         //抓出使用者輸入的資料，並排除一些不需要的資訊
         $billOfPurchaseMaster = $request->input('billOfPurchaseMaster');
@@ -92,8 +85,10 @@ class BillOfPurchaseController extends Controller
 
         $code = $billOfPurchaseMaster['code'];
 
+        //新增進貨單表頭
         $this->billOfPurchaseRepository->storeBillOfPurchaseMaster($billOfPurchaseMaster);
 
+        //新增進貨單表身
         foreach($billOfPurchaseDetail as $key => $value) {
             if ($value['quantity'] == 0 || $value['quantity'] == "") {
                 continue;
@@ -101,11 +96,18 @@ class BillOfPurchaseController extends Controller
             $this->billOfPurchaseRepository->storeBillOfPurchaseDetail(
                 $value, $code
             );
+            $this->stockWarehouseRepository->updateInventory(
+                $value['quantity'],
+                $value['stock_id'],
+                $billOfPurchaseMaster['warehouse_id']
+            );
         }
-        return redirect()->action(
+        return redirect()
+            ->action(
                 'BillOfPurchaseController@show',
                 ['code' => $code]
-            )->with('status', [0 => '進貨單已新增!']);
+            )
+            ->with('status', [0 => '進貨單已新增!']);
     }
 
     /**
@@ -181,7 +183,7 @@ class BillOfPurchaseController extends Controller
         $warehousesPair = $this->warehouseRepository->getAllWarehousesPair();
 
         return view('billsOfPurchase.edit', [
-            'code'                  => $code,
+            'code'                 => $code,
             'warehousesPair'       => $warehousesPair,
             'billOfPurchaseMaster' => $billOfPurchase['master'],
             'billOfPurchaseDetail' => $billOfPurchase['detail'],
@@ -195,7 +197,7 @@ class BillOfPurchaseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(RequestInterface $request, $code)
+    public function update(FormRequestInterface $request, $code)
     {
         $billOfPurchase = array();
         $billOfPurchaseMaster = $request->input('billOfPurchaseMaster');
@@ -218,7 +220,7 @@ class BillOfPurchaseController extends Controller
             );
         }
         return redirect()->action('BillOfPurchaseController@show', ['code' => $code])
-                            ->with('status', [0 => '進貨單已更新!']);
+            ->with('status', [0 => '進貨單已更新!']);
     }
 
     /**

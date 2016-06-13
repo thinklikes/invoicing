@@ -1,9 +1,13 @@
 @extends('layouts.app')
 
-@inject('SupplierRepository', 'App\Repositories\SupplierRepository')
-@inject('BarcodeGenerator', 'Picqer\Barcode\BarcodeGeneratorJPG')
+
 @section('content')
-    @foreach($SupplierRepository->getSuppliersOnePage([]) as $key => $value)
-    <p>{{ $value['name'] }} <img src="data:image/png;base64, {{ base64_encode($BarcodeGenerator->getBarcode($value['code'], $BarcodeGenerator::TYPE_CODE_128)) }}"></p>
-    @endforeach
+    <script type="text/javascript">
+        function isEnglishFileName() {
+            var fileName = document.getElementById('ja').value.split('.')[0];
+            return !fileName.match(/[^\x00-\xff]+/g);
+        }
+    </script>
+    <input id="ja" name="NewFile" type="file">
+    <button name="test" onclick="if(isEnglishFileName()) alert('test');" value="test">test</button>
 @endsection('content')

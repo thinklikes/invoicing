@@ -6,8 +6,6 @@ use App\StockWarehouse;
 
 use DB;
 
-use Schema;
-
 class StockWarehouseRepository
 {
     protected $stockWarehouse;
@@ -28,7 +26,7 @@ class StockWarehouseRepository
      */
     public function getAllRecordsOfStockWarehouseByStockId($stock_id)
     {
-        return $this->stockWarehouse->where('stock_id', $stock_id)->get());
+        return $this->stockWarehouse->where('stock_id', $stock_id)->get();
     }
 
     /**
@@ -37,7 +35,7 @@ class StockWarehouseRepository
      */
     public function getAllRecordsOfStockWarehouseByWarehouseId($warehouse_id)
     {
-        return $this->stockWarehouse->where('warehouse_id', $stock_id)->get());
+        return $this->stockWarehouse->where('warehouse_id', $stock_id)->get();
     }
 
     /**
@@ -74,9 +72,6 @@ class StockWarehouseRepository
      */
     public function updateInventory($inventory, $stock_id, $warehouse_id)
     {
-        //找出表頭資料表所有的欄位
-        $columns = $this->getTableColumnList($this->stockWarehouse);
-
         $this->stockWarehouse = $this->stockWarehouse
             ->where('stock_id', $stock_id)
             ->where('warehouse_id', $warehouse_id)

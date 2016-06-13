@@ -2,13 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Validator;
-
-use App\Http\Requests\Request;
-
-//use Illuminate\Contracts\Validation\Validator;
-//use Illuminate\Http\Request;
-
 class ErpRequest extends Request
 {
 

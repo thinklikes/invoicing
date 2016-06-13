@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Contracts;
 
-interface RequestInterface
+interface FormRequestInterface
 {
     /**
      * Get the validation rules that apply to the request.

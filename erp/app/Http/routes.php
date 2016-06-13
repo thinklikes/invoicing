@@ -13,9 +13,20 @@
 DB::enableQueryLog();
 
     Route::get('/test', function () {
-        //Session::put('test', 'test');
-        dd(App\Supplier::where('code', 'kkkk')->firstOrFail());
+        return view('layouts.test');
     });
+
+    Route::get('/providers_test', function () {
+        var_dump("from route");
+        //App::register('App\Providers\FormRequestServiceProvider');
+        $re = App::make('App\Http\Requests\FormRequestInterface');
+        //dd($supplier->getSupplierDetail(1));
+    });
+    // Route::get('/providers_test', function (SupplierRepository $supplier) {
+    //     var_dump("from route");
+    //     //$supplier = App::make('SupplierRepository');
+    //     dd($supplier->getSupplierDetail(1));
+    // });
 
 Route::auth();
 

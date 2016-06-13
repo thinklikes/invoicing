@@ -156,7 +156,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
-        //App\Providers\BillOfPurchaseServiceProvider::class,
+        App\Providers\FormRequestServiceProvider::class,
 
         //載入debuger的Provider：Barryvdh\Debugbar\ServiceProvider::class
         App\Providers\DebugerServiceProvider::class,

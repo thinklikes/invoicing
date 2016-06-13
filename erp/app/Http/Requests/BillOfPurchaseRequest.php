@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
+use App\Contracts\FormRequestInterface;
 
-class BillOfPurchaseRequest extends Request implements RequestInterface
+class BillOfPurchaseRequest extends Request implements FormRequestInterface
 {
     /**
      * Determine if the user is authorized to make this request.
