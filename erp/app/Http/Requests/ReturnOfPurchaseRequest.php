@@ -4,12 +4,11 @@ namespace App\Http\Requests;
 
 use App\Contracts\FormRequestInterface;
 
-class BillOfPurchaseRequest extends Request implements FormRequestInterface
+class ReturnOfPurchaseRequest extends Request implements FormRequestInterface
 {
-
-    protected $orderMasterInputName = 'billOfPurchaseMaster';
-    protected $orderDetailInputName = 'billOfPurchaseDetail';
-    protected $table_name           = 'bill_of_purchase_master';
+    protected $orderMasterInputName = 'returnOfPurchaseMaster';
+    protected $orderDetailInputName = 'returnOfPurchaseDetail';
+    protected $table_name           = 'return_of_purchase_master';
     /**
      * Determine if the user is authorized to make this request.
      *

@@ -98,15 +98,15 @@ $(function() {
                     <button type="button" id="detail_remove_' + new_id + '"><i class="fa fa-remove"></i></button>\
                 </td>\
                 <td>\
-                    <input type="text" id="detail_stock_code_' + new_id + '" name="' + order_name + 'Detail[' + new_id + '][stock_code]" size="10">\
-                    <input type="hidden" id="detail_stock_id_' + new_id + '" name="' + order_name + 'Detail[' + new_id + '][stock_id]">\
+                    <input type="text" id="detail_stock_code_' + new_id + '" name="' + app_name + 'Detail[' + new_id + '][stock_code]" size="10">\
+                    <input type="hidden" id="detail_stock_id_' + new_id + '" name="' + app_name + 'Detail[' + new_id + '][stock_id]">\
                 </td>\
                 <td>\
-                    <input type="text" id="detail_stock_name_' + new_id + '" name="' + order_name + 'Detail[' + new_id + '][stock_name]">\
+                    <input type="text" id="detail_stock_name_' + new_id + '" name="' + app_name + 'Detail[' + new_id + '][stock_name]">\
                 </td>\
-                <td><input type="text" id="detail_quantity_' + new_id + '" name="' + order_name + 'Detail[' + new_id + '][quantity]" style="text-align:right;" size="5"></td>\
-                <td><input type="text" id="detail_unit_' + new_id + '" name="' + order_name + 'Detail[' + new_id + '][unit]" readonly="" size="5"></td>\
-                <td><input type="text" id="detail_no_tax_price_' + new_id + '" name="' + order_name + 'Detail[' + new_id + '][no_tax_price]" style="text-align:right;" size="10"></td>\
+                <td><input type="text" id="detail_quantity_' + new_id + '" name="' + app_name + 'Detail[' + new_id + '][quantity]" style="text-align:right;" size="5"></td>\
+                <td><input type="text" id="detail_unit_' + new_id + '" name="' + app_name + 'Detail[' + new_id + '][unit]" readonly="" size="5"></td>\
+                <td><input type="text" id="detail_no_tax_price_' + new_id + '" name="' + app_name + 'Detail[' + new_id + '][no_tax_price]" style="text-align:right;" size="10"></td>\
                 <td><input type="text" id="detail_no_tax_amount_' + new_id + '" style="text-align:right;" size="10"></td>\
             </tr>';
         $('table#detail tbody').append(html);

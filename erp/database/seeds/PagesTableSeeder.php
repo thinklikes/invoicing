@@ -250,25 +250,49 @@ class PagesTableSeeder extends Seeder
             [
                 'name'       => '進貨單管理',
                 'level'      => 2,
-                'action'     => 'BillOfPurchaseController@index',
+                'action'     => 'Purchase\BillOfPurchaseController@index',
                 'enabled'    => 1,
             ],
             [
                 'name'       => '新增進貨單據',
                 'level'      => 3,
-                'action'     => 'BillOfPurchaseController@create',
+                'action'     => 'Purchase\BillOfPurchaseController@create',
                 'enabled'    => 1,
             ],
             [
                 'name'       => '檢視進貨單據',
                 'level'      => 3,
-                'action'     => 'BillOfPurchaseController@show',
+                'action'     => 'Purchase\BillOfPurchaseController@show',
                 'enabled'    => 1,
             ],
             [
                 'name'       => '維護進貨單據',
                 'level'      => 3,
-                'action'     => 'BillOfPurchaseController@edit',
+                'action'     => 'Purchase\BillOfPurchaseController@edit',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '進貨退回單管理',
+                'level'      => 2,
+                'action'     => 'ReturnOfPurchaseController@index',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '新增進貨退回單據',
+                'level'      => 3,
+                'action'     => 'ReturnOfPurchaseController@create',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '檢視進貨退回單據',
+                'level'      => 3,
+                'action'     => 'ReturnOfPurchaseController@show',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '維護進貨退回單據',
+                'level'      => 3,
+                'action'     => 'ReturnOfPurchaseController@edit',
                 'enabled'    => 1,
             ],
             [

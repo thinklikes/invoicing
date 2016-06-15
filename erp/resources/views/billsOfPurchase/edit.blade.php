@@ -2,6 +2,7 @@
 
 @inject('PublicPresenter', 'App\Presenters\PublicPresenter')
 @inject('OrderCalculator', 'App\Presenters\OrderCalculator')
+@inject('WarehousePresenter', 'App\Presenters\WarehousePresenter')
 
 @section('content')
         {{ $OrderCalculator->setOrderMaster($billOfPurchaseMaster) }}
@@ -10,7 +11,7 @@
         <script type="text/javascript">
             var supplier_url = '{{ url("/suppliers/json") }}';
             var stock_url    = '{{ url("/stocks/json") }}';
-            var app_name     = 'billsOfPurchase';
+            var app_name     = 'billOfPurchase';
 
             var _tax_rate       = {{ $settings->purchase_tax_rate }};
             var _quantity_round_off      = {{ $settings->quantity_round_off }};
@@ -27,7 +28,7 @@
             <table id="master" width="100%">
                 <tr>
                     <td>進貨日期</td>
-                    <td>{{ $PublicPresenter->getFormatDate($billOfPurchaseMaster->created_at) }}</td>
+                    <td>{{ $PublicPresenter->getFormatDate($created_at) }}</td>
                     <td>進貨單號</td>
                     <td><input type="text" name="billOfPurchaseMaster[code]" id="master_code" value="{{ $billOfPurchaseMaster['code']}}" readonly=""></td>
                     <td>發票號碼</td>
@@ -52,12 +53,7 @@
                     <td colspan="5">
                         <select name="billOfPurchaseMaster[warehouse_id]" id="master_warehouse_id">
                             <option></option>
-    @foreach ($warehousesPair as $id => $name)
-                            <option value="{{ $id }}"
-                            {{ $billOfPurchaseMaster['warehouse_id'] == $id ? "selected" : ""}}>
-                                {{ $name }}
-                            </option>
-    @endforeach
+                            {!! $WarehousePresenter->renderOptions($billOfPurchaseMaster['warehouse_id']) !!}
                         </select>
                     </td>
                 </tr>

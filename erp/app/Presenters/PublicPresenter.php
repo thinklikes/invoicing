@@ -18,6 +18,11 @@ class PublicPresenter
         return $date->format('Y-m-d');
     }
 
+    public function getNewDate()
+    {
+        return date('Y-m-d');
+    }
+
     public function getTaxComment($tax_rate_code)
     {
         return ($tax_rate_code == "A") ? "稅外加" : "稅內含";

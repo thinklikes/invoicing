@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BillOfPurchaseDetail extends Model
+class ReturnOfPurchaseDetail extends Model
 {
     protected $table = 'bill_of_purchase_detail';
 
