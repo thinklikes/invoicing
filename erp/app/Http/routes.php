@@ -13,7 +13,8 @@
 DB::enableQueryLog();
 
     Route::get('/test', function () {
-        return view('layouts.test');
+        $page = new App\Page\PagePresenter(new App\Page\PageRepository(new App\Page\Page));
+        return $page->getCurrentWebRoute("App\Http\Controllers\PageController@portal");
     });
 
     Route::get('/providers_test', function () {
@@ -37,61 +38,51 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/erp', 'PageController@index');
 
-    Route::get('/base', 'PageController@base');
+    Route::get('/basic', 'PageController@basic');
 
     Route::get('/purchase', 'PageController@purchase');
 
     Route::get('/sale', 'PageController@sale');
 
-    //系統設定維護
-    Route::get('/system_configs', [
-        'uses' => 'SystemConfigController@index',
-        'as'   => 'system_configs.index',
-    ]);
-    Route::get('/system_configs/edit', [
-        'uses' => 'SystemConfigController@edit',
-        'as' => 'system_configs.edit'
-    ]);
-    Route::put('/system_configs/update', [
-        'uses' => 'SystemConfigController@update',
-        'as' => 'system_configs.update'
-    ]);
-
-    //客戶資料管理
-    Route::resource('/customers', 'CustomerController');
-
-    //供應商資料管理
-    Route::post('/suppliers/json', 'SupplierController@json');
-    Route::resource('/suppliers', 'SupplierController');
-
-    //料品資料管理
-    Route::post('/stocks/json', 'StockController@json');
-    Route::resource('/stocks', 'StockController');
-
-    //稅別資料管理
-    Route::resource('/tax_rates', 'TaxRateController');
-
-    //料品單位管理
-    Route::resource('/units', 'UnitController');
-
-    //倉庫資料管理
-    Route::resource('/stock_classes', 'StockClassController');
-
-    //付款方式管理
-    Route::resource('/pay_ways', 'PayWayController');
-
-    //倉庫資料管理
-    Route::resource('/warehouses', 'WarehouseController');
-
     //採購單作業
     Route::resource('/purchase_orders', 'PurchaseOrderController');
 
-    //進貨單作業
-    Route::resource('/billsOfPurchase', 'BillOfPurchaseController');
+    Route::group(['namespace' => 'Basic'], function() {
+        //系統設定維護
+        Route::get('/system_configs', 'SystemConfigController@index');
+        Route::get('/system_configs/edit', 'SystemConfigController@edit');
+        Route::put('/system_configs/update', 'SystemConfigController@update');
 
-    //進貨單作業
-    Route::resource('/billsOfPurchase', 'Purchase\BillOfPurchaseController');
+        //客戶資料管理
+        Route::resource('/customers', 'CustomerController');
 
+        //供應商資料管理
+        Route::post('/suppliers/json', 'SupplierController@json');
+        Route::resource('/suppliers', 'SupplierController');
+
+        //料品資料管理
+        Route::post('/stocks/json', 'StockController@json');
+        Route::resource('/stocks', 'StockController');
+
+        //料品單位管理
+        Route::resource('/units', 'UnitController');
+
+        //倉庫資料管理
+        Route::resource('/stock_classes', 'StockClassController');
+
+        //付款方式管理
+        Route::resource('/pay_ways', 'PayWayController');
+
+        //倉庫資料管理
+        Route::resource('/warehouses', 'WarehouseController');
+
+    });
+    Route::group(['namespace' => 'Purchase'], function() {
+
+        //進貨單作業
+        Route::resource('/billsOfPurchase', 'BillOfPurchaseController');
+
+    });
     //進貨退回單作業
     Route::resource('/returnsOfPurchase', 'ReturnOfPurchaseController');
 

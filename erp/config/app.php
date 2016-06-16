@@ -159,7 +159,7 @@ return [
         App\Providers\FormRequestServiceProvider::class,
 
         //載入debuger的Provider：Barryvdh\Debugbar\ServiceProvider::class
-        App\Providers\DebugerServiceProvider::class,
+        //App\Providers\DebugerServiceProvider::class,
     ],
 
     /*

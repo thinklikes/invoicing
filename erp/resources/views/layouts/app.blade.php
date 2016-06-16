@@ -1,3 +1,5 @@
+@inject('page', 'App\Page\PagePresenter')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,7 +80,7 @@
             <div class="col-md-8 col-md-offset-0">
                 <div class="panel panel-default">
 @if(Auth::check())
-                    <div class="panel-heading">{!! $WebRoute !!}</div>
+                    <div class="panel-heading">{!! $page->getCurrentWebRoute(Route::currentRouteAction()) !!}</div>
 @else
                     <div class="panel-heading">login</div>
 @endif
@@ -87,14 +89,14 @@
 @if (session('status'))
                             <div class="alert alert-success">
                                 <ul>
-    @foreach (session('status') as $status)
+    @foreach (session('status')->all() as $status)
                                     <li>{{ $status }}</li>
     @endforeach
                                 </ul>
                             </div>
 @endif
 
- @if (count($errors) > 0)
+@if (count($errors) > 0)
                             <div class="alert alert-danger">
                                 <ul>
     @foreach ($errors->all() as $error)

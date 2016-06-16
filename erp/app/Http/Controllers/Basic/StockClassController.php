@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Basic\Controllers;
 
 use Illuminate\Http\Request;
 
@@ -8,9 +8,9 @@ use App\Repositories\OptionRepository;
 
 use App\Http\Requests\ErpRequest;
 
-class UnitController extends Controller
+class StockClassController extends Controller
 {
-    private $option_class = 'units';
+    private $option_class = 'stock_classes';
     /**
      * Display a listing of the resource.
      *
@@ -18,8 +18,8 @@ class UnitController extends Controller
      */
     public function index()
     {
-        $units = OptionRepository::getOptionsOnePage($this->option_class);
-        return view('units.index', ['units' => $units]);
+        $stock_classes = OptionRepository::getOptionsOnePage($this->option_class);
+        return view('stock_classes.index', ['stock_classes' => $stock_classes]);
     }
 
     /**
@@ -30,9 +30,9 @@ class UnitController extends Controller
     public function create(Request $request)
     {
         //找出之前輸入的資料
-        $unit = $request->old('unit');
+        $stock_class = $request->old('stock_class');
         //if(count($request->old()) > 0) dd($request->old());
-        return view('units.create', ['unit' => $unit]);
+        return view('stock_classes.create', ['stock_class' => $stock_class]);
     }
 
     /**
@@ -44,10 +44,10 @@ class UnitController extends Controller
     public function store(ErpRequest $request)
     {
         //抓出使用者輸入的資料
-        $unit = $request->input('unit');
-        $new_id = OptionRepository::storeOption($this->option_class, $unit);
-        return redirect()->action('UnitController@show', ['id' => $new_id])
-                            ->with('status', [0 => '料品單位已新增!']);
+        $stock_class = $request->input('stock_class');
+        $new_id = OptionRepository::storeOption($this->option_class, $stock_class);
+        return redirect()->action('StockClassController@show', ['id' => $new_id])
+                            ->with('status', [0 => '料品類別已新增!']);
     }
 
     /**
@@ -58,8 +58,8 @@ class UnitController extends Controller
      */
     public function show($id)
     {
-        $unit = OptionRepository::getOptionDetail($this->option_class, $id);
-        return view('units.show', ['id' => $id, 'unit' => $unit]);
+        $stock_class = OptionRepository::getOptionDetail($this->option_class, $id);
+        return view('stock_classes.show', ['id' => $id, 'stock_class' => $stock_class]);
     }
 
     /**
@@ -70,12 +70,12 @@ class UnitController extends Controller
      */
     public function edit($id, Request $request)
     {
-        if (count($request->old('unit')) > 0) {
-            $unit = $request->old('unit');
+        if (count($request->old('stock_class')) > 0) {
+            $stock_class = $request->old('stock_class');
         } else {
-            $unit = OptionRepository::getOptionDetail($this->option_class, $id);
+            $stock_class = OptionRepository::getOptionDetail($this->option_class, $id);
         }
-        return view('units.edit', ['id' => $id, 'unit' => $unit]);
+        return view('stock_classes.edit', ['id' => $id, 'stock_class' => $stock_class]);
     }
 
     /**
@@ -87,10 +87,10 @@ class UnitController extends Controller
      */
     public function update(ErpRequest $request, $id)
     {
-        $unit = $request->input('unit');
-        OptionRepository::updateOption($this->option_class, $unit, $id);
-        return redirect()->action('UnitController@show', ['id' => $id])
-                            ->with('status', [0 => '料品單位已更新!']);
+        $stock_class = $request->input('stock_class');
+        OptionRepository::updateOption($this->option_class, $stock_class, $id);
+        return redirect()->action('StockClassController@show', ['id' => $id])
+                            ->with('status', [0 => '料品類別已更新!']);
     }
 
     /**
@@ -102,7 +102,7 @@ class UnitController extends Controller
     public function destroy($id)
     {
         OptionRepository::deleteOption($this->option_class, $id);
-        return redirect()->action('UnitController@index')
-                            ->with('status', [0 => '料品單位已刪除!']);
+        return redirect()->action('StockClassController@index')
+                            ->with('status', [0 => '料品類別已刪除!']);
     }
 }

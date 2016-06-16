@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Purchase;
+namespace App\Purchase\BillOfPurchase;
 
 //use App\Purchase\BillOfPurchaseMaster;
 
@@ -35,7 +35,7 @@ class BillOfPurchaseRepository
      * @param  Eloquent $obj 表頭或表身的Eloquent
      * @return array      all columns
      */
-    public function getTableColumnList($obj)
+    private function getTableColumnList($obj)
     {
         return Schema::getColumnListing($obj->getTable());
         //return $this->OrderMaster->getTable();
@@ -65,7 +65,7 @@ class BillOfPurchaseRepository
      */
     public function getOrdersOnePage($ordersPerPage)
     {
-        return $this->OrderMaster->paginate($ordersPerPage);
+        return $this->OrderMaster->orderBy('id', 'desc')->paginate($ordersPerPage);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Basic\Controllers;
 
 use Illuminate\Http\Request;
 
@@ -8,9 +8,9 @@ use App\Repositories\OptionRepository;
 
 use App\Http\Requests\ErpRequest;
 
-class StockClassController extends Controller
+class PayWayController extends Controller
 {
-    private $option_class = 'stock_classes';
+    private $option_class = 'pay_ways';
     /**
      * Display a listing of the resource.
      *
@@ -18,8 +18,8 @@ class StockClassController extends Controller
      */
     public function index()
     {
-        $stock_classes = OptionRepository::getOptionsOnePage($this->option_class);
-        return view('stock_classes.index', ['stock_classes' => $stock_classes]);
+        $pay_ways = OptionRepository::getOptionsOnePage($this->option_class);
+        return view('pay_ways.index', ['pay_ways' => $pay_ways]);
     }
 
     /**
@@ -30,9 +30,9 @@ class StockClassController extends Controller
     public function create(Request $request)
     {
         //找出之前輸入的資料
-        $stock_class = $request->old('stock_class');
+        $pay_way = $request->old('pay_way');
         //if(count($request->old()) > 0) dd($request->old());
-        return view('stock_classes.create', ['stock_class' => $stock_class]);
+        return view('pay_ways.create', ['pay_way' => $pay_way]);
     }
 
     /**
@@ -44,10 +44,10 @@ class StockClassController extends Controller
     public function store(ErpRequest $request)
     {
         //抓出使用者輸入的資料
-        $stock_class = $request->input('stock_class');
-        $new_id = OptionRepository::storeOption($this->option_class, $stock_class);
-        return redirect()->action('StockClassController@show', ['id' => $new_id])
-                            ->with('status', [0 => '料品類別已新增!']);
+        $pay_way = $request->input('pay_way');
+        $new_id = OptionRepository::storeOption($this->option_class, $pay_way);
+        return redirect()->action('PayWayController@show', ['id' => $new_id])
+                            ->with('status', [0 => '單位資料已新增!']);
     }
 
     /**
@@ -58,8 +58,8 @@ class StockClassController extends Controller
      */
     public function show($id)
     {
-        $stock_class = OptionRepository::getOptionDetail($this->option_class, $id);
-        return view('stock_classes.show', ['id' => $id, 'stock_class' => $stock_class]);
+        $pay_way = OptionRepository::getOptionDetail($this->option_class, $id);
+        return view('pay_ways.show', ['id' => $id, 'pay_way' => $pay_way]);
     }
 
     /**
@@ -70,12 +70,12 @@ class StockClassController extends Controller
      */
     public function edit($id, Request $request)
     {
-        if (count($request->old('stock_class')) > 0) {
-            $stock_class = $request->old('stock_class');
+        if (count($request->old('pay_way')) > 0) {
+            $pay_way = $request->old('pay_way');
         } else {
-            $stock_class = OptionRepository::getOptionDetail($this->option_class, $id);
+            $pay_way = OptionRepository::getOptionDetail($this->option_class, $id);
         }
-        return view('stock_classes.edit', ['id' => $id, 'stock_class' => $stock_class]);
+        return view('pay_ways.edit', ['id' => $id, 'pay_way' => $pay_way]);
     }
 
     /**
@@ -87,10 +87,10 @@ class StockClassController extends Controller
      */
     public function update(ErpRequest $request, $id)
     {
-        $stock_class = $request->input('stock_class');
-        OptionRepository::updateOption($this->option_class, $stock_class, $id);
-        return redirect()->action('StockClassController@show', ['id' => $id])
-                            ->with('status', [0 => '料品類別已更新!']);
+        $pay_way = $request->input('pay_way');
+        OptionRepository::updateOption($this->option_class, $pay_way, $id);
+        return redirect()->action('PayWayController@show', ['id' => $id])
+                            ->with('status', [0 => '單位資料已更新!']);
     }
 
     /**
@@ -102,7 +102,7 @@ class StockClassController extends Controller
     public function destroy($id)
     {
         OptionRepository::deleteOption($this->option_class, $id);
-        return redirect()->action('StockClassController@index')
-                            ->with('status', [0 => '料品類別已刪除!']);
+        return redirect()->action('PayWayController@index')
+                            ->with('status', [0 => '單位資料已刪除!']);
     }
 }

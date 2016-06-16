@@ -35,7 +35,7 @@ class PageController extends Controller
             ->get();
         return view('home', ['pages' => $pages]);
     }
-    public function base()
+    public function basic()
     {
         $parent_code = Page::where('action', 'PageController@base')->value('code');
         $pages = Page::where('level', 2)

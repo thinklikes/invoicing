@@ -26,7 +26,6 @@ class ComposerServiceProvider extends ServiceProvider
         // 使用閉包型態的視圖組件...
         view()->composer('layouts.app', function ($view) {
             $view->with('website_title', OptionRepository::getWebSiteTitle());
-            $view->with('WebRoute', PageRepository::getCurrentWebRoute());
         });
 
         $for_purchase_order = [

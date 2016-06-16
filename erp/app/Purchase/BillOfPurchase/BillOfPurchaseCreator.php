@@ -1,8 +1,9 @@
 <?php
-namespace App\Purchase;
+namespace App\Purchase\BillOfPurchase;
 
 //use App\Purchase\BillOfPurchaseRepository;
 use App\Repositories\StockWarehouseRepository;
+use Illuminate\Support\MessageBag;
 
 class BillOfPurchaseCreator
 {
@@ -17,14 +18,14 @@ class BillOfPurchaseCreator
         $this->stockWarehouseRepository = $stockWarehouseRepository;
     }
 
-    public function create($orderMaster, $orderDetail)
+    public function create($listener, $orderMaster, $orderDetail)
     {
-        $bool = true;
+        $isCreated = true;
 
         $code = $orderMaster['code'];
 
         //新增進貨單表頭
-        $bool = $bool && $this->OrderRepository->storeOrderMaster($orderMaster);
+        $isCreated = $isCreated && $this->OrderRepository->storeOrderMaster($orderMaster);
 
         //新增進貨單表身
         foreach($orderDetail as $key => $value) {
@@ -32,7 +33,7 @@ class BillOfPurchaseCreator
                 continue;
             }
             //存入表身
-            $bool = $bool && $this->OrderRepository->storeOrderDetail(
+            $isCreated = $isCreated && $this->OrderRepository->storeOrderDetail(
                 $value, $code
             );
             //更新倉庫數量
@@ -42,6 +43,13 @@ class BillOfPurchaseCreator
                 $orderMaster['warehouse_id']
             );
         }
-        return $bool;
+        if (!$isCreated) {
+            return $listener->orderCreatedErrors(
+                new MessageBag(['進貨單開單失敗!'])
+            );
+        }
+        return $listener->orderCreated(
+            new MessageBag(['進貨單已新增!']), $code
+        );
     }
 }

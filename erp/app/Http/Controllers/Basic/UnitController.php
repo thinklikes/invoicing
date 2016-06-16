@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Basic\Controllers;
 
 use Illuminate\Http\Request;
 
@@ -8,9 +8,9 @@ use App\Repositories\OptionRepository;
 
 use App\Http\Requests\ErpRequest;
 
-class PayWayController extends Controller
+class UnitController extends Controller
 {
-    private $option_class = 'pay_ways';
+    private $option_class = 'units';
     /**
      * Display a listing of the resource.
      *
@@ -18,8 +18,8 @@ class PayWayController extends Controller
      */
     public function index()
     {
-        $pay_ways = OptionRepository::getOptionsOnePage($this->option_class);
-        return view('pay_ways.index', ['pay_ways' => $pay_ways]);
+        $units = OptionRepository::getOptionsOnePage($this->option_class);
+        return view('units.index', ['units' => $units]);
     }
 
     /**
@@ -30,9 +30,9 @@ class PayWayController extends Controller
     public function create(Request $request)
     {
         //找出之前輸入的資料
-        $pay_way = $request->old('pay_way');
+        $unit = $request->old('unit');
         //if(count($request->old()) > 0) dd($request->old());
-        return view('pay_ways.create', ['pay_way' => $pay_way]);
+        return view('units.create', ['unit' => $unit]);
     }
 
     /**
@@ -44,10 +44,10 @@ class PayWayController extends Controller
     public function store(ErpRequest $request)
     {
         //抓出使用者輸入的資料
-        $pay_way = $request->input('pay_way');
-        $new_id = OptionRepository::storeOption($this->option_class, $pay_way);
-        return redirect()->action('PayWayController@show', ['id' => $new_id])
-                            ->with('status', [0 => '單位資料已新增!']);
+        $unit = $request->input('unit');
+        $new_id = OptionRepository::storeOption($this->option_class, $unit);
+        return redirect()->action('UnitController@show', ['id' => $new_id])
+                            ->with('status', [0 => '料品單位已新增!']);
     }
 
     /**
@@ -58,8 +58,8 @@ class PayWayController extends Controller
      */
     public function show($id)
     {
-        $pay_way = OptionRepository::getOptionDetail($this->option_class, $id);
-        return view('pay_ways.show', ['id' => $id, 'pay_way' => $pay_way]);
+        $unit = OptionRepository::getOptionDetail($this->option_class, $id);
+        return view('units.show', ['id' => $id, 'unit' => $unit]);
     }
 
     /**
@@ -70,12 +70,12 @@ class PayWayController extends Controller
      */
     public function edit($id, Request $request)
     {
-        if (count($request->old('pay_way')) > 0) {
-            $pay_way = $request->old('pay_way');
+        if (count($request->old('unit')) > 0) {
+            $unit = $request->old('unit');
         } else {
-            $pay_way = OptionRepository::getOptionDetail($this->option_class, $id);
+            $unit = OptionRepository::getOptionDetail($this->option_class, $id);
         }
-        return view('pay_ways.edit', ['id' => $id, 'pay_way' => $pay_way]);
+        return view('units.edit', ['id' => $id, 'unit' => $unit]);
     }
 
     /**
@@ -87,10 +87,10 @@ class PayWayController extends Controller
      */
     public function update(ErpRequest $request, $id)
     {
-        $pay_way = $request->input('pay_way');
-        OptionRepository::updateOption($this->option_class, $pay_way, $id);
-        return redirect()->action('PayWayController@show', ['id' => $id])
-                            ->with('status', [0 => '單位資料已更新!']);
+        $unit = $request->input('unit');
+        OptionRepository::updateOption($this->option_class, $unit, $id);
+        return redirect()->action('UnitController@show', ['id' => $id])
+                            ->with('status', [0 => '料品單位已更新!']);
     }
 
     /**
@@ -102,7 +102,7 @@ class PayWayController extends Controller
     public function destroy($id)
     {
         OptionRepository::deleteOption($this->option_class, $id);
-        return redirect()->action('PayWayController@index')
-                            ->with('status', [0 => '單位資料已刪除!']);
+        return redirect()->action('UnitController@index')
+                            ->with('status', [0 => '料品單位已刪除!']);
     }
 }
