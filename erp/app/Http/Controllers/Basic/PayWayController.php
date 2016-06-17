@@ -1,16 +1,21 @@
 <?php
 
-namespace App\Http\Basic\Controllers;
+namespace App\Http\Controllers\Basic;
 
 use Illuminate\Http\Request;
-
 use App\Repositories\OptionRepository;
+use App\Contracts\FormRequestInterface;
+use App\Http\Controllers\BasicController;
 
-use App\Http\Requests\ErpRequest;
-
-class PayWayController extends Controller
+class PayWayController extends BasicController
 {
     private $option_class = 'pay_ways';
+
+    public function __construct()
+    {
+        $this->setFullClassName();
+    }
+    private $className    = 'PayWayController';
     /**
      * Display a listing of the resource.
      *
@@ -41,13 +46,14 @@ class PayWayController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ErpRequest $request)
+    public function store(FormRequestInterface $request)
     {
         //抓出使用者輸入的資料
         $pay_way = $request->input('pay_way');
         $new_id = OptionRepository::storeOption($this->option_class, $pay_way);
-        return redirect()->action('PayWayController@show', ['id' => $new_id])
-                            ->with('status', [0 => '單位資料已新增!']);
+        return redirect()->action(
+                "$this->className@show", ['id' => $new_id])
+            ->with('status', [0 => '單位資料已新增!']);
     }
 
     /**
@@ -85,12 +91,13 @@ class PayWayController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ErpRequest $request, $id)
+    public function update(FormRequestInterface $request, $id)
     {
         $pay_way = $request->input('pay_way');
         OptionRepository::updateOption($this->option_class, $pay_way, $id);
-        return redirect()->action('PayWayController@show', ['id' => $id])
-                            ->with('status', [0 => '單位資料已更新!']);
+        return redirect()->action(
+                "$this->className@show", ['id' => $id])
+            ->with('status', [0 => '單位資料已更新!']);
     }
 
     /**
@@ -102,7 +109,8 @@ class PayWayController extends Controller
     public function destroy($id)
     {
         OptionRepository::deleteOption($this->option_class, $id);
-        return redirect()->action('PayWayController@index')
-                            ->with('status', [0 => '單位資料已刪除!']);
+        return redirect()->action(
+                "$this->className@index")
+            ->with('status', [0 => '單位資料已刪除!']);
     }
 }

@@ -32,20 +32,25 @@ class FormRequestServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $requestMethod = '';
-        $className = Config::get('className');
-        switch ($className) {
-            case 'BillOfPurchaseController':
-                $requestMethod = 'BillOfPurchaseRequest';
-                break;
-            case 'ReturnOfPurchaseController':
-                $requestMethod = 'ReturnOfPurchaseRequest';
-                break;
-        }
-        if ($requestMethod != '')
-        //將FormRequestInterface綁定BillOfPurchaseRequest
-        $this->app->bind('App\Contracts\FormRequestInterface',
-            'App\Http\Requests\\'.$requestMethod);
+        //將FormRequestInterface綁定Request
+        $this->app->bind(
+            'App\Contracts\FormRequestInterface',
+            function ($app, $param) {
+                $requestMethod = '';
+                switch ($param['className']) {
+                    case 'Purchase\BillOfPurchaseController':
+                        $requestMethod = 'App\Http\Requests\BillOfPurchaseRequest';
+                        break;
+                    case 'ReturnOfPurchaseController':
+                        $requestMethod = 'App\Http\Requests\ReturnOfPurchaseRequest';
+                        break;
+                    default:
+                        $requestMethod = 'App\Http\Requests\ErpRequest';
+                        break;
+                }
+                return new $requestMethod;
+            }
+        );
     }
 
     /**

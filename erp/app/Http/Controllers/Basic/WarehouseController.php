@@ -1,15 +1,18 @@
 <?php
 
-namespace App\Http\Basic\Controllers;
+namespace App\Http\Controllers\Basic;
 
 use Illuminate\Http\Request;
-
 use App\Repositories\WarehouseRepository;
+use App\Contracts\FormRequestInterface;
+use App\Http\Controllers\BasicController;
 
-use App\Http\Requests\ErpRequest;
-
-class WarehouseController extends Controller
+class WarehouseController extends BasicController
 {
+    public function __construct()
+    {
+        $this->setFullClassName();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -40,12 +43,12 @@ class WarehouseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ErpRequest $request)
+    public function store(FormRequestInterface $request)
     {
         //抓出使用者輸入的資料
         $warehouse = $request->input('warehouse');
         $new_id = WarehouseRepository::storeWarehouse($warehouse);
-        return redirect()->action('WarehouseController@show', ['id' => $new_id])
+        return redirect()->action("$this->className@show", ['id' => $new_id])
                             ->with('status', [0 => '倉庫資料已新增!']);
     }
 
@@ -84,11 +87,11 @@ class WarehouseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ErpRequest $request, $id)
+    public function update(FormRequestInterface $request, $id)
     {
         $warehouse = $request->input('warehouse');
         WarehouseRepository::updateWarehouse($warehouse, $id);
-        return redirect()->action('WarehouseController@show', ['id' => $id])
+        return redirect()->action("$this->className@show", ['id' => $id])
                             ->with('status', [0 => '倉庫資料已更新!']);
     }
 
@@ -101,7 +104,7 @@ class WarehouseController extends Controller
     public function destroy($id)
     {
         WarehouseRepository::deleteWarehouse($id);
-        return redirect()->action('WarehouseController@index')
+        return redirect()->action("$this->className@index")
                             ->with('status', [0 => '倉庫資料已刪除!']);
     }
 }

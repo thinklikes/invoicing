@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Basic\Controllers;
+namespace App\Http\Controllers\Basic;
 
 use Illuminate\Http\Request;
-
 use App\Repositories\SupplierRepository;
+use App\Contracts\FormRequestInterface;
+use App\Http\Controllers\BasicController;
 
-use App\Http\Requests\ErpRequest;
-
-class SupplierController extends Controller
+class SupplierController extends BasicController
 {
     protected $supplierRepository;
+
     /**
      * SupplierController constructor.
      *
@@ -19,6 +19,7 @@ class SupplierController extends Controller
     public function __construct(SupplierRepository $supplierRepository)
     {
         $this->supplierRepository = $supplierRepository;
+        $this->setFullClassName();
     }
     /**
      * Display a listing of the resource in JSON.
@@ -62,12 +63,12 @@ class SupplierController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ErpRequest $request)
+    public function store(FormRequestInterface $request)
     {
         //抓出使用者輸入的資料
         $supplier = $request->input('supplier');
         $new_id = $this->supplierRepository->storeSupplier($supplier);
-        return redirect()->action('SupplierController@show', ['id' => $new_id])
+        return redirect()->action("$this->className@show", ['id' => $new_id])
                             ->with('status', [0 => '供應商資料已新增!']);
     }
 
@@ -106,11 +107,11 @@ class SupplierController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ErpRequest $request, $id)
+    public function update(FormRequestInterface $request, $id)
     {
         $supplier = $request->input('supplier');
         $this->supplierRepository->updateSupplier($supplier, $id);
-        return redirect()->action('SupplierController@show', ['id' => $id])
+        return redirect()->action("$this->className@show", ['id' => $id])
                             ->with('status', [0 => '供應商資料已更新!']);
     }
 
@@ -123,7 +124,7 @@ class SupplierController extends Controller
     public function destroy($id)
     {
         $this->supplierRepository->deleteSupplier($id);
-        return redirect()->action('SupplierController@index')
+        return redirect()->action("$this->className@index")
                             ->with('status', [0 => '供應商資料已刪除!']);
     }
 }

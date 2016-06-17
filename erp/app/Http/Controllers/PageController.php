@@ -5,9 +5,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-use App\Page;
-
-use Session;
+use App\Page\Page;
 
 use Auth;
 
@@ -22,7 +20,6 @@ class PageController extends Controller
     {
         session_start();
         $_SESSION['MM_Username'] = Auth::user()->name;
-
     }
     public function portal()
     {
@@ -37,7 +34,7 @@ class PageController extends Controller
     }
     public function basic()
     {
-        $parent_code = Page::where('action', 'PageController@base')->value('code');
+        $parent_code = Page::where('action', 'PageController@basic')->value('code');
         $pages = Page::where('level', 2)
             ->where('enabled', 1)
             ->where('code', 'like', $parent_code.'%')

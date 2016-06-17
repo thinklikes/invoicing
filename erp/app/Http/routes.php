@@ -13,8 +13,9 @@
 DB::enableQueryLog();
 
     Route::get('/test', function () {
-        $page = new App\Page\PagePresenter(new App\Page\PageRepository(new App\Page\Page));
-        return $page->getCurrentWebRoute("App\Http\Controllers\PageController@portal");
+        $page = new App\Http\Requests\BillOfPurchaseRequest;
+        //$page = new App\Http\Controllers\Purchase\BillOfPurchaseController;
+        return $page->rules();
     });
 
     Route::get('/providers_test', function () {

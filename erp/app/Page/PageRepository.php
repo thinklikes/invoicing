@@ -12,11 +12,13 @@ class PageRepository
     {
         $this->page = $page;
     }
-    public function getPageCode($namespace, $action)
+    public function getPageCode($action)
     {
+        if (empty($action)) {
+            return null;
+        }
         return $this->page->select('code')
-                ->where('namespace', $namespace)
-                ->where('action', $action)
-                ->value('code');
+            ->where('action', $action)
+            ->value('code');
     }
 }

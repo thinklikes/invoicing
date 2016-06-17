@@ -2,27 +2,26 @@
 
 namespace App\Http\Controllers\Purchase;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App;
+use App\Contracts\FormRequestInterface;
+use App\Http\Controllers\BasicController;
 use App\Purchase\BillOfPurchase\BillOfPurchaseRepository as OrderRepository;
 use App\Purchase\BillOfPurchase\BillOfPurchaseCreator as OrderCreator;
-//use App\Purchase\BillOfPurchaseUpdater;
-//use App\Purchase\BillOfPurchaseDeleter;
+use App\Purchase\BillOfPurchase\BillOfPurchaseUpdater as OrderUpdater;
+use App\Purchase\BillOfPurchase\BillOfPurchaseDeleter as OrderDeleter;
 use Config;
-use Carbon\Carbon;
-use App\Contracts\FormRequestInterface;
+use Illuminate\Http\Request;
 
-class BillOfPurchaseController extends Controller
+class BillOfPurchaseController extends BasicController
 {
     protected $orderRepository;
     protected $orderCreator;
     protected $orderUpdater;
     protected $orderDeleter;
-    protected $orderMasterInputName = 'billOfPurchaseMaster';
-    protected $orderDetailInputName = 'billOfPurchaseDetail';
-    protected $className = 'BillOfPurchaseController';
-    protected $routeName = 'billsOfPurchase';
-    protected $ordersPerPage = 15;
+    private $orderMasterInputName = 'billOfPurchaseMaster';
+    private $orderDetailInputName = 'billOfPurchaseDetail';
+    private $routeName = 'billsOfPurchase';
+    private $ordersPerPage = 15;
     /**
      * SupplierController constructor.
      *
@@ -37,8 +36,7 @@ class BillOfPurchaseController extends Controller
         $this->orderCreator    = $orderCreator;
         //$this->orderUpdater    = $orderUpdater;
         //$this->orderDeleter    = $orderDeleter;
-
-        Config::set('className', $this->className);
+        $this->setFullClassName();
     }
 
     /**
@@ -73,8 +71,12 @@ class BillOfPurchaseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(FormRequestInterface $request)
+    public function store()
     {
+        $request = App::make(
+            'App\Contracts\FormRequestInterface',
+            ['className' => $this->className]
+        );
         //抓出使用者輸入的資料
         $orderMaster = $request->input($this->orderMasterInputName);
         $orderDetail = $request->input($this->orderDetailInputName);

@@ -149,10 +149,10 @@ return [
             'name' => [
                 'required'       => '我們需要知道料品名稱',
             ],
-            'netWeight' => [
+            'net_weight' => [
                 'required'       => '我們需要知道料品淨重',
             ],
-            'grossWeight' => [
+            'gross_weight' => [
                 'required'       => '我們需要知道料品毛重',
             ],
         ],

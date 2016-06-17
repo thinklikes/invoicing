@@ -1,16 +1,20 @@
 <?php
 
-namespace App\Http\Basic\Controllers;
+namespace App\Http\Controllers\Basic;
 
 use Illuminate\Http\Request;
-
 use App\Repositories\OptionRepository;
+use App\Contracts\FormRequestInterface;
+use App\Http\Controllers\BasicController;
 
-use App\Http\Requests\ErpRequest;
-
-class UnitController extends Controller
+class UnitController extends BasicController
 {
     private $option_class = 'units';
+
+    public function __construct()
+    {
+        $this->setFullClassName();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -41,12 +45,12 @@ class UnitController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ErpRequest $request)
+    public function store(FormRequestInterface $request)
     {
         //抓出使用者輸入的資料
         $unit = $request->input('unit');
         $new_id = OptionRepository::storeOption($this->option_class, $unit);
-        return redirect()->action('UnitController@show', ['id' => $new_id])
+        return redirect()->action("$this->className@show", ['id' => $new_id])
                             ->with('status', [0 => '料品單位已新增!']);
     }
 
@@ -85,11 +89,11 @@ class UnitController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ErpRequest $request, $id)
+    public function update(FormRequestInterface $request, $id)
     {
         $unit = $request->input('unit');
         OptionRepository::updateOption($this->option_class, $unit, $id);
-        return redirect()->action('UnitController@show', ['id' => $id])
+        return redirect()->action("$this->className@show", ['id' => $id])
                             ->with('status', [0 => '料品單位已更新!']);
     }
 
@@ -102,7 +106,7 @@ class UnitController extends Controller
     public function destroy($id)
     {
         OptionRepository::deleteOption($this->option_class, $id);
-        return redirect()->action('UnitController@index')
+        return redirect()->action("$this->className@index")
                             ->with('status', [0 => '料品單位已刪除!']);
     }
 }

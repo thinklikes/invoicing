@@ -5,29 +5,16 @@ namespace App\Page;
 class PagePresenter
 {
     protected $page;
-    private $basicControllerNamespace = 'App\\Http\\Controllers\\';
+    private $baseControllerNamespace = 'App\\Http\\Controllers\\';
 
     public function __construct(PageRepository $page)
     {
         $this->page = $page;
     }
-    private function exceptBasicNamesapce($currentRoute)
+    private function exceptBaseNamesapce($currentRoute)
     {
-        return str_replace($this->basicControllerNamespace, '', $currentRoute);
-    }
-    private function findAction($currentRoute)
-    {
-        $currentRoute = $this->exceptBasicNamesapce($currentRoute);
-        return last(explode('\\', $currentRoute));
-    }
-    private function findNamespace($currentRoute)
-    {
-        $currentRoute = $this->exceptBasicNamesapce($currentRoute);
-        $currentRoute = explode('\\', $currentRoute);
-        if (count($currentRoute) == 1) {
-            return '';
-        }
-        return $currentRoute[1];
+        $currentRoute = str_replace($this->baseControllerNamespace, '', $currentRoute);
+        return $currentRoute;
     }
     /**
      * 找出網頁上的路徑
@@ -35,18 +22,14 @@ class PagePresenter
      */
     public function getCurrentWebRoute($currentRoute)
     {
-        if (!is_null($currentRoute)) {
-            return Exception("Illegal argument");
+        if (is_null($currentRoute)) {
+            return "Cannot find Current Web Route!!";
         }
-        $action = $this->findAction($currentRoute);
-        $namespace = $this->findNamespace($currentRoute);
-
-
-        dd($action);
-        //dd(method_exists($this->page, 'getPageCode'));
-        $code = $this->page->getPageCode($namespace, $action);
-
-        dd($code);
+        $action    = $this->exceptBaseNamesapce($currentRoute);
+        $code      = $this->page->getPageCode($action);
+        if (is_null($code)) {
+            return "Cannot find Current Web Route!!";
+        }
         $WebRoute = '';
         for ($i = 1; $i <= strlen($code); $i += 2) {
             $tmp_code = substr($code, 0, $i);
@@ -65,4 +48,15 @@ class PagePresenter
         return $WebRoute;
     }
 
+    public function getPageAction(Page $page)
+    {
+        $action = "";
+        if (!empty($page->namespace)) {
+            $action .= $page->namespace."\\";
+        }
+
+        $action .= $page->action;
+
+        return action($action);
+    }
 }

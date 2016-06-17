@@ -1,16 +1,22 @@
 <?php
 
-namespace App\Http\Basic\Controllers;
+namespace App\Http\Controllers\Basic;
 
 use Illuminate\Http\Request;
-
 use App\Repositories\OptionRepository;
+use App\Contracts\FormRequestInterface;
+use App\Http\Controllers\BasicController;
 
-use App\Http\Requests\ErpRequest;
-
-class StockClassController extends Controller
+class StockClassController extends BasicController
 {
+    private $namespace;
+    private $className;
     private $option_class = 'stock_classes';
+
+    public function __construct()
+    {
+        $this->setFullClassName();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -41,13 +47,14 @@ class StockClassController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ErpRequest $request)
+    public function store(FormRequestInterface $request)
     {
         //抓出使用者輸入的資料
         $stock_class = $request->input('stock_class');
         $new_id = OptionRepository::storeOption($this->option_class, $stock_class);
-        return redirect()->action('StockClassController@show', ['id' => $new_id])
-                            ->with('status', [0 => '料品類別已新增!']);
+        return redirect()->action(
+                "$this->className@show", ['id' => $new_id])
+            ->with('status', [0 => '料品類別已新增!']);
     }
 
     /**
@@ -85,12 +92,13 @@ class StockClassController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ErpRequest $request, $id)
+    public function update(FormRequestInterface $request, $id)
     {
         $stock_class = $request->input('stock_class');
         OptionRepository::updateOption($this->option_class, $stock_class, $id);
-        return redirect()->action('StockClassController@show', ['id' => $id])
-                            ->with('status', [0 => '料品類別已更新!']);
+        return redirect()->action(
+                "$this->className@show", ['id' => $id])
+            ->with('status', [0 => '料品類別已更新!']);
     }
 
     /**
@@ -102,7 +110,8 @@ class StockClassController extends Controller
     public function destroy($id)
     {
         OptionRepository::deleteOption($this->option_class, $id);
-        return redirect()->action('StockClassController@index')
-                            ->with('status', [0 => '料品類別已刪除!']);
+        return redirect()->action(
+                "$this->className@index")
+            ->with('status', [0 => '料品類別已刪除!']);
     }
 }

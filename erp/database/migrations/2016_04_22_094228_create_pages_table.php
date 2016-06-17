@@ -17,7 +17,6 @@ class CreatePagesTable extends Migration
             $table->string('code', 10)->unique()->comment='menu的代號';
             $table->string('name', 20)->comment='menu的名稱';
             $table->tinyInteger('level')->comment='menu的等級';
-            $table->string('namespace', 20)->comment='menu的命名空間';
             $table->string('action')->comment='menu對應到的action';
             $table->enum('enabled', [1, 0])->default(1)->comment='這個頁面是否使用';
         });

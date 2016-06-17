@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Http\Basic\Controllers;
-
-use Illuminate\Http\Request;
-
-use App\Http\Requests\ErpRequest;
+namespace App\Http\Controllers\Basic;
 
 use App\Repositories\OptionRepository;
+use App\Http\Controllers\Controller;
+use App\Contracts\FormRequestInterface;
+use Illuminate\Http\Request;
+use Illuminate\Support\MessageBag;
+use App\Http\Controllers\BasicController;
 
-class SystemConfigController extends Controller
+class SystemConfigController extends BasicController
 {
     public function __construct()
     {
-
+        $this->setFullClassName();
     }
     /**
      * 本控制器的index方法
@@ -24,10 +25,10 @@ class SystemConfigController extends Controller
             'configs' => OptionRepository::getAllConfigs()
         ]);
     }
-    /**
-     * 本控制器的edit方法
-     * @return page
-     */
+    // /**
+    //  * 本控制器的edit方法
+    //  * @return page
+    //  */
     public function edit()
     {
         //$EditRoute = route('SystemConfigsEditor');
@@ -35,42 +36,19 @@ class SystemConfigController extends Controller
             'configs' => OptionRepository::getAllConfigs()
         ]);
     }
-    /**
-     * 本控制器的update方法
-     * 執行前會先給ErpRequest驗證
-     * 若驗證有誤則導回前頁
-     * 異動完後導回/system_configs
-     * @return page
-     */
-    public function update(ErpRequest $request)
+    // /**
+    //  * 本控制器的update方法
+    //  * 執行前會先給ErpRequest驗證
+    //  * 若驗證有誤則導回前頁
+    //  * 異動完後導回/system_configs
+    //  * @return page
+    //  */
+    public function update(FormRequestInterface $request)
     {
-        // $messages = [
-        //     'configs.website_title.required' => '我們需要知道網站名稱！',
-        //     'configs.system_build_date.required' => '我們需要知道系統建立日期！',
-        // ];
-        // $validator = Validator::make($request->all(), [
-        //     'configs.website_title' => 'required',
-        //     'configs.system_build_date' => 'required',
-        // ], $messages);
-
-        //驗證後附加邏輯
-        // $validator->after(function($validator) {
-        //     //if ($validator->somethingElseIsInvalid()) {
-
-        //     //}
-        // });
-        //$validator = Validator::make($request->all());
-        //     $messages = $this->validate($request)->messages();
-        // if ($validator->fails()) {
-        //     return redirect()->back()
-        //                 ->withErrors($validator)
-        //                 ->withInput();
-        // }
-
-
         OptionRepository::setSystemConfigs($request->input('configs'));
 
-        return redirect()->action('SystemConfigController@index')
-                        ->with('status', [0 => '系統設定已更新']);
+        return redirect()->action(
+                "$this->className@index")
+            ->with(['status' => new MessageBag(['系統設定已更新'])]);
     }
 }

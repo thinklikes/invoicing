@@ -1,15 +1,18 @@
 <?php
 
-namespace App\Http\Basic\Controllers;
+namespace App\Http\Controllers\Basic;
 
 use Illuminate\Http\Request;
-
 use App\Repositories\StockRepository;
+use App\Contracts\FormRequestInterface;
+use App\Http\Controllers\BasicController;
 
-use App\Http\Requests\ErpRequest;
-
-class StockController extends Controller
+class StockController extends BasicController
 {
+    public function __construct()
+    {
+        $this->setFullClassName();
+    }
     /**
      * Display a listing of the resource in JSON.
      *
@@ -51,14 +54,14 @@ class StockController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ErpRequest $request)
+    public function store(FormRequestInterface $request)
     {
         //抓出使用者輸入的資料
         $stock = $request->input('stock');
         $new_id = StockRepository::storeStock($stock);
 
         //導回去此新增品項的詳細資料頁
-        return redirect()->action('StockController@show', ['id' => $new_id])
+        return redirect()->action("$this->className@show", ['id' => $new_id])
                             ->with('status', [0 => '料品資料已新增!']);
     }
 
@@ -97,11 +100,11 @@ class StockController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ErpRequest $request, $id)
+    public function update(FormRequestInterface $request, $id)
     {
         $stock = $request->input('stock');
         StockRepository::updateStock($stock, $id);
-        return redirect()->action('StockController@show', ['id' => $id])
+        return redirect()->action("$this->className@show", ['id' => $id])
                             ->with('status', [0 => '料品資料已更新!']);
     }
 
@@ -115,11 +118,11 @@ class StockController extends Controller
     {
         //檢查是否還有庫存量，若有則導回去詳細資料頁，並顯示不能刪除
         if (StockRepository::hasStockInventory($id)) {
-            return redirect()->action('StockController@show', ['id' => $id])
+            return redirect()->action("$this->className@show", ['id' => $id])
                                 ->withErrors([0 => '這個料品在倉庫尚有庫存量，不能刪除!']);
         }
         StockRepository::deleteStock($id);
-        return redirect()->action('StockController@index')
+        return redirect()->action("$this->className@index")
                             ->with('status', [0 => '料品資料已刪除!']);
     }
 }

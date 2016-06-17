@@ -76,8 +76,8 @@ class ErpRequest extends Request
             'stock'    => [
                 'code'        => 'required',
                 'name'        => 'required',
-                'netWeight'   => 'required',
-                'grossWeight' => 'required',
+                'net_weight'   => 'required',
+                'gross_weight' => 'required',
             ],
 
             //系統設定資料表單驗證規則

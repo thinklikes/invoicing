@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Basic\Controllers;
+namespace App\Http\Controllers\Basic;
 
 use Illuminate\Http\Request;
-
 use App\Repositories\CustomerRepository;
-
-use App\Http\Requests\ErpRequest;
+use App\Contracts\FormRequestInterface;
+use App\Http\Controllers\Controller;
 
 class CustomerController extends Controller
 {
+    private $namespace    = 'Basic';
+    private $className    = 'CustomerController';
     /**
      * Display a listing of the resource.
      *
@@ -45,13 +46,14 @@ class CustomerController extends Controller
      * @param  \App\Http\Requests\ErpRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ErpRequest $request)
+    public function store(FormRequestInterface $request)
     {
         //抓出使用者輸入的資料
         $customer = $request->input('customer');
         $new_id = CustomerRepository::storeCustomer($customer);
-        return redirect()->action('CustomerController@show', ['id' => $new_id])
-                            ->with('status', [0 => '客戶資料已新增!']);
+        return redirect()->action(
+                "$this->namespace\\$this->className@show", ['id' => $new_id])
+            ->with('status', [0 => '客戶資料已新增!']);
     }
 
     /**
@@ -89,12 +91,13 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ErpRequest $request, $id)
+    public function update(FormRequestInterface $request, $id)
     {
         $customer = $request->input('customer');
         CustomerRepository::updateCustomer($customer, $id);
-        return redirect()->action('CustomerController@show', ['id' => $id])
-                            ->with('status', [0 => '客戶資料已更新!']);
+        return redirect()->action(
+                "$this->namespace\\$this->className@show", ['id' => $id])
+            ->with('status', [0 => '客戶資料已更新!']);
     }
 
     /**
@@ -106,7 +109,8 @@ class CustomerController extends Controller
     public function destroy($id)
     {
         CustomerRepository::deleteCustomer($id);
-        return redirect()->action('CustomerController@index')
-                            ->with('status', [0 => '客戶資料已刪除!']);
+        return redirect()->action(
+            "$this->namespace\\$this->className@index")
+            ->with('status', [0 => '客戶資料已刪除!']);
     }
 }

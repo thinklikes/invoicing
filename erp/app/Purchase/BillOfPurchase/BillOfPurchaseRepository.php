@@ -2,9 +2,8 @@
 
 namespace App\Purchase\BillOfPurchase;
 
-//use App\Purchase\BillOfPurchaseMaster;
-
-//use App\Purchase\BillOfPurchaseDetail;
+use App\Purchase\BillOfPurchase\BillOfPurchaseMaster as OrderMaster;
+use App\Purchase\BillOfPurchase\BillOfPurchaseDetail as OrderDetail;
 
 use DB;
 
@@ -12,8 +11,8 @@ use Schema;
 
 class BillOfPurchaseRepository
 {
-    protected $OrderMaster;
-    protected $OrderDetail;
+    protected $orderMaster;
+    protected $orderDetail;
 
     protected $orderMasterClassName = BillOfPurchaseMaster::class;
     protected $orderDetailClassName = BillOfPurchaseDetail::class;
@@ -23,11 +22,10 @@ class BillOfPurchaseRepository
      * @param BillOfPurchaseMaster $puchase_order_master
      */
     public function __construct(
-        BillOfPurchaseMaster $OrderMaster,
-        BillOfPurchaseDetail $OrderDetail)
+        OrderMaster $orderMaster, OrderDetail $orderDetail)
     {
-        $this->OrderMaster = $OrderMaster;
-        $this->OrderDetail = $OrderDetail;
+        $this->orderMaster = $orderMaster;//$OrderMaster;
+        $this->orderDetail = $orderDetail;
     }
 
     /**
@@ -38,7 +36,7 @@ class BillOfPurchaseRepository
     private function getTableColumnList($obj)
     {
         return Schema::getColumnListing($obj->getTable());
-        //return $this->OrderMaster->getTable();
+        //return $this->orderMaster->getTable();
     }
 /**
  * [getNewMasterCode 回傳新一組的表頭CODE]
@@ -47,7 +45,7 @@ class BillOfPurchaseRepository
  */
     public function getNewOrderCode()
     {
-        $code = $this->OrderMaster->select('code')
+        $code = $this->orderMaster->select('code')
             ->where('code', 'like', date('Ymd').'%')
             ->orderBy('code', 'desc')
             ->take(1)
@@ -65,7 +63,7 @@ class BillOfPurchaseRepository
      */
     public function getOrdersOnePage($ordersPerPage)
     {
-        return $this->OrderMaster->orderBy('id', 'desc')->paginate($ordersPerPage);
+        return $this->orderMaster->orderBy('id', 'desc')->paginate($ordersPerPage);
     }
 
     /**
@@ -75,7 +73,7 @@ class BillOfPurchaseRepository
      */
     public function getOrderMaster($code)
     {
-        $array = $this->OrderMaster
+        $array = $this->orderMaster
             ->with([
                 'supplier' => function ($query) {
                     $query->select('id', 'code', 'name');
@@ -101,7 +99,7 @@ class BillOfPurchaseRepository
      */
     public function getOrderDetail($code)
     {
-        $array = $this->OrderDetail
+        $array = $this->orderDetail
             ->where('master_code', $code)
             ->with([
                 'stock' => function ($query) {
@@ -124,18 +122,18 @@ class BillOfPurchaseRepository
      */
     public function storeOrderMaster($orderMaster)
     {
-        $columnsOfMaster = $this->getTableColumnList($this->OrderMaster);
+        $columnsOfMaster = $this->getTableColumnList($this->orderMaster);
 
-        $this->OrderMaster = new $this->orderMasterClassName;
+        $this->orderMaster = new $this->orderMasterClassName;
         //判斷request傳來的欄位是否存在，有才存入此欄位數值
         foreach($columnsOfMaster as $key) {
             if (isset($orderMaster[$key])) {
-                $this->OrderMaster->{$key} = $orderMaster[$key];
+                $this->orderMaster->{$key} = $orderMaster[$key];
             }
         }
 
         //開始存入表頭
-        return $this->OrderMaster->save();
+        return $this->orderMaster->save();
     }
 
     /**
@@ -145,20 +143,20 @@ class BillOfPurchaseRepository
      */
     public function storeOrderDetail($orderDetail, $code)
     {
-        $columnsOfDetail = $this->getTableColumnList($this->OrderDetail);
+        $columnsOfDetail = $this->getTableColumnList($this->orderDetail);
 
-        $this->OrderDetail = new $this->OrderDetail;
-        $this->OrderDetail->master_code  = $code;
+        $this->orderDetail = new $this->orderDetail;
+        $this->orderDetail->master_code  = $code;
         //dd($orderDetail);
         foreach ($columnsOfDetail as $key) {
             //echo $key."<br>";
             if (isset($orderDetail[$key])) {
-                $this->OrderDetail->{$key} = $orderDetail[$key];
+                $this->orderDetail->{$key} = $orderDetail[$key];
             }
         }
         //var_dump($orderDetail);
-        //dd($this->OrderDetail);
-        return $this->OrderDetail->save();
+        //dd($this->orderDetail);
+        return $this->orderDetail->save();
     }
 
     /**
@@ -168,20 +166,20 @@ class BillOfPurchaseRepository
      */
     public function updateOrderMaster($orderMaster, $code)
     {
-        $columnsOfMaster = $this->getTableColumnList($this->OrderMaster);
+        $columnsOfMaster = $this->getTableColumnList($this->orderMaster);
 
-        $this->OrderMaster = $this->OrderMaster
+        $this->orderMaster = $this->orderMaster
             ->where('code', $code)
             ->first();
 
         //有這個欄位才存入
         foreach($columnsOfMaster as $key) {
             if (isset($orderMaster[$key])) {
-                $this->OrderMaster->{$key} = $orderMaster[$key];
+                $this->orderMaster->{$key} = $orderMaster[$key];
             }
         }
         //開始存入表頭
-        $this->OrderMaster->save();
+        $this->orderMaster->save();
     }
     /**
      * update a Purchase
@@ -190,16 +188,16 @@ class BillOfPurchaseRepository
      */
     public function updateOrderDetail($orderDetail, $code)
     {
-        $columnsOfDetail = $this->getTableColumnList($this->OrderDetail);
+        $columnsOfDetail = $this->getTableColumnList($this->orderDetail);
 
-        $this->OrderDetail = new BillOfPurchaseDetail;
-        $this->OrderDetail->master_code  = $this->OrderMaster->code;
+        $this->orderDetail = new BillOfPurchaseDetail;
+        $this->orderDetail->master_code  = $this->orderMaster->code;
         foreach ($columnsOfDetail as $key2) {
             if (isset($orderDetail[$key2])) {
-                $this->OrderDetail->{$key2} = $orderDetail[$key2];
+                $this->orderDetail->{$key2} = $orderDetail[$key2];
             }
         }
-        return $this->OrderDetail->save();
+        return $this->orderDetail->save();
     }
 
     /**
@@ -210,14 +208,14 @@ class BillOfPurchaseRepository
     public function deleteOrderMaster($code)
     {
 
-        return $this->OrderMaster
+        return $this->orderMaster
             ->where('code', $code)
             ->delete();
     }
 
     public function deleteOrderDetail($code)
     {
-        return $this->OrderDetail
+        return $this->orderDetail
             ->where('master_code', $code)
             ->delete();
     }

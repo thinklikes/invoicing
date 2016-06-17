@@ -1,4 +1,5 @@
 @inject('page', 'App\Page\PagePresenter')
+@inject('presenter', 'App\Presenters\HomePagePresenter')
 
 <!DOCTYPE html>
 <html lang="en">
@@ -86,25 +87,9 @@
 @endif
                     <div class="panel-body">
 
-@if (session('status'))
-                            <div class="alert alert-success">
-                                <ul>
-    @foreach (session('status')->all() as $status)
-                                    <li>{{ $status }}</li>
-    @endforeach
-                                </ul>
-                            </div>
-@endif
+{!! $presenter->showStatus(session('status')) !!}
 
-@if (count($errors) > 0)
-                            <div class="alert alert-danger">
-                                <ul>
-    @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-    @endforeach
-                                </ul>
-                            </div>
-@endif
+{!! $presenter->showErrors($errors) !!}
 
 @yield('content')
                     </div>
