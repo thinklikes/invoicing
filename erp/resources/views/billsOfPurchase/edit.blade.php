@@ -22,13 +22,13 @@
         </script>
         <script type="text/javascript" src="{{ asset('assets/js/OrderCalculator.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/purchase.js') }}"></script>
-        <form action="{{ url("/billsOfPurchase/$code") }}" method="POST">
+        <form action="{{ url("/billsOfPurchase/".$billOfPurchaseMaster['code']) }}" method="POST">
             {{ csrf_field() }}
             {{ method_field('PUT') }}
             <table id="master" width="100%">
                 <tr>
                     <td>進貨日期</td>
-                    <td>{{ $PublicPresenter->getFormatDate($created_at) }}</td>
+                    <td>{{ $PublicPresenter->getFormatDate($billOfPurchaseMaster['created_at']) }}</td>
                     <td>進貨單號</td>
                     <td><input type="text" name="billOfPurchaseMaster[code]" id="master_code" value="{{ $billOfPurchaseMaster['code']}}" readonly=""></td>
                     <td>發票號碼</td>

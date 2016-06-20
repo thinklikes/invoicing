@@ -13,9 +13,12 @@
 DB::enableQueryLog();
 
     Route::get('/test', function () {
-        $page = new App\Http\Requests\BillOfPurchaseRequest;
+        //$page = new App\Repositories\StockWarehouseRepository(new App\StockWarehouse);
         //$page = new App\Http\Controllers\Purchase\BillOfPurchaseController;
-        return $page->rules();
+        //return $page->updateInventory(5, 1, 1);
+        dd(factory(App\Supplier::class)->make());
+
+        return view('welcome');
     });
 
     Route::get('/providers_test', function () {

@@ -29,13 +29,14 @@ class BillOfPurchaseController extends BasicController
      */
     public function __construct(
         OrderRepository $orderRepository,
-        OrderCreator $orderCreator
-        )
+        OrderCreator $orderCreator,
+        OrderUpdater $orderUpdater,
+        OrderDeleter $orderDeleter)
     {
         $this->orderRepository = $orderRepository;
         $this->orderCreator    = $orderCreator;
-        //$this->orderUpdater    = $orderUpdater;
-        //$this->orderDeleter    = $orderDeleter;
+        $this->orderUpdater    = $orderUpdater;
+        $this->orderDeleter    = $orderDeleter;
         $this->setFullClassName();
     }
 
@@ -73,6 +74,7 @@ class BillOfPurchaseController extends BasicController
      */
     public function store()
     {
+        //驗證表單填入的資料
         $request = App::make(
             'App\Contracts\FormRequestInterface',
             ['className' => $this->className]
@@ -108,21 +110,21 @@ class BillOfPurchaseController extends BasicController
      */
     public function edit(Request $request, $code)
     {
-        if (count($request->old($this->orderMasterInputName)) > 0 ||
-            $request->old($this->orderDetailInputName) > 0)
-        {
+        if ($request->old($this->orderMasterInputName)) {
             $orderMaster = $request->old($this->orderMasterInputName);
+            $orderMaster['created_at'] = $this->orderRepository
+                ->getOrderMasterfield('created_at', $code);
+        } else {
+            $orderMaster = $this->orderRepository->getOrderMaster($code);
+        }
+
+        if ($request->old($this->orderDetailInputName)) {
             $orderDetail = $request->old($this->orderDetailInputName);
         } else {
-            $orderMaster = $this->orderRepository
-                ->getOrderMaster($code);
-            $orderDetail = $this->orderRepository
-                ->getOrderDetail($code);
+            $orderDetail = $this->orderRepository->getOrderDetail($code);
         }
 
         return view($this->routeName.'.edit', [
-            'code'                      => $code,
-            'created_at'                => $orderMaster->created_at,
             $this->orderMasterInputName => $orderMaster,
             $this->orderDetailInputName => $orderDetail,
         ]);
@@ -135,51 +137,18 @@ class BillOfPurchaseController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(FormRequestInterface $request, $code)
+    public function update($code)
     {
-        //將庫存數量恢復到未開單前
-        $old_OrderMaster = $this->orderRepository
-            ->getOrderMaster($code);
-        $old_OrderDetail = $this->orderRepository
-            ->getOrderDetail($code);
-        foreach ($old_OrderDetail as $key => $value) {
-            $this->stockWarehouseRepository->updateInventory(
-                -$value['quantity'],
-                $value['stock_id'],
-                $old_OrderMaster['warehouse_id']
-            );
-        }
+        //驗證表單填入的資料
+        $request = App::make(
+            'App\Contracts\FormRequestInterface',
+            ['className' => $this->className]
+        );
 
         $orderMaster = $request->input($this->orderMasterInputName);
         $orderDetail = $request->input($this->orderDetailInputName);
 
-        //先存入表頭
-        $this->orderRepository->updateOrderMaster(
-            $orderMaster, $code
-        );
-
-        //清空表身
-        $this->orderRepository->deleteOrderDetail($code);
-
-        foreach ($orderDetail as $key => $value) {
-            if ($value['quantity'] == 0 || $value['quantity'] == "") {
-                continue;
-            }
-            //存入表身
-            $this->orderRepository->updateOrderDetail(
-                $value, $code
-            );
-            //更新數量
-            $this->stockWarehouseRepository->updateInventory(
-                $value['quantity'],
-                $value['stock_id'],
-                $orderMaster['warehouse_id']
-            );
-        }
-        if (! $this->orderCreator->update($orderMaster, $orderDetail)) {
-            return $this->orderCreatedError();
-        }
-        return $this->orderUpdated($code);
+        return $this->orderUpdater->update($this, $orderMaster, $orderDetail);
     }
 
     /**
@@ -190,24 +159,20 @@ class BillOfPurchaseController extends BasicController
      */
     public function destroy($code)
     {
+        return $this->orderDeleter->delete($this, $code);
+    }
+
+    public function retrunStockInventory($code) {
         //將庫存數量恢復到未開單前
-        $old_OrderMaster = $this->orderRepository
-            ->getOrderMaster($code);
-        $old_OrderDetail = $this->orderRepository
-            ->getOrderDetail($code);
+        $old_OrderMaster = $this->orderRepository->getOrderMaster($code);
+        $old_OrderDetail = $this->orderRepository->getOrderDetail($code);
         foreach ($old_OrderDetail as $key => $value) {
-            $this->stockWarehouseRepository->updateInventory(
+            app('App\Repositories\StockWarehouseRepository')->updateInventory(
                 -$value['quantity'],
                 $value['stock_id'],
                 $old_OrderMaster['warehouse_id']
             );
         }
-
-        //將這張單作廢
-        $this->orderRepository->deleteOrderMaster($code);
-        //$this->orderRepository->deleteOrderDetail($code);
-        return redirect()->action($this->className.'@index')
-            ->with('status', [0 => '進貨單已刪除!']);
     }
 
     public function orderCreated($status, $code)
@@ -224,12 +189,21 @@ class BillOfPurchaseController extends BasicController
     public function orderUpdated($status, $code)
     {
         return redirect()->action($this->className.'@show', ['code' => $code])
-            ->with('status', $status);
+            ->with(['status' => $status]);
     }
 
-    public function orderUpdatedError()
+    public function orderUpdatedErrors($errors)
     {
-        return redirectBack()
-            ->with('errors', ['進貨單更新失敗!']);
+        return back()->withInput()->withErrors($errors);
+    }
+
+    public function orderDeleted($status, $code)
+    {
+        return redirect()->action($this->className.'@index')->with(['status' => $status]);
+    }
+
+    public function orderDeletedErrors($errors)
+    {
+        return back()->withInput()->withErrors($errors);
     }
 }

@@ -28,6 +28,11 @@ class BillOfPurchaseRepository
         $this->orderDetail = $orderDetail;
     }
 
+    public function isOrderExsist($code)
+    {
+        return $this->orderMaster->where('code', $code)->count() > 0;
+    }
+
     /**
      * [getTableColumnList get table all columns]
      * @param  Eloquent $obj 表頭或表身的Eloquent
@@ -38,16 +43,17 @@ class BillOfPurchaseRepository
         return Schema::getColumnListing($obj->getTable());
         //return $this->orderMaster->getTable();
     }
-/**
- * [getNewMasterCode 回傳新一組的表頭CODE]
- *
- * @return string      newMasterCode
- */
+    /**
+     * [getNewMasterCode 回傳新一組的表頭CODE]
+     *
+     * @return string      newMasterCode
+     */
     public function getNewOrderCode()
     {
         $code = $this->orderMaster->select('code')
             ->where('code', 'like', date('Ymd').'%')
             ->orderBy('code', 'desc')
+            ->withTrashed()
             ->take(1)
             ->value('code');
         if (is_null($code)) {
@@ -64,6 +70,11 @@ class BillOfPurchaseRepository
     public function getOrdersOnePage($ordersPerPage)
     {
         return $this->orderMaster->orderBy('id', 'desc')->paginate($ordersPerPage);
+    }
+
+    public function getOrderMasterfield($field, $code)
+    {
+        return $this->orderMaster->where('code', $code)->value($field);
     }
 
     /**
@@ -179,7 +190,7 @@ class BillOfPurchaseRepository
             }
         }
         //開始存入表頭
-        $this->orderMaster->save();
+        return $this->orderMaster->save();
     }
     /**
      * update a Purchase
