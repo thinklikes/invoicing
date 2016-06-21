@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Purchase\BillOfPurchase;
+namespace App\Purchase;
 
 use Illuminate\Database\Eloquent\Model;
 

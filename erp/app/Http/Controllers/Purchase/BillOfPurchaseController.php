@@ -95,7 +95,15 @@ class BillOfPurchaseController extends BasicController
     public function show($code)
     {
         $orderMaster = $this->orderRepository->getOrderMaster($code);
+        $orderMaster->supplier_code = $orderMaster->supplier->code;
+        $orderMaster->supplier_name = $orderMaster->supplier->name;
+
         $orderDetail = $this->orderRepository->getOrderDetail($code);
+        foreach ($orderDetail as $key => $value) {
+            $orderDetail[$key]->stock_code = $orderDetail[$key]->stock->code;
+            $orderDetail[$key]->stock_name = $orderDetail[$key]->stock->name;
+            $orderDetail[$key]->unit = $orderDetail[$key]->stock->unit->comment;
+        }
         return view($this->routeName.'.show', [
             $this->orderMasterInputName => $orderMaster,
             $this->orderDetailInputName => $orderDetail,

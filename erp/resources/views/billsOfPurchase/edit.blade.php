@@ -30,7 +30,7 @@
                     <td>進貨日期</td>
                     <td>{{ $PublicPresenter->getFormatDate($billOfPurchaseMaster['created_at']) }}</td>
                     <td>進貨單號</td>
-                    <td><input type="text" name="billOfPurchaseMaster[code]" id="master_code" value="{{ $billOfPurchaseMaster['code']}}" readonly=""></td>
+                    <td><input type="text" id="master_code" value="{{ $billOfPurchaseMaster['code']}}" readonly=""></td>
                     <td>發票號碼</td>
                     <td><input type="text" name="billOfPurchaseMaster[invoice_code]" id="master_invoice_code" value="{{ $billOfPurchaseMaster['invoice_code'] }}"></td>
                 </tr>

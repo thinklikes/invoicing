@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Basic;
 
 use Illuminate\Http\Request;
-use App\Repositories\SupplierRepository;
+use App\Repositories\Basic\SupplierRepository;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
 
@@ -39,7 +39,7 @@ class SupplierController extends BasicController
      */
     public function index(Request $request)
     {
-        $suppliers = $this->supplierRepository->getSuppliersOnePage(array_except($request->input(), 'page'));
+        $suppliers = $this->supplierRepository->getSuppliersPaginated(array_except($request->input(), 'page'));
         //$suppliers = SupplierRepository::getSuppliersOnePage($request->input());
         return view('suppliers.index', ['suppliers' => $suppliers]);
     }

@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Purchase\BillOfPurchase;
+namespace App\Repositories\Purchase;
 
-use App\Purchase\BillOfPurchase\BillOfPurchaseMaster as OrderMaster;
-use App\Purchase\BillOfPurchase\BillOfPurchaseDetail as OrderDetail;
+use App\Repositories\BasicRepository;
+use App\Purchase\BillOfPurchaseMaster as OrderMaster;
+use App\Purchase\BillOfPurchaseDetail as OrderDetail;
 
-use DB;
 
-use Schema;
-
-class BillOfPurchaseRepository
+class BillOfPurchaseRepository extends BasicRepository
 {
     protected $orderMaster;
     protected $orderDetail;
 
-    protected $orderMasterClassName = BillOfPurchaseMaster::class;
-    protected $orderDetailClassName = BillOfPurchaseDetail::class;
+    protected $orderMasterClassName = OrderMaster::class;
+    protected $orderDetailClassName = OrderDetail::class;
     /**
      * BillOfPurchaseRepository constructor.
      *
@@ -33,16 +31,6 @@ class BillOfPurchaseRepository
         return $this->orderMaster->where('code', $code)->count() > 0;
     }
 
-    /**
-     * [getTableColumnList get table all columns]
-     * @param  Eloquent $obj 表頭或表身的Eloquent
-     * @return array      all columns
-     */
-    private function getTableColumnList($obj)
-    {
-        return Schema::getColumnListing($obj->getTable());
-        //return $this->orderMaster->getTable();
-    }
     /**
      * [getNewMasterCode 回傳新一組的表頭CODE]
      *
@@ -84,23 +72,7 @@ class BillOfPurchaseRepository
      */
     public function getOrderMaster($code)
     {
-        $array = $this->orderMaster
-            ->with([
-                'supplier' => function ($query) {
-                    $query->select('id', 'code', 'name');
-                }
-            ])
-            ->with([
-                'warehouse' => function ($query) {
-                    $query->select('id', 'code', 'name');
-                }
-            ])
-            ->where('code', $code)
-            ->firstOrFail();
-
-        $array->supplier_code = $array->supplier->code;
-        $array->supplier_name = $array->supplier->name;
-        return $array;
+        return $this->orderMaster->where('code', $code)->firstOrFail();
     }
 
     /**
@@ -110,20 +82,7 @@ class BillOfPurchaseRepository
      */
     public function getOrderDetail($code)
     {
-        $array = $this->orderDetail
-            ->where('master_code', $code)
-            ->with([
-                'stock' => function ($query) {
-                    $query->select('id', 'code', 'name', 'unit_id');
-                }
-            ])
-            ->get();
-        foreach ($array as $key => $value) {
-            $array[$key]->stock_code = $array[$key]->stock->code;
-            $array[$key]->stock_name = $array[$key]->stock->name;
-            $array[$key]->unit = $array[$key]->stock->unit->comment;
-        }
-        return $array;
+        return $this->orderDetail->where('master_code', $code)->get();
     }
 
     /**
@@ -134,8 +93,8 @@ class BillOfPurchaseRepository
     public function storeOrderMaster($orderMaster)
     {
         $columnsOfMaster = $this->getTableColumnList($this->orderMaster);
-
         $this->orderMaster = new $this->orderMasterClassName;
+        $this->orderMaster->code = $this->getNewOrderCode();
         //判斷request傳來的欄位是否存在，有才存入此欄位數值
         foreach($columnsOfMaster as $key) {
             if (isset($orderMaster[$key])) {
@@ -218,7 +177,6 @@ class BillOfPurchaseRepository
      */
     public function deleteOrderMaster($code)
     {
-
         return $this->orderMaster
             ->where('code', $code)
             ->delete();

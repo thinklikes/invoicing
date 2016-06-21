@@ -13,12 +13,16 @@
 DB::enableQueryLog();
 
     Route::get('/test', function () {
-        //$page = new App\Repositories\StockWarehouseRepository(new App\StockWarehouse);
+        $target = new App\Repositories\Purchase\BillOfPurchaseRepository(
+            new App\Purchase\BillOfPurchaseMaster,
+            new App\Purchase\BillOfPurchaseDetail
+        );
+        //$data = factory(App\Basic\Supplier::class)->make();
         //$page = new App\Http\Controllers\Purchase\BillOfPurchaseController;
         //return $page->updateInventory(5, 1, 1);
-        dd(factory(App\Supplier::class)->make());
+        //$actual = $target->storeSupplier($data);
 
-        return view('welcome');
+        return $actual;
     });
 
     Route::get('/providers_test', function () {

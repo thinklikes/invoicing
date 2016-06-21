@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Basic;
 
-use App\Supplier;
-
+use App\Basic\Supplier;
+use App\Repositories\BasicRepository;
 use DB;
 
-class SupplierRepository
+class SupplierRepository extends BasicRepository
 {
     protected $supplier;
 
@@ -15,9 +15,9 @@ class SupplierRepository
      *
      * @param User $user
      */
-    public function __construct(Supplier $supplier)
+    public function __construct()
     {
-        $this->supplier = $supplier;
+        $this->supplier = new Supplier;
     }
 
     /**
@@ -46,7 +46,7 @@ class SupplierRepository
      * find One page of suppliers
      * @return array all suppliers
      */
-    public function getSuppliersOnePage($param)
+    public function getSuppliersPaginated($param)
     {
         $suppliers = $this->supplier->where(function ($query) use($param) {
             if (isset($param['name']) && $param['name'] != "") {
@@ -80,9 +80,12 @@ class SupplierRepository
      */
     public function storeSupplier($supplier)
     {
+        $columns = $this->getTableColumnList($this->supplier);
         $this->supplier = new Supplier;
-        foreach($supplier as $key => $value) {
-            $this->supplier->{$key} = $value;
+        foreach($columns as $key) {
+            if (isset($supplier[$key])) {
+                $this->supplier->{$key} = $supplier[$key];
+            }
         }
         $this->supplier->save();
         return $this->supplier->id;
