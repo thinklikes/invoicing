@@ -66,9 +66,7 @@ $factory->define(App\Basic\Supplier::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Stock::class, function (Faker\Generator $faker) {
     $faker->addProvider(new Faker\Provider\zh_TW\Person($faker));
-    $faker->addProvider(new Faker\Provider\zh_TW\Address($faker));
-    $faker->addProvider(new Faker\Provider\zh_TW\PhoneNumber($faker));
-    $faker->addProvider(new Faker\Provider\zh_TW\Company($faker));
+
     return [
         'code'                      => $faker->randomNumber(8),
         'name'                      => $faker->name,
@@ -83,12 +81,8 @@ $factory->define(App\Stock::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Purchase\BillOfPurchaseMaster::class, function (Faker\Generator $faker) {
-    $faker->addProvider(new Faker\Provider\zh_TW\Person($faker));
-    $faker->addProvider(new Faker\Provider\zh_TW\Address($faker));
-    $faker->addProvider(new Faker\Provider\zh_TW\PhoneNumber($faker));
-    $faker->addProvider(new Faker\Provider\zh_TW\Company($faker));
     return [
-        'code' => date('Ymd').sprintf('%03d', $faker->numberBetween(1, 50)),
+        'code' => date('Ymd').sprintf('%03d', $faker->unique()->numberBetween(1, 50)),
         'invoice_code' => $faker->randomLetter.$faker->randomLetter.$faker->randomNumber(8),
         'warehouse_id' => $faker->randomElement([1, 2]),
         'supplier_id'  => $faker->numberBetween(1, 50),
@@ -98,14 +92,18 @@ $factory->define(App\Purchase\BillOfPurchaseMaster::class, function (Faker\Gener
 });
 
 $factory->define(App\Purchase\BillOfPurchaseDetail::class, function (Faker\Generator $faker) {
-    $faker->addProvider(new Faker\Provider\zh_TW\Person($faker));
-    $faker->addProvider(new Faker\Provider\zh_TW\Address($faker));
-    $faker->addProvider(new Faker\Provider\zh_TW\PhoneNumber($faker));
-    $faker->addProvider(new Faker\Provider\zh_TW\Company($faker));
     return [
         'master_code' => date('Ymd').sprintf('%03d', $faker->numberBetween(1, 50)),
-        'stock_id' => $faker->numberBetween(1, 50),
+        'stock_id' => $faker->unique()->numberBetween(1, 50),
         'quantity' => $faker->numberBetween(1, 50),
         'no_tax_price'  =>  $faker->randomFloat(5, 0, 500),
+    ];
+});
+
+$factory->define(App\StockWarehouse::class, function (Faker\Generator $faker) {
+    return [
+        'stock_id' => $faker->unique()->numberBetween(1, 50),
+        'warehouse_id' => $faker->randomElement([1, 2]),
+        'inventory'  =>  $faker->randomFloat(5, 0, 500),
     ];
 });

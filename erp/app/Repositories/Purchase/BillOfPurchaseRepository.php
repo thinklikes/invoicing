@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Purchase;
 
+use App;
 use App\Repositories\BasicRepository;
 use App\Purchase\BillOfPurchaseMaster as OrderMaster;
 use App\Purchase\BillOfPurchaseDetail as OrderDetail;
@@ -26,10 +27,10 @@ class BillOfPurchaseRepository extends BasicRepository
         $this->orderDetail = $orderDetail;
     }
 
-    public function isOrderExsist($code)
-    {
-        return $this->orderMaster->where('code', $code)->count() > 0;
-    }
+    // public function isOrderExsist($code)
+    // {
+    //     return $this->orderMaster->where('code', $code)->count() > 0;
+    // }
 
     /**
      * [getNewMasterCode 回傳新一組的表頭CODE]
@@ -55,7 +56,7 @@ class BillOfPurchaseRepository extends BasicRepository
      * find a page of orders
      * @return array all purchases
      */
-    public function getOrdersOnePage($ordersPerPage)
+    public function getOrdersPaginated($ordersPerPage)
     {
         return $this->orderMaster->orderBy('id', 'desc')->paginate($ordersPerPage);
     }
@@ -93,8 +94,7 @@ class BillOfPurchaseRepository extends BasicRepository
     public function storeOrderMaster($orderMaster)
     {
         $columnsOfMaster = $this->getTableColumnList($this->orderMaster);
-        $this->orderMaster = new $this->orderMasterClassName;
-        $this->orderMaster->code = $this->getNewOrderCode();
+        $this->orderMaster = App::make($this->orderMasterClassName);
         //判斷request傳來的欄位是否存在，有才存入此欄位數值
         foreach($columnsOfMaster as $key) {
             if (isset($orderMaster[$key])) {
@@ -111,13 +111,11 @@ class BillOfPurchaseRepository extends BasicRepository
      * @param  integer $id The id of purchase
      * @return void
      */
-    public function storeOrderDetail($orderDetail, $code)
+    public function storeOrderDetail($orderDetail)
     {
         $columnsOfDetail = $this->getTableColumnList($this->orderDetail);
 
         $this->orderDetail = new $this->orderDetail;
-        $this->orderDetail->master_code  = $code;
-        //dd($orderDetail);
         foreach ($columnsOfDetail as $key) {
             //echo $key."<br>";
             if (isset($orderDetail[$key])) {
@@ -148,28 +146,10 @@ class BillOfPurchaseRepository extends BasicRepository
                 $this->orderMaster->{$key} = $orderMaster[$key];
             }
         }
+        $this->orderMaster->code = $code;
         //開始存入表頭
         return $this->orderMaster->save();
     }
-    /**
-     * update a Purchase
-     * @param  integer $id The id of purchase
-     * @return void
-     */
-    public function updateOrderDetail($orderDetail, $code)
-    {
-        $columnsOfDetail = $this->getTableColumnList($this->orderDetail);
-
-        $this->orderDetail = new BillOfPurchaseDetail;
-        $this->orderDetail->master_code  = $this->orderMaster->code;
-        foreach ($columnsOfDetail as $key2) {
-            if (isset($orderDetail[$key2])) {
-                $this->orderDetail->{$key2} = $orderDetail[$key2];
-            }
-        }
-        return $this->orderDetail->save();
-    }
-
     /**
      * delete a Purchase
      * @param  integer $id The id of purchase
@@ -179,6 +159,7 @@ class BillOfPurchaseRepository extends BasicRepository
     {
         return $this->orderMaster
             ->where('code', $code)
+            ->first()
             ->delete();
     }
 

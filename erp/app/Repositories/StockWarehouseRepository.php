@@ -15,9 +15,9 @@ class StockWarehouseRepository
      *
      * @param StockWarehouse $puchase_order_master
      */
-    public function __construct(StockWarehouse $stockWarehouse)
+    public function __construct()
     {
-        $this->stockWarehouse = $stockWarehouse;
+        $this->stockWarehouse = new StockWarehouse;
     }
 
     /**

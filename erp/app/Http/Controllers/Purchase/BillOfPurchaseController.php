@@ -6,18 +6,14 @@ use App;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
 use App\Purchase\BillOfPurchase\BillOfPurchaseRepository as OrderRepository;
-use App\Purchase\BillOfPurchase\BillOfPurchaseCreator as OrderCreator;
-use App\Purchase\BillOfPurchase\BillOfPurchaseUpdater as OrderUpdater;
-use App\Purchase\BillOfPurchase\BillOfPurchaseDeleter as OrderDeleter;
+use App\Purchase\BillOfPurchase\BillOfPurchaseService as orderService;
 use Config;
 use Illuminate\Http\Request;
 
 class BillOfPurchaseController extends BasicController
 {
     protected $orderRepository;
-    protected $orderCreator;
-    protected $orderUpdater;
-    protected $orderDeleter;
+    protected $orderService;
     private $orderMasterInputName = 'billOfPurchaseMaster';
     private $orderDetailInputName = 'billOfPurchaseDetail';
     private $routeName = 'billsOfPurchase';
@@ -29,14 +25,10 @@ class BillOfPurchaseController extends BasicController
      */
     public function __construct(
         OrderRepository $orderRepository,
-        OrderCreator $orderCreator,
-        OrderUpdater $orderUpdater,
-        OrderDeleter $orderDeleter)
-    {
+        OrderService $orderService
+    ) {
         $this->orderRepository = $orderRepository;
-        $this->orderCreator    = $orderCreator;
-        $this->orderUpdater    = $orderUpdater;
-        $this->orderDeleter    = $orderDeleter;
+        $this->orderService    = $orderService;
         $this->setFullClassName();
     }
 
@@ -168,19 +160,6 @@ class BillOfPurchaseController extends BasicController
     public function destroy($code)
     {
         return $this->orderDeleter->delete($this, $code);
-    }
-
-    public function retrunStockInventory($code) {
-        //將庫存數量恢復到未開單前
-        $old_OrderMaster = $this->orderRepository->getOrderMaster($code);
-        $old_OrderDetail = $this->orderRepository->getOrderDetail($code);
-        foreach ($old_OrderDetail as $key => $value) {
-            app('App\Repositories\StockWarehouseRepository')->updateInventory(
-                -$value['quantity'],
-                $value['stock_id'],
-                $old_OrderMaster['warehouse_id']
-            );
-        }
     }
 
     public function orderCreated($status, $code)
