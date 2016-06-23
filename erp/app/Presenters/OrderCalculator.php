@@ -3,6 +3,7 @@
 namespace App\Presenters;
 
 use App\Repositories\OptionRepository;
+use Config;
 
 class OrderCalculator
 {
@@ -19,11 +20,11 @@ class OrderCalculator
     public function __construct()
     {
         $settings = OptionRepository::getPurchaseOrderSettings();
-        $this->purchase_tax_rate       = $settings->purchase_tax_rate;
-        $this->quantity_round_off      = $settings->quantity_round_off;
-        $this->no_tax_price_round_off  = $settings->no_tax_price_round_off;
-        $this->tax_round_off           = $settings->tax_round_off;
-        $this->total_amount_round_off  = $settings->total_amount_round_off;
+        $this->purchase_tax_rate       = Config::get('system_configs')['purchase_tax_rate'];
+        $this->quantity_round_off      = Config::get('system_configs')['quantity_round_off'];
+        $this->no_tax_price_round_off  = Config::get('system_configs')['no_tax_price_round_off'];
+        $this->tax_round_off           = Config::get('system_configs')['tax_round_off'];
+        $this->total_amount_round_off  = Config::get('system_configs')['total_amount_round_off'];
     }
 
     public function setOrderMaster($orderMaster)

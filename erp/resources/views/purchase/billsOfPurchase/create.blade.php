@@ -1,36 +1,30 @@
 @extends('layouts.app')
 
 @inject('PublicPresenter', 'App\Presenters\PublicPresenter')
-@inject('OrderCalculator', 'App\Presenters\OrderCalculator')
 @inject('WarehousePresenter', 'App\Presenters\WarehousePresenter')
-
 @section('content')
-        {{ $OrderCalculator->setOrderMaster($billOfPurchaseMaster) }}
-        {{ $OrderCalculator->setOrderDetail($billOfPurchaseDetail) }}
-        {{ $OrderCalculator->calculate() }}
         <script type="text/javascript">
             var supplier_url = '{{ url("/suppliers/json") }}';
             var stock_url    = '{{ url("/stocks/json") }}';
             var app_name     = 'billOfPurchase';
 
-            var _tax_rate       = {{ $settings->purchase_tax_rate }};
-            var _quantity_round_off      = {{ $settings->quantity_round_off }};
-            var _no_tax_price_round_off  = {{ $settings->no_tax_price_round_off }};
-            var _no_tax_amount_round_off = {{ $settings->no_tax_amount_round_off }};
-            var _tax_round_off           = {{ $settings->tax_round_off }};
-            var _total_amount_round_off  = {{ $settings->total_amount_round_off }};
+            var _tax_rate       = {{ Config::get('system_configs')['purchase_tax_rate'] }};
+            var _quantity_round_off      = {{ Config::get('system_configs')['quantity_round_off'] }};
+            var _no_tax_price_round_off  = {{ Config::get('system_configs')['no_tax_price_round_off'] }};
+            var _no_tax_amount_round_off = {{ Config::get('system_configs')['no_tax_amount_round_off'] }};
+            var _tax_round_off           = {{ Config::get('system_configs')['tax_round_off'] }};
+            var _total_amount_round_off  = {{ Config::get('system_configs')['total_amount_round_off'] }};
         </script>
         <script type="text/javascript" src="{{ asset('assets/js/OrderCalculator.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/purchase.js') }}"></script>
-        <form action="{{ url("/billsOfPurchase/$code") }}" method="POST">
+        <form action=" {{ url("/billsOfPurchase") }}" method="POST">
             {{ csrf_field() }}
-            {{ method_field('PUT') }}
             <table id="master" width="100%">
                 <tr>
                     <td>進貨日期</td>
-                    <td>{{ $PublicPresenter->getFormatDate($billOfPurchaseMaster['created_at']) }}</td>
+                    <td>{{ $PublicPresenter->getNewDate() }}</td>
                     <td>進貨單號</td>
-                    <td><input type="text" name="billOfPurchaseMaster[code]" id="master_code" value="{{ $billOfPurchaseMaster['code']}}" readonly=""></td>
+                    <td><input type="text" id="master_code" value="{{ $billOfPurchaseMaster['code'] != "" ? $billOfPurchaseMaster['code'] : $new_master_code }}" readonly=""></td>
                     <td>發票號碼</td>
                     <td><input type="text" name="billOfPurchaseMaster[invoice_code]" id="master_invoice_code" value="{{ $billOfPurchaseMaster['invoice_code'] }}"></td>
                 </tr>
@@ -73,8 +67,8 @@
                     </tr>
                 </thead>
                 <tbody>
-    @if(count($billOfPurchaseDetail) > 0)
-        @foreach($billOfPurchaseDetail as $i => $value)
+    @if (count($billOfPurchaseDetail) > 0)
+        @foreach ($billOfPurchaseDetail as $i => $value)
                     <tr>
                         <td>
                             <button type="button" id="detail_remove_{{ $i }}"><i class="fa fa-remove"></i></button>
@@ -89,11 +83,11 @@
                         <td><input type="text" id="detail_quantity_{{ $i }}" name="billOfPurchaseDetail[{{ $i }}][quantity]" value="{{ $billOfPurchaseDetail[$i]['quantity'] }}" style="text-align:right;" size="5"></td>
                         <td><input type="text" id="detail_unit_{{ $i }}" name="billOfPurchaseDetail[{{ $i }}][unit]" value="{{ $billOfPurchaseDetail[$i]['unit'] }}" readonly="" size="5"></td>
                         <td><input type="text" id="detail_no_tax_price_{{ $i }}" name="billOfPurchaseDetail[{{ $i }}][no_tax_price]" value="{{ $billOfPurchaseDetail[$i]['no_tax_price'] }}" style="text-align:right;" size="10"></td>
-                        <td><input type="text" id="detail_no_tax_amount_{{ $i }}" style="text-align:right;" size="10" value="{{ $OrderCalculator->getNoTaxAmount($i) }}"></td>
+                        <td><input type="text" id="detail_no_tax_amount_{{ $i }}" style="text-align:right;" size="10"></td>
                     </tr>
         @endforeach
     @else
-        @for($i = 0; $i < 5; $i ++)
+        @for ($i = 0; $i < 5; $i ++)
                     <tr>
                         <td>
                             <button type="button" id="detail_remove_{{ $i }}"><i class="fa fa-remove"></i></button>
@@ -115,44 +109,45 @@
                 </tbody>
             </table>
             <hr>
-            <div style="width:50%;"">
+            <div style="width:100%;">
                 <p>
                     營業稅
-                    <input type="radio" id="tax_rate_code_A"  name="billOfPurchaseMaster[tax_rate_code]" value="A" checked="">稅外加
-                    <input type="radio" id="tax_rate_code_I"  name="billOfPurchaseMaster[tax_rate_code]" value="I">稅內含
+                    <input type="radio" id="tax_rate_code_A" name="billOfPurchaseMaster[tax_rate_code]" value="A" checked="">稅外加
+                    <input type="radio" id="tax_rate_code_I" name="billOfPurchaseMaster[tax_rate_code]" value="I">稅內含
                 </p>
             </div>
             <div style="width:50%;height:100px;float:left;">
                 <table>
                     <tr>
                         <td>稅前合計：</td>
-                        <td><input type="text" id="total_no_tax_amount" value="{{ $OrderCalculator->getTotalNoTaxAmount() }}" readonly=""></td>
+                        <td><input type="text" id="total_no_tax_amount" readonly=""></td>
                     </tr>
                     <tr>
                         <td>營業稅：</td>
-                        <td><input type="text" id="tax" value="{{ $OrderCalculator->getTax() }}" readonly=""></td>
+                        <td><input type="text" id="tax" readonly=""></td>
                     </tr>
                     <tr>
                         <td>應付總計：</td>
-                        <td><input type="text" id="total_amount" value="{{ $OrderCalculator->getTotalAmount() }}" readonly=""></td>
+                        <td><input type="text" id="total_amount" readonly=""></td>
                     </tr>
                 </table>
             </div>
-            <div style="width:50%;height:100px;float:left;">
-                <!-- <table>
+            <div style="width:50%;height:100px;float:right;">
+                {{--<table>
                     <tr>
                         <td>稅前合計：</td>
-                        <td><input type="text" id="total_no_tax_amount" value="{{ $OrderCalculator->getTotalNoTaxAmount() }}" readonly=""></td>
+                        <td><input type="text" id="total_no_tax_amount" readonly=""></td>
                     </tr>
                     <tr>
                         <td>營業稅：</td>
-                        <td><input type="text" id="tax" value="{{ $OrderCalculator->getTax() }}" readonly=""></td>
+                        <td><input type="text" id="tax" readonly=""></td>
                     </tr>
                     <tr>
                         <td>應付總計：</td>
-                        <td><input type="text" id="total_amount" value="{{ $OrderCalculator->getTotalAmount() }}" readonly=""></td>
+                        <td><input type="text" id="total_amount" readonly=""></td>
                     </tr>
-                </table> -->
+                </table>
+                --}}
             </div>
             <button type="submit">確認送出</button>
         </form>

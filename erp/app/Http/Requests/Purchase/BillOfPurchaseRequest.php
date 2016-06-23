@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Purchase;
 
+use App\Http\Requests\Request;
 use App\Contracts\FormRequestInterface;
 
 class BillOfPurchaseRequest extends Request implements FormRequestInterface

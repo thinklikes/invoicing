@@ -24,19 +24,6 @@ class ComposerServiceProvider extends ServiceProvider
         //     '*', 'App\Http\ViewComposers\PageComposer'
         // );
         // 使用閉包型態的視圖組件...
-        view()->composer('layouts.app', function ($view) {
-            $view->with('website_title', OptionRepository::getWebSiteTitle());
-        });
-
-        $for_purchase_order = [
-            'purchase_orders.create',
-            'purchase_orders.edit',
-            'billsOfPurchase.create',
-            'billsOfPurchase.edit',
-        ];
-        view()->composer($for_purchase_order, function ($view) {
-            $view->with('settings', OptionRepository::getPurchaseOrderSettings());
-        });
 
         //把單位渲染到stocks底下所有程式
         $for_units = [

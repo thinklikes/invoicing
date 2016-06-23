@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-
+use App;
 use Config;
 
 class FormRequestServiceProvider extends ServiceProvider
@@ -39,16 +39,16 @@ class FormRequestServiceProvider extends ServiceProvider
                 $requestMethod = '';
                 switch ($param['className']) {
                     case 'Purchase\BillOfPurchaseController':
-                        $requestMethod = 'App\Http\Requests\BillOfPurchaseRequest';
+                        $requestMethod = 'App\Http\Requests\Purchase\BillOfPurchaseRequest';
                         break;
-                    case 'ReturnOfPurchaseController':
-                        $requestMethod = 'App\Http\Requests\ReturnOfPurchaseRequest';
+                    case 'Purchase\ReturnOfPurchaseController':
+                        $requestMethod = 'App\Http\Requests\Purchase\ReturnOfPurchaseRequest';
                         break;
                     default:
                         $requestMethod = 'App\Http\Requests\ErpRequest';
                         break;
                 }
-                return new $requestMethod;
+                return App::make($requestMethod);
             }
         );
     }

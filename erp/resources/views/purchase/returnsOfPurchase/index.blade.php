@@ -11,22 +11,20 @@
                     <th>進貨退回單代號</th>
                     <th>供應商編號</th>
                     <th>供應商名稱</th>
-                    <th>交貨日期</th>
                 </tr>
             </thead>
             <tbody>
         @foreach ($orders as $order)
                 <tr>
                     <td>{{ $PublicPresenter->getFormatDate($order->created_at) }}</td>
-                    <td><a href="{{ url("/billsOfPurchase/$order->code") }}">{{ $order->code }}</a></td>
+                    <td><a href="{{ url("/returnsOfPurchase/$order->code") }}">{{ $order->code }}</a></td>
                     <td>{{ $order->supplier->code }}</td>
                     <td>{{ $order->supplier->name }}</td>
-                    <td>{{ $order->supplier->delivery_date }}</td>
                 </tr>
         @endforeach
             </tbody>
         </table>
         <div align="center">{!! $orders->render() !!}</div>
         <br>
-        <a href="{{ url('/billsOfPurchase/create') }}">新增進貨退回單</a>
+        <a href="{{ url('/returnsOfPurchase/create') }}">新增進貨退回單</a>
 @endsection

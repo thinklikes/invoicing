@@ -1,9 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Purchase;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ReturnOfPurchaseMaster extends Model
@@ -18,7 +17,7 @@ class ReturnOfPurchaseMaster extends Model
      * 回傳這個進貨退回單表頭所有的庫存數量
      * @return [type] [description]
      */
-    public function billOfPurchaseDetail()
+    public function ReturnOfPurchaseDetail()
     {
         return $this->hasMany('App\ReturnOfPurchaseDetail', 'master_code', 'code');
     }
@@ -29,7 +28,7 @@ class ReturnOfPurchaseMaster extends Model
      */
     public function supplier()
     {
-        return $this->belongsTo('App\Supplier', 'supplier_id', 'id');
+        return $this->belongsTo('App\Basic\Supplier', 'supplier_id', 'id');
     }
 
     /**

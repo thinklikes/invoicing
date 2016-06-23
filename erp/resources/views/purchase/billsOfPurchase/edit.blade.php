@@ -13,12 +13,12 @@
             var stock_url    = '{{ url("/stocks/json") }}';
             var app_name     = 'billOfPurchase';
 
-            var _tax_rate       = {{ $settings->purchase_tax_rate }};
-            var _quantity_round_off      = {{ $settings->quantity_round_off }};
-            var _no_tax_price_round_off  = {{ $settings->no_tax_price_round_off }};
-            var _no_tax_amount_round_off = {{ $settings->no_tax_amount_round_off }};
-            var _tax_round_off           = {{ $settings->tax_round_off }};
-            var _total_amount_round_off  = {{ $settings->total_amount_round_off }};
+            var _tax_rate       = {{ Config::get('system_configs')['purchase_tax_rate'] }};
+            var _quantity_round_off      = {{ Config::get('system_configs')['quantity_round_off'] }};
+            var _no_tax_price_round_off  = {{ Config::get('system_configs')['no_tax_price_round_off'] }};
+            var _no_tax_amount_round_off = {{ Config::get('system_configs')['no_tax_amount_round_off'] }};
+            var _tax_round_off           = {{ Config::get('system_configs')['tax_round_off'] }};
+            var _total_amount_round_off  = {{ Config::get('system_configs')['total_amount_round_off'] }};
         </script>
         <script type="text/javascript" src="{{ asset('assets/js/OrderCalculator.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/purchase.js') }}"></script>

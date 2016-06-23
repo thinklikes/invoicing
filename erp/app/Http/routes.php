@@ -13,34 +13,7 @@
 DB::enableQueryLog();
 
     Route::get('/test', function () {
-        /**
-         * Arrange
-         * 產生表身假資料，表身的code是另外存入
-         */
-        $target = App::make(App\Repositories\Purchase\BillOfPurchaseRepository::class);
-        $code = date('Ymd').sprintf('%03d', '999');
-        $num = 2;
-        $data = factory(App\Purchase\BillOfPurchaseDetail::class, $num)->make();
-        /**
-         * Assert
-         * 測試是否成功
-         */
-        for($i=0; $i < $num; $i++) {
-
-            /**
-             * Act
-             * 存入表身
-             */
-            $actual_1 = $target->storeOrderDetail($data[$i], $code);
-            $actual_2 = App\Purchase\BillOfPurchaseDetail::where('master_code', $code)->skip($i)->take(1)->firstOrFail();
-                var_dump($actual_2);
-            // $this->assertTrue($actual_1);
-            // //測試存入的欄位是否跟取出的欄位值一樣
-            // $this->assertEquals($data[$i]->stock_id, $actual_2->stock_id);
-            // $this->assertEquals($data[$i]->quantity, $actual_2->quantity);
-            // $this->assertEquals($data[$i]->no_tax_price, $actual_2->no_tax_price);
-        }
-        //return ($a) ? 123 : 456;
+        dd(Config::get('system_configs')['website_title']);
     });
 
     Route::get('/providers_test', function () {
@@ -107,10 +80,11 @@ Route::group(['middleware' => 'auth'], function () {
 
         //進貨單作業
         Route::resource('/billsOfPurchase', 'BillOfPurchaseController');
+        Route::resource('/returnsOfPurchase', 'ReturnOfPurchaseController');
+        Route::resource('/returnsOfPurchase', 'PaymentOfPurchaseController');
 
     });
     //進貨退回單作業
-    Route::resource('/returnsOfPurchase', 'ReturnOfPurchaseController');
 
     //銷貨作業
     Route::resource('/sales', 'SaleController');

@@ -284,25 +284,49 @@ class PagesTableSeeder extends Seeder
             [
                 'name'       => '進貨退回單管理',
                 'level'      => 2,
-                'action'     => 'ReturnOfPurchaseController@index',
+                'action'     => 'Purchase\ReturnOfPurchaseController@index',
                 'enabled'    => 1,
             ],
             [
                 'name'       => '新增進貨退回單據',
                 'level'      => 3,
-                'action'     => 'ReturnOfPurchaseController@create',
+                'action'     => 'Purchase\ReturnOfPurchaseController@create',
                 'enabled'    => 1,
             ],
             [
                 'name'       => '檢視進貨退回單據',
                 'level'      => 3,
-                'action'     => 'ReturnOfPurchaseController@show',
+                'action'     => 'Purchase\ReturnOfPurchaseController@show',
                 'enabled'    => 1,
             ],
             [
                 'name'       => '維護進貨退回單據',
                 'level'      => 3,
-                'action'     => 'ReturnOfPurchaseController@edit',
+                'action'     => 'Purchase\ReturnOfPurchaseController@edit',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '廠商付款記錄管理',
+                'level'      => 2,
+                'action'     => 'Purchase\PaymentOfPurchaseController@index',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '新增廠商付款記錄',
+                'level'      => 3,
+                'action'     => 'Purchase\PaymentOfPurchaseController@create',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '檢視廠商付款記錄',
+                'level'      => 3,
+                'action'     => 'Purchase\PaymentOfPurchaseController@show',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '維護廠商付款記錄',
+                'level'      => 3,
+                'action'     => 'Purchase\PaymentOfPurchaseController@edit',
                 'enabled'    => 1,
             ],
             // [

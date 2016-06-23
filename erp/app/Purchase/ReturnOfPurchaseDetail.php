@@ -1,12 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Purchase;
 
 use Illuminate\Database\Eloquent\Model;
 
 class ReturnOfPurchaseDetail extends Model
 {
-    protected $table = 'bill_of_purchase_detail';
+    protected $table = 'return_of_purchase_detail';
 
     public $timestamps = false;
 

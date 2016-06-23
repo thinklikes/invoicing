@@ -4,27 +4,20 @@ namespace App\Repositories\Purchase;
 
 use App;
 use App\Repositories\BasicRepository;
-use App\Purchase\ReturnOfPurchaseMaster as OrderMaster;
-use App\Purchase\ReturnOfPurchaseDetail as OrderDetail;
+use App\Purchase\PaymentOfPurchase as OrderMaster;
 
-
-class ReturnOfPurchaseRepository extends BasicRepository
+class PaymentOfPurchaseRepository extends BasicRepository
 {
     protected $orderMaster;
-    protected $orderDetail;
-
-    protected $orderMasterClassName = OrderMaster::class;
-    protected $orderDetailClassName = OrderDetail::class;
+    protected $orderClassName = Order::class;
     /**
      * BillOfPurchaseRepository constructor.
      *
      * @param BillOfPurchaseMaster $puchase_order_master
      */
-    public function __construct(
-        OrderMaster $orderMaster, OrderDetail $orderDetail)
+    public function __construct(OrderMaster $orderMaster)
     {
         $this->orderMaster = $orderMaster;//$OrderMaster;
-        $this->orderDetail = $orderDetail;
     }
 
     // public function isOrderExsist($code)
@@ -77,16 +70,6 @@ class ReturnOfPurchaseRepository extends BasicRepository
     }
 
     /**
-     * find detail of one purchase order
-     * @param  integer $id The id of purchase
-     * @return array       one purchase
-     */
-    public function getOrderDetail($code)
-    {
-        return $this->orderDetail->where('master_code', $code)->get();
-    }
-
-    /**
      * store billOfPurchaseMaster
      * @param  Array billOfPurchaseMaster
      * @return boolean
@@ -104,27 +87,6 @@ class ReturnOfPurchaseRepository extends BasicRepository
 
         //開始存入表頭
         return $this->orderMaster->save();
-    }
-
-    /**
-     * store a purchase order
-     * @param  integer $id The id of purchase
-     * @return void
-     */
-    public function storeOrderDetail($orderDetail)
-    {
-        $columnsOfDetail = $this->getTableColumnList($this->orderDetail);
-
-        $this->orderDetail = new $this->orderDetail;
-        foreach ($columnsOfDetail as $key) {
-            //echo $key."<br>";
-            if (isset($orderDetail[$key])) {
-                $this->orderDetail->{$key} = $orderDetail[$key];
-            }
-        }
-        //var_dump($orderDetail);
-        //dd($this->orderDetail);
-        return $this->orderDetail->save();
     }
 
     /**
@@ -146,7 +108,7 @@ class ReturnOfPurchaseRepository extends BasicRepository
                 $this->orderMaster->{$key} = $orderMaster[$key];
             }
         }
-        $this->orderMaster->code = $code;
+        //$this->orderMaster->code = $code;
         //開始存入表頭
         return $this->orderMaster->save();
     }
@@ -160,13 +122,6 @@ class ReturnOfPurchaseRepository extends BasicRepository
         return $this->orderMaster
             ->where('code', $code)
             ->first()
-            ->delete();
-    }
-
-    public function deleteOrderDetail($code)
-    {
-        return $this->orderDetail
-            ->where('master_code', $code)
             ->delete();
     }
 }

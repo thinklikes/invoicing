@@ -3,7 +3,6 @@
 namespace App\Purchase;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BillOfPurchaseMaster extends Model
@@ -20,7 +19,7 @@ class BillOfPurchaseMaster extends Model
      */
     public function billOfPurchaseDetail()
     {
-        return $this->hasMany('App\BillOfPurchaseDetail', 'master_code', 'code');
+        return $this->hasMany('App\Purchase\BillOfPurchaseDetail', 'master_code', 'code');
     }
 
     /**
@@ -29,7 +28,7 @@ class BillOfPurchaseMaster extends Model
      */
     public function supplier()
     {
-        return $this->belongsTo('App\Supplier', 'supplier_id', 'id');
+        return $this->belongsTo('App\Basic\Supplier', 'supplier_id', 'id');
     }
 
     /**
