@@ -2,12 +2,18 @@
 
 
 @section('content')
+    <script type="text/javascript" src="{{ asset('assets/js/OrderCalculator.js') }}"></script>
     <script type="text/javascript">
-        function isEnglishFileName() {
-            var fileName = document.getElementById('ja').value.split('.')[0];
-            return !fileName.match(/[^\x00-\xff]+/g);
+        var class_name = {
+            quantity : 'stock_quantity',
+            no_tax_price : 'stock_no_tax_price',
+            no_tax_amount : 'stock_no_tax_amount',
+            tax_rate_code : 'tax_rate_code',
+            total_no_tax_amount : 'total_no_tax_amount',
+            tax : 'tax'
+            total_amount_class : 'total_amount_class'
         }
+        var a = new ValuePullerByHtmlId();
+        console.log(a.pull(class_name));
     </script>
-    <input id="ja" name="NewFile" type="file">
-    <button name="test" onclick="if(isEnglishFileName()) alert('test');" value="test">test</button>
 @endsection('content')

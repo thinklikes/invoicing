@@ -81,7 +81,7 @@ Route::group(['middleware' => 'auth'], function () {
         //進貨單作業
         Route::resource('/billsOfPurchase', 'BillOfPurchaseController');
         Route::resource('/returnsOfPurchase', 'ReturnOfPurchaseController');
-        Route::resource('/returnsOfPurchase', 'PaymentOfPurchaseController');
+        Route::resource('/paymentsOfPurchase', 'PaymentOfPurchaseController');
 
     });
     //進貨退回單作業

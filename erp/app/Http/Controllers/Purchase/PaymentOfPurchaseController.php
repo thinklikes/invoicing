@@ -14,9 +14,8 @@ class PaymentOfPurchaseController extends BasicController
 {
     protected $orderRepository;
     protected $orderService;
-    private $orderMasterInputName = 'paymentOfPurchaseMaster';
-    private $orderDetailInputName = 'paymentOfPurchaseDetail';
-    private $routeName = 'purchase.returnsOfPurchase';
+    private $orderMasterInputName = 'paymentOfPurchase';
+    private $routeName = 'purchase.paymentsOfPurchase';
     private $ordersPerPage = 15;
     /**
      * SupplierController constructor.
@@ -54,7 +53,6 @@ class PaymentOfPurchaseController extends BasicController
         return view($this->routeName.'.create', [
             'new_master_code'           => $this->orderRepository->getNewOrderCode(),
             $this->orderMasterInputName => $request->old($this->orderMasterInputName),
-            $this->orderDetailInputName => $request->old($this->orderDetailInputName),
         ]);
     }
 

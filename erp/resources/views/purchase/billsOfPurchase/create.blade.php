@@ -17,6 +17,8 @@
         </script>
         <script type="text/javascript" src="{{ asset('assets/js/OrderCalculator.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/purchase.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/bindSupplierAutocomplete.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/bindStockAutocomplete.js') }}"></script>
         <form action=" {{ url("/billsOfPurchase") }}" method="POST">
             {{ csrf_field() }}
             <table id="master" width="100%">
@@ -26,14 +28,14 @@
                     <td>進貨單號</td>
                     <td><input type="text" id="master_code" value="{{ $billOfPurchaseMaster['code'] != "" ? $billOfPurchaseMaster['code'] : $new_master_code }}" readonly=""></td>
                     <td>發票號碼</td>
-                    <td><input type="text" name="billOfPurchaseMaster[invoice_code]" id="master_invoice_code" value="{{ $billOfPurchaseMaster['invoice_code'] }}"></td>
+                    <td><input type="text" name="billOfPurchaseMaster[invoice_code]" value="{{ $billOfPurchaseMaster['invoice_code'] }}"></td>
                 </tr>
                 <tr>
                     <th>供應商</th>
                     <td colspan="5">
-                        <input type="hidden" name="billOfPurchaseMaster[supplier_id]" id="master_supplier_id" value="{{ $billOfPurchaseMaster['supplier_id'] }}"  size="10">
-                        <input type="text" name="billOfPurchaseMaster[supplier_code]" id="master_supplier_code" value="{{ $billOfPurchaseMaster['supplier_code'] }}"  size="10">
-                        <input type="text" name="billOfPurchaseMaster[supplier_name]" id="master_supplier_name" value="{{ $billOfPurchaseMaster['supplier_name'] }}">
+                        <input type="hidden" name="billOfPurchaseMaster[supplier_id]" class="supplier_id" value="{{ $billOfPurchaseMaster['supplier_id'] }}"  size="10">
+                        <input type="text" name="billOfPurchaseMaster[supplier_code]" class="supplier_code" value="{{ $billOfPurchaseMaster['supplier_code'] }}"  size="10">
+                        <input type="text" name="billOfPurchaseMaster[supplier_name]" class="supplier_autocomplete" value="{{ $billOfPurchaseMaster['supplier_name'] }}">
                     </td>
                 </tr>
                 <tr>
@@ -45,7 +47,7 @@
                <tr>
                     <th>進貨倉庫</th>
                     <td colspan="5">
-                        <select name="billOfPurchaseMaster[warehouse_id]" id="master_warehouse_id">
+                        <select name="billOfPurchaseMaster[warehouse_id]">
                             <option></option>
                             {!! $WarehousePresenter->renderOptions($billOfPurchaseMaster['warehouse_id']) !!}
                         </select>
@@ -71,38 +73,38 @@
         @foreach ($billOfPurchaseDetail as $i => $value)
                     <tr>
                         <td>
-                            <button type="button" id="detail_remove_{{ $i }}"><i class="fa fa-remove"></i></button>
+                            <button type="button" class="remove_button"><i class="fa fa-remove"></i></button>
                         </td>
                         <td>
-                            <input type="text" id="detail_stock_code_{{ $i }}" name="billOfPurchaseDetail[{{ $i }}][stock_code]" value="{{ $billOfPurchaseDetail[$i]['stock_code'] }}" size="10">
-                            <input type="hidden" id="detail_stock_id_{{ $i }}" name="billOfPurchaseDetail[{{ $i }}][stock_id]" value="{{ $billOfPurchaseDetail[$i]['stock_id'] }}">
+                            <input type="text" class="stock_code" name="billOfPurchaseDetail[{{ $i }}][stock_code]" value="{{ $billOfPurchaseDetail[$i]['stock_code'] }}" size="10">
+                            <input type="hidden" class="stock_id" name="billOfPurchaseDetail[{{ $i }}][stock_id]" value="{{ $billOfPurchaseDetail[$i]['stock_id'] }}">
                         </td>
                         <td>
-                            <input type="text" id="detail_stock_name_{{ $i }}" name="billOfPurchaseDetail[{{ $i }}][stock_name]" value="{{ $billOfPurchaseDetail[$i]['stock_name'] }}">
+                            <input type="text" class="stock_autocomplete" name="billOfPurchaseDetail[{{ $i }}][stock_name]" value="{{ $billOfPurchaseDetail[$i]['stock_name'] }}">
                         </td>
-                        <td><input type="text" id="detail_quantity_{{ $i }}" name="billOfPurchaseDetail[{{ $i }}][quantity]" value="{{ $billOfPurchaseDetail[$i]['quantity'] }}" style="text-align:right;" size="5"></td>
-                        <td><input type="text" id="detail_unit_{{ $i }}" name="billOfPurchaseDetail[{{ $i }}][unit]" value="{{ $billOfPurchaseDetail[$i]['unit'] }}" readonly="" size="5"></td>
-                        <td><input type="text" id="detail_no_tax_price_{{ $i }}" name="billOfPurchaseDetail[{{ $i }}][no_tax_price]" value="{{ $billOfPurchaseDetail[$i]['no_tax_price'] }}" style="text-align:right;" size="10"></td>
-                        <td><input type="text" id="detail_no_tax_amount_{{ $i }}" style="text-align:right;" size="10"></td>
+                        <td><input type="text" class="stock_quantity" name="billOfPurchaseDetail[{{ $i }}][quantity]" onkeyup="calculator.calculate();" value="{{ $billOfPurchaseDetail[$i]['quantity'] }}" style="text-align:right;" size="5"></td>
+                        <td><input type="text" class="stock_unit" name="billOfPurchaseDetail[{{ $i }}][unit]" value="{{ $billOfPurchaseDetail[$i]['unit'] }}" readonly="" size="5"></td>
+                        <td><input type="text" class="stock_no_tax_price" name="billOfPurchaseDetail[{{ $i }}][no_tax_price]" onkeyup="calculator.calculate();" value="{{ $billOfPurchaseDetail[$i]['no_tax_price'] }}" style="text-align:right;" size="10"></td>
+                        <td><input type="text" class="stock_no_tax_amount" style="text-align:right;" size="10"></td>
                     </tr>
         @endforeach
     @else
         @for ($i = 0; $i < 5; $i ++)
                     <tr>
                         <td>
-                            <button type="button" id="detail_remove_{{ $i }}"><i class="fa fa-remove"></i></button>
+                            <button type="button" class="remove_button"><i class="fa fa-remove"></i></button>
                         </td>
                         <td>
-                            <input type="text" id="detail_stock_code_{{ $i }}" name="billOfPurchaseDetail[{{ $i }}][stock_code]" value="" size="10">
-                            <input type="hidden" id="detail_stock_id_{{ $i }}" name="billOfPurchaseDetail[{{ $i }}][stock_id]" value="">
+                            <input type="text" class="stock_code" name="billOfPurchaseDetail[{{ $i }}][stock_code]" value="" size="10">
+                            <input type="hidden" class="stock_id" name="billOfPurchaseDetail[{{ $i }}][stock_id]" value="">
                         </td>
                         <td>
-                            <input type="text" id="detail_stock_name_{{ $i }}" name="billOfPurchaseDetail[{{ $i }}][stock_name]" value="">
+                            <input type="text" class="stock_autocomplete" name="billOfPurchaseDetail[{{ $i }}][stock_name]" value="">
                         </td>
-                        <td><input type="text" id="detail_quantity_{{ $i }}" name="billOfPurchaseDetail[{{ $i }}][quantity]" value="" style="text-align:right;" size="5"></td>
-                        <td><input type="text" id="detail_unit_{{ $i }}" name="billOfPurchaseDetail[{{ $i }}][unit]" value="" readonly="" size="5"></td>
-                        <td><input type="text" id="detail_no_tax_price_{{ $i }}" name="billOfPurchaseDetail[{{ $i }}][no_tax_price]" value="" style="text-align:right;" size="10"></td>
-                        <td><input type="text" id="detail_no_tax_amount_{{ $i }}" style="text-align:right;" size="10"></td>
+                        <td><input type="text" class="stock_quantity" name="billOfPurchaseDetail[{{ $i }}][quantity]" onkeyup="calculator.calculate();" value="" style="text-align:right;" size="5"></td>
+                        <td><input type="text" class="stock_unit" name="billOfPurchaseDetail[{{ $i }}][unit]" value="" readonly="" size="5"></td>
+                        <td><input type="text" class="stock_no_tax_price" name="billOfPurchaseDetail[{{ $i }}][no_tax_price]" onkeyup="calculator.calculate();" value="" style="text-align:right;" size="10"></td>
+                        <td><input type="text" class="stock_no_tax_amount" style="text-align:right;" size="10"></td>
                     </tr>
         @endfor
     @endif
@@ -112,23 +114,23 @@
             <div style="width:100%;">
                 <p>
                     營業稅
-                    <input type="radio" id="tax_rate_code_A" name="billOfPurchaseMaster[tax_rate_code]" value="A" checked="">稅外加
-                    <input type="radio" id="tax_rate_code_I" name="billOfPurchaseMaster[tax_rate_code]" value="I">稅內含
+                    <input type="radio" class="tax_rate_code" onclick="calculator.calculate();" name="billOfPurchaseMaster[tax_rate_code]" value="A" checked="">稅外加
+                    <input type="radio" class="tax_rate_code" onclick="calculator.calculate();" name="billOfPurchaseMaster[tax_rate_code]" value="I">稅內含
                 </p>
             </div>
             <div style="width:50%;height:100px;float:left;">
                 <table>
                     <tr>
                         <td>稅前合計：</td>
-                        <td><input type="text" id="total_no_tax_amount" readonly=""></td>
+                        <td><input type="text" class="total_no_tax_amount" style="text-align:right;" readonly=""></td>
                     </tr>
                     <tr>
                         <td>營業稅：</td>
-                        <td><input type="text" id="tax" readonly=""></td>
+                        <td><input type="text" class="tax" style="text-align:right;" readonly=""></td>
                     </tr>
                     <tr>
                         <td>應付總計：</td>
-                        <td><input type="text" id="total_amount" readonly=""></td>
+                        <td><input type="text" class="total_amount" style="text-align:right;" readonly=""></td>
                     </tr>
                 </table>
             </div>
