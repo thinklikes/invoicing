@@ -221,15 +221,6 @@ return [
             ],
         ],
         'billOfPurchaseMaster'=> [
-            'code' => [
-                'required' => '我們需要知道進貨單號!!',
-                'unique'   => '這一組進貨單號已使用了!!',
-            ],
-            'delivery_date' => [
-                'required' => '我們需要知道交貨日期!!',
-                'date'     => '交貨日期請輸入正確的日期格式(YYYY-MM-dd)',
-                'after'    => '交貨日期須設定為今天以後!!',
-            ],
             'supplier_id' => [
                 'required' => '我們需要知道供應商',
             ],
@@ -250,6 +241,52 @@ return [
                 'no_tax_price' => [
                     'numeric' => '稅前單價請填入數字',
                 ],
+            ],
+        ],
+        'returnOfPurchaseMaster'=> [
+            'supplier_id' => [
+                'required' => '我們需要知道供應商',
+            ],
+            'warehouse_id' => [
+                'required' => '我們需要知道進貨退回倉庫',
+            ],
+        ],
+        'returnOfPurchaseDetail'=> [
+            '*' => [
+                'stock_id' => [
+                    'required_unless'      => '我們需要知道料品名稱!!',
+                    'required_without_all' => '請至少輸入一項料品',
+                ],
+                'quantity' => [
+                    'required_with' => '我們需要知道數量!!',
+                    'numeric'       => '數量請填入數字',
+                ],
+                'no_tax_price' => [
+                    'numeric' => '稅前單價請填入數字',
+                ],
+            ],
+        ],
+        'paymentOfPurchase'=> [
+            'supplier_id' => [
+                'required' => '我們需要知道供應商',
+            ],
+            'pay_date' => [
+                'required' => '我們需要知道付款日期',
+                'date'     => '付款日期請輸入正確的日期格式(YYYY-MM-dd)',
+            ],
+            'check_code' => [
+                'required_if' => '我們需要知道票據號碼',
+            ],
+            'expiry_date' => [
+                'required_if' => '我們需要知道到期日',
+                'date'        => '到期日請輸入正確的日期格式(YYYY-MM-dd)',
+            ],
+            'bank_account' => [
+                'required_if' => '我們需要知道銀行帳號',
+            ],
+            'amount' => [
+                'required' => '我們需要知道付款金額',
+                'numeric'  => '付款金額請填入數值',
             ],
         ],
     ],

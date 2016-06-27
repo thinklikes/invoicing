@@ -15,7 +15,7 @@ class CreatePaymentOfPurchaseTable extends Migration
         Schema::create('payment_of_purchase', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code', 20)->unique()->comment = "付款單號";
-            $table->date('date')->comment = "付款日期";
+            $table->date('pay_date')->comment = "付款日期";
             $table->integer('supplier_id')->comment = "供應商的id";
             $table->enum('type', ['cash', 'check'])->comment = "付款方式類別";
             $table->integer('amount')->unsigned()->comment = "付款金額";

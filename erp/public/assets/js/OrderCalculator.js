@@ -106,9 +106,9 @@ function OrderCalculator(class_name) {
             var no_tax_price  = data[class_name.detail.no_tax_price][key] * 1;
             var no_tax_amount = 0;
 
-            if (old_tax_type == 'A' && class_name.tax_rate_code == 'I') {
+            if (old_tax_type == 'A' && data[class_name.tax_rate_code] == 'I') {
                 no_tax_price = no_tax_price / (1 + _tax_rate);
-            } else if (old_tax_type == 'I' && tax_type == 'A') {
+            } else if (old_tax_type == 'I' && data[class_name.tax_rate_code] == 'A') {
                 no_tax_price = no_tax_price * (1 + _tax_rate);
             } else {
                 no_tax_price = no_tax_price;
@@ -152,7 +152,7 @@ function OrderCalculator(class_name) {
         data[class_name.master.tax]                 = tax;
         data[class_name.master.total_amount]        = total_amount;
 
-        old_tax_type = class_name.tax_rate_code;
+        old_tax_type = data[class_name.tax_rate_code];
         //開始把資料拋回html文件
 
         push(data);

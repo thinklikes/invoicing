@@ -11,4 +11,13 @@ class PaymentOfPurchase extends Model
 
     protected $table = 'payment_of_purchase';
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+
+    /**
+     * 回傳這個進貨單表頭的供應商
+     * @return [type] [description]
+     */
+    public function supplier()
+    {
+        return $this->belongsTo('App\Basic\Supplier', 'supplier_id', 'id');
+    }
 }

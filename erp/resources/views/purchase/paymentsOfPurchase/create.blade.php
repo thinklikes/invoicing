@@ -1,30 +1,20 @@
 @extends('layouts.app')
 
 @inject('PublicPresenter', 'App\Presenters\PublicPresenter')
-@inject('WarehousePresenter', 'App\Presenters\WarehousePresenter')
 @section('content')
-        <script type="text/javascript">
-            var stock_url    = '{{ url("/stocks/json") }}';
-            var app_name     = 'returnOfPurchase';
 
-            var _tax_rate       = {{ Config::get('system_configs')['purchase_tax_rate'] }};
-            var _quantity_round_off      = {{ Config::get('system_configs')['quantity_round_off'] }};
-            var _no_tax_price_round_off  = {{ Config::get('system_configs')['no_tax_price_round_off'] }};
-            var _no_tax_amount_round_off = {{ Config::get('system_configs')['no_tax_amount_round_off'] }};
-            var _tax_round_off           = {{ Config::get('system_configs')['tax_round_off'] }};
-            var _total_amount_round_off  = {{ Config::get('system_configs')['total_amount_round_off'] }};
-        </script>
-<!--         <script type="text/javascript" src="{{ asset('assets/js/OrderCalculator.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('assets/js/purchase.js') }}"></script> -->
         <script type="text/javascript" src="{{ asset('assets/js/bindSupplierAutocomplete.js') }}"></script>
-        <form action=" {{ url("/returnsOfPurchase") }}" method="POST">
+        <script type="text/javascript" src="{{ asset('assets/js/bindDatePicker.js') }}"></script>
+        <form action=" {{ url("/paymentsOfPurchase") }}" method="POST">
             {{ csrf_field() }}
             <table id="master" width="100%">
                 <tr>
-                    <td>付款日期</td>
+                    <td>建立日期</td>
                     <td>{{ $PublicPresenter->getNewDate() }}</td>
+                    <td>付款日期</td>
+                    <td><input type="text" name="paymentOfPurchase[pay_date]" class="datepicker" size="10" value="{{ $paymentOfPurchase['pay_date'] }}"></td>
                     <td>付款單號</td>
-                    <td><input type="text" name="paymentOfPurchase[code]" id="code" value="{{ $paymentOfPurchase['code'] != "" ? $paymentOfPurchase['code'] : $new_master_code }}" readonly=""></td>
+                    <td><input type="text" id="code" value="{{ $new_master_code }}" readonly=""></td>
                 </tr>
                 <tr>
                     <th>供應商</th>
@@ -35,6 +25,17 @@
                     </td>
                 </tr>
                 <tr>
+                    <th>付款方式</th>
+                    <td colspan="5">
+                        <input type="radio" name="paymentOfPurchase[type]" value="cash"
+                            onclick="$('div#check_contents').find('input').attr('disabled', true);"
+                            {{ $paymentOfPurchase['type'] == "cash" || $paymentOfPurchase['type'] == '' ? 'checked=""' : ''}}>現金
+                        <input type="radio" name="paymentOfPurchase[type]" value="check"
+                            onclick="$('div#check_contents').find('input').attr('disabled', false);"
+                            {{ $paymentOfPurchase['type'] == "check" ? 'checked=""' : ''}}>票據
+                    </td>
+                </tr>
+                <tr>
                     <th>付款單備註</th>
                     <td colspan="5">
                         <input type="text" name="paymentOfPurchase[note]" id="master_note" value="{{ $paymentOfPurchase['note'] }}" size="50">
@@ -42,46 +43,46 @@
                 </tr>
             </table>
             <hr>
-            <div style="width:100%;">
-                <p>
-                    營業稅
-                    <input type="radio" id="tax_rate_code_A" name="paymentOfPurchase[tax_rate_code]" value="A" checked="">稅外加
-                    <input type="radio" id="tax_rate_code_I" name="paymentOfPurchase[tax_rate_code]" value="I">稅內含
-                </p>
+            <div id="check_contents">
+                <table width="100%">
+                    <tr>
+                        <td>票據號碼</td>
+                        <td>
+                            <input type="text" name="paymentOfPurchase[check_code]"
+                                {{ $paymentOfPurchase['type'] == "cash" || $paymentOfPurchase['type'] == '' ? 'disabled=""' : ''}}
+                                value="{{ isset($paymentOfPurchase['check_code']) ? $paymentOfPurchase['check_code'] : '' }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>到期日</td>
+                        <td>
+                            <input type="text" class="datepicker" name="paymentOfPurchase[expiry_date]" size="10"
+                                {{ $paymentOfPurchase['type'] == "cash" || $paymentOfPurchase['type'] == '' ? 'disabled=""' : ''}}
+                                value="{{ isset($paymentOfPurchase['expiry_date']) ? $paymentOfPurchase['expiry_date'] : '' }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>銀行帳號</td>
+                        <td>
+                            <input type="text" name="paymentOfPurchase[bank_account]"
+                                {{ $paymentOfPurchase['type'] == "cash" || $paymentOfPurchase['type'] == '' ? 'disabled=""' : '' }}
+                                value="{{ isset($paymentOfPurchase['bank_account']) ? $paymentOfPurchase['bank_account'] : '' }}">
+                        </td>
+                    </tr>
+                </table>
             </div>
-            <div style="width:50%;height:100px;float:left;">
-                <table>
+            <div>
+                <table width="100%">
                     <tr>
-                        <td>稅前合計：</td>
-                        <td><input type="text" id="total_no_tax_amount" readonly=""></td>
-                    </tr>
-                    <tr>
-                        <td>營業稅：</td>
-                        <td><input type="text" id="tax" readonly=""></td>
-                    </tr>
-                    <tr>
-                        <td>應付總計：</td>
-                        <td><input type="text" id="total_amount" readonly=""></td>
+                        <td>付款金額</td>
+                        <td>
+                            <input type="text" name="paymentOfPurchase[amount]" style="text-align:right;"
+                                value="{{ $paymentOfPurchase['amount'] }}">
+                        </td>
                     </tr>
                 </table>
             </div>
-            <div style="width:50%;height:100px;float:right;">
-                {{--<table>
-                    <tr>
-                        <td>稅前合計：</td>
-                        <td><input type="text" id="total_no_tax_amount" readonly=""></td>
-                    </tr>
-                    <tr>
-                        <td>營業稅：</td>
-                        <td><input type="text" id="tax" readonly=""></td>
-                    </tr>
-                    <tr>
-                        <td>應付總計：</td>
-                        <td><input type="text" id="total_amount" readonly=""></td>
-                    </tr>
-                </table>
-                --}}
-            </div>
+            <hr>
             <button type="submit">確認送出</button>
         </form>
 

@@ -26,7 +26,7 @@
                     <td>進貨日期</td>
                     <td>{{ $PublicPresenter->getNewDate() }}</td>
                     <td>進貨單號</td>
-                    <td><input type="text" id="master_code" value="{{ $billOfPurchaseMaster['code'] != "" ? $billOfPurchaseMaster['code'] : $new_master_code }}" readonly=""></td>
+                    <td><input type="text" id="master_code" value="{{ $new_master_code }}" readonly=""></td>
                     <td>發票號碼</td>
                     <td><input type="text" name="billOfPurchaseMaster[invoice_code]" value="{{ $billOfPurchaseMaster['invoice_code'] }}"></td>
                 </tr>
@@ -114,8 +114,12 @@
             <div style="width:100%;">
                 <p>
                     營業稅
-                    <input type="radio" class="tax_rate_code" onclick="calculator.calculate();" name="billOfPurchaseMaster[tax_rate_code]" value="A" checked="">稅外加
-                    <input type="radio" class="tax_rate_code" onclick="calculator.calculate();" name="billOfPurchaseMaster[tax_rate_code]" value="I">稅內含
+                    <input type="radio" class="tax_rate_code" onclick="calculator.calculate();"
+                        name="billOfPurchaseMaster[tax_rate_code]" value="A"
+                        {{ $billOfPurchaseMaster['tax_rate_code'] == "A" || $billOfPurchaseMaster['tax_rate_code'] == '' ? 'checked=""' : ''}}>稅外加
+                    <input type="radio" class="tax_rate_code" onclick="calculator.calculate();"
+                        name="billOfPurchaseMaster[tax_rate_code]" value="I"
+                        {{ $billOfPurchaseMaster['tax_rate_code'] == "I" ? 'checked=""' : ''}}>稅內含
                 </p>
             </div>
             <div style="width:50%;height:100px;float:left;">

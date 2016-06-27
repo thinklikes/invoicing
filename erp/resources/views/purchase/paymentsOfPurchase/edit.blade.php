@@ -1,159 +1,90 @@
 @extends('layouts.app')
 
 @inject('PublicPresenter', 'App\Presenters\PublicPresenter')
-@inject('OrderCalculator', 'App\Presenters\OrderCalculator')
-@inject('WarehousePresenter', 'App\Presenters\WarehousePresenter')
 
 @section('content')
-        {{ $OrderCalculator->setOrderMaster($returnOfPurchaseMaster) }}
-        {{ $OrderCalculator->setOrderDetail($returnOfPurchaseDetail) }}
-        {{ $OrderCalculator->calculate() }}
-        <script type="text/javascript">
-            var supplier_url = '{{ url("/suppliers/json") }}';
-            var stock_url    = '{{ url("/stocks/json") }}';
-            var app_name     = 'returnOfPurchase';
 
-            var _tax_rate       = {{ Config::get('system_configs')['purchase_tax_rate'] }};
-            var _quantity_round_off      = {{ Config::get('system_configs')['quantity_round_off'] }};
-            var _no_tax_price_round_off  = {{ Config::get('system_configs')['no_tax_price_round_off'] }};
-            var _no_tax_amount_round_off = {{ Config::get('system_configs')['no_tax_amount_round_off'] }};
-            var _tax_round_off           = {{ Config::get('system_configs')['tax_round_off'] }};
-            var _total_amount_round_off  = {{ Config::get('system_configs')['total_amount_round_off'] }};
-        </script>
-        <script type="text/javascript" src="{{ asset('assets/js/OrderCalculator.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('assets/js/purchase.js') }}"></script>
-        <form action="{{ url("/returnsOfPurchase/".$returnOfPurchaseMaster['code']) }}" method="POST">
+        <script type="text/javascript" src="{{ asset('assets/js/bindSupplierAutocomplete.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/bindDatePicker.js') }}"></script>
+        <form action="{{ url("/paymentsOfPurchase/".$paymentOfPurchase['code']) }}" method="POST">
             {{ csrf_field() }}
             {{ method_field('PUT') }}
-            <table id="master" width="100%">
+           <table id="master" width="100%">
                 <tr>
-                    <td>進貨退回日期</td>
-                    <td>{{ $PublicPresenter->getFormatDate($returnOfPurchaseMaster['created_at']) }}</td>
-                    <td>進貨退回單號</td>
-                    <td><input type="text" name="returnOfPurchaseMaster[code]" id="master_code" value="{{ $returnOfPurchaseMaster['code']}}" readonly=""></td>
-                    <td>發票號碼</td>
-                    <td><input type="text" name="returnOfPurchaseMaster[invoice_code]" id="master_invoice_code" value="{{ $returnOfPurchaseMaster['invoice_code'] }}"></td>
+                    <td>建立日期</td>
+                    <td>{{ $PublicPresenter->getNewDate() }}</td>
+                    <td>付款日期</td>
+                    <td><input type="text" name="paymentOfPurchase[pay_date]" class="datepicker" size="10" value="{{ $paymentOfPurchase['pay_date'] }}"></td>
+                    <td>付款單號</td>
+                    <td><input type="text" id="code" value="{{ $paymentOfPurchase['code'] }}" readonly=""></td>
                 </tr>
                 <tr>
                     <th>供應商</th>
                     <td colspan="5">
-                        <input type="hidden" name="returnOfPurchaseMaster[supplier_id]" id="master_supplier_id" value="{{ $returnOfPurchaseMaster['supplier_id'] }}"  size="10">
-                        <input type="text" name="returnOfPurchaseMaster[supplier_code]" id="master_supplier_code" value="{{ $returnOfPurchaseMaster['supplier_code'] }}"  size="10">
-                        <input type="text" name="returnOfPurchaseMaster[supplier_name]" id="master_supplier_name" value="{{ $returnOfPurchaseMaster['supplier_name'] }}">
+                        <input type="hidden" name="paymentOfPurchase[supplier_id]" class="supplier_id" value="{{ $paymentOfPurchase['supplier_id'] }}"  size="10">
+                        <input type="text" name="paymentOfPurchase[supplier_code]" class="supplier_code" value="{{ $paymentOfPurchase['supplier_code'] }}"  size="10">
+                        <input type="text" name="paymentOfPurchase[supplier_name]" class="supplier_autocomplete" value="{{ $paymentOfPurchase['supplier_name'] }}">
                     </td>
                 </tr>
                 <tr>
-                    <th>進貨退回單備註</th>
+                    <th>付款方式</th>
                     <td colspan="5">
-                        <input type="text" name="returnOfPurchaseMaster[note]" id="master_note" value="{{ $returnOfPurchaseMaster['note'] }}" size="50">
+                        <input type="radio" name="paymentOfPurchase[type]" value="cash"
+                            onclick="$('div#check_contents').find('input').attr('disabled', true);"
+                            {{ $paymentOfPurchase['type'] == "cash" || $paymentOfPurchase['type'] == '' ? 'checked=""' : ''}}>現金
+                        <input type="radio" name="paymentOfPurchase[type]" value="check"
+                            onclick="$('div#check_contents').find('input').attr('disabled', false);"
+                            {{ $paymentOfPurchase['type'] == "check" ? 'checked=""' : ''}}>票據
                     </td>
                 </tr>
-               <tr>
-                    <th>進貨退回倉庫</th>
+                <tr>
+                    <th>付款單備註</th>
                     <td colspan="5">
-                        <select name="returnOfPurchaseMaster[warehouse_id]" id="master_warehouse_id">
-                            <option></option>
-                            {!! $WarehousePresenter->renderOptions($returnOfPurchaseMaster['warehouse_id']) !!}
-                        </select>
+                        <input type="text" name="paymentOfPurchase[note]" id="master_note" value="{{ $paymentOfPurchase['note'] }}" size="50">
                     </td>
                 </tr>
             </table>
             <hr>
-            <button type="button" id="add_a_row">增加一列</button>
-            <table id="detail" width="100%">
-                <thead>
+            <div id="check_contents">
+                <table width="100%">
                     <tr>
-                        <th></th>
-                        <th>料品編號</th>
-                        <th>品名</th>
-                        <th>數量</th>
-                        <th>單位</th>
-                        <th>稅前單價</th>
-                        <th>小計</th>
-                    </tr>
-                </thead>
-                <tbody>
-    @if(count($returnOfPurchaseDetail) > 0)
-        @foreach($returnOfPurchaseDetail as $i => $value)
-                    <tr>
+                        <td>票據號碼</td>
                         <td>
-                            <button type="button" id="detail_remove_{{ $i }}"><i class="fa fa-remove"></i></button>
+                            <input type="text" name="paymentOfPurchase[check_code]"
+                                {{ $paymentOfPurchase['type'] == "cash" || $paymentOfPurchase['type'] == '' ? 'disabled=""' : ''}}
+                                value="{{ isset($paymentOfPurchase['check_code']) ? $paymentOfPurchase['check_code'] : '' }}">
                         </td>
-                        <td>
-                            <input type="text" id="detail_stock_code_{{ $i }}" name="returnOfPurchaseDetail[{{ $i }}][stock_code]" value="{{ $returnOfPurchaseDetail[$i]['stock_code'] }}" size="10">
-                            <input type="hidden" id="detail_stock_id_{{ $i }}" name="returnOfPurchaseDetail[{{ $i }}][stock_id]" value="{{ $returnOfPurchaseDetail[$i]['stock_id'] }}">
-                        </td>
-                        <td>
-                            <input type="text" id="detail_stock_name_{{ $i }}" name="returnOfPurchaseDetail[{{ $i }}][stock_name]" value="{{ $returnOfPurchaseDetail[$i]['stock_name'] }}">
-                        </td>
-                        <td><input type="text" id="detail_quantity_{{ $i }}" name="returnOfPurchaseDetail[{{ $i }}][quantity]" value="{{ $returnOfPurchaseDetail[$i]['quantity'] }}" style="text-align:right;" size="5"></td>
-                        <td><input type="text" id="detail_unit_{{ $i }}" name="returnOfPurchaseDetail[{{ $i }}][unit]" value="{{ $returnOfPurchaseDetail[$i]['unit'] }}" readonly="" size="5"></td>
-                        <td><input type="text" id="detail_no_tax_price_{{ $i }}" name="returnOfPurchaseDetail[{{ $i }}][no_tax_price]" value="{{ $returnOfPurchaseDetail[$i]['no_tax_price'] }}" style="text-align:right;" size="10"></td>
-                        <td><input type="text" id="detail_no_tax_amount_{{ $i }}" style="text-align:right;" size="10" value="{{ $OrderCalculator->getNoTaxAmount($i) }}"></td>
-                    </tr>
-        @endforeach
-    @else
-        @for($i = 0; $i < 5; $i ++)
-                    <tr>
-                        <td>
-                            <button type="button" id="detail_remove_{{ $i }}"><i class="fa fa-remove"></i></button>
-                        </td>
-                        <td>
-                            <input type="text" id="detail_stock_code_{{ $i }}" name="returnOfPurchaseDetail[{{ $i }}][stock_code]" value="" size="10">
-                            <input type="hidden" id="detail_stock_id_{{ $i }}" name="returnOfPurchaseDetail[{{ $i }}][stock_id]" value="">
-                        </td>
-                        <td>
-                            <input type="text" id="detail_stock_name_{{ $i }}" name="returnOfPurchaseDetail[{{ $i }}][stock_name]" value="">
-                        </td>
-                        <td><input type="text" id="detail_quantity_{{ $i }}" name="returnOfPurchaseDetail[{{ $i }}][quantity]" value="" style="text-align:right;" size="5"></td>
-                        <td><input type="text" id="detail_unit_{{ $i }}" name="returnOfPurchaseDetail[{{ $i }}][unit]" value="" readonly="" size="5"></td>
-                        <td><input type="text" id="detail_no_tax_price_{{ $i }}" name="returnOfPurchaseDetail[{{ $i }}][no_tax_price]" value="" style="text-align:right;" size="10"></td>
-                        <td><input type="text" id="detail_no_tax_amount_{{ $i }}" style="text-align:right;" size="10"></td>
-                    </tr>
-        @endfor
-    @endif
-                </tbody>
-            </table>
-            <hr>
-            <div style="width:50%;"">
-                <p>
-                    營業稅
-                    <input type="radio" id="tax_rate_code_A"  name="returnOfPurchaseMaster[tax_rate_code]" value="A" checked="">稅外加
-                    <input type="radio" id="tax_rate_code_I"  name="returnOfPurchaseMaster[tax_rate_code]" value="I">稅內含
-                </p>
-            </div>
-            <div style="width:50%;height:100px;float:left;">
-                <table>
-                    <tr>
-                        <td>稅前合計：</td>
-                        <td><input type="text" id="total_no_tax_amount" value="{{ $OrderCalculator->getTotalNoTaxAmount() }}" readonly=""></td>
                     </tr>
                     <tr>
-                        <td>營業稅：</td>
-                        <td><input type="text" id="tax" value="{{ $OrderCalculator->getTax() }}" readonly=""></td>
+                        <td>到期日</td>
+                        <td>
+                            <input type="text" class="datepicker" name="paymentOfPurchase[expiry_date]" size="10"
+                                {{ $paymentOfPurchase['type'] == "cash" || $paymentOfPurchase['type'] == '' ? 'disabled=""' : ''}}
+                                value="{{ isset($paymentOfPurchase['expiry_date']) ? $paymentOfPurchase['expiry_date'] : '' }}">
+                        </td>
                     </tr>
                     <tr>
-                        <td>應付總計：</td>
-                        <td><input type="text" id="total_amount" value="{{ $OrderCalculator->getTotalAmount() }}" readonly=""></td>
+                        <td>銀行帳號</td>
+                        <td>
+                            <input type="text" name="paymentOfPurchase[bank_account]"
+                                {{ $paymentOfPurchase['type'] == "cash" || $paymentOfPurchase['type'] == '' ? 'disabled=""' : '' }}
+                                value="{{ isset($paymentOfPurchase['bank_account']) ? $paymentOfPurchase['bank_account'] : '' }}">
+                        </td>
                     </tr>
                 </table>
             </div>
-            <div style="width:50%;height:100px;float:left;">
-                <!-- <table>
+            <div>
+                <table width="100%">
                     <tr>
-                        <td>稅前合計：</td>
-                        <td><input type="text" id="total_no_tax_amount" value="{{ $OrderCalculator->getTotalNoTaxAmount() }}" readonly=""></td>
+                        <td>付款金額</td>
+                        <td>
+                            <input type="text" name="paymentOfPurchase[amount]" style="text-align:right;"
+                                value="{{ $paymentOfPurchase['amount'] }}">
+                        </td>
                     </tr>
-                    <tr>
-                        <td>營業稅：</td>
-                        <td><input type="text" id="tax" value="{{ $OrderCalculator->getTax() }}" readonly=""></td>
-                    </tr>
-                    <tr>
-                        <td>應付總計：</td>
-                        <td><input type="text" id="total_amount" value="{{ $OrderCalculator->getTotalAmount() }}" readonly=""></td>
-                    </tr>
-                </table> -->
+                </table>
             </div>
+            <hr>
             <button type="submit">確認送出</button>
         </form>
 

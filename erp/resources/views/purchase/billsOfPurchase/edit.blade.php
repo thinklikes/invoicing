@@ -32,7 +32,7 @@
                     <td>進貨日期</td>
                     <td>{{ $PublicPresenter->getFormatDate($billOfPurchaseMaster['created_at']) }}</td>
                     <td>進貨單號</td>
-                    <td><input type="text" value="{{ $billOfPurchaseMaster['code']}}" readonly=""></td>
+                    <td><input type="text" value="{{ $billOfPurchaseMaster['code'] }}" readonly=""></td>
                     <td>發票號碼</td>
                     <td><input type="text" name="billOfPurchaseMaster[invoice_code]" value="{{ $billOfPurchaseMaster['invoice_code'] }}"></td>
                 </tr>
@@ -91,7 +91,7 @@
                         <td><input type="text" class="stock_quantity" name="billOfPurchaseDetail[{{ $i }}][quantity]" onkeyup="calculator.calculate();" value="{{ $billOfPurchaseDetail[$i]['quantity'] }}" style="text-align:right;" size="5"></td>
                         <td><input type="text" class="stock_unit" name="billOfPurchaseDetail[{{ $i }}][unit]" value="{{ $billOfPurchaseDetail[$i]['unit'] }}" readonly="" size="5"></td>
                         <td><input type="text" class="stock_no_tax_price" name="billOfPurchaseDetail[{{ $i }}][no_tax_price]" onkeyup="calculator.calculate();" value="{{ $billOfPurchaseDetail[$i]['no_tax_price'] }}" style="text-align:right;" size="10"></td>
-                        <td><input type="text" class="stock_no_tax_amount" style="text-align:right;" size="10"></td>
+                        <td><input type="text" class="stock_no_tax_amount" style="text-align:right;" value="{{ $OrderCalculator->getNoTaxAmount($i) }}" size="10"></td>
                     </tr>
         @endforeach
     @else
@@ -120,8 +120,12 @@
             <div style="width:50%;"">
                 <p>
                     營業稅
-                    <input type="radio" class="tax_rate_code"  name="billOfPurchaseMaster[tax_rate_code]" onclick="calculator.calculate();" value="A" checked="">稅外加
-                    <input type="radio" class="tax_rate_code"  name="billOfPurchaseMaster[tax_rate_code]" onclick="calculator.calculate();" value="I">稅內含
+                    <input type="radio" class="tax_rate_code" onclick="calculator.calculate();"
+                        name="billOfPurchaseMaster[tax_rate_code]" value="A"
+                        {{ $billOfPurchaseMaster['tax_rate_code'] == "A" || $billOfPurchaseMaster['tax_rate_code'] == '' ? 'checked=""' : ''}}>稅外加
+                    <input type="radio" class="tax_rate_code" onclick="calculator.calculate();"
+                        name="billOfPurchaseMaster[tax_rate_code]" value="I"
+                        {{ $billOfPurchaseMaster['tax_rate_code'] == "I" ? 'checked=""' : ''}}>稅內含
                 </p>
             </div>
             <div style="width:50%;height:100px;float:left;">

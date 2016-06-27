@@ -28,21 +28,18 @@ class BillOfPurchaseRequest extends Request implements FormRequestInterface
      */
     public function rules()
     {
-        $code = $this->input("$this->orderMasterInputName.code");
-        $rules = [];
-        if ($this->input("$this->orderMasterInputName.code")) {
-            $rules = $rules + [
-                    //表頭驗證規則
-                    "{$this->orderMasterInputName}.code"
-                        => "required|unique:{$this->table_name},code,{$code},code",
-                    "{$this->orderMasterInputName}.supplier_id"
-                        => "required",
-                    "{$this->orderMasterInputName}.tax_rate_code"
-                        => "required",
-                    "{$this->orderMasterInputName}.warehouse_id"
-                        => "required",
-            ];
-        }
+        $rules = [
+                //表頭驗證規則
+                // "{$this->orderMasterInputName}.code"
+                //     => "required|unique:{$this->table_name},code,{$code},code",
+                "{$this->orderMasterInputName}.supplier_id"
+                    => "required",
+                // "{$this->orderMasterInputName}.tax_rate_code"
+                //     => "required",
+                "{$this->orderMasterInputName}.warehouse_id"
+                    => "required",
+        ];
+
 
         if ($this->input($this->orderDetailInputName)) {
             $code = $this->input("$this->orderMasterInputName.code");

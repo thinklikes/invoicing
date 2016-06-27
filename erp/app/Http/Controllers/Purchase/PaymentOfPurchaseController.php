@@ -7,7 +7,6 @@ use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
 use App\Repositories\Purchase\PaymentOfPurchaseRepository as OrderRepository;
 use App\Services\Purchase\PaymentOfPurchaseService as orderService;
-use Config;
 use Illuminate\Http\Request;
 
 class PaymentOfPurchaseController extends BasicController
@@ -71,9 +70,8 @@ class PaymentOfPurchaseController extends BasicController
         );
         //抓出使用者輸入的資料
         $orderMaster = $request->input($this->orderMasterInputName);
-        $orderDetail = $request->input($this->orderDetailInputName);
 
-        return $this->orderService->create($this, $orderMaster, $orderDetail);
+        return $this->orderService->create($this, $orderMaster);
     }
 
     /**
@@ -88,15 +86,8 @@ class PaymentOfPurchaseController extends BasicController
         $orderMaster->supplier_code = $orderMaster->supplier->code;
         $orderMaster->supplier_name = $orderMaster->supplier->name;
 
-        $orderDetail = $this->orderRepository->getOrderDetail($code);
-        foreach ($orderDetail as $key => $value) {
-            $orderDetail[$key]->stock_code = $orderDetail[$key]->stock->code;
-            $orderDetail[$key]->stock_name = $orderDetail[$key]->stock->name;
-            $orderDetail[$key]->unit = $orderDetail[$key]->stock->unit->comment;
-        }
         return view($this->routeName.'.show', [
-            $this->orderMasterInputName => $orderMaster,
-            $this->orderDetailInputName => $orderDetail,
+            $this->orderMasterInputName => $orderMaster
         ]);
     }
 
@@ -119,20 +110,8 @@ class PaymentOfPurchaseController extends BasicController
             $orderMaster->supplier_name = $orderMaster->supplier->name;
         }
 
-        if ($request->old($this->orderDetailInputName)) {
-            $orderDetail = $request->old($this->orderDetailInputName);
-        } else {
-            $orderDetail = $this->orderRepository->getOrderDetail($code);
-            foreach ($orderDetail as $key => $value) {
-                $orderDetail[$key]->stock_code = $orderDetail[$key]->stock->code;
-                $orderDetail[$key]->stock_name = $orderDetail[$key]->stock->name;
-                $orderDetail[$key]->unit = $orderDetail[$key]->stock->unit->comment;
-            }
-        }
-
         return view($this->routeName.'.edit', [
             $this->orderMasterInputName => $orderMaster,
-            $this->orderDetailInputName => $orderDetail,
         ]);
     }
 
@@ -152,9 +131,8 @@ class PaymentOfPurchaseController extends BasicController
         );
 
         $orderMaster = $request->input($this->orderMasterInputName);
-        $orderDetail = $request->input($this->orderDetailInputName);
 
-        return $this->orderService->update($this, $orderMaster, $orderDetail, $code);
+        return $this->orderService->update($this, $orderMaster, $code);
     }
 
     /**

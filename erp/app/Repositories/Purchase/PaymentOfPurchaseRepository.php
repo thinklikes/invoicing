@@ -9,7 +9,7 @@ use App\Purchase\PaymentOfPurchase as OrderMaster;
 class PaymentOfPurchaseRepository extends BasicRepository
 {
     protected $orderMaster;
-    protected $orderClassName = Order::class;
+    protected $orderMasterClassName = OrderMaster::class;
     /**
      * BillOfPurchaseRepository constructor.
      *

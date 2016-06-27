@@ -31,12 +31,12 @@ class ReturnOfPurchaseRequest extends Request implements FormRequestInterface
 
         $rules = [
                 //表頭驗證規則
-                "{$this->orderMasterInputName}.code"
-                    => "required|unique:{$this->table_name},code,{$code},code",
+                // "{$this->orderMasterInputName}.code"
+                //     => "required|unique:{$this->table_name},code,{$code},code",
                 "{$this->orderMasterInputName}.supplier_id"
                     => "required",
-                "{$this->orderMasterInputName}.tax_rate_code"
-                    => "required",
+                // "{$this->orderMasterInputName}.tax_rate_code"
+                //     => "required",
                 "{$this->orderMasterInputName}.warehouse_id"
                     => "required",
         ];

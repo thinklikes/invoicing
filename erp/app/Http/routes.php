@@ -13,15 +13,15 @@
 DB::enableQueryLog();
 
     Route::get('/test', function () {
-        dd(Config::get('system_configs')['website_title']);
+        $test = App::make('App\Http\Requests\Purchase\PaymentOfPurchaseRequest');
     });
 
-    Route::get('/providers_test', function () {
-        var_dump("from route");
+    //Route::get('/providers_test', function () {
+        //var_dump("from route");
         //App::register('App\Providers\FormRequestServiceProvider');
-        $re = App::make('App\Http\Requests\FormRequestInterface');
+        //$re = App::make('App\Http\Requests\FormRequestInterface');
         //dd($supplier->getSupplierDetail(1));
-    });
+    //});
     // Route::get('/providers_test', function (SupplierRepository $supplier) {
     //     var_dump("from route");
     //     //$supplier = App::make('SupplierRepository');
