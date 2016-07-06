@@ -4,6 +4,7 @@ namespace App\Services\Purchase;
 use App\Repositories\Purchase\BillOfPurchaseRepository as OrderRepository;
 use App\Repositories\StockWarehouseRepository as StockWarehouse;
 use Illuminate\Support\MessageBag;
+use App\Presenters\OrderCalculator;
 
 class BillOfPurchaseService
 {
@@ -12,19 +13,25 @@ class BillOfPurchaseService
 
     public function __construct(
         OrderRepository $orderRepository,
-        StockWarehouse $stock
+        StockWarehouse $stock,
+        OrderCalculator $calculator
     ) {
         $this->orderRepository = $orderRepository;
         $this->stock           = $stock;
+        $this->calculator      = $calculator;
     }
 
     public function create($listener, $orderMaster, $orderDetail)
     {
         $isCreated = true;
-
         $code = $this->orderRepository->getNewOrderCode();
-
         $orderMaster['code'] = $code;
+
+        $this->calculator->setOrderMaster($orderMaster);
+        $this->calculator->setOrderDetail($orderDetail);
+        $this->calculator->calculate();
+
+        $orderMaster['total_amount'] = $this->calculator->getTotalAmount();
         //新增進貨單表頭
         $isCreated = $isCreated && $this->orderRepository->storeOrderMaster($orderMaster);
 

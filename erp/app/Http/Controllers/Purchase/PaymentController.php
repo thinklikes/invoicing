@@ -5,16 +5,16 @@ namespace App\Http\Controllers\Purchase;
 use App;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
-use App\Repositories\Purchase\PaymentOfPurchaseRepository as OrderRepository;
-use App\Services\Purchase\PaymentOfPurchaseService as orderService;
+use App\Repositories\Purchase\PaymentRepository as OrderRepository;
+use App\Services\Purchase\PaymentService as orderService;
 use Illuminate\Http\Request;
 
-class PaymentOfPurchaseController extends BasicController
+class PaymentController extends BasicController
 {
     protected $orderRepository;
     protected $orderService;
-    private $orderMasterInputName = 'paymentOfPurchase';
-    private $routeName = 'purchase.paymentsOfPurchase';
+    private $orderMasterInputName = 'payment';
+    private $routeName = 'purchase.payments';
     private $ordersPerPage = 15;
     /**
      * SupplierController constructor.
@@ -28,6 +28,25 @@ class PaymentOfPurchaseController extends BasicController
         $this->orderRepository = $orderRepository;
         $this->orderService    = $orderService;
         $this->setFullClassName();
+    }
+
+    /**
+     * 回傳Json格式的資料
+     * @param  string $data_mode 資料類型
+     * @param  string $code      搜尋的鍵值
+     * @return Json            Json格式的資料
+     */
+    public function json($data_mode, $code)
+    {
+        switch ($data_mode) {
+            case 'getPaymentBySupplierId':
+                $orderMaster = $this->orderRepository->getPaymentBySupplierId($code);
+                break;
+            default:
+                # code...
+                break;
+        }
+        return response()->json($orderMaster->all());
     }
 
     /**

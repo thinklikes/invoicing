@@ -5,18 +5,18 @@ namespace App\Http\Controllers\Purchase;
 use App;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
-use App\Repositories\Purchase\ReturnOfPurchaseRepository as OrderRepository;
-use App\Services\Purchase\ReturnOfPurchaseService as orderService;
-use Config;
+use App\Repositories\Purchase\PayableWriteOffRepository as OrderRepository;
+use App\Services\Purchase\PayableWriteOffService as orderService;
 use Illuminate\Http\Request;
 
-class ReturnOfPurchaseController extends BasicController
+class PayableWriteOffController extends BasicController
 {
     protected $orderRepository;
     protected $orderService;
-    private $orderMasterInputName = 'returnOfPurchaseMaster';
-    private $orderDetailInputName = 'returnOfPurchaseDetail';
-    private $routeName = 'purchase.returnsOfPurchase';
+    private $orderMasterInputName = 'payableWriteOff';
+    protected $creditInputName = 'payableWriteOffCredit';
+    protected $debitInputName = 'payableWriteOffDebit';
+    private $routeName = 'purchase.payableWriteOff';
     private $ordersPerPage = 15;
     /**
      * SupplierController constructor.
@@ -32,24 +32,6 @@ class ReturnOfPurchaseController extends BasicController
         $this->setFullClassName();
     }
 
-    /**
-     * 回傳Json格式的資料
-     * @param  string $data_mode 資料類型
-     * @param  string $code      搜尋的鍵值
-     * @return Json            Json格式的資料
-     */
-    public function json($data_mode, $code)
-    {
-        switch ($data_mode) {
-            case 'getPayableBySupplierId':
-                $orderMaster = $this->orderRepository->getPayableBySupplierId($code);
-                break;
-            default:
-                # code...
-                break;
-        }
-        return response()->json($orderMaster->all());
-    }
     /**
      * Display a listing of the resource.
      *
@@ -72,7 +54,8 @@ class ReturnOfPurchaseController extends BasicController
         return view($this->routeName.'.create', [
             'new_master_code'           => $this->orderRepository->getNewOrderCode(),
             $this->orderMasterInputName => $request->old($this->orderMasterInputName),
-            $this->orderDetailInputName => $request->old($this->orderDetailInputName),
+            $this->creditInputName => $request->old($this->creditInputName),
+            $this->debitInputName => $request->old($this->debitInputName),
         ]);
     }
 
@@ -82,18 +65,20 @@ class ReturnOfPurchaseController extends BasicController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store()
+    public function store(Request $request)
     {
         //驗證表單填入的資料
         $request = App::make(
             'App\Contracts\FormRequestInterface',
             ['className' => $this->className]
         );
+        dd('驗證通過');
         //抓出使用者輸入的資料
         $orderMaster = $request->input($this->orderMasterInputName);
-        $orderDetail = $request->input($this->orderDetailInputName);
+        $orderCredit = $request->input($this->creditInputName);
+        $orderdebit = $request->input($this->debitInputName);
 
-        return $this->orderService->create($this, $orderMaster, $orderDetail);
+        return $this->orderService->create($this, $orderMaster, $orderCredit, $orderdebit);
     }
 
     /**
@@ -108,15 +93,8 @@ class ReturnOfPurchaseController extends BasicController
         $orderMaster->supplier_code = $orderMaster->supplier->code;
         $orderMaster->supplier_name = $orderMaster->supplier->name;
 
-        $orderDetail = $this->orderRepository->getOrderDetail($code);
-        foreach ($orderDetail as $key => $value) {
-            $orderDetail[$key]->stock_code = $orderDetail[$key]->stock->code;
-            $orderDetail[$key]->stock_name = $orderDetail[$key]->stock->name;
-            $orderDetail[$key]->unit = $orderDetail[$key]->stock->unit->comment;
-        }
         return view($this->routeName.'.show', [
-            $this->orderMasterInputName => $orderMaster,
-            $this->orderDetailInputName => $orderDetail,
+            $this->orderMasterInputName => $orderMaster
         ]);
     }
 
@@ -139,20 +117,8 @@ class ReturnOfPurchaseController extends BasicController
             $orderMaster->supplier_name = $orderMaster->supplier->name;
         }
 
-        if ($request->old($this->orderDetailInputName)) {
-            $orderDetail = $request->old($this->orderDetailInputName);
-        } else {
-            $orderDetail = $this->orderRepository->getOrderDetail($code);
-            foreach ($orderDetail as $key => $value) {
-                $orderDetail[$key]->stock_code = $orderDetail[$key]->stock->code;
-                $orderDetail[$key]->stock_name = $orderDetail[$key]->stock->name;
-                $orderDetail[$key]->unit = $orderDetail[$key]->stock->unit->comment;
-            }
-        }
-
         return view($this->routeName.'.edit', [
             $this->orderMasterInputName => $orderMaster,
-            $this->orderDetailInputName => $orderDetail,
         ]);
     }
 
@@ -172,9 +138,8 @@ class ReturnOfPurchaseController extends BasicController
         );
 
         $orderMaster = $request->input($this->orderMasterInputName);
-        $orderDetail = $request->input($this->orderDetailInputName);
 
-        return $this->orderService->update($this, $orderMaster, $orderDetail, $code);
+        return $this->orderService->update($this, $orderMaster, $code);
     }
 
     /**

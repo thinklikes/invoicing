@@ -27,10 +27,18 @@ class ReturnOfPurchaseRepository extends BasicRepository
         $this->orderDetail = $orderDetail;
     }
 
-    // public function isOrderExsist($code)
-    // {
-    //     return $this->orderMaster->where('code', $code)->count() > 0;
-    // }
+    /**
+     * 找出輸入的供應商id未付清的所有應付帳款
+     * @return array all suppliers
+     */
+    public function getPayableBySupplierId($suppier_id)
+    {
+        return $this->orderMaster->select('id', 'code', 'invoice_code','total_amount', 'paid_amount', 'created_at')
+            ->where('supplier_id', $suppier_id)
+            ->where('is_paid', '0')
+            ->orderBy('code')
+            ->get();
+    }
 
     /**
      * [getNewMasterCode 回傳新一組的表頭CODE]

@@ -5,10 +5,10 @@ namespace App\Http\Requests\Purchase;
 use App\Http\Requests\Request;
 use App\Contracts\FormRequestInterface;
 
-class PaymentOfPurchaseRequest extends Request implements FormRequestInterface
+class PaymentRequest extends Request implements FormRequestInterface
 {
-    protected $orderMasterInputName = 'paymentOfPurchase';
-    protected $table_name           = 'payment_of_purchase';
+    protected $orderMasterInputName = 'payment';
+    protected $table_name           = 'payment';
     /**
      * Determine if the user is authorized to make this request.
      *

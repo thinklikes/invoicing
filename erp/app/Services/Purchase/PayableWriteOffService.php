@@ -1,10 +1,10 @@
 <?php
 namespace App\Services\Purchase;
 
-use App\Repositories\Purchase\PaymentOfPurchaseRepository as OrderRepository;
+use App\Repositories\Purchase\PayableWriteOffRepository as OrderRepository;
 use Illuminate\Support\MessageBag;
 
-class PaymentOfPurchaseService
+class PayableWriteOffService
 {
     protected $orderRepository;
     protected $stock;

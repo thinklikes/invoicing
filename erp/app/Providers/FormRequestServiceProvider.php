@@ -44,8 +44,11 @@ class FormRequestServiceProvider extends ServiceProvider
                     case 'Purchase\ReturnOfPurchaseController':
                         $requestMethod = 'App\Http\Requests\Purchase\ReturnOfPurchaseRequest';
                         break;
-                    case 'Purchase\PaymentOfPurchaseController':
-                        $requestMethod = 'App\Http\Requests\Purchase\PaymentOfPurchaseRequest';
+                    case 'Purchase\PaymentController':
+                        $requestMethod = 'App\Http\Requests\Purchase\PaymentRequest';
+                        break;
+                    case 'Purchase\PayableWriteOffController':
+                        $requestMethod = 'App\Http\Requests\Purchase\PayableWriteOffRequest';
                         break;
                     default:
                         $requestMethod = 'App\Http\Requests\ErpRequest';

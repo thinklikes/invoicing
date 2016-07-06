@@ -127,6 +127,13 @@ return [
             'tax_rate_code' => [
                 'required' => '我們需要知道營業稅別!!',
             ],
+            'supplier_id' => [
+                'required' => '我們需要知道供應商',
+            ],
+            'stock_id' => [
+                'required_unless'      => '我們需要知道料品名稱!!',
+                'required_without_all' => '請至少輸入一項料品',
+            ],
         ],
         //客戶資料管理的表單驗證訊息
         'customer' => [
@@ -207,10 +214,6 @@ return [
         ],
         'purchase_order_detail'=> [
             '*' => [
-                'stock_id' => [
-                    'required_unless'      => '我們需要知道料品名稱!!',
-                    'required_without_all' => '請至少輸入一項料品',
-                ],
                 'quantity' => [
                     'required_with' => '我們需要知道數量!!',
                     'numeric'       => '數量請填入數字',
@@ -221,19 +224,12 @@ return [
             ],
         ],
         'billOfPurchaseMaster'=> [
-            'supplier_id' => [
-                'required' => '我們需要知道供應商',
-            ],
             'warehouse_id' => [
                 'required' => '我們需要知道進貨倉庫',
             ],
         ],
         'billOfPurchaseDetail'=> [
             '*' => [
-                'stock_id' => [
-                    'required_unless'      => '我們需要知道料品名稱!!',
-                    'required_without_all' => '請至少輸入一項料品',
-                ],
                 'quantity' => [
                     'required_with' => '我們需要知道數量!!',
                     'numeric'       => '數量請填入數字',
@@ -244,19 +240,12 @@ return [
             ],
         ],
         'returnOfPurchaseMaster'=> [
-            'supplier_id' => [
-                'required' => '我們需要知道供應商',
-            ],
             'warehouse_id' => [
                 'required' => '我們需要知道進貨退回倉庫',
             ],
         ],
         'returnOfPurchaseDetail'=> [
             '*' => [
-                'stock_id' => [
-                    'required_unless'      => '我們需要知道料品名稱!!',
-                    'required_without_all' => '請至少輸入一項料品',
-                ],
                 'quantity' => [
                     'required_with' => '我們需要知道數量!!',
                     'numeric'       => '數量請填入數字',
@@ -267,9 +256,6 @@ return [
             ],
         ],
         'paymentOfPurchase'=> [
-            'supplier_id' => [
-                'required' => '我們需要知道供應商',
-            ],
             'pay_date' => [
                 'required' => '我們需要知道付款日期',
                 'date'     => '付款日期請輸入正確的日期格式(YYYY-MM-dd)',
@@ -288,6 +274,35 @@ return [
                 'required' => '我們需要知道付款金額',
                 'numeric'  => '付款金額請填入數值',
             ],
+        ],
+        'payableWriteOff' => [
+            'total_credit_amount' => [
+                'same' => '應付帳款沖銷不平，請檢查沖銷金額!!'
+            ]
+        ],
+        'payableWriteOffCredit' => [
+            '*' => [
+                'credit_checked' => [
+                    'required_without_all' => '請至少沖銷一項付款金額',
+                ],
+            ],
+        ],
+        'payableWriteOffDebit' => [
+            '*' => [
+                'debit_checked' => [
+                    'required_without_all' => '請至少沖銷一項應付帳款',
+                ],
+                'debit_amount' => [
+                    'numeric' => '應付帳款沖銷金額請填入數字',
+                    'max'     => '應付帳款沖銷金額高於未付清款項',
+                    'required_if' => '我們需要知道應付帳款沖銷金額'
+                ],
+            ],
+            // '0' => [
+            //     'debit_checked' => [
+            //         'required' => '請選擇供應商，或聯絡管理員',
+            //     ],
+            // ]
         ],
     ],
 

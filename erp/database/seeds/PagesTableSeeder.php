@@ -308,25 +308,49 @@ class PagesTableSeeder extends Seeder
             [
                 'name'       => '付款單管理',
                 'level'      => 2,
-                'action'     => 'Purchase\PaymentOfPurchaseController@index',
+                'action'     => 'Purchase\PaymentController@index',
                 'enabled'    => 1,
             ],
             [
                 'name'       => '新增付款單',
                 'level'      => 3,
-                'action'     => 'Purchase\PaymentOfPurchaseController@create',
+                'action'     => 'Purchase\PaymentController@create',
                 'enabled'    => 1,
             ],
             [
                 'name'       => '檢視付款單',
                 'level'      => 3,
-                'action'     => 'Purchase\PaymentOfPurchaseController@show',
+                'action'     => 'Purchase\PaymentController@show',
                 'enabled'    => 1,
             ],
             [
                 'name'       => '維護付款單',
                 'level'      => 3,
-                'action'     => 'Purchase\PaymentOfPurchaseController@edit',
+                'action'     => 'Purchase\PaymentController@edit',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '應付帳款沖銷單管理',
+                'level'      => 2,
+                'action'     => 'Purchase\PayableWriteOffController@index',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '新增應付帳款沖銷單',
+                'level'      => 3,
+                'action'     => 'Purchase\PayableWriteOffController@create',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '檢視應付帳款沖銷單',
+                'level'      => 3,
+                'action'     => 'Purchase\PayableWriteOffController@show',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '維護應付帳款沖銷單',
+                'level'      => 3,
+                'action'     => 'Purchase\PayableWriteOffController@edit',
                 'enabled'    => 1,
             ],
             // [

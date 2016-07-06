@@ -4,7 +4,6 @@
 @inject('WarehousePresenter', 'App\Presenters\WarehousePresenter')
 @section('content')
         <script type="text/javascript">
-            var supplier_url = '{{ url("/suppliers/json") }}';
             var stock_url    = '{{ url("/stocks/json") }}';
             var app_name     = 'billOfPurchase';
 
@@ -16,8 +15,8 @@
             var _total_amount_round_off  = {{ Config::get('system_configs')['total_amount_round_off'] }};
         </script>
         <script type="text/javascript" src="{{ asset('assets/js/OrderCalculator.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('assets/js/purchase.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/bindSupplierAutocomplete.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/purchase.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/bindStockAutocomplete.js') }}"></script>
         <form action=" {{ url("/billsOfPurchase") }}" method="POST">
             {{ csrf_field() }}

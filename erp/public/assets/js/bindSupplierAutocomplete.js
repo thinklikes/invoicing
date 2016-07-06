@@ -1,68 +1,99 @@
-$(function() {
-    //要加這一段ajax才能生效
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-    var supplier_url = '/suppliers/json';
-    //綁定供應商名稱自動完成的事件
-    $( "input.supplier_autocomplete" ).autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                method: "POST",
-                url: supplier_url,
-                dataType: "json",
-                data: {
-                    'name': request.term,
-                },
-                success: function( data ) {
-                    //console.log(data);
-                    response( $.map( data, function( item ) {
-                        return {
-                            label: item.shortName + ' - ' + item.name,
-                            value: item.name,
-                            id   : item.id,
-                            code   : item.code,
-                        }
-                    }));
-                }
-            });
-        },
-        select: function( event, ui ) {
-            if ($('input.supplier_code').length > 0) {
-                $('input.supplier_code').val(ui.item.code);
-            }
-            if ($('input.supplier_id').length > 0) {
-                $('input.supplier_id').val(ui.item.id);
-            }
-        },
-        minLength: 2
-    });
-    //綁定掃描供應商條碼的事件
-    $( "input.supplier_code" ).blur(function () {
-        if ($(this).val() == "") {
-            return false;
-        }
-        var code = $(this).val();
-        $.ajax({
-            method: "POST",
-            url: supplier_url,
-            dataType: "json",
-            data: {
-                'code': code
-            },
-            success: function( data ) {
-                if ($('input.supplier_id"]').length > 0) {
-                    $('input.supplier_id"]').val(data[0].id);
-                }
-                if ($('input.supplier_name"]').length > 0) {
-                    $('input.supplier_name').val(data[0].name);
-                }
-                if ($('input.stock_code:first').length > 0) {
-                    $('input.stock_code:first').focus();
-                }
+/**
+ * 綁定供應商名稱自動完成的程式
+ * 以及掃描供應商條碼自動填入的程式
+ * 本程式必須啟用Jquery
+ */
+/**
+ * Javascript Class SupplierAutocompleter
+ * @param {string} request_url      請求資料的網址
+ * @param {object} triggered_by     autocomplete模組的觸發元素是input.supplier_autocomplete
+ *                                  scan模組的觸發元素是input.supplier_code
+ * @param {object} auto_fill        會自動填入的元素
+ * @param {Object} after_triggering autocomplete觸發後要執行的方法
+ */
+function SupplierAutocompleter(request_url, triggered_by, auto_fill,
+    after_triggering = {}) {
+
+    MyObj = this;
+    request_url = request_url;
+    triggeredBySelectors = triggered_by;
+    auto_fill = auto_fill;
+    after_triggering = after_triggering;
+
+    if (typeof $.ajaxSetup().headers == 'undefined') {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-    });
-});
+    }
+
+    MyObj.eventBind = function () {
+        /**
+         * 透過jquery ui的autocomplete抓出供應商資料
+         */
+        $( triggeredBySelectors['autocomplete'] ).autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    method: "POST",
+                    url: request_url,
+                    dataType: "json",
+                    data: {
+                        'name': request.term,
+                    },
+                    success: function( data ) {
+                        response( $.map( data, function( item ) {
+                            return {
+                                label: item.shortName + ' - ' + item.name,
+                                value: item.name,
+                                id   : item.id,
+                                code   : item.code,
+                            }
+                        }));
+                    }
+                });
+            },
+            select: function( event, ui ) {
+                if ($(auto_fill['code']).length > 0) {
+                    $(auto_fill['code']).val(ui.item.code);
+                }
+                if ($(auto_fill['id']).length > 0) {
+                    $(auto_fill['id']).val(ui.item.id);
+                }
+                if (typeof after_triggering['autocomplete'] == "function") {
+                    after_triggering['autocomplete'](ui.item.id);
+                }
+            },
+            minLength: 2
+        });
+        /**
+         * 掃描時
+         * 透過jquery的ajax抓出供應商資料
+         */
+        $( triggeredBySelectors['scan'] ).blur(function () {
+            if ($(this).val() == "") {
+                return false;
+            }
+            var code = $(this).val();
+            $.ajax({
+                method: "POST",
+                url: request_url,
+                dataType: "json",
+                data: {
+                    'code': code,
+                },
+                success: function( data ) {
+                    if ($(auto_fill['id']).length > 0) {
+                        $(auto_fill['id']).val(data[0].id);
+                    }
+                    if ($(auto_fill['name']).length > 0) {
+                        $(auto_fill['name']).val(data[0].name);
+                    }
+                    if (typeof after_triggering['scan'] == "function") {
+                        after_triggering['scan'](data[0].id);
+                    }
+                }
+            });
+        });
+    }
+}

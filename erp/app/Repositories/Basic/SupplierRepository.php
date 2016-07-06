@@ -26,7 +26,6 @@ class SupplierRepository extends BasicRepository
      */
     public function getSuppliersJson($param)
     {
-        //dd($param);
         return $this->supplier->select('id', 'code', 'shortName','name')
             ->where(function ($query) use($param) {
                 if (isset($param['name'])) {

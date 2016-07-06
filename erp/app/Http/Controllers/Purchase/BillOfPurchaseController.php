@@ -33,6 +33,25 @@ class BillOfPurchaseController extends BasicController
     }
 
     /**
+     * 回傳Json格式的資料
+     * @param  string $data_mode 資料類型
+     * @param  string $code      搜尋的鍵值
+     * @return Json            Json格式的資料
+     */
+    public function json($data_mode, $code)
+    {
+        switch ($data_mode) {
+            case 'getPayableBySupplierId':
+                $orderMaster = $this->orderRepository->getPayableBySupplierId($code);
+                break;
+            default:
+                # code...
+                break;
+        }
+        return response()->json($orderMaster->all());
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

@@ -8,7 +8,7 @@
             <thead>
                 <tr>
                     <th>開單日期</th>
-                    <th>付款單代號</th>
+                    <th>應付帳款沖銷單代號</th>
                     <th>供應商編號</th>
                     <th>供應商名稱</th>
                 </tr>
@@ -17,7 +17,7 @@
         @foreach ($orders as $order)
                 <tr>
                     <td>{{ $PublicPresenter->getFormatDate($order->created_at) }}</td>
-                    <td><a href="{{ url("/paymentsOfPurchase/$order->code") }}">{{ $order->code }}</a></td>
+                    <td><a href="{{ url("/payableWriteOff/$order->code") }}">{{ $order->code }}</a></td>
                     <td>{{ $order->supplier->code }}</td>
                     <td>{{ $order->supplier->name }}</td>
                 </tr>
@@ -26,5 +26,5 @@
         </table>
         <div align="center">{!! $orders->render() !!}</div>
         <br>
-        <a href="{{ url('/paymentsOfPurchase/create') }}">新增付款單</a>
+        <a href="{{ url('/payableWriteOff/create') }}">新增應付帳款沖銷單</a>
 @endsection

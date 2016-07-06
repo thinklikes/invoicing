@@ -4,9 +4,9 @@ namespace App\Repositories\Purchase;
 
 use App;
 use App\Repositories\BasicRepository;
-use App\Purchase\PaymentOfPurchase as OrderMaster;
+use App\Purchase\Payment as OrderMaster;
 
-class PaymentOfPurchaseRepository extends BasicRepository
+class PaymentRepository extends BasicRepository
 {
     protected $orderMaster;
     protected $orderMasterClassName = OrderMaster::class;
@@ -20,10 +20,18 @@ class PaymentOfPurchaseRepository extends BasicRepository
         $this->orderMaster = $orderMaster;//$OrderMaster;
     }
 
-    // public function isOrderExsist($code)
-    // {
-    //     return $this->orderMaster->where('code', $code)->count() > 0;
-    // }
+    /**
+     * 找出輸入的供應商id未沖銷的的所有付款
+     * @return array all suppliers
+     */
+    public function getPaymentBySupplierId($suppier_id)
+    {
+        return $this->orderMaster->select('id', 'code', 'pay_date', 'type', 'check_code', 'amount')
+            ->where('supplier_id', $suppier_id)
+            ->where('isWrittenOff', '0')
+            ->orderBy('code')
+            ->get();
+    }
 
     /**
      * [getNewMasterCode 回傳新一組的表頭CODE]

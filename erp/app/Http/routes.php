@@ -12,23 +12,29 @@
 */
 DB::enableQueryLog();
 
-    Route::get('/test', function () {
-        $test = App::make('App\Http\Requests\Purchase\PaymentOfPurchaseRequest');
-    });
-
-    //Route::get('/providers_test', function () {
-        //var_dump("from route");
-        //App::register('App\Providers\FormRequestServiceProvider');
-        //$re = App::make('App\Http\Requests\FormRequestInterface');
-        //dd($supplier->getSupplierDetail(1));
-    //});
-    // Route::get('/providers_test', function (SupplierRepository $supplier) {
-    //     var_dump("from route");
-    //     //$supplier = App::make('SupplierRepository');
-    //     dd($supplier->getSupplierDetail(1));
-    // });
-
 Route::auth();
+
+Route::get('/test', function () {
+    // $faker = new Faker\Generator;
+    // $faker->addProvider(new Faker\Provider\zh_TW\Person($faker));
+    // $faker->addProvider(new Faker\Provider\zh_TW\Address($faker));
+    // $faker->addProvider(new Faker\Provider\zh_TW\PhoneNumber($faker));
+    // $faker->addProvider(new Faker\Provider\zh_TW\Company($faker));
+    // for ($i = 0; $i < 100; $i++) {
+    //     echo '<sapn style="font-family:Fixedsys, Meiryo;">'.$faker->unique()->regexify('[A-Za-z0-9]{5}')."</span><br>";
+    // }
+    //return view('layouts.test');
+
+    $collection = collect([['name' => 'Desk', 'price' => 100], ['name' => 'Table', 'price' => 200]]);
+
+    // $collection->contains('Desk');
+
+
+
+    if ($collection->contains('Desk')) {
+        echo 123;
+    };
+});
 
 Route::group(['middleware' => 'auth'], function () {
 
@@ -79,10 +85,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['namespace' => 'Purchase'], function() {
 
         //進貨單作業
+        Route::post('/billsOfPurchase/json/{data_mode}/{code}', 'BillOfPurchaseController@json');
         Route::resource('/billsOfPurchase', 'BillOfPurchaseController');
+        //進貨退回作業
+        Route::post('/returnsOfPurchase/json/{data_mode}/{code}', 'ReturnOfPurchaseController@json');
         Route::resource('/returnsOfPurchase', 'ReturnOfPurchaseController');
-        Route::resource('/paymentsOfPurchase', 'PaymentOfPurchaseController');
 
+        Route::post('/payments/json/{data_mode}/{code}', 'PaymentController@json');
+        Route::resource('/payments', 'PaymentController');
+
+        Route::get('/payableWriteOff/beforeCreate', 'PayableWriteOffController@beforeCreate');
+        Route::resource('/payableWriteOff', 'PayableWriteOffController');
     });
     //進貨退回單作業
 

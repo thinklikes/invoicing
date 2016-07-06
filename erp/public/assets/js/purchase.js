@@ -1,3 +1,25 @@
+//供應商自動完成所需資訊
+var supplier_url = '/suppliers/json';
+var triggered_by = {
+    autocomplete: 'input.supplier_autocomplete',
+    scan: 'input.supplier_code'
+};
+var auto_fill = {
+    id: 'input.supplier_id',
+    code :'input.supplier_code',
+    name : 'input.supplier_autocomplete'
+};
+var after_triggering = {
+    scan: function () {
+        if ($('input.stock_code:first').length > 0) {
+            $('input.stock_code:first').focus();
+        }
+    }
+};
+
+var supplierAutocompleter = new SupplierAutocompleter(supplier_url, triggered_by, auto_fill, after_triggering);
+
+//表單計算機所需資訊
 var class_name = {
     master: {
         total_no_tax_amount : 'total_no_tax_amount',
@@ -13,7 +35,10 @@ var class_name = {
 }
 
 var calculator = new OrderCalculator(class_name);
+
 $(function() {
+    //綁定供應商名稱的自動完成
+    supplierAutocompleter.eventBind();
 
     //綁定料品品名自動完成的事件
     rebindStockAutocomplete();

@@ -22,14 +22,16 @@ class SupplierController extends BasicController
         $this->setFullClassName();
     }
     /**
-     * Display a listing of the resource in JSON.
+     * 回傳Json格式的供應商陣列，若有request 'with'，
+     * 則將相關的進貨單或進或退回單回傳
      *
      * @return \Illuminate\Http\Response
      */
     public function json(Request $request)
     {
-        $suppliers = $this->supplierRepository->getSuppliersJson($request->input());
-        return response()->json($suppliers);
+        $param = $request->input();
+        $suppliers = $this->supplierRepository->getSuppliersPaginated($param);
+        return response()->json($suppliers->all());
     }
 
     /**
