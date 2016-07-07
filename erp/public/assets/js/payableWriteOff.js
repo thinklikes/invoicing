@@ -1,3 +1,5 @@
+//借方項目的index
+var index = 0;
 //供應商自動完成所需資訊
 var supplier_url = '/suppliers/json';
 
@@ -15,6 +17,8 @@ var auto_fill = {
 var after_triggering = {
     autocomplete: function (supplier_id)
     {
+        index = 0;
+
         getPayableBySupplierId(supplier_id);
 
         setTimeout('', 100);
@@ -28,6 +32,8 @@ var after_triggering = {
         if ($('input.stock_code:first').length > 0) {
             $('input.stock_code:first').focus();
         }
+
+        index = 0;
 
         getPayableBySupplierId(supplier_id);
 
@@ -48,9 +54,6 @@ var writeOffCalculator = new WriteOffCalculator(
 $(function () {
     supplierAutocompleter.eventBind();
 });
-
-//借方項目的index
-var index = 0;
 
 function fill_amount(index) {
     if ($('.debit_checked:eq(' + index + ')').prop('checked')) {
@@ -74,6 +77,7 @@ function fill_amount(index) {
 function getPayableBySupplierId(supplier_id)
 {
     clearPayableHtml();
+
     $.ajax({
         method: "POST",
         url: '/billsOfPurchase/json/getPayableBySupplierId/' + supplier_id,

@@ -72,13 +72,8 @@ class StockWarehouseRepository
      */
     public function updateInventory($inventory, $stock_id, $warehouse_id)
     {
-        $this->stockWarehouse = $this->stockWarehouse
-            ->where('stock_id', $stock_id)
+        return $this->stockWarehouse->where('stock_id', $stock_id)
             ->where('warehouse_id', $warehouse_id)
-            ->first();
-
-        $this->stockWarehouse->inventory = $this->stockWarehouse->inventory + $inventory;
-
-        return $this->stockWarehouse->save();
+            ->increment('inventory', $inventory);
     }
 }

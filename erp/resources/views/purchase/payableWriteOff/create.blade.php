@@ -81,7 +81,7 @@
                                 <input type="hidden" name="payableWriteOffCredit[{{ $i }}][credit_check_code]"
                                     value="{{ $payableWriteOffCredit[$i]['credit_check_code'] }}">
                             </td>
-                            <td>
+                            <td style="text-align:right;">
                                 {{ $payableWriteOffCredit[$i]['credit_amount'] }}
                                 <input class="credit_amount" type="hidden"
                                     name="payableWriteOffCredit[{{ $i }}][credit_amount]"
@@ -92,11 +92,14 @@
 @endif
                     </tbody>
                     <tfoot>
+                        <tr><td colspan="7">　</td></tr>
                         <tr>
-                            <td colspan="6">
-                                <label>付款沖銷總額　　</label>
+                            <td colspan="5" style="text-align:center">
+                                <label>付款沖銷總額</label>
+                            </td>
+                            <td>
                                 <input type="text" class="total_credit_amount" style="text-align:right;"
-                                    name="payableWriteOff[total_credit_amount]" readonly=""
+                                    name="payableWriteOff[total_credit_amount]" readonly="" size="10"
                                     value="{{ $payableWriteOff['total_credit_amount'] }}">
                             </td>
                         </tr>
@@ -170,11 +173,14 @@
 @endif
                     </tbody>
                     <tfoot>
+                        <tr><td colspan="7">　</td></tr>
                         <tr>
-                            <td colspan="7">
+                            <td colspan="6" style="text-align:center">
                                 <label>應付帳款沖銷總額</label>
+                            </td>
+                            <td>
                                 <input type="text" class="total_debit_amount" style="text-align:right;"
-                                    name="payableWriteOff[total_debit_amount]" readonly=""
+                                    name="payableWriteOff[total_debit_amount]" readonly="" size="10"
                                     value="{{ $payableWriteOff['total_debit_amount'] }}">
                             </td>
                         </tr>

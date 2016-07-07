@@ -6,7 +6,7 @@ use App;
 use App\Repositories\BasicRepository;
 use App\Purchase\ReturnOfPurchaseMaster as OrderMaster;
 use App\Purchase\ReturnOfPurchaseDetail as OrderDetail;
-
+use DB;
 
 class ReturnOfPurchaseRepository extends BasicRepository
 {
@@ -72,6 +72,12 @@ class ReturnOfPurchaseRepository extends BasicRepository
     public function getOrderMasterfield($field, $code)
     {
         return $this->orderMaster->where('code', $code)->value($field);
+    }
+
+    public function getNotPaidAmount($code)
+    {
+        return $this->orderMaster->select(DB::raw('(total_amount - paid_amount) as not_paid_amount'))
+            ->where('code', $code)->value('not_paid_amount');
     }
 
     /**
@@ -158,6 +164,31 @@ class ReturnOfPurchaseRepository extends BasicRepository
         //開始存入表頭
         return $this->orderMaster->save();
     }
+
+    /**
+     * 更新已付款項
+     * @param  integer $paid_amount 本次付款金額
+     * @param  string $code        進貨單號
+     * @return boolean             是否更新成功
+     */
+    public function updatePaidAmount($amount, $code)
+    {
+        return $this->orderMaster->where('code', $code)
+            ->increment('paid_amount', $amount);
+    }
+
+    /**
+     * 更新是否已付清
+     * @param  integer $is_paid 是否已付清 1:已付清, 0:未付清
+     * @param  string $code        進貨單號
+     * @return boolean             是否更新成功
+     */
+    public function setIsPaid($is_paid, $code)
+    {
+        return $this->orderMaster->where('code', $code)
+            ->update(['is_paid' => $is_paid]);
+    }
+
     /**
      * delete a Purchase
      * @param  integer $id The id of purchase

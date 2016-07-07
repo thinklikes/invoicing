@@ -120,6 +120,18 @@ class PaymentRepository extends BasicRepository
         //開始存入表頭
         return $this->orderMaster->save();
     }
+
+    /**
+     * 設定是否沖銷的狀態
+     * @param boolean $isWrittenOff 是否沖銷
+     * @param string  $code 付款單號
+     */
+    public function setIsWrittenOff($isWrittenOff = false, $code)
+    {
+        $this->orderMaster->where('code', $code)
+            ->update(['isWrittenOff' => $isWrittenOff]);
+    }
+
     /**
      * delete a Purchase
      * @param  integer $id The id of purchase

@@ -25,15 +25,12 @@ Route::get('/test', function () {
     // }
     //return view('layouts.test');
 
-    $collection = collect([['name' => 'Desk', 'price' => 100], ['name' => 'Table', 'price' => 200]]);
+    //$collection = collect([['name' => 'Desk', 'price' => 100], ['name' => 'Table', 'price' => 200]]);
 
     // $collection->contains('Desk');
 
-
-
-    if ($collection->contains('Desk')) {
-        echo 123;
-    };
+    $a = App::make('App\Repositories\Purchase\ReturnOfPurchaseRepository');
+    return $a->getNotPaidAmount('20160707001');
 });
 
 Route::group(['middleware' => 'auth'], function () {

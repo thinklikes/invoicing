@@ -15,7 +15,7 @@ class CreateReturnOfPurchaseMasterTable extends Migration
         Schema::create('return_of_purchase_master', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code', 20)->unique()->comment = "進貨退回單號";
-            $table->enum('is_paid', [0, 1])->comment = "是否付款(0:未付款, 1:未付款)";
+            $table->enum('is_paid', [0, 1])->comment = "是否付款(0:未付款, 1:已付款)";
             $table->string('invoice_code', 10)->comment = "發票號碼";
             $table->integer('warehouse_id')->comment = "倉庫的id";
             $table->integer('supplier_id')->comment = "供應商的id";

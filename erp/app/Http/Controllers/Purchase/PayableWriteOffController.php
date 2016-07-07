@@ -14,8 +14,8 @@ class PayableWriteOffController extends BasicController
     protected $orderRepository;
     protected $orderService;
     private $orderMasterInputName = 'payableWriteOff';
-    protected $creditInputName = 'payableWriteOffCredit';
-    protected $debitInputName = 'payableWriteOffDebit';
+    private $orderCreditInputName = 'payableWriteOffCredit';
+    private $orderDebitInputName = 'payableWriteOffDebit';
     private $routeName = 'purchase.payableWriteOff';
     private $ordersPerPage = 15;
     /**
@@ -72,7 +72,7 @@ class PayableWriteOffController extends BasicController
             'App\Contracts\FormRequestInterface',
             ['className' => $this->className]
         );
-        dd('驗證通過');
+
         //抓出使用者輸入的資料
         $orderMaster = $request->input($this->orderMasterInputName);
         $orderCredit = $request->input($this->creditInputName);
@@ -93,8 +93,14 @@ class PayableWriteOffController extends BasicController
         $orderMaster->supplier_code = $orderMaster->supplier->code;
         $orderMaster->supplier_name = $orderMaster->supplier->name;
 
+        $orderCredit = $this->orderRepository->getOrderCredit($code);
+
+        $orderDebit = $this->orderRepository->getOrderDebit($code);
+
         return view($this->routeName.'.show', [
-            $this->orderMasterInputName => $orderMaster
+            $this->orderMasterInputName => $orderMaster,
+            $this->orderCreditInputName => $orderCredit,
+            $this->orderDebitInputName => $orderDebit
         ]);
     }
 
