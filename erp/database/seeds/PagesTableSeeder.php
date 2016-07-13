@@ -353,34 +353,132 @@ class PagesTableSeeder extends Seeder
                 'action'     => 'Purchase\PayableWriteOffController@edit',
                 'enabled'    => 1,
             ],
-            // [
-            //     'name'       => '銷貨作業',
-            //     'level'      => 1,
-            //     'namespace'  => '',
-            //     'action'     => 'PageController@sale',
-            //     'enabled'    => 1,
-            // ],
-            // [
-            //     'name'       => '新增銷貨單據',
-            //     'level'      => 2,
-            //     'namespace'  => '',
-            //     'action'     => 'SaleController@create',
-            //     'enabled'    => 1,
-            // ],
-            // [
-            //     'name'       => '檢視銷貨單據',
-            //     'level'      => 2,
-            //     'namespace'  => '',
-            //     'action'     => 'SaleController@show',
-            //     'enabled'    => 1,
-            // ],
-            // [
-            //     'name'       => '維護銷貨單據',
-            //     'level'      => 2,
-            //     'namespace'  => '',
-            //     'action'     => 'SaleController@edit',
-            //     'enabled'    => 1,
-            // ],
+            [
+                'name'       => '銷貨作業',
+                'level'      => 1,
+                'action'     => 'PageController@sale',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '訂購單管理',
+                'level'      => 2,
+                'action'     => 'SaleOrderController@index',
+                'enabled'    => 0,
+            ],
+            [
+                'name'       => '新增訂購單據',
+                'level'      => 3,
+                'action'     => 'SaleOrderController@create',
+                'enabled'    => 0,
+            ],
+            [
+                'name'       => '檢視訂購單據',
+                'level'      => 3,
+                'action'     => 'SaleOrderController@show',
+                'enabled'    => 0,
+            ],
+            [
+                'name'       => '維護訂購單據',
+                'level'      => 3,
+                'action'     => 'SaleOrderController@edit',
+                'enabled'    => 0,
+            ],
+            [
+                'name'       => '銷貨單管理',
+                'level'      => 2,
+                'action'     => 'Sale\BillOfSaleController@index',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '新增銷貨單據',
+                'level'      => 3,
+                'action'     => 'Sale\BillOfSaleController@create',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '檢視銷貨單據',
+                'level'      => 3,
+                'action'     => 'Sale\BillOfSaleController@show',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '維護銷貨單據',
+                'level'      => 3,
+                'action'     => 'Sale\BillOfSaleController@edit',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '銷貨退回單管理',
+                'level'      => 2,
+                'action'     => 'Sale\ReturnOfSaleController@index',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '新增銷貨退回單據',
+                'level'      => 3,
+                'action'     => 'Sale\ReturnOfSaleController@create',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '檢視銷貨退回單據',
+                'level'      => 3,
+                'action'     => 'Sale\ReturnOfSaleController@show',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '維護銷貨退回單據',
+                'level'      => 3,
+                'action'     => 'Sale\ReturnOfSaleController@edit',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '收款單管理',
+                'level'      => 2,
+                'action'     => 'Sale\ReceiptController@index',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '新增收款單',
+                'level'      => 3,
+                'action'     => 'Sale\ReceiptController@create',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '檢視收款單',
+                'level'      => 3,
+                'action'     => 'Sale\ReceiptController@show',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '維護收款單',
+                'level'      => 3,
+                'action'     => 'Sale\ReceiptController@edit',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '應收帳款沖銷單管理',
+                'level'      => 2,
+                'action'     => 'Sale\ReceivableWriteOffController@index',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '新增應收帳款沖銷單',
+                'level'      => 3,
+                'action'     => 'Sale\ReceivableWriteOffController@create',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '檢視應收帳款沖銷單',
+                'level'      => 3,
+                'action'     => 'Sale\ReceivableWriteOffController@show',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '維護應收帳款沖銷單',
+                'level'      => 3,
+                'action'     => 'Sale\ReceivableWriteOffController@edit',
+                'enabled'    => 1,
+            ],
             [
                 'name'       => '系統設定',
                 'level'      => 1,
@@ -428,6 +526,6 @@ class PagesTableSeeder extends Seeder
             }
             $pages[$key] = array_add($pages[$key], 'code', $code);
         }
-        DB::table('pages')->insert($pages);
+        DB::table('erp_pages')->insert($pages);
     }
 }

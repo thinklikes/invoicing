@@ -25,12 +25,8 @@ Route::get('/test', function () {
     // }
     //return view('layouts.test');
 
-    //$collection = collect([['name' => 'Desk', 'price' => 100], ['name' => 'Table', 'price' => 200]]);
-
-    // $collection->contains('Desk');
-
-    $a = App::make('App\Repositories\Purchase\ReturnOfPurchaseRepository');
-    return $a->getNotPaidAmount('20160707001');
+    $a = App::make('BillOfPurchase\BillOfPurchaseRepository');
+    return $a->getOrdersPaginated(20);
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -51,51 +47,72 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['namespace' => 'Basic'], function() {
         //系統設定維護
-        Route::get('/system_configs', 'SystemConfigController@index');
-        Route::get('/system_configs/edit', 'SystemConfigController@edit');
-        Route::put('/system_configs/update', 'SystemConfigController@update');
+        Route::get('/system_config', 'SystemConfigController@index');
+        Route::get('/system_config/edit', 'SystemConfigController@edit');
+        Route::put('/system_config/update', 'SystemConfigController@update');
 
         //客戶資料管理
-        Route::resource('/customers', 'CustomerController');
+        Route::resource('/customer', 'CustomerController');
 
         //供應商資料管理
-        Route::post('/suppliers/json', 'SupplierController@json');
-        Route::resource('/suppliers', 'SupplierController');
+        Route::post('/supplier/json', 'SupplierController@json');
+        Route::resource('/supplier', 'SupplierController');
 
         //料品資料管理
-        Route::post('/stocks/json', 'StockController@json');
-        Route::resource('/stocks', 'StockController');
+        Route::post('/stock/json', 'StockController@json');
+        Route::resource('/stock', 'StockController');
 
         //料品單位管理
-        Route::resource('/units', 'UnitController');
+        Route::resource('/unit', 'UnitController');
 
         //倉庫資料管理
-        Route::resource('/stock_classes', 'StockClassController');
+        Route::resource('/stock_class', 'StockClassController');
 
         //付款方式管理
-        Route::resource('/pay_ways', 'PayWayController');
+        Route::resource('/pay_way', 'PayWayController');
 
         //倉庫資料管理
-        Route::resource('/warehouses', 'WarehouseController');
+        Route::resource('/warehouse', 'WarehouseController');
 
     });
     Route::group(['namespace' => 'Purchase'], function() {
 
         //進貨單作業
-        Route::post('/billsOfPurchase/json/{data_mode}/{code}', 'BillOfPurchaseController@json');
-        Route::resource('/billsOfPurchase', 'BillOfPurchaseController');
+        Route::post('/billOfPurchase/json/{data_mode}/{code}', 'BillOfPurchaseController@json');
+        Route::resource('/billOfPurchase', 'BillOfPurchaseController');
         //進貨退回作業
-        Route::post('/returnsOfPurchase/json/{data_mode}/{code}', 'ReturnOfPurchaseController@json');
-        Route::resource('/returnsOfPurchase', 'ReturnOfPurchaseController');
+        Route::post('/returnOfPurchase/json/{data_mode}/{code}', 'ReturnOfPurchaseController@json');
+        Route::resource('/returnOfPurchase', 'ReturnOfPurchaseController');
 
-        Route::post('/payments/json/{data_mode}/{code}', 'PaymentController@json');
-        Route::resource('/payments', 'PaymentController');
+        Route::post('/payment/json/{data_mode}/{code}', 'PaymentController@json');
+        Route::resource('/payment', 'PaymentController');
 
-        Route::get('/payableWriteOff/beforeCreate', 'PayableWriteOffController@beforeCreate');
-        Route::resource('/payableWriteOff', 'PayableWriteOffController');
+        //應付帳款沖銷單管理
+        Route::resource('/payableWriteOff', 'PayableWriteOffController',
+            [
+                'except' => ['edit', 'update']
+            ]
+        );
     });
-    //進貨退回單作業
 
     //銷貨作業
-    Route::resource('/sales', 'SaleController');
+    Route::group(['namespace' => 'Sale'], function() {
+
+        //進貨單作業
+        Route::post('/billOfSale/json/{data_mode}/{code}', 'BillOfSaleController@json');
+        Route::resource('/billOfSale', 'BillOfSaleController');
+        //進貨退回作業
+        Route::post('/returnOfSale/json/{data_mode}/{code}', 'ReturnOfSaleController@json');
+        Route::resource('/returnOfSale', 'ReturnOfSaleController');
+
+        Route::post('/receipt/json/{data_mode}/{code}', 'ReceiptController@json');
+        Route::resource('/receipt', 'ReceiptController');
+
+        //應付帳款沖銷單管理
+        Route::resource('/receivableWriteOff', 'ReceivableWriteOffController',
+            [
+                'except' => ['edit', 'update']
+            ]
+        );
+    });
 });

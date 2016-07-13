@@ -12,7 +12,7 @@ class CreateReturnOfPurchaseDetailTable extends Migration
      */
     public function up()
     {
-        Schema::create('return_of_purchase_detail', function (Blueprint $table) {
+        Schema::create('erp_return_of_purchase_detail', function (Blueprint $table) {
             $table->increments('id');
             $table->string('master_code', 20)->comment = "進貨退回單的code";
             $table->integer('stock_id')->comment = "料品的id";
@@ -28,6 +28,6 @@ class CreateReturnOfPurchaseDetailTable extends Migration
      */
     public function down()
     {
-        Schema::drop('return_of_purchase_detail');
+        Schema::dropIfExists('erp_return_of_purchase_detail');
     }
 }

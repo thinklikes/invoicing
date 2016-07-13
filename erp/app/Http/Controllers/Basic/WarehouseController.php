@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Basic;
 
 use Illuminate\Http\Request;
-use App\Repositories\WarehouseRepository;
+use Warehouse\WarehouseRepository;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
 
 class WarehouseController extends BasicController
 {
+    private $routeName = 'erp.basic.warehouse';
+
     public function __construct()
     {
         $this->setFullClassName();
@@ -21,7 +23,7 @@ class WarehouseController extends BasicController
     public function index()
     {
         $warehouses = WarehouseRepository::getWarehousesOnePage();
-        return view('warehouses.index', ['warehouses' => $warehouses]);
+        return view($this->routeName.'.index', ['warehouses' => $warehouses]);
     }
 
     /**
@@ -34,7 +36,7 @@ class WarehouseController extends BasicController
         //找出之前輸入的資料
         $warehouse = $request->old('warehouse');
         //if(count($request->old()) > 0) dd($request->old());
-        return view('warehouses.create', ['warehouse' => $warehouse]);
+        return view($this->routeName.'.create', ['warehouse' => $warehouse]);
     }
 
     /**
@@ -61,7 +63,7 @@ class WarehouseController extends BasicController
     public function show($id)
     {
         $warehouse = WarehouseRepository::getWarehouseDetail($id);
-        return view('warehouses.show', ['id' => $id, 'warehouse' => $warehouse]);
+        return view($this->routeName.'.show', ['id' => $id, 'warehouse' => $warehouse]);
     }
 
     /**
@@ -77,7 +79,7 @@ class WarehouseController extends BasicController
         } else {
             $warehouse = WarehouseRepository::getWarehouseDetail($id);
         }
-        return view('warehouses.edit', ['id' => $id, 'warehouse' => $warehouse]);
+        return view($this->routeName.'.edit', ['id' => $id, 'warehouse' => $warehouse]);
     }
 
     /**

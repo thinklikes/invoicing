@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-use App\Page\Page;
+use Page\Page;
 
 use Auth;
 

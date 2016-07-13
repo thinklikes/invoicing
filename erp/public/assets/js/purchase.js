@@ -1,5 +1,6 @@
 //供應商自動完成所需資訊
-var supplier_url = '/suppliers/json';
+var stock_url    = '/stock/json';
+var supplier_url = '/supplier/json';
 var triggered_by = {
     autocomplete: 'input.supplier_autocomplete',
     scan: 'input.supplier_code'

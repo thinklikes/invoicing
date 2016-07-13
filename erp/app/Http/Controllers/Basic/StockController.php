@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Basic;
 
 use Illuminate\Http\Request;
-use App\Repositories\StockRepository;
+use Stock\StockRepository;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
 
 class StockController extends BasicController
 {
+    private $routeName = 'erp.basic.stock';
+
     public function __construct()
     {
         $this->setFullClassName();
@@ -32,7 +34,7 @@ class StockController extends BasicController
     {
         $param = $request->input('search');
         $stocks = StockRepository::getStocksOnePage($param);
-        return view('stocks.index', ['stocks' => $stocks]);
+        return view($this->routeName.'.index', ['stocks' => $stocks]);
     }
 
     /**
@@ -45,7 +47,7 @@ class StockController extends BasicController
         //找出之前輸入的資料
         $stock = $request->old('stock');
         //if(count($request->old()) > 0) dd($request->old());
-        return view('stocks.create', ['stock' => $stock]);
+        return view($this->routeName.'.create', ['stock' => $stock]);
     }
 
     /**
@@ -74,7 +76,7 @@ class StockController extends BasicController
     public function show($id)
     {
         $stock = StockRepository::getStockDetail($id);
-        return view('stocks.show', ['id' => $id, 'stock' => $stock]);
+        return view($this->routeName.'.show', ['id' => $id, 'stock' => $stock]);
     }
 
     /**
@@ -90,7 +92,7 @@ class StockController extends BasicController
         } else {
             $stock = StockRepository::getStockDetail($id);
         }
-        return view('stocks.edit', ['id' => $id, 'stock' => $stock]);
+        return view($this->routeName.'.edit', ['id' => $id, 'stock' => $stock]);
     }
 
     /**

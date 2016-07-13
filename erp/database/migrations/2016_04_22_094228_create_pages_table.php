@@ -12,7 +12,7 @@ class CreatePagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('pages', function (Blueprint $table) {
+        Schema::create('erp_pages', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code', 10)->unique()->comment='menu的代號';
             $table->string('name', 20)->comment='menu的名稱';
@@ -29,6 +29,6 @@ class CreatePagesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('pages');
+        Schema::dropIfExists('erp_pages');
     }
 }

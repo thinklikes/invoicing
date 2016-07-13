@@ -2,7 +2,6 @@
 
 namespace App\Presenters;
 
-use App\Repositories\OptionRepository;
 use Config;
 
 class OrderCalculator
@@ -19,7 +18,6 @@ class OrderCalculator
 
     public function __construct()
     {
-        $settings = OptionRepository::getPurchaseOrderSettings();
         $this->purchase_tax_rate       = Config::get('system_configs')['purchase_tax_rate'];
         $this->quantity_round_off      = Config::get('system_configs')['quantity_round_off'];
         $this->no_tax_price_round_off  = Config::get('system_configs')['no_tax_price_round_off'];

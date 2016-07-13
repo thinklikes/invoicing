@@ -1,4 +1,4 @@
-@inject('page', 'App\Page\PagePresenter')
+@inject('page', 'Page\PagePresenter')
 @inject('presenter', 'App\Presenters\HomePagePresenter')
 
 <!DOCTYPE html>
@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
 
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/general.css') }}">
     <style>
         body {
             font-family: 'Lato';
@@ -44,7 +45,11 @@
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url('/') }}">Home</a></li>
                 </ul>
-
+{{--
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ back()->getTargetUrl() }}">Back</a></li>
+                </ul>
+--}}
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->

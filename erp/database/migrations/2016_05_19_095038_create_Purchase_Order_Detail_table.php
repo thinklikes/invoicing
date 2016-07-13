@@ -12,7 +12,7 @@ class CreatePurchaseOrderDetailTable extends Migration
      */
     public function up()
     {
-        Schema::create('purchase_order_detail', function (Blueprint $table) {
+        Schema::create('erp_purchase_order_detail', function (Blueprint $table) {
             $table->increments('id');
             $table->string('master_code', 20)->comment = "採購單的code";
             $table->integer('stock_id')->comment = "料品的id";
@@ -28,6 +28,6 @@ class CreatePurchaseOrderDetailTable extends Migration
      */
     public function down()
     {
-        Schema::drop('purchase_order_detail');
+        Schema::dropIfExists('erp_purchase_order_detail');
     }
 }

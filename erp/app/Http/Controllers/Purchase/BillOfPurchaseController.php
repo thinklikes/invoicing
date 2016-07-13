@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Purchase;
 use App;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
-use App\Repositories\Purchase\BillOfPurchaseRepository as OrderRepository;
-use App\Services\Purchase\BillOfPurchaseService as orderService;
-use Config;
+use BillOfPurchase\BillOfPurchaseRepository as OrderRepository;
+use BillOfPurchase\BillOfPurchaseService as orderService;
 use Illuminate\Http\Request;
 
 class BillOfPurchaseController extends BasicController
@@ -16,7 +15,7 @@ class BillOfPurchaseController extends BasicController
     protected $orderService;
     private $orderMasterInputName = 'billOfPurchaseMaster';
     private $orderDetailInputName = 'billOfPurchaseDetail';
-    private $routeName = 'purchase.billsOfPurchase';
+    private $routeName = 'erp.purchase.billOfPurchase';
     private $ordersPerPage = 15;
     /**
      * SupplierController constructor.

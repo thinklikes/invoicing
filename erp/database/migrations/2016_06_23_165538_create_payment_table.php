@@ -12,7 +12,7 @@ class CreatePaymentTable extends Migration
      */
     public function up()
     {
-        Schema::create('payment', function (Blueprint $table) {
+        Schema::create('erp_payment', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code', 20)->unique()->comment = "付款單號";
             $table->enum('isWrittenOff', ['0', '1'])->default('0')->comment = "是否沖銷(0:未沖銷, 1:已沖銷)";
@@ -36,6 +36,6 @@ class CreatePaymentTable extends Migration
      */
     public function down()
     {
-        Schema::drop('payment');
+        Schema::dropIfExists('erp_payment');
     }
 }

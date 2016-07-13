@@ -12,7 +12,7 @@ class CreateBillOfPurchaseDetailTable extends Migration
      */
     public function up()
     {
-        Schema::create('bill_of_purchase_detail', function (Blueprint $table) {
+        Schema::create('erp_bill_of_purchase_detail', function (Blueprint $table) {
             $table->increments('id');
             $table->string('master_code', 20)->comment = "進貨單的code";
             $table->integer('stock_id')->comment = "料品的id";
@@ -28,6 +28,6 @@ class CreateBillOfPurchaseDetailTable extends Migration
      */
     public function down()
     {
-        Schema::drop('bill_of_purchase_detail');
+        Schema::dropIfExists('erp_bill_of_purchase_detail');
     }
 }

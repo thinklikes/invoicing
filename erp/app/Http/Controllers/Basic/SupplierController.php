@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Basic;
 
 use Illuminate\Http\Request;
-use App\Repositories\Basic\SupplierRepository;
+use Supplier\SupplierRepository;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
 
 class SupplierController extends BasicController
 {
     protected $supplierRepository;
+    private $routeName = 'erp.basic.supplier';
 
     /**
      * SupplierController constructor.
@@ -43,7 +44,7 @@ class SupplierController extends BasicController
     {
         $suppliers = $this->supplierRepository->getSuppliersPaginated(array_except($request->input(), 'page'));
         //$suppliers = SupplierRepository::getSuppliersOnePage($request->input());
-        return view('suppliers.index', ['suppliers' => $suppliers]);
+        return view($this->routeName.'.index', ['suppliers' => $suppliers]);
     }
 
     /**
@@ -56,7 +57,7 @@ class SupplierController extends BasicController
         //找出之前輸入的資料
         $supplier = $request->old('supplier');
         //if(count($request->old()) > 0) dd($request->old());
-        return view('suppliers.create', ['supplier' => $supplier]);
+        return view($this->routeName.'.create', ['supplier' => $supplier]);
     }
 
     /**
@@ -83,7 +84,7 @@ class SupplierController extends BasicController
     public function show($id)
     {
         $supplier = $this->supplierRepository->getSupplierDetail($id);
-        return view('suppliers.show', ['id' => $id, 'supplier' => $supplier]);
+        return view($this->routeName.'.show', ['id' => $id, 'supplier' => $supplier]);
     }
 
     /**
@@ -99,7 +100,7 @@ class SupplierController extends BasicController
         } else {
             $supplier = $this->supplierRepository->getSupplierDetail($id);
         }
-        return view('suppliers.edit', ['id' => $id, 'supplier' => $supplier]);
+        return view($this->routeName.'.edit', ['id' => $id, 'supplier' => $supplier]);
     }
 
     /**

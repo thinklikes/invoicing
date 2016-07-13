@@ -12,7 +12,7 @@ class CreateStocksTable extends Migration
      */
     public function up()
     {
-        Schema::create('stocks', function (Blueprint $table) {
+        Schema::create('erp_stocks', function (Blueprint $table) {
             $table->increments('id')->comment = '料品資料表主鍵';
             $table->string('code', 10)->comment = '料品代號';
             $table->string('name', 50)->comment = '料品名稱';
@@ -35,6 +35,6 @@ class CreateStocksTable extends Migration
      */
     public function down()
     {
-        Schema::drop('stocks');
+        Schema::dropIfExists('erp_stocks');
     }
 }

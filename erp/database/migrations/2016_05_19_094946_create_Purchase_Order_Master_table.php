@@ -12,7 +12,7 @@ class CreatePurchaseOrderMasterTable extends Migration
      */
     public function up()
     {
-        Schema::create('purchase_order_master', function (Blueprint $table) {
+        Schema::create('erp_purchase_order_master', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code', 20)->unique()->comment = "採購單號";
             $table->date('delivery_date')->comment = "交貨日期";
@@ -31,6 +31,6 @@ class CreatePurchaseOrderMasterTable extends Migration
      */
     public function down()
     {
-        Schema::drop('purchase_order_master');
+        Schema::dropIfExists('erp_purchase_order_master');
     }
 }

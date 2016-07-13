@@ -12,7 +12,7 @@ class CreatePayableWriteOffMasterTable extends Migration
      */
     public function up()
     {
-        Schema::create('payable_write_off_master', function (Blueprint $table) {
+        Schema::create('erp_payable_write_off_master', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code', 20)->unique()->comment = "付款單號";
             $table->integer('supplier_id')->comment = "供應商的id";
@@ -31,6 +31,6 @@ class CreatePayableWriteOffMasterTable extends Migration
      */
     public function down()
     {
-        Schema::drop('payable_write_off_master');
+        Schema::dropIfExists('erp_payable_write_off_master');
     }
 }

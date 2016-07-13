@@ -12,7 +12,7 @@ class CreateOptionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('options', function (Blueprint $table) {
+        Schema::create('erp_options', function (Blueprint $table) {
             $table->increments('id');
             $table->string('class', 20)->comment('此記錄的類別');
             $table->string('code', 50)->comment('此類別的代碼');
@@ -29,6 +29,6 @@ class CreateOptionsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('options');
+        Schema::dropIfExists('erp_options');
     }
 }

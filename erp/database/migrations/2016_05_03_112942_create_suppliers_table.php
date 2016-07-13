@@ -12,7 +12,7 @@ class CreateSuppliersTable extends Migration
      */
     public function up()
     {
-        Schema::create('suppliers', function (Blueprint $table) {
+        Schema::create('erp_suppliers', function (Blueprint $table) {
             $table->increments('id')->comment = '供應商資料表主鍵';
             $table->string('code', 10)->unique()->comment = '供應商編號';
             $table->string('name', 50)->comment = '供應商名稱';
@@ -38,6 +38,6 @@ class CreateSuppliersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('suppliers');
+        Schema::dropIfExists('erp_suppliers');
     }
 }

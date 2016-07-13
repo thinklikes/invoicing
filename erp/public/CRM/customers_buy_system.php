@@ -270,7 +270,7 @@ return true;
 							echo "<li><a href=\"".$row["menu_url"]."\"><i class=\"".$row["menu_class"]."\"></i> ".$row["menu_name"]."</a></li>";	
 						}
 					?>				
-					<li><a href="<?php echo $file."?doLogout=true";?>" onclick="return  confirm('是否要登出');"><i class="fa fa-sign-out"></i>登出</a></li>
+					<li id="lo"><a ><i class="fa fa-sign-out"></i>登出</a></li>
                </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -315,7 +315,7 @@ return true;
 			  <li><a href="customers_maintain_system.php">客戶維護資料管理</a></li>
 			  <li><a href="approval_code_system.php">授權碼</a></li>
 			</ul>
-       </div>
+       </div><BR>
      </div>	 
      
    
@@ -492,16 +492,9 @@ return true;
     </div>
     <!-- /#wrapper -->
 
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
-
-    <!-- Morris Charts JavaScript -->
-    <script src="js/plugins/morris/raphael.min.js"></script>
-    <script src="js/plugins/morris/morris.min.js"></script>
-    <script src="js/plugins/morris/morris-data.js"></script>
+<?php
+include("inc_js.php");
+?>
 
 </body>
 

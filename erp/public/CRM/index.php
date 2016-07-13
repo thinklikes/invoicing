@@ -5,9 +5,9 @@ if(isset($_POST['ad_account'])) { //判斷是否有送出使用者名稱的值
 		setcookie("rempass", $_POST['ad_pw'], time()+86400*30); //設定密碼的 Cookie 值
 		setcookie("rememberMe", $_POST['rememberMe'], time()+86400*30); //設定是否要記錄的 Cookie 值
 	}else{
-		setcookie("remuser", '', time()); //去除使用者名稱的 Cookie 值
-		setcookie("rempass", '', time()); //去除密碼的 Cookie 值
-		setcookie("rememberMe", '', time()); //去除密碼的 Cookie 值
+		setcookie("remuser", '', time()-86400*30); //去除使用者名稱的 Cookie 值
+		setcookie("rempass", '', time()-86400*30); //去除密碼的 Cookie 值
+		setcookie("rememberMe", '', time()-86400*30); //去除密碼的 Cookie 值
 	}
 }
 ?>
@@ -18,14 +18,10 @@ if (!isset($_SESSION)) {
   session_start();
 }
 
-if($_SESSION['MM_Username']!=""){
-	unset($_SESSION['MM_Username']);
+
+if($_SESSION['MM_Username']==""){
     //setcookie("remuser", '', time()); //去除使用者名稱的 Cookie 值
-	setcookie("rempass", '', time()); //去除使用者密碼的 Cookie 值
-	//echo "<div class=\"alert alert-danger\"><strong>您的帳號密碼有誤，請重新輸入！</strong></div>";
-	//echo "<script>location.href=\"company_system.php\";</script>";
-    header("Location:company_system.php");
-    exit;
+	//setcookie("rempass", '', time()); //去除使用者密碼的 Cookie 值
 }
 
 // ** Logout the current user. **
@@ -99,21 +95,10 @@ $row_RecUser = mysqli_fetch_assoc($RecUser);
 $totalRows_RecUser = mysqli_num_rows($RecUser);
   $_SESSION['LoginName'] = $row_RecUser['ad_name'];
 ?>
-<script>
-function show(id){
-  var o=document.getElementById(id);
-  if( o.style.display == 'none' )  {
-    o.style.display='';	
-  }
-}
-</script>
 <?php
 // *** Validate request to login to this site.
 
-
 $loginFormAction = $_SERVER['PHP_SELF'];
-
-
 //echo $_POST['ad_account'];
 if (isset($_POST['ad_account'])) {
   $loginUsername=$_POST['ad_account'];
@@ -124,9 +109,9 @@ if (isset($_POST['ad_account'])) {
   $MM_redirectLoginFailed = "index.php";
   $MM_redirecttoReferrer = false;
   //mysql_select_db($database_connSQL, $connSQL);
-  $_SESSION['MM_Username'] = $loginUsername;
+ 
   
-  $sql_pw=sprintf("select ad_pw,ad_name from admin_tb where ad_account=%s",GetSQLValueString($_SESSION['MM_Username'], "text"));
+  $sql_pw=sprintf("select ad_pw,ad_name from admin_tb where ad_account=%s",GetSQLValueString($loginUsername, "text"));
   $rs_pw=mysqli_query($connSQL,$sql_pw) or die(mysqli_error());
   $row_pw=mysqli_fetch_array($rs_pw);
   $pw=$row_pw["ad_pw"];
@@ -141,15 +126,24 @@ if (isset($_POST['ad_account'])) {
 //echo $MM_redirectLoginSuccess;exit;
 	*/
   if (password_verify($_POST['ad_pw'], $pw)) {
+	$_SESSION['MM_Username'] = $loginUsername;
 	$_SESSION['LoginName'] = $row_pw['ad_name'];
     header("Location: " . $MM_redirectLoginSuccess );
 	exit;
   }
   else {
-	 //echo "<script>show('hiddenbox')</script>";
-	//echo "<script>show(\"hiddenbox\");location.href=(\"$MM_redirectLoginFailed\");</script>";
-    header("Location: ". $MM_redirectLoginFailed );
-	exit;
+    //header("Location: ". $MM_redirectLoginFailed);
+	//exit;
+	$status="error";
+	if($status=="error"){
+		echo '<div class="alert alert-danger" id="hiddenbox"><strong>帳號密碼有誤，請重新輸入</strong></div>';
+	}
+	/*
+	echo "<meta content='0; url=index.php?s=error' http-equiv='refresh'>";
+	if($_GET["s"]=="error"){
+		echo '<div class="alert alert-danger" id="hiddenbox"><strong>帳號密碼有誤</strong></div>';
+	}
+	*/
   }
 }
 ?>
@@ -212,6 +206,9 @@ if (isset($_POST['ad_account'])) {
    <h3 class="panel-title">會員登入</h3>
    </div>
      <div class="panel-body">
+									<?php
+										
+									?>
                                    <form class="form-horizontal" role="form" ACTION="<?php echo $loginFormAction; ?>" name="form1" method="POST">
 										<div class="form-group">
                                          <label for="account" class="col-sm-2 control-label">帳號</label>
@@ -232,7 +229,6 @@ if (isset($_POST['ad_account'])) {
                <input name="rememberMe" type="checkbox" id="rememberMe" value="1" checked> 請記住我
             </label>
          </div>
-		 <!--<div class="alert alert-danger" style="display:none;" id="hiddenbox"><strong>帳號密碼有誤</strong></div>-->
       </div>
    </div>
        <div class="form-group">

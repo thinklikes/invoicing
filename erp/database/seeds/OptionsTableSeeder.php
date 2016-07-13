@@ -11,7 +11,7 @@ class OptionsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('options')->insert([
+        DB::table('erp_options')->insert([
             //網站基本資訊
             [
                 'class'   => 'system_configs',

@@ -247,7 +247,7 @@ function MM_goToURL() { //v3.0
 							echo "<li><a href=\"".$row["menu_url"]."\"><i class=\"".$row["menu_class"]."\"></i> ".$row["menu_name"]."</a></li>";	
 						}
 					?>				
-					<li><a href="<?php echo $file."?doLogout=true";?>" onclick="return  confirm('是否要登出');"><i class="fa fa-sign-out"></i>登出</a></li>
+					<li id="lo"><a ><i class="fa fa-sign-out"></i>登出</a></li>
                </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -278,12 +278,14 @@ function MM_goToURL() { //v3.0
              
              <input type="submit" name="button" id="button" class="btn btn-default" value="查詢">
              <input name="button2" type="button" id="button2" class="btn btn-default" onClick="MM_goToURL('parent','company_system.php');return document.MM_returnValue" value="顯示所有資料">
+			 <button type="button" class="btn btn-link" onclick="window.open('company_add.php', 'newwindow', 'height=700, width=800');">新增廠商資料</button>
           
 		   </form>
         </div><BR>
 	    <div class="btn-group">
 		<div class="container-fluid">
-            <button type="button" class="btn btn-info" onclick="window.open('company_add.php', 'newwindow', 'height=700, width=800');">新增廠商資料</button>
+            <button type="button" class="btn btn-info" onclick="location.href='school_system.php';">學校資料管理</button>
+			<button type="button" class="btn btn-info" onclick="location.href='addressbook_system.php';">通訊錄</button>
        </div><BR>
 	   <div class="container-fluid">
             <ul class="nav nav-tabs">
@@ -294,7 +296,7 @@ function MM_goToURL() { //v3.0
 			  <li><a href="customers_maintain_system.php">客戶維護資料管理</a></li>
 			  <li><a href="approval_code_system.php">授權碼</a></li>
 			</ul>
-       </div>
+       </div><BR>
      </div>	 
      
    
@@ -303,7 +305,7 @@ function MM_goToURL() { //v3.0
             
             <div class="container-fluid">
            
-  <table class="table table-striped table_01">
+  <table class="table table-striped table_01" style="table-layout: fixed;word-break: break-all;">
 <?php $i=1; do {  $auto_id=$row_RecMember['auto_id'];?>
       <tr class="th_row" style="background-color:#5599FF;">
         <th>公司名稱</th>
@@ -355,13 +357,14 @@ function MM_goToURL() { //v3.0
 			<td data-th="備註"><?php echo $row_RecMember['company_remark'];?></td>
 			<td data-th="功能" colspan="2">
 				<input type="button" value="修改" class="btn btn-default" onclick="window.open('company_system_edit.php?nid=<?PHP echo $auto_id;?>', 'newwindow', 'height=450, width=550, top=50, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no');">
-				<input type="button" value="刪除" class="btn btn-default" onclick="if(confirm('確定要刪除這一筆資料?'))location.href='company_system.php?deliid=<?php echo $auto_id;?>';">
+				<!--<input type="button" id="del" value="刪除" class="btn btn-default" onclick="if(confirm('確定要刪除這一筆資料?'))location.href='company_system.php?deliid=<?php echo $auto_id;?>';">-->
+				<input type="button" id="del<?php echo $i;?>" name="del<?php echo $i;?>" value="刪除" class="btn btn-default">
 			</td>
         </tr>
 		<tr><td colspan="7" style="border: 0px;background-color:#FFF;">&nbsp;</td></tr>
 	   <?php $i++;} while ($row_RecMember = mysqli_fetch_assoc($RecMember)); ?>
   </table>
-  
+
   <ul class="pager">
   <?php if ($pageNum_RecMember > 0) { // Show if not first page ?>
   <li><a href="<?php printf("%s?pageNum_RecMember=%d%s", $currentPage, 0, $queryString_RecMember); ?>">第一頁</a></li>
@@ -390,18 +393,12 @@ function MM_goToURL() { //v3.0
 
     </div>
     <!-- /#wrapper -->
+<?php
+include("inc_js.php");
+?>
+<script>
 
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
-
-    <!-- Morris Charts JavaScript -->
-    <script src="js/plugins/morris/raphael.min.js"></script>
-    <script src="js/plugins/morris/morris.min.js"></script>
-    <script src="js/plugins/morris/morris-data.js"></script>
-
+</script>
 </body>
 
 </html>

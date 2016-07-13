@@ -12,7 +12,7 @@ class CreateStockWarehousesTable extends Migration
      */
     public function up()
     {
-        Schema::create('stocks_warehouses', function (Blueprint $table) {
+        Schema::create('erp_stock_warehouse', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('stock_id')->comment = '料品id';
             $table->integer('warehouse_id')->comment = '倉庫id';
@@ -29,6 +29,6 @@ class CreateStockWarehousesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('stocks_warehouses');
+        Schema::dropIfExists('erp_stock_warehouse');
     }
 }

@@ -12,7 +12,7 @@ class CreateWarehousesTable extends Migration
      */
     public function up()
     {
-        Schema::create('warehouses', function (Blueprint $table) {
+        Schema::create('erp_warehouses', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code', 20)->comment = '倉庫代碼';
             $table->string('name', 20)->comment = '倉庫名稱';
@@ -29,6 +29,6 @@ class CreateWarehousesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('warehouses');
+        Schema::dropIfExists('erp_warehouses');
     }
 }

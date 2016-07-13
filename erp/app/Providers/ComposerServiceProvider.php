@@ -4,11 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-use App\Repositories\OptionRepository;
-
-use App\Repositories\PageRepository;
-
-use App\Repositories\TaxRateRepository;
+use Option\OptionRepository;
 
 class ComposerServiceProvider extends ServiceProvider
 {
@@ -27,8 +23,8 @@ class ComposerServiceProvider extends ServiceProvider
 
         //把單位渲染到stocks底下所有程式
         $for_units = [
-            'stocks.create',
-            'stocks.edit',
+            'erp.basic.stock.create',
+            'erp.basic.stock.edit',
         ];
         view()->composer($for_units, function ($view) {
             //$view->with('ids', OptionRepository::getAllOptionsId('warehouses'));

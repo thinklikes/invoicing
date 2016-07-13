@@ -11,7 +11,7 @@ class WarehouseSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('warehouses')->insert([
+        DB::table('erp_warehouses')->insert([
             //倉庫資料
             [
                 'code'    => 'KS',

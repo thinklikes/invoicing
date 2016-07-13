@@ -12,7 +12,7 @@ class CreateEmployeesTable extends Migration
      */
     public function up()
     {
-        Schema::create('employees', function (Blueprint $table) {
+        Schema::create('erp_employees', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->comment = '員工資料表主鍵';
             $table->string('code', 10)->comment = '員工編號';
@@ -34,6 +34,6 @@ class CreateEmployeesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('employees');
+        Schema::dropIfExists('erp_employees');
     }
 }

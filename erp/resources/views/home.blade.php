@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@inject('pagePresenter', 'App\Page\PagePresenter')
+@inject('pagePresenter', 'Page\PagePresenter')
 
 @section('content')
 

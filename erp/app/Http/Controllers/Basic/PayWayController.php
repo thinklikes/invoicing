@@ -3,19 +3,21 @@
 namespace App\Http\Controllers\Basic;
 
 use Illuminate\Http\Request;
-use App\Repositories\OptionRepository;
+use Option\OptionRepository;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
 
 class PayWayController extends BasicController
 {
     private $option_class = 'pay_ways';
+    private $routeName = 'erp.basic.pay_way';
+    protected $className    = 'PayWayController';
+
 
     public function __construct()
     {
         $this->setFullClassName();
     }
-    private $className    = 'PayWayController';
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +26,7 @@ class PayWayController extends BasicController
     public function index()
     {
         $pay_ways = OptionRepository::getOptionsOnePage($this->option_class);
-        return view('pay_ways.index', ['pay_ways' => $pay_ways]);
+        return view($this->routeName.'.index', ['pay_ways' => $pay_ways]);
     }
 
     /**
@@ -37,7 +39,7 @@ class PayWayController extends BasicController
         //找出之前輸入的資料
         $pay_way = $request->old('pay_way');
         //if(count($request->old()) > 0) dd($request->old());
-        return view('pay_ways.create', ['pay_way' => $pay_way]);
+        return view($this->routeName.'.create', ['pay_way' => $pay_way]);
     }
 
     /**
@@ -65,7 +67,7 @@ class PayWayController extends BasicController
     public function show($id)
     {
         $pay_way = OptionRepository::getOptionDetail($this->option_class, $id);
-        return view('pay_ways.show', ['id' => $id, 'pay_way' => $pay_way]);
+        return view($this->routeName.'.show', ['id' => $id, 'pay_way' => $pay_way]);
     }
 
     /**
@@ -81,7 +83,7 @@ class PayWayController extends BasicController
         } else {
             $pay_way = OptionRepository::getOptionDetail($this->option_class, $id);
         }
-        return view('pay_ways.edit', ['id' => $id, 'pay_way' => $pay_way]);
+        return view($this->routeName.'.edit', ['id' => $id, 'pay_way' => $pay_way]);
     }
 
     /**

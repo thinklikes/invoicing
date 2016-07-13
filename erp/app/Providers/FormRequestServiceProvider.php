@@ -35,24 +35,26 @@ class FormRequestServiceProvider extends ServiceProvider
         //將FormRequestInterface綁定Request
         $this->app->bind(
             'App\Contracts\FormRequestInterface',
-            function ($app, $param) {
+            function ($app, $param = null) {
                 $requestMethod = '';
-                switch ($param['className']) {
-                    case 'Purchase\BillOfPurchaseController':
-                        $requestMethod = 'App\Http\Requests\Purchase\BillOfPurchaseRequest';
-                        break;
-                    case 'Purchase\ReturnOfPurchaseController':
-                        $requestMethod = 'App\Http\Requests\Purchase\ReturnOfPurchaseRequest';
-                        break;
-                    case 'Purchase\PaymentController':
-                        $requestMethod = 'App\Http\Requests\Purchase\PaymentRequest';
-                        break;
-                    case 'Purchase\PayableWriteOffController':
-                        $requestMethod = 'App\Http\Requests\Purchase\PayableWriteOffRequest';
-                        break;
-                    default:
-                        $requestMethod = 'App\Http\Requests\ErpRequest';
-                        break;
+
+                if (!empty($param)) {
+                    switch ($param['className']) {
+                        case 'Purchase\BillOfPurchaseController':
+                            $requestMethod = 'BillOfPurchase\BillOfPurchaseRequest';
+                            break;
+                        case 'Purchase\ReturnOfPurchaseController':
+                            $requestMethod = 'ReturnOfPurchase\ReturnOfPurchaseRequest';
+                            break;
+                        case 'Purchase\PaymentController':
+                            $requestMethod = 'Payment\PaymentRequest';
+                            break;
+                        case 'Purchase\PayableWriteOffController':
+                            $requestMethod = 'PayableWriteOff\PayableWriteOffRequest';
+                            break;
+                    }
+                } else {
+                    $requestMethod = 'App\Http\Requests\ErpRequest';
                 }
                 return App::make($requestMethod);
             }

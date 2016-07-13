@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Repositories\OptionRepository;
+use Option\OptionRepository;
 use Config;
 
 class SystemConfigsServiceProvider extends ServiceProvider

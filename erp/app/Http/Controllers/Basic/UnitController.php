@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Basic;
 
 use Illuminate\Http\Request;
-use App\Repositories\OptionRepository;
+use Option\OptionRepository;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
 
 class UnitController extends BasicController
 {
     private $option_class = 'units';
+    private $routeName = 'erp.basic.unit';
 
     public function __construct()
     {
@@ -23,7 +24,7 @@ class UnitController extends BasicController
     public function index()
     {
         $units = OptionRepository::getOptionsOnePage($this->option_class);
-        return view('units.index', ['units' => $units]);
+        return view($this->routeName.'.index', ['units' => $units]);
     }
 
     /**
@@ -36,7 +37,7 @@ class UnitController extends BasicController
         //找出之前輸入的資料
         $unit = $request->old('unit');
         //if(count($request->old()) > 0) dd($request->old());
-        return view('units.create', ['unit' => $unit]);
+        return view($this->routeName.'.create', ['unit' => $unit]);
     }
 
     /**
@@ -63,7 +64,7 @@ class UnitController extends BasicController
     public function show($id)
     {
         $unit = OptionRepository::getOptionDetail($this->option_class, $id);
-        return view('units.show', ['id' => $id, 'unit' => $unit]);
+        return view($this->routeName.'.show', ['id' => $id, 'unit' => $unit]);
     }
 
     /**
@@ -79,7 +80,7 @@ class UnitController extends BasicController
         } else {
             $unit = OptionRepository::getOptionDetail($this->option_class, $id);
         }
-        return view('units.edit', ['id' => $id, 'unit' => $unit]);
+        return view($this->routeName.'.edit', ['id' => $id, 'unit' => $unit]);
     }
 
     /**

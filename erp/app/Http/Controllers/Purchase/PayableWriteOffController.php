@@ -5,18 +5,25 @@ namespace App\Http\Controllers\Purchase;
 use App;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
-use App\Repositories\Purchase\PayableWriteOffRepository as OrderRepository;
-use App\Services\Purchase\PayableWriteOffService as orderService;
+use PayableWriteOff\PayableWriteOffRepository as OrderRepository;
+use PayableWriteOff\PayableWriteOffService as OrderService;
+use Payment\PaymentRepository as Payment;
+use BillOfPurchase\BillOfPurchaseRepository as BillOfPurchase;
+use ReturnOfPurchase\ReturnOfPurchaseRepository as ReturnOfPurchase;
+
 use Illuminate\Http\Request;
 
 class PayableWriteOffController extends BasicController
 {
     protected $orderRepository;
     protected $orderService;
+    protected $payment;
+    protected $billOfPurchase;
+    protected $returnOfPurchase;
     private $orderMasterInputName = 'payableWriteOff';
     private $orderCreditInputName = 'payableWriteOffCredit';
     private $orderDebitInputName = 'payableWriteOffDebit';
-    private $routeName = 'purchase.payableWriteOff';
+    private $routeName = 'erp.purchase.payableWriteOff';
     private $ordersPerPage = 15;
     /**
      * SupplierController constructor.
@@ -25,10 +32,16 @@ class PayableWriteOffController extends BasicController
      */
     public function __construct(
         OrderRepository $orderRepository,
-        OrderService $orderService
+        OrderService $orderService,
+        Payment $payment,
+        BillOfPurchase $billOfPurchase,
+        ReturnOfPurchase $returnOfPurchase
     ) {
         $this->orderRepository = $orderRepository;
         $this->orderService    = $orderService;
+        $this->payment = $payment;
+        $this->billOfPurchase = $billOfPurchase;
+        $this->returnOfPurchase = $returnOfPurchase;
         $this->setFullClassName();
     }
 
@@ -54,8 +67,8 @@ class PayableWriteOffController extends BasicController
         return view($this->routeName.'.create', [
             'new_master_code'           => $this->orderRepository->getNewOrderCode(),
             $this->orderMasterInputName => $request->old($this->orderMasterInputName),
-            $this->creditInputName => $request->old($this->creditInputName),
-            $this->debitInputName => $request->old($this->debitInputName),
+            $this->orderCreditInputName => $request->old($this->orderCreditInputName),
+            $this->orderDebitInputName => $request->old($this->orderDebitInputName),
         ]);
     }
 
@@ -75,8 +88,8 @@ class PayableWriteOffController extends BasicController
 
         //抓出使用者輸入的資料
         $orderMaster = $request->input($this->orderMasterInputName);
-        $orderCredit = $request->input($this->creditInputName);
-        $orderdebit = $request->input($this->debitInputName);
+        $orderCredit = $request->input($this->orderCreditInputName);
+        $orderdebit = $request->input($this->orderDebitInputName);
 
         return $this->orderService->create($this, $orderMaster, $orderCredit, $orderdebit);
     }
@@ -89,63 +102,11 @@ class PayableWriteOffController extends BasicController
      */
     public function show($code)
     {
-        $orderMaster = $this->orderRepository->getOrderMaster($code);
-        $orderMaster->supplier_code = $orderMaster->supplier->code;
-        $orderMaster->supplier_name = $orderMaster->supplier->name;
-
-        $orderCredit = $this->orderRepository->getOrderCredit($code);
-
-        $orderDebit = $this->orderRepository->getOrderDebit($code);
-
         return view($this->routeName.'.show', [
-            $this->orderMasterInputName => $orderMaster,
-            $this->orderCreditInputName => $orderCredit,
-            $this->orderDebitInputName => $orderDebit
+            $this->orderMasterInputName => $this->orderRepository->getOrderMaster($code),
+            $this->orderCreditInputName => $this->orderRepository->getOrderCredit($code),
+            $this->orderDebitInputName => $this->orderRepository->getOrderDebit($code)
         ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Request $request, $code)
-    {
-        if ($request->old($this->orderMasterInputName)) {
-            $orderMaster = $request->old($this->orderMasterInputName);
-            $orderMaster['created_at'] = $this->orderRepository
-                ->getOrderMasterfield('created_at', $code);
-            $orderMaster['code'] = $code;
-        } else {
-            $orderMaster = $this->orderRepository->getOrderMaster($code);
-            $orderMaster->supplier_code = $orderMaster->supplier->code;
-            $orderMaster->supplier_name = $orderMaster->supplier->name;
-        }
-
-        return view($this->routeName.'.edit', [
-            $this->orderMasterInputName => $orderMaster,
-        ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update($code)
-    {
-        //驗證表單填入的資料
-        $request = App::make(
-            'App\Contracts\FormRequestInterface',
-            ['className' => $this->className]
-        );
-
-        $orderMaster = $request->input($this->orderMasterInputName);
-
-        return $this->orderService->update($this, $orderMaster, $code);
     }
 
     /**

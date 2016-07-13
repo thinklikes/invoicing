@@ -46,7 +46,7 @@ if (isset($_SERVER['QUERY_STRING'])) {
 }
 
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
-  $updateSQL = sprintf('update company_system set company_name=%s,company_status=%s, mailbox=%s, company_abb=%s, company_contact=%s, company_con_tel=%s, company_con_email=%s, company_con_fax=%s, company_tel=%s, company_fax=%s, company_add=%s, VTA_NO=%s,internet_phone=%s,company_remark=%s where auto_id=%s',
+  $updateSQL = sprintf('update company_system set company_name=%s,company_status=%s, mailbox=%s, company_abb=%s, company_contact=%s, company_con_tel=%s, company_con_email=%s, company_con_fax=%s, company_tel=%s, company_fax=%s, company_add=%s, VTA_NO=%s,internet_phone=%s,company_remark=%s,line=%s,skype=%s,wechat=%s where auto_id=%s',
                        GetSQLValueString($_POST['company_name'], "text"),
 					   GetSQLValueString($_POST['company_status'], "text"),
                        GetSQLValueString($_POST['mailbox'], "text"),
@@ -61,6 +61,9 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 					   GetSQLValueString($_POST['VTA_NO'], "text"),
 					   GetSQLValueString($_POST['internet_phone'], "text"),
 					   GetSQLValueString($_POST['company_remark'], "text"),
+					   GetSQLValueString($_POST['line'], "text"),
+					   GetSQLValueString($_POST['skype'], "text"),
+					   GetSQLValueString($_POST['wechat'], "text"),
                        GetSQLValueString($auto_id, "text"));
 	//$updateSQL=htmlspecialchars($updateSQL, ENT_QUOTES);
 	//echo  $updateSQL."<BR>";
@@ -332,6 +335,21 @@ function productDataCheck(){
 				 <option value="3" <?php  if($result["company_status"]==3) echo "selected"; ?>>不使用</option></select>
                  </span><br>
 										 </div>
+                                    </div>
+									
+									<div class="form-group">
+                                         <label  class="col-sm-2 control-label">通訊軟體帳號</label>
+                                         <div class="col-sm-10"><span id="sprytextfield15">
+						<div class="col-xs-4">
+											Line帳號<input type="text" name="line"  id="line" class="form-control" placeholder="請輸入Line帳號" value=<?php  echo $result["line"]; ?>>
+										  </div>
+						<div class="col-xs-4">
+											Skype帳號<input type="text" name="skype"  id="skype" class="form-control" placeholder="請輸入Skype帳號" value=<?php  echo $result["skype"]; ?>>
+										  </div>
+						<div class="col-xs-4">
+											WeChat帳號<input type="text" name="wechat"  id="wechat" class="form-control" placeholder="請輸入WeChat帳號" value=<?php  echo $result["wechat"]; ?>>
+										  </div>
+										 </div></span>
                                     </div>
 									
 									<div class="form-group">

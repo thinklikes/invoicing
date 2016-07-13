@@ -12,7 +12,7 @@ class CreatePayableWriteOffCreditTable extends Migration
      */
     public function up()
     {
-        Schema::create('payable_write_off_credit', function (Blueprint $table) {
+        Schema::create('erp_payable_write_off_credit', function (Blueprint $table) {
             $table->increments('id');
             $table->string('master_code', 20)->comment = "表頭單號";
             $table->string('credit_code', 20)->comment = "付款單號";
@@ -27,6 +27,6 @@ class CreatePayableWriteOffCreditTable extends Migration
      */
     public function down()
     {
-        Schema::drop('payable_write_off_credit');
+        Schema::dropIfExists('erp_payable_write_off_credit');
     }
 }

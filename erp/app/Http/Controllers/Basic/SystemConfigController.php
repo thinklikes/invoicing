@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Basic;
 
-use App\Repositories\OptionRepository;
+use Option\OptionRepository;
 use App\Http\Controllers\Controller;
 use App\Contracts\FormRequestInterface;
 use Illuminate\Http\Request;
@@ -11,6 +11,8 @@ use App\Http\Controllers\BasicController;
 
 class SystemConfigController extends BasicController
 {
+    private $routeName = 'erp.basic.system_config';
+
     public function __construct()
     {
         $this->setFullClassName();
@@ -21,7 +23,7 @@ class SystemConfigController extends BasicController
      */
     public function index()
     {
-        return view('system_configs.index', [
+        return view($this->routeName.'.index', [
             'configs' => OptionRepository::getAllConfigs()
         ]);
     }
@@ -32,7 +34,7 @@ class SystemConfigController extends BasicController
     public function edit()
     {
         //$EditRoute = route('SystemConfigsEditor');
-        return view('system_configs.edit', [
+        return view($this->routeName.'.edit', [
             'configs' => OptionRepository::getAllConfigs()
         ]);
     }

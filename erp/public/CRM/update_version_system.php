@@ -258,7 +258,7 @@ function MM_goToURL() { //v3.0
 							echo "<li><a href=\"".$row["menu_url"]."\"><i class=\"".$row["menu_class"]."\"></i> ".$row["menu_name"]."</a></li>";	
 						}
 					?>				
-					<li><a href="<?php echo $file."?doLogout=true";?>" onclick="return  confirm('是否要登出');"><i class="fa fa-sign-out"></i>登出</a></li>
+					<li id="lo"><a ><i class="fa fa-sign-out"></i>登出</a></li>
                </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -285,12 +285,12 @@ function MM_goToURL() { //v3.0
              
              <input type="submit" name="button" id="button" class="btn btn-default" value="查詢">
              <input name="button2" type="button" id="button2" class="btn btn-default" onClick="MM_goToURL('parent','update_version_system.php');return document.MM_returnValue" value="顯示所有資料">
-          
+			 <button type="button" class="btn btn-link" onclick="window.open('update_version_add.php', 'newwindow', 'height=700, width=800');">新增版本更新資料</button>
 		   </form>
         </div><BR>
 	    <div class="btn-group">
 		<div class="container-fluid">
-            <button type="button" class="btn btn-info" onclick="window.open('update_version_add.php', 'newwindow', 'height=700, width=800');">新增</button>
+            <!--<button type="button" class="btn btn-info" onclick="window.open('update_version_add.php', 'newwindow', 'height=700, width=800');">新增</button>-->
        </div><br>
 <div class="container-fluid">
             <ul class="nav nav-tabs">
@@ -381,7 +381,8 @@ function MM_goToURL() { //v3.0
 			<td data-th="所在地"><?php if($row_RecMember['place']=="k")echo "高雄"; elseif($row_RecMember['place']=="n") echo "台南";?></td>
 			<td data-th="功能">
 				<input type="button" value="修改" class="btn btn-default" onclick="window.open('update_version_system_edit.php?nid=<?PHP echo $auto_id;?>', 'newwindow', 'height=450, width=550, top=50, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no');">
-				<input type="button" value="刪除" class="btn btn-default" onclick="if(confirm('確定要刪除這一筆資料?'))location.href='update_version_system.php?deliid=<?php echo $auto_id;?>';">
+				<!--<input type="button" id="del" value="刪除" class="btn btn-default" onclick="if(confirm('確定要刪除這一筆資料?'))location.href='company_system.php?deliid=<?php echo $auto_id;?>';">-->
+				<input type="button" id="del<?php echo $i;?>" name="del<?php echo $i;?>" value="刪除" class="btn btn-default">
 			</td>
         </tr>
 		<tr><td colspan="9" style="border: 0px;background-color:#FFF;">&nbsp;</td></tr>
@@ -417,16 +418,9 @@ function MM_goToURL() { //v3.0
     </div>
     <!-- /#wrapper -->
 
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
-
-    <!-- Morris Charts JavaScript -->
-    <script src="js/plugins/morris/raphael.min.js"></script>
-    <script src="js/plugins/morris/morris.min.js"></script>
-    <script src="js/plugins/morris/morris-data.js"></script>
+<?php
+include("inc_js.php");
+?>
 
 </body>
 

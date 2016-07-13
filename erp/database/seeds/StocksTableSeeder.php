@@ -11,8 +11,8 @@ class StocksTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('stocks')->truncate();
+        DB::table('erp_stocks')->truncate();
         //用模型工廠隨機填入五十筆產品
-        factory(App\Stock::class, 20)->create();
+        factory(Stock\Stock::class, 20)->create();
     }
 }

@@ -12,10 +12,10 @@ class CreatePayableWriteOffDebitTable extends Migration
      */
     public function up()
     {
-        Schema::create('payable_write_off_debit', function (Blueprint $table) {
+        Schema::create('erp_payable_write_off_debit', function (Blueprint $table) {
             $table->increments('id');
             $table->string('master_code', 20)->comment = "表頭單號";
-            $table->enum('debit_type', ['billsOfPurchase', 'returnsOfPurchase'])->comment = "進退貨單別";
+            $table->enum('debit_type', ['billOfPurchase', 'returnOfPurchase'])->comment = "進退貨單別";
             $table->string('debit_code', 20)->comment = "進退貨單號";
             $table->integer('debit_amount')->comment = "進退貨單沖銷金額";
         });
@@ -28,6 +28,6 @@ class CreatePayableWriteOffDebitTable extends Migration
      */
     public function down()
     {
-        Schema::drop('payable_write_off_debit');
+        Schema::dropIfExists('erp_payable_write_off_debit');
     }
 }

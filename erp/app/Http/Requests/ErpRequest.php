@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
-class ErpRequest extends Request
+use App\Contracts\FormRequestInterface;
+
+class ErpRequest extends Request implements FormRequestInterface
 {
 
     /**

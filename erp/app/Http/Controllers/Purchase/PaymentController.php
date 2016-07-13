@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Purchase;
 use App;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
-use App\Repositories\Purchase\PaymentRepository as OrderRepository;
-use App\Services\Purchase\PaymentService as orderService;
+use Payment\PaymentRepository as OrderRepository;
+use Payment\PaymentService as orderService;
 use Illuminate\Http\Request;
 
 class PaymentController extends BasicController
@@ -14,7 +14,7 @@ class PaymentController extends BasicController
     protected $orderRepository;
     protected $orderService;
     private $orderMasterInputName = 'payment';
-    private $routeName = 'purchase.payments';
+    private $routeName = 'erp.purchase.payment';
     private $ordersPerPage = 15;
     /**
      * SupplierController constructor.

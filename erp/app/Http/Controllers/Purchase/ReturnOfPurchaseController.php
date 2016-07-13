@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Purchase;
 use App;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
-use App\Repositories\Purchase\ReturnOfPurchaseRepository as OrderRepository;
-use App\Services\Purchase\ReturnOfPurchaseService as orderService;
+use ReturnOfPurchase\ReturnOfPurchaseRepository as OrderRepository;
+use ReturnOfPurchase\ReturnOfPurchaseService as orderService;
 use Config;
 use Illuminate\Http\Request;
 
@@ -16,7 +16,7 @@ class ReturnOfPurchaseController extends BasicController
     protected $orderService;
     private $orderMasterInputName = 'returnOfPurchaseMaster';
     private $orderDetailInputName = 'returnOfPurchaseDetail';
-    private $routeName = 'purchase.returnsOfPurchase';
+    private $routeName = 'erp.purchase.returnOfPurchase';
     private $ordersPerPage = 15;
     /**
      * SupplierController constructor.

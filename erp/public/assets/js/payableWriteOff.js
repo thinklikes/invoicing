@@ -86,7 +86,7 @@ function getPayableBySupplierId(supplier_id)
             'supplier_id' : supplier_id,
         },
         success: function( data ) {
-            renderPayableHtml(data, 'billsOfPurchase');
+            renderPayableHtml(data, 'billOfPurchase');
         }
     });
 
@@ -99,7 +99,7 @@ function getPayableBySupplierId(supplier_id)
             'supplier_id' : supplier_id,
         },
         success: function( data ) {
-            renderPayableHtml(data, 'returnsOfPurchase');
+            renderPayableHtml(data, 'returnOfPurchase');
         }
     });
 }
@@ -122,8 +122,8 @@ function clearPayableHtml()
 function renderPayableHtml(data, type)
 {
     var content;
-    var prefix = (type == 'billsOfPurchase') ? '進' : '退';
-    var positive = (type == 'billsOfPurchase') ? 1 : -1;
+    var prefix = (type == 'billOfPurchase') ? '進' : '退';
+    var positive = (type == 'billOfPurchase') ? 1 : -1;
     for (key in data) {
         var date = new Date(data[key]['created_at']);
         date = date.toISOString().substring(0, 10);
@@ -144,13 +144,13 @@ function renderPayableHtml(data, type)
                             ' + data[key]['invoice_code'] + '\
                             <input type="hidden" name="payableWriteOffDebit['+index+'][debit_invoice_code]" value="' + data[key]['invoice_code'] + '">\
                         </td>\
-                        <td>' + (data[key]['total_amount'] * positive) + '</td>\
-                        <td>\
+                        <td class="numeric">' + (data[key]['total_amount'] * positive) + '</td>\
+                        <td class="numeric">\
                             ' + (data[key]['total_amount'] * positive - data[key]['paid_amount'] * positive) + '\
                             <input type="hidden" class="debit_order_amount" name="payableWriteOffDebit['+index+'][debit_order_amount]" value="' + (data[key]['total_amount'] * positive) + '">\
                             <input type="hidden" class="debit_paid_amount" name="payableWriteOffDebit['+index+'][debit_paid_amount]" value="' + (data[key]['paid_amount'] * positive) + '">\
                         </td>\
-                        <td><input type="text" class="debit_amount" style="text-align:right;" name="payableWriteOffDebit['+index+'][debit_amount]" onkeyup="writeOffCalculator.calculate();" size="10"></td>\
+                        <td><input type="text" class="debit_amount numeric" name="payableWriteOffDebit['+index+'][debit_amount]" onkeyup="writeOffCalculator.calculate();" size="10"></td>\
                     </tr>';
         index ++;
     }
@@ -204,7 +204,6 @@ function renderPaymentHtml(data)
         content += '<tr>\
                         <td>\
                             <input class="credit_checked" type="checkbox" name="payableWriteOffCredit['+i+'][credit_checked]"  onclick="writeOffCalculator.calculate();" value="1">\
-                            <input class="credit_type" type="hidden" name="payableWriteOffCredit['+i+'][credit_type]" value="payment">\
                         </td>\
                         <td>\
                             ' + data[key]['pay_date'] + '\
@@ -222,7 +221,7 @@ function renderPaymentHtml(data)
                             ' + (data[key]['check_code'] ? data[key]['check_code'] : '--') + '\
                             <input type="hidden" name="payableWriteOffCredit['+i+'][credit_check_code]" value="' + data[key]['check_code'] + '">\
                         </td>\
-                        <td>\
+                        <td class="numeric">\
                             ' + data[key]['amount'] + '\
                             <input class="credit_amount" type="hidden" name="payableWriteOffCredit['+i+'][credit_amount]" value="' + data[key]['amount'] + '">\
                         </td>\

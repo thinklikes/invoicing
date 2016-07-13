@@ -13,9 +13,9 @@ class PublicPresenter
      * @param Carbon $date
      * @return date
      */
-    public function getFormatDate(Carbon $date)
+    public function getFormatDate($date)
     {
-        return $date->format('Y-m-d');
+        return (class_basename($date) == 'Carbon') ? $date->format('Y-m-d') : $date;
     }
 
     public function getNewDate()

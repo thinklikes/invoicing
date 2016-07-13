@@ -12,7 +12,7 @@ class CreateBillOfPurchaseMasterTable extends Migration
      */
     public function up()
     {
-        Schema::create('bill_of_purchase_master', function (Blueprint $table) {
+        Schema::create('erp_bill_of_purchase_master', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code', 20)->unique()->comment = "進貨單號";
             $table->enum('is_paid', [0, 1])->default('0')->comment = "是否付款(0:未付款, 1:已付款)";
@@ -35,6 +35,6 @@ class CreateBillOfPurchaseMasterTable extends Migration
      */
     public function down()
     {
-        Schema::drop('bill_of_purchase_master');
+        Schema::dropIfExists('erp_bill_of_purchase_master');
     }
 }

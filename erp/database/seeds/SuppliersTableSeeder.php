@@ -11,8 +11,8 @@ class SuppliersTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('suppliers')->truncate();
+        DB::table('erp_suppliers')->truncate();
         //用模型工廠隨機填入五十筆供應商
-        factory(App\Basic\Supplier::class, 50)->create();
+        factory(Supplier\Supplier::class, 50)->create();
     }
 }

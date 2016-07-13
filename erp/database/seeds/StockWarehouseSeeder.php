@@ -2,9 +2,9 @@
 
 use Illuminate\Database\Seeder;
 
-use App\Repositories\StockRepository;
+use Stock\StockRepository;
 
-use App\Repositories\WarehouseRepository;
+use Warehouse\WarehouseRepository;
 
 class StockWarehouseSeeder extends Seeder
 {
@@ -32,6 +32,6 @@ class StockWarehouseSeeder extends Seeder
                 $i ++;
             }
         }
-        DB::table('stocks_warehouses')->insert($stocks_warehouses);
+        DB::table('erp_stock_warehouse')->insert($stocks_warehouses);
     }
 }

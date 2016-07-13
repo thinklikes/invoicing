@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Basic;
 
 use Illuminate\Http\Request;
-use App\Repositories\OptionRepository;
+use Option\OptionRepository;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
 
 class StockClassController extends BasicController
 {
     private $namespace;
-    private $className;
+    protected $className;
     private $option_class = 'stock_classes';
+    private $routeName = 'erp.basic.stock_class';
 
     public function __construct()
     {
@@ -25,7 +26,7 @@ class StockClassController extends BasicController
     public function index()
     {
         $stock_classes = OptionRepository::getOptionsOnePage($this->option_class);
-        return view('stock_classes.index', ['stock_classes' => $stock_classes]);
+        return view($this->routeName.'.index', ['stock_classes' => $stock_classes]);
     }
 
     /**
@@ -38,7 +39,7 @@ class StockClassController extends BasicController
         //找出之前輸入的資料
         $stock_class = $request->old('stock_class');
         //if(count($request->old()) > 0) dd($request->old());
-        return view('stock_classes.create', ['stock_class' => $stock_class]);
+        return view($this->routeName.'.create', ['stock_class' => $stock_class]);
     }
 
     /**
@@ -66,7 +67,7 @@ class StockClassController extends BasicController
     public function show($id)
     {
         $stock_class = OptionRepository::getOptionDetail($this->option_class, $id);
-        return view('stock_classes.show', ['id' => $id, 'stock_class' => $stock_class]);
+        return view($this->routeName.'.show', ['id' => $id, 'stock_class' => $stock_class]);
     }
 
     /**
@@ -82,7 +83,7 @@ class StockClassController extends BasicController
         } else {
             $stock_class = OptionRepository::getOptionDetail($this->option_class, $id);
         }
-        return view('stock_classes.edit', ['id' => $id, 'stock_class' => $stock_class]);
+        return view($this->routeName.'.edit', ['id' => $id, 'stock_class' => $stock_class]);
     }
 
     /**
