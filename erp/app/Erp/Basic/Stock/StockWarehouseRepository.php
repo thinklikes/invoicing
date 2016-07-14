@@ -68,7 +68,7 @@ class StockWarehouseRepository
      * @param  integer $warehouse_id   warehouse id
      * @return boolean                 if save success, return true
      */
-    public function updateInventory($inventory, $stock_id, $warehouse_id)
+    public function incrementInventory($inventory, $stock_id, $warehouse_id)
     {
         return $this->stockWarehouse->where('stock_id', $stock_id)
             ->where('warehouse_id', $warehouse_id)

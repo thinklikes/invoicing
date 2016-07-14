@@ -1,12 +1,12 @@
 <?php
-namespace ReturnOfPurchase;
+namespace BillOfSale;
 
-use ReturnOfPurchase\ReturnOfPurchaseRepository as OrderRepository;
+use BillOfSale\BillOfSaleRepository as OrderRepository;
 use Stock\StockWarehouseRepository as StockWarehouse;
 use Illuminate\Support\MessageBag;
 use App\Presenters\OrderCalculator;
 
-class ReturnOfPurchaseService
+class BillOfSaleService
 {
     protected $orderRepository;
     protected $stock;
@@ -32,11 +32,10 @@ class ReturnOfPurchaseService
         $this->calculator->calculate();
 
         $orderMaster['total_amount'] = $this->calculator->getTotalAmount();
-
-        //新增進貨退回單表頭
+        //新增銷貨單表頭
         $isCreated = $isCreated && $this->orderRepository->storeOrderMaster($orderMaster);
 
-        //新增進貨退回單表身
+        //新增銷貨單表身
         foreach($orderDetail as $key => $value) {
             if ($value['quantity'] == 0 || $value['quantity'] == "") {
                 continue;
@@ -45,7 +44,7 @@ class ReturnOfPurchaseService
             //存入表身
             $isCreated = $isCreated && $this->orderRepository
                 ->storeOrderDetail($value);
-            //更新倉庫數量
+            //更新倉庫數量，因為是銷貨，扣掉數量
             $this->stock->incrementInventory(
                 -$value['quantity'],
                 $value['stock_id'],
@@ -56,19 +55,21 @@ class ReturnOfPurchaseService
         //return $isCreated;
         if (!$isCreated) {
             return $listener->orderCreatedErrors(
-                new MessageBag(['進貨退回單開單失敗!'])
+                new MessageBag(['銷貨單開單失敗!'])
             );
         }
         return $listener->orderCreated(
-            new MessageBag(['進貨退回單已新增!']), $code
+            new MessageBag(['銷貨單已新增!']), $code
         );
     }
 
     public function update($listener, $orderMaster, $orderDetail, $code)
     {
         $isUpdated = true;
+
         //將庫存數量恢復到未開單前
         $this->revertStockInventory($code);
+
         //先存入表頭
         $isUpdated = $isUpdated && $this->orderRepository->updateOrderMaster(
             $orderMaster, $code
@@ -85,7 +86,7 @@ class ReturnOfPurchaseService
             $value['master_code'] = $code;
             //存入表身
             $isUpdated = $isUpdated && $this->orderRepository->storeOrderDetail($value);
-            //更新數量，因為是進貨退回，所以是扣掉數量
+            //更新數量
             $this->stock->incrementInventory(
                 -$value['quantity'],
                 $value['stock_id'],
@@ -96,11 +97,11 @@ class ReturnOfPurchaseService
         //return $isUpdated;
         if (!$isUpdated) {
             return $listener->orderUpdatedErrors(
-                new MessageBag(['進貨退回單更新失敗!'])
+                new MessageBag(['銷貨單更新失敗!'])
             );
         }
         return $listener->orderUpdated(
-            new MessageBag(['進貨退回單已更新!']), $code
+            new MessageBag(['銷貨單已更新!']), $code
         );
     }
 
@@ -117,11 +118,11 @@ class ReturnOfPurchaseService
 
         if (!$isDeleted) {
             return $listener->orderDeletedErrors(
-                new MessageBag(['進貨退回單刪除失敗!'])
+                new MessageBag(['銷貨單刪除失敗!'])
             );
         }
         return $listener->orderDeleted(
-            new MessageBag(['進貨退回單已刪除!']), $code
+            new MessageBag(['銷貨單已刪除!']), $code
         );
     }
 
@@ -129,7 +130,8 @@ class ReturnOfPurchaseService
         //將庫存數量恢復到未開單前
         $old_OrderMaster = $this->orderRepository->getOrderMaster($code);
         $old_OrderDetail = $this->orderRepository->getOrderDetail($code);
-        //更新數量，因為是進貨退回，所以是把數量加回來數量
+        //因為是銷貨，把數量加回來
+
         foreach ($old_OrderDetail as $key => $value) {
             $this->stock->incrementInventory(
                 $value['quantity'],

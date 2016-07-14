@@ -5,9 +5,9 @@
         <script type="text/javascript">
 
         </script>
-        <script type="text/javascript" src="{{ asset('assets/js/bindSupplierAutocomplete.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/purchase/bindSupplierAutocomplete.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/WriteOffCalculator.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('assets/js/payableWriteOff.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/purchase/payableWriteOff.js') }}"></script>
         <form action=" {{ url("/payableWriteOff") }}" method="POST">
             {{ csrf_field() }}
             <table id="master" width="100%">

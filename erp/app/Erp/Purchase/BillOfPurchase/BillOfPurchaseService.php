@@ -10,6 +10,7 @@ class BillOfPurchaseService
 {
     protected $orderRepository;
     protected $stock;
+    protected $stock;
 
     public function __construct(
         OrderRepository $orderRepository,
@@ -45,7 +46,7 @@ class BillOfPurchaseService
             $isCreated = $isCreated && $this->orderRepository
                 ->storeOrderDetail($value);
             //更新倉庫數量
-            $this->stock->updateInventory(
+            $this->stock->incrementInventory(
                 $value['quantity'],
                 $value['stock_id'],
                 $orderMaster['warehouse_id']
@@ -67,12 +68,13 @@ class BillOfPurchaseService
     {
         $isUpdated = true;
 
+        //將庫存數量恢復到未開單前
+        $this->revertStockInventory($code);
+
         //先存入表頭
         $isUpdated = $isUpdated && $this->orderRepository->updateOrderMaster(
             $orderMaster, $code
         );
-        //將庫存數量恢復到未開單前
-        $this->retrunStockInventory($code);
         //dd($isUpdated);
         //清空表身
         $this->orderRepository->deleteOrderDetail($code);
@@ -85,7 +87,7 @@ class BillOfPurchaseService
             //存入表身
             $isUpdated = $isUpdated && $this->orderRepository->storeOrderDetail($value);
             //更新數量
-            $this->stock->updateInventory(
+            $this->stock->incrementInventory(
                 $value['quantity'],
                 $value['stock_id'],
                 $orderMaster['warehouse_id']
@@ -108,7 +110,7 @@ class BillOfPurchaseService
         $isDeleted = true;
 
         //將庫存數量恢復到未開單前
-        $this->retrunStockInventory($code);
+        $this->revertStockInventory($code);
 
         //將這張單作廢
         $isDeleted = $isDeleted && $this->orderRepository->deleteOrderMaster($code);
@@ -124,12 +126,12 @@ class BillOfPurchaseService
         );
     }
 
-    public function retrunStockInventory($code) {
+    public function revertStockInventory($code) {
         //將庫存數量恢復到未開單前
         $old_OrderMaster = $this->orderRepository->getOrderMaster($code);
         $old_OrderDetail = $this->orderRepository->getOrderDetail($code);
         foreach ($old_OrderDetail as $key => $value) {
-            $this->stock->updateInventory(
+            $this->stock->incrementInventory(
                 -$value['quantity'],
                 $value['stock_id'],
                 $old_OrderMaster['warehouse_id']

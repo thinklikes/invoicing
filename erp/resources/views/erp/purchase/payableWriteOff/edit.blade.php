@@ -4,9 +4,9 @@
 
 @section('content')
 
-        <script type="text/javascript" src="{{ asset('assets/js/bindSupplierAutocomplete.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/purchase/bindSupplierAutocomplete.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/WriteOffCalculator.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('assets/js/payableWriteOff.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/purchase/payableWriteOff.js') }}"></script>
         <form action="{{ url("/payableWriteOff/".$payableWriteOff->code) }}" method="POST">
             {{ csrf_field() }}
             {{ method_field('PUT') }}

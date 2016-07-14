@@ -130,9 +130,22 @@ return [
             'supplier_id' => [
                 'required' => '我們需要知道供應商',
             ],
+            'company_id' => [
+                'required' => '我們需要知道客戶',
+            ],
+            'warehouse_id' => [
+                'required' => '我們需要知道使用倉庫',
+            ],
             'stock_id' => [
                 'required_unless'      => '我們需要知道料品名稱!!',
                 'required_without_all' => '請至少輸入一項料品',
+            ],
+            'quantity' => [
+                'required_with' => '我們需要知道數量!!',
+                'numeric'       => '數量請填入數字',
+            ],
+            'no_tax_price' => [
+                'numeric' => '稅前單價請填入數字',
             ],
         ],
         //客戶資料管理的表單驗證訊息
@@ -213,38 +226,6 @@ return [
             ],
         ],
         'purchase_order_detail'=> [
-            '*' => [
-                'quantity' => [
-                    'required_with' => '我們需要知道數量!!',
-                    'numeric'       => '數量請填入數字',
-                ],
-                'no_tax_price' => [
-                    'numeric' => '稅前單價請填入數字',
-                ],
-            ],
-        ],
-        'billOfPurchaseMaster'=> [
-            'warehouse_id' => [
-                'required' => '我們需要知道進貨倉庫',
-            ],
-        ],
-        'billOfPurchaseDetail'=> [
-            '*' => [
-                'quantity' => [
-                    'required_with' => '我們需要知道數量!!',
-                    'numeric'       => '數量請填入數字',
-                ],
-                'no_tax_price' => [
-                    'numeric' => '稅前單價請填入數字',
-                ],
-            ],
-        ],
-        'returnOfPurchaseMaster'=> [
-            'warehouse_id' => [
-                'required' => '我們需要知道進貨退回倉庫',
-            ],
-        ],
-        'returnOfPurchaseDetail'=> [
             '*' => [
                 'quantity' => [
                     'required_with' => '我們需要知道數量!!',

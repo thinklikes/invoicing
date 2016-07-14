@@ -12,7 +12,8 @@ class StockRepository
      */
     public static function getStocksJson($param)
     {
-        $stocks = Stock::select('id', 'code', 'name', 'unit_id', 'no_tax_price_of_purchased')
+        $stocks = Stock::select('id', 'code', 'name', 'unit_id',
+            'no_tax_price_of_purchased', 'no_tax_price_of_sold')
         ->with(['unit' => function($query) {
             $query->select('id', 'comment');
         }])

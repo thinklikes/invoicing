@@ -34,10 +34,11 @@
             "ReturnOfPurchase\\": "app/Erp/Purchase/ReturnOfPurchase",
             "Payment\\": "app/Erp/Purchase/Payment",
             "PayableWriteOff\\": "app/Erp/Purchase/PayableWriteOff",
-            "BillOfSale\\": "app/Erp/Purchase/BillOfSale",
-            "ReturnOfSale\\": "app/Erp/Purchase/ReturnOfSale",
-            "Receipt\\": "app/Erp/Purchase/Receipt",
-            "ReceivableWriteOff\\": "app/Erp/Purchase/ReceivableWriteOff"
+            "BillOfSale\\": "app/Erp/Sale/BillOfSale",
+            "ReturnOfSale\\": "app/Erp/Sale/ReturnOfSale",
+            "Receipt\\": "app/Erp/Sale/Receipt",
+            "ReceivableWriteOff\\": "app/Erp/Sale/ReceivableWriteOff",
+            "Company\\": "app/Erp/Basic/Company"
         }
     },
     "autoload-dev": {

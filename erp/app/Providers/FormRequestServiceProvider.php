@@ -52,6 +52,12 @@ class FormRequestServiceProvider extends ServiceProvider
                         case 'Purchase\PayableWriteOffController':
                             $requestMethod = 'PayableWriteOff\PayableWriteOffRequest';
                             break;
+                        case 'Sale\BillOfSaleController':
+                            $requestMethod = 'BillOfSale\BillOfSaleRequest';
+                            break;
+                        case 'Sale\ReturnOfSaleController':
+                            $requestMethod = 'ReturnOfSale\ReturnOfSaleRequest';
+                            break;
                     }
                 } else {
                     $requestMethod = 'App\Http\Requests\ErpRequest';

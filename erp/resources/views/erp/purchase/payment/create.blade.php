@@ -2,7 +2,7 @@
 
 @inject('PublicPresenter', 'App\Presenters\PublicPresenter')
 @section('content')
-        <script type="text/javascript" src="{{ asset('assets/js/bindSupplierAutocomplete.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/purchase/bindSupplierAutocomplete.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/bindDatePicker.js') }}"></script>
         <script type="text/javascript">
             //供應商自動完成所需資訊

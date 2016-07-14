@@ -25,8 +25,8 @@ Route::get('/test', function () {
     // }
     //return view('layouts.test');
 
-    $a = App::make('BillOfPurchase\BillOfPurchaseRepository');
-    return $a->getOrdersPaginated(20);
+    $a = App::make('ReturnOfSale\ReturnOfSaleRepository');
+    return $a->getNewOrderCode();
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -52,8 +52,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/system_config/update', 'SystemConfigController@update');
 
         //客戶資料管理
-        Route::resource('/customer', 'CustomerController');
-
+        //Route::resource('/customer', 'CustomerController');
+        Route::post('/company/json', 'CompanyController@json');
         //供應商資料管理
         Route::post('/supplier/json', 'SupplierController@json');
         Route::resource('/supplier', 'SupplierController');

@@ -1,21 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Purchase;
+namespace App\Http\Controllers\Sale;
 
 use App;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
-use BillOfPurchase\BillOfPurchaseRepository as OrderRepository;
-use BillOfPurchase\BillOfPurchaseService as OrderService;
+use ReturnOfSale\ReturnOfSaleRepository as OrderRepository;
+use ReturnOfSale\ReturnOfSaleService as orderService;
+use Config;
 use Illuminate\Http\Request;
 
-class BillOfPurchaseController extends BasicController
+class ReturnOfSaleController extends BasicController
 {
     protected $orderRepository;
     protected $orderService;
-    private $orderMasterInputName = 'billOfPurchaseMaster';
-    private $orderDetailInputName = 'billOfPurchaseDetail';
-    private $routeName = 'erp.purchase.billOfPurchase';
+    private $orderMasterInputName = 'returnOfSaleMaster';
+    private $orderDetailInputName = 'returnOfSaleDetail';
+    private $routeName = 'erp.sale.returnOfSale';
     private $ordersPerPage = 15;
     /**
      * SupplierController constructor.
@@ -37,19 +38,18 @@ class BillOfPurchaseController extends BasicController
      * @param  string $code      搜尋的鍵值
      * @return Json            Json格式的資料
      */
-    public function json($data_mode, $code)
-    {
-        switch ($data_mode) {
-            case 'getPayableBySupplierId':
-                $orderMaster = $this->orderRepository->getPayableBySupplierId($code);
-                break;
-            default:
-                # code...
-                break;
-        }
-        return response()->json($orderMaster->all());
-    }
-
+    // public function json($data_mode, $code)
+    // {
+    //     switch ($data_mode) {
+    //         case 'getPayableBySupplierId':
+    //             $orderMaster = $this->orderRepository->getPayableBySupplierId($code);
+    //             break;
+    //         default:
+    //             # code...
+    //             break;
+    //     }
+    //     return response()->json($orderMaster->all());
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -89,6 +89,7 @@ class BillOfPurchaseController extends BasicController
             'App\Contracts\FormRequestInterface',
             ['className' => $this->className]
         );
+        dd('驗證通過');
         //抓出使用者輸入的資料
         $orderMaster = $request->input($this->orderMasterInputName);
         $orderDetail = $request->input($this->orderDetailInputName);
