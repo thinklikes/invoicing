@@ -139,7 +139,7 @@
                                     value="{{ $payableWriteOffDebit[$i]['debit_date'] }}">
                             </td>
                             <td>
-                                {{ $payableWriteOffDebit[$i]['debit_type'] == "billsOfPurchase" ? '進' : '退' }}
+                                {{ $payableWriteOffDebit[$i]['debit_type'] == "billOfPurchase" ? '進' : '退' }}
                                 {{ $payableWriteOffDebit[$i]['debit_code'] }}
                                 <input class="debit_type" type="hidden"
                                     name="payableWriteOffDebit[{{ $i }}][debit_type]"

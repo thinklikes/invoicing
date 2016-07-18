@@ -47,4 +47,65 @@ class BasicController extends Controller
     protected function setFullClassName() {
         $this->className = $this->exceptBaseNamesapce($this->getFullClassName());
     }
+
+    /**
+     * 單據建立完成後的轉址
+     * @param  array $status 狀態說明及代碼
+     * @param  string $code   單據號碼
+     * @return response         回傳的頁面
+     */
+    public function orderCreated($status, $code)
+    {
+        return redirect()->action($this->className.'@show', ['code' => $code])
+            ->with(['status' => $status]);
+    }
+    /**
+     * 單據建立錯誤時的轉址
+     * @param  array $errors 錯誤說明及代碼
+     * @return response         回傳的頁面
+     */
+    public function orderCreatedErrors($errors)
+    {
+        return back()->withInput()->withErrors($errors);
+    }
+
+    /**
+     * 單據更新完成後的轉址
+     * @param  array $status 狀態說明及代碼
+     * @param  string $code   單據號碼
+     * @return response         回傳的頁面
+     */
+    public function orderUpdated($status, $code)
+    {
+        return redirect()->action($this->className.'@show', ['code' => $code])
+            ->with(['status' => $status]);
+    }
+    /**
+     * 單據更新錯誤時的轉址
+     * @param  array $errors 錯誤說明及代碼
+     * @return response         回傳的頁面
+     */
+    public function orderUpdatedErrors($errors)
+    {
+        return back()->withInput()->withErrors($errors);
+    }
+    /**
+     * 單據刪除完成後的轉址
+     * @param  array $status 狀態說明及代碼
+     * @param  string $code   單據號碼
+     * @return response         回傳的頁面
+     */
+    public function orderDeleted($status, $code)
+    {
+        return redirect()->action($this->className.'@index')->with(['status' => $status]);
+    }
+    /**
+     * 單據刪除錯誤時的轉址
+     * @param  array $errors 錯誤說明及代碼
+     * @return response         回傳的頁面
+     */
+    public function orderDeletedErrors($errors)
+    {
+        return back()->withInput()->withErrors($errors);
+    }
 }

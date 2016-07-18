@@ -45,9 +45,9 @@ class ReturnOfSaleService
             //存入表身
             $isCreated = $isCreated && $this->orderRepository
                 ->storeOrderDetail($value);
-            //更新倉庫數量
+            //更新倉庫數量，因為是銷貨退回，所以要加回來
             $this->stock->incrementInventory(
-                -$value['quantity'],
+                $value['quantity'],
                 $value['stock_id'],
                 $orderMaster['warehouse_id']
             );
@@ -85,9 +85,9 @@ class ReturnOfSaleService
             $value['master_code'] = $code;
             //存入表身
             $isUpdated = $isUpdated && $this->orderRepository->storeOrderDetail($value);
-            //更新數量，因為是銷貨退回，所以是扣掉數量
+            //更新數量，因為是銷貨退回，所以要加回來
             $this->stock->incrementInventory(
-                -$value['quantity'],
+                $value['quantity'],
                 $value['stock_id'],
                 $orderMaster['warehouse_id']
             );
@@ -129,10 +129,10 @@ class ReturnOfSaleService
         //將庫存數量恢復到未開單前
         $old_OrderMaster = $this->orderRepository->getOrderMaster($code);
         $old_OrderDetail = $this->orderRepository->getOrderDetail($code);
-        //更新數量，因為是銷貨退回，所以是把數量加回來數量
+        //更新數量，因為是銷貨退回，所以是把數量扣掉
         foreach ($old_OrderDetail as $key => $value) {
             $this->stock->incrementInventory(
-                $value['quantity'],
+                -$value['quantity'],
                 $value['stock_id'],
                 $old_OrderMaster['warehouse_id']
             );

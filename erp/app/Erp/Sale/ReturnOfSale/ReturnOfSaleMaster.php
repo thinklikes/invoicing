@@ -26,9 +26,9 @@ class ReturnOfSaleMaster extends Model
      * 回傳這個銷貨退回單表頭的供應商
      * @return [type] [description]
      */
-    public function supplier()
+    public function company()
     {
-        return $this->belongsTo('Company\Company', 'Company_id', 'auto_id');
+        return $this->belongsTo('Company\Company', 'company_id', 'auto_id');
     }
 
     /**

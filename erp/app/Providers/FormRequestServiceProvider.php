@@ -58,6 +58,18 @@ class FormRequestServiceProvider extends ServiceProvider
                         case 'Sale\ReturnOfSaleController':
                             $requestMethod = 'ReturnOfSale\ReturnOfSaleRequest';
                             break;
+                        case 'Sale\ReceiptController':
+                            $requestMethod = 'Receipt\ReceiptRequest';
+                            break;
+                        case 'Sale\ReceivableWriteOffController':
+                            $requestMethod = 'ReceivableWriteOff\ReceivableWriteOffRequest';
+                            break;
+                        case 'StockManager\StockInOutController':
+                            $requestMethod = 'StockInOut\StockInOutRequest';
+                            break;
+                        case 'StockManager\StockTransferController':
+                            $requestMethod = 'StockTransfer\StockTransferRequest';
+                            break;
                     }
                 } else {
                     $requestMethod = 'App\Http\Requests\ErpRequest';

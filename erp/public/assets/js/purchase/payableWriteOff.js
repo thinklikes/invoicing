@@ -1,7 +1,7 @@
 //借方項目的index
 var index = 0;
 //供應商自動完成所需資訊
-var supplier_url = '/suppliers/json';
+var supplier_url = '/supplier/json';
 
 var triggered_by = {
     autocomplete: 'input.supplier_autocomplete',
@@ -80,7 +80,7 @@ function getPayableBySupplierId(supplier_id)
 
     $.ajax({
         method: "POST",
-        url: '/billsOfPurchase/json/getPayableBySupplierId/' + supplier_id,
+        url: '/billOfPurchase/json/getPayableBySupplierId/' + supplier_id,
         dataType: "json",
         data: {
             'supplier_id' : supplier_id,
@@ -93,7 +93,7 @@ function getPayableBySupplierId(supplier_id)
     //抓出進貨退回單的應付帳款
     $.ajax({
         method: "POST",
-        url: '/returnsOfPurchase/json/getPayableBySupplierId/' + supplier_id,
+        url: '/returnOfPurchase/json/getPayableBySupplierId/' + supplier_id,
         dataType: "json",
         data: {
             'supplier_id' : supplier_id,
@@ -180,7 +180,7 @@ function getPaymentBySupplierId(supplier_id)
     clearPaymentHtml();
     $.ajax({
         method: "POST",
-        url: '/payments/json/getPaymentBySupplierId/' + supplier_id,
+        url: '/payment/json/getPaymentBySupplierId/' + supplier_id,
         dataType: "json",
         data: {
             'supplier_id' : supplier_id,

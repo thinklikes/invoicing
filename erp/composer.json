@@ -38,7 +38,9 @@
             "ReturnOfSale\\": "app/Erp/Sale/ReturnOfSale",
             "Receipt\\": "app/Erp/Sale/Receipt",
             "ReceivableWriteOff\\": "app/Erp/Sale/ReceivableWriteOff",
-            "Company\\": "app/Erp/Basic/Company"
+            "Company\\": "app/Erp/Basic/Company",
+            "StockInOut\\": "app/Erp/StockManager/StockInOut",
+            "StockTransfer\\": "app/Erp/StockManager/StockTransfer"
         }
     },
     "autoload-dev": {

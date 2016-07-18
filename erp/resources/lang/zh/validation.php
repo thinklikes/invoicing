@@ -236,7 +236,7 @@ return [
                 ],
             ],
         ],
-        'paymentOfPurchase'=> [
+        'payment'=> [
             'pay_date' => [
                 'required' => '我們需要知道付款日期',
                 'date'     => '付款日期請輸入正確的日期格式(YYYY-MM-dd)',
@@ -285,8 +285,65 @@ return [
             //     ],
             // ]
         ],
+        'receipt'=> [
+            'receive_date' => [
+                'required' => '我們需要知道收款日期',
+                'date'     => '收款日期請輸入正確的日期格式(YYYY-MM-dd)',
+            ],
+            'check_code' => [
+                'required_if' => '我們需要知道票據號碼',
+            ],
+            'expiry_date' => [
+                'required_if' => '我們需要知道到期日',
+                'date'        => '到期日請輸入正確的日期格式(YYYY-MM-dd)',
+            ],
+            'bank_account' => [
+                'required_if' => '我們需要知道銀行帳號',
+            ],
+            'amount' => [
+                'required' => '我們需要知道收款金額',
+                'numeric'  => '收款金額請填入數值',
+            ],
+        ],
+        'receivableWriteOff' => [
+            'total_credit_amount' => [
+                'same' => '應收帳款沖銷不平，請檢查沖銷金額!!'
+            ]
+        ],
+        'receivableWriteOffCredit' => [
+            '*' => [
+                'credit_checked' => [
+                    'required_without_all' => '請至少沖銷一項應收帳款',
+                ],
+                'credit_amount' => [
+                    'numeric' => '應收帳款沖銷金額請填入數字',
+                    'max'     => '應收帳款沖銷金額高於未收款金額',
+                    'required_if' => '我們需要知道應收帳款沖銷金額'
+                ],
+            ],
+        ],
+        'receivableWriteOffDebit' => [
+            '*' => [
+                'debit_checked' => [
+                    'required_without_all' => '請至少沖銷一項收款金額',
+                ],
+            ],
+            // '0' => [
+            //     'debit_checked' => [
+            //         'required' => '請選擇供應商，或聯絡管理員',
+            //     ],
+            // ]
+        ],
+        'stockTransferMaster' => [
+            'from_warehouse_id' => [
+                'required' => '我們需要知道調出倉庫',
+                'different' => '請選擇相互不同的調出調入倉庫'
+            ],
+            'to_warehouse_id' => [
+                'required' => '我們需要知道調入倉庫'
+            ]
+        ]
     ],
-
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes

@@ -28,17 +28,17 @@ class ReturnOfSaleRepository extends BasicRepository
     }
 
     /**
-     * 找出輸入的供應商id未付清的所有應付帳款
+     * 找出輸入的供應商id未收款的所有應付帳款
      * @return array all suppliers
      */
-    // public function getPayableByCompanyId($suppier_id)
-    // {
-    //     return $this->orderMaster->select('id', 'code', 'invoice_code','total_amount', 'paid_amount', 'created_at')
-    //         ->where('company_id', $suppier_id)
-    //         ->where('is_paid', '0')
-    //         ->orderBy('code')
-    //         ->get();
-    // }
+    public function getReceivableByCompanyId($company_id)
+    {
+        return $this->orderMaster->select('id', 'code', 'invoice_code','total_amount', 'received_amount', 'created_at')
+            ->where('company_id', $company_id)
+            ->where('is_received', '0')
+            ->orderBy('code')
+            ->get();
+    }
 
     /**
      * [getNewMasterCode 回傳新一組的表頭CODE]
@@ -74,10 +74,10 @@ class ReturnOfSaleRepository extends BasicRepository
         return $this->orderMaster->where('code', $code)->value($field);
     }
 
-    public function getNotPaidAmount($code)
+    public function getNotReceivedAmount($code)
     {
-        return $this->orderMaster->select(DB::raw('(total_amount - paid_amount) as not_paid_amount'))
-            ->where('code', $code)->value('not_paid_amount');
+        return $this->orderMaster->select(DB::raw('(total_amount - received_amount) as not_received_amount'))
+            ->where('code', $code)->value('not_received_amount');
     }
 
     /**
@@ -166,27 +166,27 @@ class ReturnOfSaleRepository extends BasicRepository
     }
 
     /**
-     * 更新已付款項
-     * @param  integer $paid_amount 本次付款金額
-     * @param  string $code        進貨單號
+     * 更新已收款項
+     * @param  integer $received_amount 本次收款金額
+     * @param  string $code        銷貨單號
      * @return boolean             是否更新成功
      */
-    public function incrementPaidAmount($amount, $code)
+    public function incrementReceivedAmount($amount, $code)
     {
         return $this->orderMaster->where('code', $code)
-            ->increment('paid_amount', $amount);
+            ->increment('received_amount', $amount);
     }
 
     /**
-     * 更新是否已付清
-     * @param  integer $is_paid 是否已付清 1:已付清, 0:未付清
-     * @param  string $code        進貨單號
+     * 更新是否已收款
+     * @param  integer $is_received 是否已收款 1:已收款, 0:未收款
+     * @param  string $code        銷貨單號
      * @return boolean             是否更新成功
      */
-    public function setIsPaid($is_paid, $code)
+    public function setIsReceived($is_received, $code)
     {
         return $this->orderMaster->where('code', $code)
-            ->update(['is_paid' => $is_paid]);
+            ->update(['is_received' => $is_received]);
     }
 
     /**

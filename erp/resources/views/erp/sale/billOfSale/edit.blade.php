@@ -146,15 +146,15 @@
                 <table>
                     <tr>
                         <td>已收款：</td>
-                        <td align="right">{{ $billOfSaleMaster->paid_amount }}</td>
+                        <td align="right">{{ $billOfSaleMaster['received_amount'] }}</td>
                     </tr>
                     <tr>
                         <td>未收款：</td>
-                        <td align="right">{{ $OrderCalculator->getTotalAmount() - $billOfSaleMaster->paid_amount }}</td>
+                        <td align="right">{{ $OrderCalculator->getTotalAmount() - $billOfSaleMaster['received_amount'] }}</td>
                     </tr>
                 </table>
             </div>
-    @if ($billOfSaleMaster->paid_amount == 0)
+    @if ($billOfSaleMaster['received_amount'] == 0)
             <button type="submit">確認送出</button>
     @endif
         </form>

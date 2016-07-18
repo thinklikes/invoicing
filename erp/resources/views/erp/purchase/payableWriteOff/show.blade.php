@@ -96,7 +96,7 @@
                                 {{ $PublicPresenter->getFormatDate($value->{$value->debit_type}->created_at) }}
                             </td>
                             <td>
-                                {{ $value->debit_type == "billsOfPurchase" ? '進' : '退' }}
+                                {{ $value->debit_type == "billOfPurchase" ? '進' : '退' }}
                                 {{ $value->debit_code }}
                             </td>
                             <td>

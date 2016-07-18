@@ -89,15 +89,15 @@
             <table>
                 <tr>
                     <td>已收款：</td>
-                    <td align="right">{{ $billOfSaleMaster->paid_amount }}</td>
+                    <td align="right">{{ $billOfSaleMaster['received_amount'] }}</td>
                 </tr>
                 <tr>
                     <td>未收款：</td>
-                    <td align="right">{{ $OrderCalculator->getTotalAmount() - $billOfSaleMaster->paid_amount }}</td>
+                    <td align="right">{{ $OrderCalculator->getTotalAmount() - $billOfSaleMaster['received_amount'] }}</td>
                 </tr>
             </table>
         </div>
-    @if ($billOfSaleMaster->paid_amount == 0)
+    @if ($billOfSaleMaster['received_amount'] == 0)
         <a href="{{ url("/billOfSale/{$billOfSaleMaster->code}/edit") }}">維護銷貨單</a>
         <form action="{{ url("/billOfSale/{$billOfSaleMaster->code}") }}" method="POST">
             {{ csrf_field() }}

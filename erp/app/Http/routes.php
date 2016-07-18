@@ -25,8 +25,8 @@ Route::get('/test', function () {
     // }
     //return view('layouts.test');
 
-    $a = App::make('ReturnOfSale\ReturnOfSaleRepository');
-    return $a->getNewOrderCode();
+    $a = App::make('StockTransfer\StockTransferRepository');
+    //return $a->getNewOrderCode();
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/sale', 'PageController@sale');
 
+    Route::get('/stockManager', 'PageController@stockManager');
     //採購單作業
     Route::resource('/purchase_orders', 'PurchaseOrderController');
 
@@ -98,21 +99,33 @@ Route::group(['middleware' => 'auth'], function () {
     //銷貨作業
     Route::group(['namespace' => 'Sale'], function() {
 
-        //進貨單作業
+        //銷貨單作業
         Route::post('/billOfSale/json/{data_mode}/{code}', 'BillOfSaleController@json');
         Route::resource('/billOfSale', 'BillOfSaleController');
-        //進貨退回作業
+        //銷貨退回作業
         Route::post('/returnOfSale/json/{data_mode}/{code}', 'ReturnOfSaleController@json');
         Route::resource('/returnOfSale', 'ReturnOfSaleController');
 
         Route::post('/receipt/json/{data_mode}/{code}', 'ReceiptController@json');
         Route::resource('/receipt', 'ReceiptController');
 
-        //應付帳款沖銷單管理
+        //應收帳款沖銷單管理
         Route::resource('/receivableWriteOff', 'ReceivableWriteOffController',
             [
                 'except' => ['edit', 'update']
             ]
         );
+    });
+
+    //存貨管理作業
+    Route::group(['namespace' => 'StockManager'], function() {
+
+        //調整單作業
+        Route::resource('/stockInOut', 'StockInOutController');
+        //轉倉單作業
+        Route::resource('/stockTransfer', 'StockTransferController');
+        //庫存異動報表
+        Route::get('/stockInOutReport', 'StockInOutReportController@index');
+        Route::post('/stockInOutReport', 'StockInOutReportController@show');
     });
 });

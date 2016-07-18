@@ -188,35 +188,4 @@ class ReturnOfPurchaseController extends BasicController
         return $this->orderService->delete($this, $code);
     }
 
-    public function orderCreated($status, $code)
-    {
-        return redirect()->action($this->className.'@show', ['code' => $code])
-            ->with(['status' => $status]);
-    }
-
-    public function orderCreatedErrors($errors)
-    {
-        return back()->withInput()->withErrors($errors);
-    }
-
-    public function orderUpdated($status, $code)
-    {
-        return redirect()->action($this->className.'@show', ['code' => $code])
-            ->with(['status' => $status]);
-    }
-
-    public function orderUpdatedErrors($errors)
-    {
-        return back()->withInput()->withErrors($errors);
-    }
-
-    public function orderDeleted($status, $code)
-    {
-        return redirect()->action($this->className.'@index')->with(['status' => $status]);
-    }
-
-    public function orderDeletedErrors($errors)
-    {
-        return back()->withInput()->withErrors($errors);
-    }
 }

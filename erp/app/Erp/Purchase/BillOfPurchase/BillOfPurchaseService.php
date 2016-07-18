@@ -10,7 +10,6 @@ class BillOfPurchaseService
 {
     protected $orderRepository;
     protected $stock;
-    protected $stock;
 
     public function __construct(
         OrderRepository $orderRepository,

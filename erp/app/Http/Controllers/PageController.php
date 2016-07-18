@@ -41,6 +41,7 @@ class PageController extends Controller
             ->get();
         return view('home', ['pages' => $pages]);
     }
+
     public function purchase()
     {
         $parent_code = Page::where('action', 'PageController@purchase')->value('code');
@@ -50,9 +51,20 @@ class PageController extends Controller
             ->get();
         return view('home', ['pages' => $pages]);
     }
+
     public function sale()
     {
         $parent_code = Page::where('action', 'PageController@sale')->value('code');
+        $pages = Page::where('level', 2)
+            ->where('enabled', 1)
+            ->where('code', 'like', $parent_code.'%')
+            ->get();
+        return view('home', ['pages' => $pages]);
+    }
+
+    public function stockManager()
+    {
+        $parent_code = Page::where('action', 'PageController@stockManager')->value('code');
         $pages = Page::where('level', 2)
             ->where('enabled', 1)
             ->where('code', 'like', $parent_code.'%')

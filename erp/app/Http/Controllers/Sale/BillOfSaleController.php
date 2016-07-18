@@ -18,9 +18,9 @@ class BillOfSaleController extends BasicController
     private $routeName = 'erp.sale.billOfSale';
     private $ordersPerPage = 15;
     /**
-     * SupplierController constructor.
+     * CompanyController constructor.
      *
-     * @param SupplierRepository $companyRepository
+     * @param CompanyRepository $companyRepository
      */
     public function __construct(
         OrderRepository $orderRepository,
@@ -37,18 +37,18 @@ class BillOfSaleController extends BasicController
      * @param  string $code      搜尋的鍵值
      * @return Json            Json格式的資料
      */
-    // public function json($data_mode, $code)
-    // {
-    //     switch ($data_mode) {
-    //         case 'getPayableBySupplierId':
-    //             $orderMaster = $this->orderRepository->getPayableBySupplierId($code);
-    //             break;
-    //         default:
-    //             # code...
-    //             break;
-    //     }
-    //     return response()->json($orderMaster->all());
-    // }
+    public function json($data_mode, $code)
+    {
+        switch ($data_mode) {
+            case 'getReceivableByCompanyId':
+                $orderMaster = $this->orderRepository->getReceivableByCompanyId($code);
+                break;
+            default:
+                # code...
+                break;
+        }
+        return response()->json($orderMaster->all());
+    }
 
     /**
      * Display a listing of the resource.
@@ -135,6 +135,9 @@ class BillOfSaleController extends BasicController
             $orderMaster['created_at'] = $this->orderRepository
                 ->getOrderMasterfield('created_at', $code);
 
+            $orderMaster['received_amount'] = $this->orderRepository
+                ->getOrderMasterfield('received_amount', $code);
+
             $orderMaster['code'] = $code;
 
             $orderDetail = $request->old($this->orderDetailInputName);
@@ -189,35 +192,4 @@ class BillOfSaleController extends BasicController
         return $this->orderService->delete($this, $code);
     }
 
-    public function orderCreated($status, $code)
-    {
-        return redirect()->action($this->className.'@show', ['code' => $code])
-            ->with(['status' => $status]);
-    }
-
-    public function orderCreatedErrors($errors)
-    {
-        return back()->withInput()->withErrors($errors);
-    }
-
-    public function orderUpdated($status, $code)
-    {
-        return redirect()->action($this->className.'@show', ['code' => $code])
-            ->with(['status' => $status]);
-    }
-
-    public function orderUpdatedErrors($errors)
-    {
-        return back()->withInput()->withErrors($errors);
-    }
-
-    public function orderDeleted($status, $code)
-    {
-        return redirect()->action($this->className.'@index')->with(['status' => $status]);
-    }
-
-    public function orderDeletedErrors($errors)
-    {
-        return back()->withInput()->withErrors($errors);
-    }
 }
