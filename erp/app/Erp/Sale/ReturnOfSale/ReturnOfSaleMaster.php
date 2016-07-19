@@ -14,7 +14,7 @@ class ReturnOfSaleMaster extends Model
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
-     * 回傳這個銷貨退回單表頭所有的庫存數量
+     * 回傳這個表頭所屬的表身細項
      * @return [type] [description]
      */
     public function ReturnOfSaleDetail()

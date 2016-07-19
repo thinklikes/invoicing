@@ -15,6 +15,10 @@ DB::enableQueryLog();
 Route::auth();
 
 Route::get('/test', function () {
+    $columns = 1;
+    try {
+        $a = $columns / 0;
+    } catch (Exception $e) {}
     // $faker = new Faker\Generator;
     // $faker->addProvider(new Faker\Provider\zh_TW\Person($faker));
     // $faker->addProvider(new Faker\Provider\zh_TW\Address($faker));
@@ -25,7 +29,7 @@ Route::get('/test', function () {
     // }
     //return view('layouts.test');
 
-    $a = App::make('StockTransfer\StockTransferRepository');
+    //$a = App::make('StockTransfer\StockTransferRepository');
     //return $a->getNewOrderCode();
 });
 
@@ -126,6 +130,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('/stockTransfer', 'StockTransferController');
         //庫存異動報表
         Route::get('/stockInOutReport', 'StockInOutReportController@index');
-        Route::post('/stockInOutReport', 'StockInOutReportController@show');
+        Route::get('/stockInOutReport/print', 'StockInOutReportController@print');
     });
 });

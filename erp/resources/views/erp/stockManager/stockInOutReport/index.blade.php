@@ -6,7 +6,7 @@
         <script type="text/javascript" src="{{ asset('assets/js/bindStockAutocomplete.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/bindDatePicker.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/stockManager/stockInOutReport.js') }}"></script>
-        <form action=" {{ url("/stockInOut") }}" method="POST">
+        <form action=" {{ url("/stockInOutReport/print") }}" method="GET">
             {{ csrf_field() }}
             <table id="master" width="100%">
                 <tr>

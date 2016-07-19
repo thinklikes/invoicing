@@ -40,7 +40,8 @@
             "ReceivableWriteOff\\": "app/Erp/Sale/ReceivableWriteOff",
             "Company\\": "app/Erp/Basic/Company",
             "StockInOut\\": "app/Erp/StockManager/StockInOut",
-            "StockTransfer\\": "app/Erp/StockManager/StockTransfer"
+            "StockTransfer\\": "app/Erp/StockManager/StockTransfer",
+            "StockInOutReport\\": "app/Erp/StockManager/StockInOutReport"
         }
     },
     "autoload-dev": {

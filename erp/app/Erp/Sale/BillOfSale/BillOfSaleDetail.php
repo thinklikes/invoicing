@@ -10,6 +10,15 @@ class BillOfSaleDetail extends Model
 
     public $timestamps = false;
 
+    /**
+     * 這個表身細項的表頭資料
+     * @return [type] [description]
+     */
+    public function orderMaster()
+    {
+        return $this->belongsTo('BillOfSale\BillOfSaleMaster', 'master_code', 'code');
+    }
+
     public function stock() {
         return $this->belongsTo('Stock\Stock', 'stock_id', 'id');
     }

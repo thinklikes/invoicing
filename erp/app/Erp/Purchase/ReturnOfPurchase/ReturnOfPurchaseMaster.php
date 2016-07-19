@@ -14,12 +14,12 @@ class ReturnOfPurchaseMaster extends Model
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
-     * 回傳這個進貨退回單表頭所有的庫存數量
+     * 回傳這個表頭所屬的表身細項
      * @return [type] [description]
      */
-    public function ReturnOfPurchaseDetail()
+    public function orderDetail()
     {
-        return $this->hasMany('ReturnOfPurchase\ReturnOfPurchaseDetail', 'master_code', 'code');
+        return $this->hasMany('ReturnOfPurchase\ReturnOfPurchaseDetail', 'code', 'master_code');
     }
 
     /**

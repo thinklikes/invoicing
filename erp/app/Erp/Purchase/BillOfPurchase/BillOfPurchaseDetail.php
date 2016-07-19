@@ -11,6 +11,15 @@ class BillOfPurchaseDetail extends Model
     public $timestamps = false;
 
     /**
+     * 這個表身細項的表頭資料
+     * @return [type] [description]
+     */
+    public function orderMaster()
+    {
+        return $this->belongsTo('BillOfPurchase\BillOfPurchaseMaster', 'master_code', 'code');
+    }
+
+    /**
      * 回傳庫存資料
      * @return [type] [description]
      */
