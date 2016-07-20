@@ -14,25 +14,6 @@ DB::enableQueryLog();
 
 Route::auth();
 
-Route::get('/test', function () {
-    $columns = 1;
-    try {
-        $a = $columns / 0;
-    } catch (Exception $e) {}
-    // $faker = new Faker\Generator;
-    // $faker->addProvider(new Faker\Provider\zh_TW\Person($faker));
-    // $faker->addProvider(new Faker\Provider\zh_TW\Address($faker));
-    // $faker->addProvider(new Faker\Provider\zh_TW\PhoneNumber($faker));
-    // $faker->addProvider(new Faker\Provider\zh_TW\Company($faker));
-    // for ($i = 0; $i < 100; $i++) {
-    //     echo '<sapn style="font-family:Fixedsys, Meiryo;">'.$faker->unique()->regexify('[A-Za-z0-9]{5}')."</span><br>";
-    // }
-    //return view('layouts.test');
-
-    //$a = App::make('StockTransfer\StockTransferRepository');
-    //return $a->getNewOrderCode();
-});
-
 Route::group(['middleware' => 'auth'], function () {
 
     //首頁
