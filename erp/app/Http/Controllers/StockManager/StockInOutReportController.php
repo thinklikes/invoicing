@@ -48,20 +48,8 @@ class StockInOutReportController extends BasicController
         } else {
             $stock_id = 1;
         }
-        return $this->orderService->getStockInOutRecordsInDateRange($stock_id   );
-        // $orderMaster = $this->orderRepository->getOrderMaster($code);
-        // //$orderMaster->company_code = $orderMaster->company->code;
+        return $this->orderService->getStockInOutRecordsInDateRange($stock_id);
 
-        // $orderDetail = $this->orderRepository->getOrderDetail($code);
-        // foreach ($orderDetail as $key => $value) {
-        //     $orderDetail[$key]->stock_code = $orderDetail[$key]->stock->code;
-        //     $orderDetail[$key]->stock_name = $orderDetail[$key]->stock->name;
-        //     $orderDetail[$key]->unit = $orderDetail[$key]->stock->unit->comment;
-        // }
-        // return view($this->routeName.'.show', [
-        //     $this->orderMasterInputName => $orderMaster,
-        //     $this->orderDetailInputName => $orderDetail,
-        // ]);
     }
 
 }
