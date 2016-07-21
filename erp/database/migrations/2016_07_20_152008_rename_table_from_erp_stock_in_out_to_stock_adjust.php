@@ -23,6 +23,9 @@ class RenameTableFromErpStockInOutToStockAdjust extends Migration
      */
     public function down()
     {
+        Schema::rename('erp_stock_adjust_master', 'erp_stock_in_out_master');
+        Schema::rename('erp_stock_adjust_detail', 'erp_stock_in_out_detail');
+
         //Schema::dropIfExists('erp_stock_adjust');
     }
 }
