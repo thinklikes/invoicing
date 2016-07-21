@@ -12,7 +12,9 @@ class RenameTables extends Migration
      */
     public function up()
     {
-        Schema::rename('users', 'erp_users');
+        try {
+            Schema::rename('users', 'erp_users');
+        } catch (Exception $e) {}
         // Schema::rename('pages', 'erp_pages');
         // Schema::rename('employees', 'erp_employees');
         // Schema::rename('stocks', 'erp_stocks');
@@ -39,6 +41,9 @@ class RenameTables extends Migration
      */
     public function down()
     {
+        try {
+            Schema::rename('erp_users', 'users');
+        } catch (Exception $e) {}
         //Schema::dropIfExists('erp_users');
         // Schema::dropIfExists('erp_suppliers');
         // Schema::dropIfExists('erp_pages');
