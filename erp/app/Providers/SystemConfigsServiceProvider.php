@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Option\OptionRepository;
-use Config;
 
 class SystemConfigsServiceProvider extends ServiceProvider
 {
@@ -13,7 +12,7 @@ class SystemConfigsServiceProvider extends ServiceProvider
      *
      * @var bool
      */
-    protected $defer = true;
+    //protected $defer = true;
     /**
      * Bootstrap the application services.
      *
@@ -25,13 +24,12 @@ class SystemConfigsServiceProvider extends ServiceProvider
          * 把系統設定值放入Config
          *
          */
-
         $configs = OptionRepository::getAllConfigs();
         $output = [];
         foreach ($configs as $key => $value) {
             $output[$value['code']] = $value['value'];
         }
-        Config::set([
+        config([
             'system_configs' => $output
         ]);
 

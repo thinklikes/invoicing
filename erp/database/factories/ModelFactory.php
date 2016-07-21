@@ -25,6 +25,7 @@ $factory->define(App\Customer::class, function (Faker\Generator $faker) {
     $faker->addProvider(new Faker\Provider\zh_TW\Address($faker));
     $faker->addProvider(new Faker\Provider\zh_TW\PhoneNumber($faker));
     $faker->addProvider(new Faker\Provider\zh_TW\Company($faker));
+
     return [
         'name'          => $faker->company,
         'code'          => strtoupper($faker->randomLetter).$faker->randomNumber(4),
@@ -39,7 +40,7 @@ $factory->define(App\Customer::class, function (Faker\Generator $faker) {
         'fax'           => $faker->phoneNumber,
         'taxNumber'     => $faker->randomNumber(8),
         'tax_rate_id'   => $faker->randomElement(['1','2','3']),
-        'pay_way_id'    => $faker->randomElement(['6','7','8', '9', '10', '11']),
+        'pay_way_id'    => $faker->randomElement(['19','20','21', '22', '23', '24']),
     ];
 });
 
@@ -67,11 +68,33 @@ $factory->define(Supplier\Supplier::class, function (Faker\Generator $faker) {
 $factory->define(Stock\Stock::class, function (Faker\Generator $faker) {
     $faker->addProvider(new Faker\Provider\zh_TW\Person($faker));
 
+    $collection = DB::table('erp_options')
+    ->select('id')
+    ->where('class', 'stock_classes')
+    ->get();
+
+    $stock_classes = array();
+
+    foreach ($collection as $value) {
+        $stock_classes[] = $value->id;
+    }
+
+    $collection = DB::table('erp_options')
+    ->select('id')
+    ->where('class', 'units')
+    ->get();
+
+    $units = array();
+
+    foreach ($collection as $value) {
+        $units[] = $value->id;
+    }
+
     return [
         'code'                      => $faker->randomNumber(8),
         'name'                      => $faker->name,
-        'stock_class_id'            => $faker->randomElement([13, 14, 15]),
-        'unit_id'                   => $faker->randomElement([10, 11, 12]),
+        'stock_class_id'            => $faker->randomElement($stock_classes),
+        'unit_id'                   => $faker->randomElement($units),
         'net_weight'                => $faker->randomFloat(5, 0, 500),
         'gross_weight'              => $faker->randomFloat(5, 0, 500),
         'no_tax_price_of_purchased' => $faker->randomFloat(5, 0, 1000),
@@ -81,10 +104,20 @@ $factory->define(Stock\Stock::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(BillOfPurchase\BillOfPurchaseMaster::class, function (Faker\Generator $faker) {
+    $collection = DB::table('erp_warehouse')
+    ->select('id')
+    ->get();
+
+    $warehouses = array();
+
+    foreach ($collection as $value) {
+        $warehouses[] = $value->id;
+    }
+
     return [
         'code' => date('Ymd').sprintf('%03d', $faker->unique()->numberBetween(1, 50)),
         'invoice_code' => $faker->randomLetter.$faker->randomLetter.$faker->randomNumber(8),
-        'warehouse_id' => $faker->randomElement([1, 2]),
+        'warehouse_id' => $faker->randomElement($warehouses),
         'supplier_id'  => $faker->numberBetween(1, 50),
         'tax_rate_code'=> $faker->randomElement(['A', 'I']),
         'note'         => $faker->realText
@@ -101,9 +134,19 @@ $factory->define(BillOfPurchase\BillOfPurchaseDetail::class, function (Faker\Gen
 });
 
 $factory->define(Stock\StockWarehouse::class, function (Faker\Generator $faker) {
+    $collection = DB::table('erp_warehouse')
+    ->select('id')
+    ->get();
+
+    $warehouses = array();
+
+    foreach ($collection as $value) {
+        $warehouses[] = $value->id;
+    }
+
     return [
         'stock_id' => $faker->unique()->numberBetween(1, 50),
-        'warehouse_id' => $faker->randomElement([1, 2]),
+        'warehouse_id' => $faker->randomElement($warehouses),
         'inventory'  =>  $faker->randomFloat(5, 0, 500),
     ];
 });

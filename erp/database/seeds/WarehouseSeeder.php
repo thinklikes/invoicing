@@ -11,6 +11,7 @@ class WarehouseSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('erp_warehouses')->truncate();
         DB::table('erp_warehouses')->insert([
             //倉庫資料
             [

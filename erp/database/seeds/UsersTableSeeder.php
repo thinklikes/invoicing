@@ -11,6 +11,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('erp_users')->truncate();
         DB::table('erp_users')->insert([
             [ //admin帳號
                 'id' => '1',

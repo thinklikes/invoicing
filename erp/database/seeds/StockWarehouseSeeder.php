@@ -32,6 +32,7 @@ class StockWarehouseSeeder extends Seeder
                 $i ++;
             }
         }
+        DB::table('erp_stock_warehouse')->truncate();
         DB::table('erp_stock_warehouse')->insert($stocks_warehouses);
     }
 }
