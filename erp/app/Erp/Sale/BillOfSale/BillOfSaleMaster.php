@@ -17,7 +17,7 @@ class BillOfSaleMaster extends Model
      * 回傳這個表頭所屬的表身細項
      * @return [type] [description]
      */
-    public function billOfSaleDetail()
+    public function orderDetail()
     {
         return $this->hasMany('BillOfSale\BillOfSaleDetail', 'master_code', 'code');
     }
@@ -38,4 +38,5 @@ class BillOfSaleMaster extends Model
     public function warehouse()
     {
         return $this->belongsTo('Warehouse\Warehouse', 'warehouse_id', 'id');
-    }}
+    }
+}

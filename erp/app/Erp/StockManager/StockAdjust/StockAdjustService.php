@@ -1,12 +1,12 @@
 <?php
-namespace StockInOut;
+namespace StockAdjust;
 
-use StockInOut\StockInOutRepository as OrderRepository;
+use StockAdjust\StockAdjustRepository as OrderRepository;
 use Stock\StockWarehouseRepository as StockWarehouse;
 use Illuminate\Support\MessageBag;
 use App\Presenters\OrderCalculator;
 
-class StockInOutService
+class StockAdjustService
 {
     protected $orderRepository;
     protected $stock;

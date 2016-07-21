@@ -1,0 +1,53 @@
+/**
+ * 整個列印頁面的樣式設定
+ */
+.main_page {
+    width:21cm;
+}
+/**
+ * 公司資訊區塊的樣式設定
+ */
+.company_information {
+    margin-left:10px;
+    float:left;
+}
+/**
+ * 公司資訊的樣式設定
+ */
+.company_information table tr td{
+    font-size: 20px;
+}
+/**
+ * 單據資訊區塊的樣式設定
+ */
+.order_information {
+    //margin-top:10px;
+    margin-right:10px;
+    float:right;
+}
+/**
+ * 單據資訊的樣式設定
+ */
+.order_information table tr td{
+    font-size: 20px;
+}
+
+.information_container {
+    //border-bottom: 1px solid black;
+}
+/**
+ * 數值或數值標題的樣式設定
+ */
+.numeric {
+    text-align: right;
+}
+/**
+ * 字串或字串標題的樣式設定
+ */
+.string {
+    text-align:center;
+}
+
+table {
+    width:100%;
+}

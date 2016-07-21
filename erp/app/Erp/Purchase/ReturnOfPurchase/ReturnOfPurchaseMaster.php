@@ -19,7 +19,7 @@ class ReturnOfPurchaseMaster extends Model
      */
     public function orderDetail()
     {
-        return $this->hasMany('ReturnOfPurchase\ReturnOfPurchaseDetail', 'code', 'master_code');
+        return $this->hasMany('ReturnOfPurchase\ReturnOfPurchaseDetail', 'master_code', 'code');
     }
 
     /**

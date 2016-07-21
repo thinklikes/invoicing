@@ -11,6 +11,9 @@ class OptionsTableSeeder extends Seeder
      */
     public function run()
     {
+        //先清空
+        DB::table('erp_options')->truncate();
+
         DB::table('erp_options')->insert([
             //網站基本資訊
             [
@@ -24,6 +27,24 @@ class OptionsTableSeeder extends Seeder
                 'code'    => 'system_build_date',
                 'comment' => '系統建立日期',
                 'value'   => '2016-01-01',
+            ],
+            [
+                'class'   => 'system_configs',
+                'code'    => 'company_name',
+                'comment' => '公司名稱',
+                'value'   => '好好公司',
+            ],
+            [
+                'class'   => 'system_configs',
+                'code'    => 'company_address',
+                'comment' => '公司地址',
+                'value'   => '高雄市鳥松區球場路21號',
+            ],
+            [
+                'class'   => 'system_configs',
+                'code'    => 'company_phone_number',
+                'comment' => '公司電話',
+                'value'   => '(07)3700050',
             ],
             // [
             //     'class'   => 'system_configs',

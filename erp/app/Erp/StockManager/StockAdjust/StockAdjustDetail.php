@@ -1,12 +1,12 @@
 <?php
 
-namespace StockInOut;
+namespace StockAdjust;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StockInOutDetail extends Model
+class StockAdjustDetail extends Model
 {
-    protected $table = 'erp_stock_in_out_detail';
+    protected $table = 'erp_stock_adjust_detail';
 
     public $timestamps = false;
 

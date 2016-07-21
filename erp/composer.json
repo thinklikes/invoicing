@@ -39,7 +39,7 @@
             "Receipt\\": "app/Erp/Sale/Receipt",
             "ReceivableWriteOff\\": "app/Erp/Sale/ReceivableWriteOff",
             "Company\\": "app/Erp/Basic/Company",
-            "StockInOut\\": "app/Erp/StockManager/StockInOut",
+            "StockAdjust\\": "app/Erp/StockManager/StockAdjust",
             "StockTransfer\\": "app/Erp/StockManager/StockTransfer",
             "StockInOutReport\\": "app/Erp/StockManager/StockInOutReport"
         }

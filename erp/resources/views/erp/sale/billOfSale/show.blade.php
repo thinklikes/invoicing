@@ -106,4 +106,6 @@
             <button>刪除銷貨單</button>
         </form>
     @endif
+        <br>
+        <a href="{{ url("/billOfSale/{$billOfSaleMaster->code}/print") }}" target="_blank">列印銷貨單</a>
 @endsection

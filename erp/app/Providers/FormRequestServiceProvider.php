@@ -64,8 +64,8 @@ class FormRequestServiceProvider extends ServiceProvider
                         case 'Sale\ReceivableWriteOffController':
                             $requestMethod = 'ReceivableWriteOff\ReceivableWriteOffRequest';
                             break;
-                        case 'StockManager\StockInOutController':
-                            $requestMethod = 'StockInOut\StockInOutRequest';
+                        case 'StockManager\StockAdjustController':
+                            $requestMethod = 'StockAdjust\StockAdjustRequest';
                             break;
                         case 'StockManager\StockTransferController':
                             $requestMethod = 'StockTransfer\StockTransferRequest';

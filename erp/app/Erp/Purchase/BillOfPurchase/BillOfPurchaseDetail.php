@@ -16,7 +16,7 @@ class BillOfPurchaseDetail extends Model
      */
     public function orderMaster()
     {
-        return $this->belongsTo('BillOfPurchase\BillOfPurchaseMaster', 'master_code', 'code');
+        return $this->belongsTo('BillOfPurchase\BillOfPurchaseMaster', 'code', 'master_code');
     }
 
     /**

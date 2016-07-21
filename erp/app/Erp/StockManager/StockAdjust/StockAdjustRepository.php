@@ -1,21 +1,21 @@
 <?php
 
-namespace StockInOut;
+namespace StockAdjust;
 
 use App;
 use App\Repositories\BasicRepository;
-use StockInOut\StockInOutMaster as OrderMaster;
-use StockInOut\StockInOutDetail as OrderDetail;
+use StockAdjust\StockAdjustMaster as OrderMaster;
+use StockAdjust\StockAdjustDetail as OrderDetail;
 use DB;
 
-class StockInOutRepository extends BasicRepository
+class StockAdjustRepository extends BasicRepository
 {
     protected $orderMaster;
     protected $orderDetail;
     /**
-     * StockInOutRepository constructor.
+     * StockAdjustRepository constructor.
      *
-     * @param StockInOutMaster $puchase_order_master
+     * @param StockAdjustMaster $puchase_order_master
      */
     public function __construct(
         OrderMaster $orderMaster, OrderDetail $orderDetail)

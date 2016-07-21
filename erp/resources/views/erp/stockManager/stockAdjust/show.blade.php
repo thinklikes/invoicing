@@ -4,26 +4,26 @@
 @inject('OrderCalculator', 'App\Presenters\OrderCalculator')
 
 @section('content')
-        {{ $OrderCalculator->setOrderMaster($stockInOutMaster) }}
-        {{ $OrderCalculator->setOrderDetail($stockInOutDetail) }}
+        {{ $OrderCalculator->setOrderMaster($stockAdjustMaster) }}
+        {{ $OrderCalculator->setOrderDetail($stockAdjustDetail) }}
         {{ $OrderCalculator->calculate() }}
         <table id="master" width="100%">
             <tr>
                 <td>調整日期</td>
-                <td>{{ $PublicPresenter->getFormatDate($stockInOutMaster->created_at) }}</td>
+                <td>{{ $PublicPresenter->getFormatDate($stockAdjustMaster->created_at) }}</td>
                 <td>調整單號</td>
-                <td>{{ $stockInOutMaster->code }}</td>
+                <td>{{ $stockAdjustMaster->code }}</td>
             </tr>
             <tr>
                 <th>調整單備註</th>
                 <td colspan="3">
-                    {{ $stockInOutMaster->note }}
+                    {{ $stockAdjustMaster->note }}
                 </td>
             </tr>
             <tr>
                 <th>調整倉庫</th>
                 <td colspan="3">
-                    {{ $stockInOutMaster->warehouse->name }}
+                    {{ $stockAdjustMaster->warehouse->name }}
                 </td>
             </tr>
         </table>
@@ -41,13 +41,13 @@
             </thead>
             <tbody>
 
-    @foreach($stockInOutDetail as $i => $value)
+    @foreach($stockAdjustDetail as $i => $value)
                 <tr>
-                    <td>{{ $stockInOutDetail[$i]['stock_code'] }}</td>
-                    <td>{{ $stockInOutDetail[$i]['stock_name'] }}</td>
-                    <td align="right">{{ $stockInOutDetail[$i]['quantity'] }}</td>
-                    <td>{{ $stockInOutDetail[$i]['unit'] }}</td>
-                    <td align="right">{{ $stockInOutDetail[$i]['no_tax_price'] }}</td>
+                    <td>{{ $stockAdjustDetail[$i]['stock_code'] }}</td>
+                    <td>{{ $stockAdjustDetail[$i]['stock_name'] }}</td>
+                    <td align="right">{{ $stockAdjustDetail[$i]['quantity'] }}</td>
+                    <td>{{ $stockAdjustDetail[$i]['unit'] }}</td>
+                    <td align="right">{{ $stockAdjustDetail[$i]['no_tax_price'] }}</td>
                     <td align="right">{{ $OrderCalculator->getNoTaxAmount($i) }}</td>
                 </tr>
     @endforeach
@@ -57,7 +57,7 @@
         <hr>
 {{--         <div style="width:50%;">
             <p>
-                營業稅 {{ $PublicPresenter->getTaxComment($stockInOutMaster->tax_rate_code) }}
+                營業稅 {{ $PublicPresenter->getTaxComment($stockAdjustMaster->tax_rate_code) }}
             </p>
         </div> --}}
         <div style="width:50%;height:100px;float:left;">
@@ -86,19 +86,21 @@
 {{--             <table>
                 <tr>
                     <td>已付款：</td>
-                    <td align="right">{{ $stockInOutMaster->paid_amount }}</td>
+                    <td align="right">{{ $stockAdjustMaster->paid_amount }}</td>
                 </tr>
                 <tr>
                     <td>未付款：</td>
-                    <td align="right">{{ $OrderCalculator->getTotalAmount() - $stockInOutMaster->paid_amount }}</td>
+                    <td align="right">{{ $OrderCalculator->getTotalAmount() - $stockAdjustMaster->paid_amount }}</td>
                 </tr>
             </table> --}}
         </div>
-        <a href="{{ url("/stockInOut/{$stockInOutMaster->code}/edit") }}">維護調整單</a>
-        <form action="{{ url("/stockInOut/{$stockInOutMaster->code}") }}" method="POST">
+        <a href="{{ url("/stockAdjust/{$stockAdjustMaster->code}/edit") }}">維護調整單</a>
+        <form action="{{ url("/stockAdjust/{$stockAdjustMaster->code}") }}" method="POST">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
 
             <button>刪除調整單</button>
         </form>
+        <br>
+        <a href="{{ url("/stockAdjust/{$stockAdjustMaster->code}/print") }}" target="_blank">列印調整單</a>
 @endsection

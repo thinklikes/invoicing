@@ -106,4 +106,6 @@
             <button>刪除進貨單</button>
         </form>
     @endif
+        <br>
+        <a href="{{ url("/billOfPurchase/{$billOfPurchaseMaster->code}/print") }}" target="_blank">列印進貨單</a>
 @endsection

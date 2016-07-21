@@ -192,4 +192,12 @@ class BillOfSaleController extends BasicController
         return $this->orderService->delete($this, $code);
     }
 
+    public function print($code)
+    {
+        return view($this->routeName.'.print', [
+            $this->orderMasterInputName => $this->orderRepository->getOrderMaster($code),
+            $this->orderDetailInputName => $this->orderRepository->getOrderDetail($code),
+        ]);
+    }
+
 }

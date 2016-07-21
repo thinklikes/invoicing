@@ -39,7 +39,7 @@ class RenameTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('erp_users');
+        //Schema::dropIfExists('erp_users');
         // Schema::dropIfExists('erp_suppliers');
         // Schema::dropIfExists('erp_pages');
         // Schema::dropIfExists('erp_employees');

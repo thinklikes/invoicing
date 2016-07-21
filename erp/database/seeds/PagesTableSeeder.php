@@ -488,25 +488,25 @@ class PagesTableSeeder extends Seeder
             [
                 'name'       => '調整單管理',
                 'level'      => 2,
-                'action'     => 'StockManager\StockInOutController@index',
+                'action'     => 'StockManager\StockAdjustController@index',
                 'enabled'    => 1,
             ],
             [
                 'name'       => '新增調整單',
                 'level'      => 3,
-                'action'     => 'StockManager\StockInOutController@create',
+                'action'     => 'StockManager\StockAdjustController@create',
                 'enabled'    => 1,
             ],
             [
                 'name'       => '檢視調整單',
                 'level'      => 3,
-                'action'     => 'StockManager\StockInOutController@show',
+                'action'     => 'StockManager\StockAdjustController@show',
                 'enabled'    => 1,
             ],
             [
                 'name'       => '維護調整單',
                 'level'      => 3,
-                'action'     => 'StockManager\StockInOutController@edit',
+                'action'     => 'StockManager\StockAdjustController@edit',
                 'enabled'    => 1,
             ],
             [
@@ -592,6 +592,7 @@ class PagesTableSeeder extends Seeder
             }
             $pages[$key] = array_add($pages[$key], 'code', $code);
         }
+        DB::table('erp_pages')->truncate();
         DB::table('erp_pages')->insert($pages);
     }
 }

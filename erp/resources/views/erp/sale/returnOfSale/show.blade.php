@@ -106,4 +106,6 @@
             <button>刪除銷貨退回單</button>
         </form>
     @endif
+        <br>
+        <a href="{{ url("/returnOfSale/{$returnOfSaleMaster->code}/print") }}" target="_blank">列印銷貨退回單</a>
 @endsection

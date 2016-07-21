@@ -65,9 +65,11 @@ Route::group(['middleware' => 'auth'], function () {
 
         //進貨單作業
         Route::post('/billOfPurchase/json/{data_mode}/{code}', 'BillOfPurchaseController@json');
+        Route::get('/billOfPurchase/{code}/print', 'BillOfPurchaseController@print');
         Route::resource('/billOfPurchase', 'BillOfPurchaseController');
         //進貨退回作業
         Route::post('/returnOfPurchase/json/{data_mode}/{code}', 'ReturnOfPurchaseController@json');
+        Route::get('/returnOfPurchase/{code}/print', 'ReturnOfPurchaseController@print');
         Route::resource('/returnOfPurchase', 'ReturnOfPurchaseController');
 
         Route::post('/payment/json/{data_mode}/{code}', 'PaymentController@json');
@@ -86,9 +88,11 @@ Route::group(['middleware' => 'auth'], function () {
 
         //銷貨單作業
         Route::post('/billOfSale/json/{data_mode}/{code}', 'BillOfSaleController@json');
+        Route::get('/billOfSale/{code}/print', 'BillOfSaleController@print');
         Route::resource('/billOfSale', 'BillOfSaleController');
         //銷貨退回作業
         Route::post('/returnOfSale/json/{data_mode}/{code}', 'ReturnOfSaleController@json');
+        Route::get('/returnOfSale/{code}/print', 'ReturnOfSaleController@print');
         Route::resource('/returnOfSale', 'ReturnOfSaleController');
 
         Route::post('/receipt/json/{data_mode}/{code}', 'ReceiptController@json');
@@ -106,8 +110,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['namespace' => 'StockManager'], function() {
 
         //調整單作業
-        Route::resource('/stockInOut', 'StockInOutController');
+        Route::get('/stockAdjust/{code}/print', 'StockAdjustController@print');
+        Route::resource('/stockAdjust', 'StockAdjustController');
         //轉倉單作業
+        Route::get('/stockTransfer/{code}/print', 'StockTransferController@print');
         Route::resource('/stockTransfer', 'StockTransferController');
         //庫存異動報表
         Route::get('/stockInOutReport', 'StockInOutReportController@index');

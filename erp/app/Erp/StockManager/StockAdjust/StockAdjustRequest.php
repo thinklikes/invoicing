@@ -1,15 +1,15 @@
 <?php
 
-namespace StockInOut;
+namespace StockAdjust;
 
 use App\Http\Requests\Request;
 use App\Contracts\FormRequestInterface;
 
-class StockInOutRequest extends Request implements FormRequestInterface
+class StockAdjustRequest extends Request implements FormRequestInterface
 {
 
-    protected $orderMasterInputName = 'stockInOutMaster';
-    protected $orderDetailInputName = 'stockInOutDetail';
+    protected $orderMasterInputName = 'stockAdjustMaster';
+    protected $orderDetailInputName = 'stockAdjustDetail';
 
     /**
      * Determine if the user is authorized to make this request.

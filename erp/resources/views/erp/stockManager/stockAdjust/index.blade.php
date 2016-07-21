@@ -16,7 +16,7 @@
         @foreach ($orders as $order)
                 <tr>
                     <td>{{ $PublicPresenter->getFormatDate($order->created_at) }}</td>
-                    <td><a href="{{ url("/stockInOut/$order->code") }}">{{ $order->code }}</a></td>
+                    <td><a href="{{ url("/stockAdjust/$order->code") }}">{{ $order->code }}</a></td>
                     <td>{{ $order->warehouse->name }}</td>
                 </tr>
         @endforeach
@@ -24,5 +24,5 @@
         </table>
         <div align="center">{!! $orders->render() !!}</div>
         <br>
-        <a href="{{ url('/stockInOut/create') }}">新增調整單</a>
+        <a href="{{ url('/stockAdjust/create') }}">新增調整單</a>
 @endsection

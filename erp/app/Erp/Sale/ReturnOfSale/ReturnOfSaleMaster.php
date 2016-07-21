@@ -17,7 +17,7 @@ class ReturnOfSaleMaster extends Model
      * 回傳這個表頭所屬的表身細項
      * @return [type] [description]
      */
-    public function ReturnOfSaleDetail()
+    public function orderDetail()
     {
         return $this->hasMany('ReturnOfSale\ReturnOfSaleDetail', 'master_code', 'code');
     }

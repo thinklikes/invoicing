@@ -4,18 +4,18 @@ namespace App\Http\Controllers\StockManager;
 use App;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
-use StockInOut\StockInOutRepository as OrderRepository;
-use StockInOut\StockInOutService as OrderService;
+use StockAdjust\StockAdjustRepository as OrderRepository;
+use StockAdjust\StockAdjustService as OrderService;
 use Illuminate\Http\Request;
 
 
-class StockInOutController extends BasicController
+class StockAdjustController extends BasicController
 {
     protected $orderRepository;
     protected $orderService;
-    private $orderMasterInputName = 'stockInOutMaster';
-    private $orderDetailInputName = 'stockInOutDetail';
-    private $routeName = 'erp.stockManager.stockInOut';
+    private $orderMasterInputName = 'stockAdjustMaster';
+    private $orderDetailInputName = 'stockAdjustDetail';
+    private $routeName = 'erp.stockManager.stockAdjust';
     private $ordersPerPage = 15;
     /**
      * CompanyController constructor.
@@ -185,5 +185,13 @@ class StockInOutController extends BasicController
     public function destroy($code)
     {
         return $this->orderService->delete($this, $code);
+    }
+
+    public function print($code)
+    {
+        return view($this->routeName.'.print', [
+            $this->orderMasterInputName => $this->orderRepository->getOrderMaster($code),
+            $this->orderDetailInputName => $this->orderRepository->getOrderDetail($code),
+        ]);
     }
 }
