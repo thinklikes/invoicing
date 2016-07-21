@@ -106,5 +106,5 @@
             <button>刪除轉倉單</button>
         </form>
         <br>
-        <a href="{{ url("/stockTransfer/{$stockTransferMaster->code}/print") }}" target="_blank">列印轉倉單</a>
+        <a href="{{ url("/stockTransfer/{$stockTransferMaster->code}/printing") }}" target="_blank">列印轉倉單</a>
 @endsection

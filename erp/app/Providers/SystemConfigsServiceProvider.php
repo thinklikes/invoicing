@@ -25,16 +25,16 @@ class SystemConfigsServiceProvider extends ServiceProvider
          * 把系統設定值放入Config
          *
          */
-        try {
-            $configs = OptionRepository::getAllConfigs();
-            $output = [];
-            foreach ($configs as $key => $value) {
-                $output[$value['code']] = $value['value'];
-            }
-            Config::set([
-                'system_configs' => $output
-            ]);
-        } catch (Exception $e) {}
+
+        $configs = OptionRepository::getAllConfigs();
+        $output = [];
+        foreach ($configs as $key => $value) {
+            $output[$value['code']] = $value['value'];
+        }
+        Config::set([
+            'system_configs' => $output
+        ]);
+
     }
 
     /**

@@ -102,5 +102,5 @@
             <button>刪除調整單</button>
         </form>
         <br>
-        <a href="{{ url("/stockAdjust/{$stockAdjustMaster->code}/print") }}" target="_blank">列印調整單</a>
+        <a href="{{ url("/stockAdjust/{$stockAdjustMaster->code}/printing") }}" target="_blank">列印調整單</a>
 @endsection

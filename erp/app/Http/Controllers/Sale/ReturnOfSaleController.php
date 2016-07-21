@@ -198,9 +198,9 @@ class ReturnOfSaleController extends BasicController
         return $this->orderService->delete($this, $code);
     }
 
-    public function print($code)
+    public function printing($code)
     {
-        return view($this->routeName.'.print', [
+        return view($this->routeName.'.printing', [
             $this->orderMasterInputName => $this->orderRepository->getOrderMaster($code),
             $this->orderDetailInputName => $this->orderRepository->getOrderDetail($code),
         ]);

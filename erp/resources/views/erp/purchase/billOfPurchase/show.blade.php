@@ -107,5 +107,5 @@
         </form>
     @endif
         <br>
-        <a href="{{ url("/billOfPurchase/{$billOfPurchaseMaster->code}/print") }}" target="_blank">列印進貨單</a>
+        <a href="{{ url("/billOfPurchase/{$billOfPurchaseMaster->code}/printing") }}" target="_blank">列印進貨單</a>
 @endsection

@@ -157,7 +157,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
         App\Providers\FormRequestServiceProvider::class,
-        App\Providers\SystemConfigsServiceProvider::class,
+        //App\Providers\SystemConfigsServiceProvider::class,
         //載入debuger的Provider：Barryvdh\Debugbar\ServiceProvider::class
         App\Providers\DebugerServiceProvider::class,
     ],

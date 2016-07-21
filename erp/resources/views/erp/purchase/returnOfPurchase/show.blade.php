@@ -107,5 +107,5 @@
         </form>
     @endif
         <br>
-        <a href="{{ url("/returnOfPurchase/{$returnOfPurchaseMaster->code}/print") }}" target="_blank">列印進貨退回單</a>
+        <a href="{{ url("/returnOfPurchase/{$returnOfPurchaseMaster->code}/printing") }}" target="_blank">列印進貨退回單</a>
 @endsection
