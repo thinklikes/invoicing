@@ -16,6 +16,8 @@ Route::auth();
 
 Route::group(['middleware' => 'auth'], function () {
 
+    Route::get('/test', 'AdminTestController@index');
+
     //首頁
     Route::get('/', 'PageController@portal');
 
