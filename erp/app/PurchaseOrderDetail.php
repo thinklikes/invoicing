@@ -4,6 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\PurchaseOrderDetail
+ *
+ * @property-read \Stock\Stock $stock
+ * @mixin \Eloquent
+ */
 class PurchaseOrderDetail extends Model
 {
     protected $table = 'bill_of_purchase_detail';
@@ -16,6 +22,6 @@ class PurchaseOrderDetail extends Model
      */
     public function stock()
     {
-        return $this->belongsTo('App\Stock', 'stock_id', 'id');
+        return $this->belongsTo('Stock\Stock', 'stock_id', 'id');
     }
 }

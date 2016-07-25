@@ -33,7 +33,7 @@ class StockWarehouseRepository
      */
     public function getAllRecordsOfStockWarehouseByWarehouseId($warehouse_id)
     {
-        return $this->stockWarehouse->where('warehouse_id', $stock_id)->get();
+        return $this->stockWarehouse->where('warehouse_id', $warehouse_id)->get();
     }
 
     /**

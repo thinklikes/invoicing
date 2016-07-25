@@ -1,58 +1,28 @@
-//借方項目的index
 var index = 0;
-//供應商自動完成所需資訊
-var company_url = '/company/json';
-
-var triggered_by = {
-    autocomplete: 'input.company_autocomplete',
-    scan: 'input.company_code'
-};
-
-var auto_fill = {
-    id: 'input.company_id',
-    code :'input.company_code',
-    name : 'input.company_autocomplete'
-};
-
-var after_triggering = {
-    autocomplete: function (company_id)
-    {
-        index = 0;
-
-        getReceivableByCompanyId(company_id);
-
-        setTimeout('', 100);
-
-        getReceiptByCompanyId(company_id);
-
-        setTimeout('', 100);
-    },
-    // scan: function (company_id)
-    // {
-    //     if ($('input.stock_code:first').length > 0) {
-    //         $('input.stock_code:first').focus();
-    //     }
-
-    //     index = 0;
-
-    //     getReceivableByCompanyId(company_id);
-
-    //     setTimeout('', 100);
-
-    //     getReceiptByCompanyId(company_id);
-
-    //     setTimeout('', 100);
-    // }
-};
-
-var companyAutocompleter = new CompanyAutocompleter(company_url, triggered_by, auto_fill, after_triggering);
 
 var writeOffCalculator = new WriteOffCalculator(
     'credit_checked', 'credit_amount', 'total_credit_amount',
     'debit_checked', 'debit_amount', 'total_debit_amount');
 
 $(function () {
-    companyAutocompleter.eventBind();
+    /**
+     * 綁定客戶名稱自動完成的事件
+     * @type {AjaxCombobox}
+     */
+    $('.company_autocomplete').AjaxCombobox({
+        url: '/company/json',
+        afterSelect : function (ui) {
+            $('input.company_id').val(ui.item.id);
+
+            getReceivableByCompanyId(ui.item.id);
+
+            setTimeout('', 100);
+
+            getReceiptByCompanyId(ui.item.id);
+
+            setTimeout('', 100);
+        },
+    });
 });
 
 function fill_amount(index) {

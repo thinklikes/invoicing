@@ -9,7 +9,9 @@
         "laravel/framework": "5.2.*",
         "illuminate/html": "5.0.*",
         "nesbot/carbon": "^1.21",
-        "picqer/php-barcode-generator": "^0.2.0"
+        "picqer/php-barcode-generator": "^0.2.0",
+        "barryvdh/laravel-ide-helper": "^2.2",
+        "doctrine/dbal": "^2.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -41,7 +43,9 @@
             "Company\\": "app/Erp/Basic/Company",
             "StockAdjust\\": "app/Erp/StockManager/StockAdjust",
             "StockTransfer\\": "app/Erp/StockManager/StockTransfer",
-            "StockInOutReport\\": "app/Erp/StockManager/StockInOutReport"
+            "StockInOutReport\\": "app/Erp/StockManager/StockInOutReport",
+            "StockInLogs\\": "app/Erp/StockManager/StockInLogs",
+            "StockOutLogs\\": "app/Erp/StockManager/StockOutLogs"
         }
     },
     "autoload-dev": {
@@ -62,6 +66,8 @@
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
+            "php artisan ide-helper:generate",
+            "php artisan ide-helper:meta",
             "php artisan optimize"
         ]
     },

@@ -99,13 +99,15 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::post('/receipt/json/{data_mode}/{code}', 'ReceiptController@json');
         Route::resource('/receipt', 'ReceiptController');
-
         //應收帳款沖銷單管理
         Route::resource('/receivableWriteOff', 'ReceivableWriteOffController',
             [
                 'except' => ['edit', 'update']
             ]
         );
+        //對帳單
+        Route::get('/statement', 'StatementController@index');
+        Route::get('/statement/printing', 'StatementController@printing');
     });
 
     //存貨管理作業

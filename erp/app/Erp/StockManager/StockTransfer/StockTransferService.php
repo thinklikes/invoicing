@@ -3,22 +3,26 @@ namespace StockTransfer;
 
 use StockTransfer\StockTransferRepository as OrderRepository;
 use Stock\StockWarehouseRepository as StockWarehouse;
+use StockInLogs\StockInLogsRepository as StockInLogs;
+use StockOutLogs\StockOutLogsRepository as StockOutLogs;
 use Illuminate\Support\MessageBag;
 use App\Presenters\OrderCalculator;
 
 class StockTransferService
 {
-    protected $orderRepository;
+    protected $orderRepository, $stockInLogs, $stockOutLogs;
     protected $stock;
 
     public function __construct(
         OrderRepository $orderRepository,
         StockWarehouse $stock,
-        OrderCalculator $calculator
+        StockInLogs $stockInLogs,
+        StockOutLogs $stockOutLogs
     ) {
         $this->orderRepository = $orderRepository;
         $this->stock           = $stock;
-        $this->calculator      = $calculator;
+        $this->stockInLogs     = $stockInLogs;
+        $this->stockOutLogs    = $stockOutLogs;
     }
 
     public function create($listener, $orderMaster, $orderDetail)
@@ -27,11 +31,6 @@ class StockTransferService
         $code = $this->orderRepository->getNewOrderCode();
         $orderMaster['code'] = $code;
 
-        // $this->calculator->setOrderMaster($orderMaster);
-        // $this->calculator->setOrderDetail($orderDetail);
-        // $this->calculator->calculate();
-
-        //$orderMaster['total_amount'] = $this->calculator->getTotalAmount();
         //新增轉倉單表頭
         $isCreated = $isCreated && $this->orderRepository->storeOrderMaster($orderMaster);
 
@@ -50,11 +49,27 @@ class StockTransferService
                 $value['stock_id'],
                 $orderMaster['from_warehouse_id']
             );
+            //添加一筆庫存出庫記錄
+            $this->stockOutLogs->addStockOutLog(
+                'stockTransfer',
+                $value['master_code'],
+                $orderMaster['from_warehouse_id'],
+                $value['stock_id'],
+                -$value['quantity']
+            );
             //更新調入倉庫數量，因為是調入，所以把數量加回來
             $this->stock->incrementInventory(
                 $value['quantity'],
                 $value['stock_id'],
                 $orderMaster['to_warehouse_id']
+            );
+            //添加一筆庫存入庫記錄
+            $this->stockInLogs->addStockInLog(
+                'stockTransfer',
+                $value['master_code'],
+                $orderMaster['to_warehouse_id'],
+                $value['stock_id'],
+                $value['quantity']
             );
         }
 
@@ -75,7 +90,10 @@ class StockTransferService
 
         //將庫存數量恢復到未開單前
         $this->revertStockInventory($code);
-
+        //移除本單據的庫存出庫記錄
+        $this->stockOutLogs->deleteStockOutLogsByOrderCode('stockTransfer', $code);
+        //移除本單據的庫存入庫記錄
+        $this->stockInLogs->deleteStockInLogsByOrderCode('stockTransfer', $code);
         //先存入表頭
         $isUpdated = $isUpdated && $this->orderRepository->updateOrderMaster(
             $orderMaster, $code
@@ -97,11 +115,27 @@ class StockTransferService
                 $value['stock_id'],
                 $orderMaster['from_warehouse_id']
             );
+            //添加一筆庫存出庫記錄
+            $this->stockOutLogs->addStockOutLog(
+                'stockTransfer',
+                $value['master_code'],
+                $orderMaster['from_warehouse_id'],
+                $value['stock_id'],
+                -$value['quantity']
+            );
             //更新調入倉庫數量，因為是調入，所以把數量加回來
             $this->stock->incrementInventory(
                 $value['quantity'],
                 $value['stock_id'],
                 $orderMaster['to_warehouse_id']
+            );
+            //添加一筆庫存入庫記錄
+            $this->stockInLogs->addStockInLog(
+                'stockTransfer',
+                $value['master_code'],
+                $orderMaster['to_warehouse_id'],
+                $value['stock_id'],
+                $value['quantity']
             );
         }
 
@@ -122,7 +156,10 @@ class StockTransferService
 
         //將庫存數量恢復到未開單前
         $this->revertStockInventory($code);
-
+        //移除本單據的庫存出庫記錄
+        $this->stockOutLogs->deleteStockOutLogsByOrderCode('stockTransfer', $code);
+        //移除本單據的庫存入庫記錄
+        $this->stockInLogs->deleteStockInLogsByOrderCode('stockTransfer', $code);
         //將這張單作廢
         $isDeleted = $isDeleted && $this->orderRepository->deleteOrderMaster($code);
         //$this->orderRepository->deleteOrderDetail($code);

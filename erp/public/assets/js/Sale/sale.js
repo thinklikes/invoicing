@@ -1,25 +1,3 @@
-//供應商自動完成所需資訊
-var stock_url    = '/stock/json';
-var company_url = '/company/json';
-var triggered_by = {
-    autocomplete: 'input.company_autocomplete',
-    scan: 'input.company_code'
-};
-var auto_fill = {
-    id: 'input.company_id',
-    //code :'input.company_code',
-    name : 'input.company_autocomplete'
-};
-var after_triggering = {
-    scan: function () {
-        if ($('input.stock_code:first').length > 0) {
-            $('input.stock_code:first').focus();
-        }
-    }
-};
-
-var companyAutocompleter = new CompanyAutocompleter(company_url, triggered_by, auto_fill, after_triggering);
-
 //表單計算機所需資訊
 var class_name = {
     master: {
@@ -38,8 +16,16 @@ var class_name = {
 var calculator = new OrderCalculator(class_name);
 
 $(function() {
-    //綁定供應商名稱的自動完成
-    companyAutocompleter.eventBind();
+    /**
+     * 綁定客戶名稱自動完成的事件
+     * @type {AjaxCombobox}
+     */
+    $('.company_autocomplete').AjaxCombobox({
+        url: '/company/json',
+        afterSelect : function (ui) {
+            $('input.company_id').val(ui.item.id)
+        },
+    });
 
     //綁定料品品名自動完成的事件
     rebindStockAutocomplete();

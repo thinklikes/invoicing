@@ -3,22 +3,24 @@ namespace BillOfPurchase;
 
 use BillOfPurchase\BillOfPurchaseRepository as OrderRepository;
 use Stock\StockWarehouseRepository as StockWarehouse;
+use StockInLogs\StockInLogsRepository as StockInLogs;
 use Illuminate\Support\MessageBag;
 use App\Presenters\OrderCalculator;
 
 class BillOfPurchaseService
 {
-    protected $orderRepository;
-    protected $stock;
+    protected $orderRepository, $stock, $calculator, $stockInLogs;
 
     public function __construct(
         OrderRepository $orderRepository,
         StockWarehouse $stock,
-        OrderCalculator $calculator
+        OrderCalculator $calculator,
+        StockInLogs $stockInLogs
     ) {
         $this->orderRepository = $orderRepository;
         $this->stock           = $stock;
         $this->calculator      = $calculator;
+        $this->stockInLogs     = $stockInLogs;
     }
 
     public function create($listener, $orderMaster, $orderDetail)
@@ -27,6 +29,7 @@ class BillOfPurchaseService
         $code = $this->orderRepository->getNewOrderCode();
         $orderMaster['code'] = $code;
 
+        //單據計算機
         $this->calculator->setOrderMaster($orderMaster);
         $this->calculator->setOrderDetail($orderDetail);
         $this->calculator->calculate();
@@ -50,8 +53,15 @@ class BillOfPurchaseService
                 $value['stock_id'],
                 $orderMaster['warehouse_id']
             );
+            //添加一筆庫存入庫記錄
+            $this->stockInLogs->addStockInLog(
+                'billOfPurchase',
+                $value['master_code'],
+                $orderMaster['warehouse_id'],
+                $value['stock_id'],
+                $value['quantity']
+            );
         }
-
         //return $isCreated;
         if (!$isCreated) {
             return $listener->orderCreatedErrors(
@@ -69,6 +79,14 @@ class BillOfPurchaseService
 
         //將庫存數量恢復到未開單前
         $this->revertStockInventory($code);
+        //移除本單據的庫存入庫記錄
+        $this->stockInLogs->deleteStockInLogsByOrderCode('billOfPurchase', $code);
+        //單據計算機
+        $this->calculator->setOrderMaster($orderMaster);
+        $this->calculator->setOrderDetail($orderDetail);
+        $this->calculator->calculate();
+
+        $orderMaster['total_amount'] = $this->calculator->getTotalAmount();
 
         //先存入表頭
         $isUpdated = $isUpdated && $this->orderRepository->updateOrderMaster(
@@ -91,6 +109,14 @@ class BillOfPurchaseService
                 $value['stock_id'],
                 $orderMaster['warehouse_id']
             );
+            //添加一筆庫存入庫記錄
+            $this->stockInLogs->addStockInLog(
+                'billOfPurchase',
+                $value['master_code'],
+                $orderMaster['warehouse_id'],
+                $value['stock_id'],
+                $value['quantity']
+            );
         }
 
         //return $isUpdated;
@@ -110,7 +136,8 @@ class BillOfPurchaseService
 
         //將庫存數量恢復到未開單前
         $this->revertStockInventory($code);
-
+        //移除本單據的庫存入庫記錄
+        $this->stockInLogs->deleteStockInLogsByOrderCode('billOfPurchase', $code);
         //將這張單作廢
         $isDeleted = $isDeleted && $this->orderRepository->deleteOrderMaster($code);
         //$this->orderRepository->deleteOrderDetail($code);

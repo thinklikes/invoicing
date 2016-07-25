@@ -14,7 +14,7 @@
             var _total_amount_round_off  = {{ Config::get('system_configs')['total_amount_round_off'] }};
         </script>
         <script type="text/javascript" src="{{ asset('assets/js/OrderCalculator.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('assets/js/sale/bindCompanyAutocomplete.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/AjaxCombobox.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/sale/sale.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/sale/bindStockAutocomplete.js') }}"></script>
         <form action=" {{ url("/billOfSale") }}" method="POST">

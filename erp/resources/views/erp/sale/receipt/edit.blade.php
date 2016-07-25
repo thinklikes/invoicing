@@ -4,30 +4,20 @@
 
 @section('content')
 
-        <script type="text/javascript" src="{{ asset('assets/js/sale/bindCompanyAutocomplete.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/AjaxCombobox.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/bindDatePicker.js') }}"></script>
         <script type="text/javascript">
-            //客戶自動完成所需資訊
-            var company_url = '/company/json';
-            var triggered_by = {
-                autocomplete: 'input.company_autocomplete',
-                scan: 'input.company_code'
-            };
-            var auto_fill = {
-                id: 'input.company_id',
-                code :'input.company_code',
-                name : 'input.company_autocomplete'
-            };
-            var after_triggering = {
-                scan: function () {
-                    if ($('input.stock_code:first').length > 0) {
-                        $('input.stock_code:first').focus();
-                    }
-                }
-            };
-            var companyAutocompleter = new CompanyAutocompleter(company_url, triggered_by, auto_fill, after_triggering);
             $(function () {
-                companyAutocompleter.eventBind();
+                /**
+                 * 綁定客戶名稱自動完成的事件
+                 * @type {AjaxCombobox}
+                 */
+                $('.company_autocomplete').AjaxCombobox({
+                    url: '/company/json',
+                    afterSelect : function (ui) {
+                        $('input.company_id').val(ui.item.id)
+                    },
+                });
             });
         </script>
         <form action="{{ url("/receipt/".$receipt['code']) }}" method="POST">

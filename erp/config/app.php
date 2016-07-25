@@ -152,7 +152,7 @@ return [
          * Application Service Providers...
          */
         //載入debuger的Provider：Barryvdh\Debugbar\ServiceProvider::class
-        App\Providers\DebugerServiceProvider::class,
+        //App\Providers\DebugerServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
@@ -160,6 +160,8 @@ return [
         App\Providers\ComposerServiceProvider::class,
         App\Providers\FormRequestServiceProvider::class,
         App\Providers\SystemConfigsServiceProvider::class,
+        //IDE Helper Generator
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
     ],
 
     /*

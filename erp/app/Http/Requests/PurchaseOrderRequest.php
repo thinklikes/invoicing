@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
+use App\Contracts\FormRequestInterface;
+
 class PurchaseOrderRequest extends Request implements FormRequestInterface
 {
     /**

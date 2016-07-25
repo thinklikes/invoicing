@@ -8,24 +8,19 @@ use App\Http\Requests;
 
 use App;
 
-use DB;
+use StockInOutReport\StockInOutReportPresenter as OrderTest;
 
 class AdminTestController extends Controller
 {
+    private $test;
+
+    public function __construct(OrderTest $orderTest)
+    {
+        $this->test = $orderTest;
+    }
+
     public function index()
     {
-        $collection = DB::table('erp_options')
-        ->select('id')
-        ->where('class', 'stock_classes')
-        ->get();
-
-        $classes = array();
-
-        foreach ($collection as $value) {
-            $classes[] = $value->id;
-        }
-        //$plucked = $collection->pluck('name');
-
-        dd($classes);
+        return view('layouts.test');
     }
 }

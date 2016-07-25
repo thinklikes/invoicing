@@ -432,6 +432,18 @@ class PagesTableSeeder extends Seeder
                 'enabled'    => 1,
             ],
             [
+                'name'       => '對帳單管理',
+                'level'      => 2,
+                'action'     => 'Sale\StatementController@index',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '對帳單列印',
+                'level'      => 3,
+                'action'     => 'Sale\StatementController@printing',
+                'enabled'    => 1,
+            ],
+            [
                 'name'       => '收款單管理',
                 'level'      => 2,
                 'action'     => 'Sale\ReceiptController@index',

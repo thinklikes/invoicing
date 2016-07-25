@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@inject('BarcodeGenerator', 'Picqer\Barcode\BarcodeGeneratorJPG');
+@inject('BarcodeGenerator', 'Picqer\Barcode\BarcodeGeneratorJPG')
 {{--
 @section('sidebar')
 

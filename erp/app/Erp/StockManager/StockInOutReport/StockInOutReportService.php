@@ -1,245 +1,44 @@
 <?php
 namespace StockInOutReport;
 
-use BillOfPurchase\BillOfPurchaseMaster as BillOfPurchaseDetail;
-use ReturnOfPurchase\ReturnOfPurchaseMaster as ReturnOfPurchase;
-use BillOfSale\BillOfSaleMaster as BillOfSale;
-use ReturnOfSale\ReturnOfSaleMaster as ReturnOfSale;
-use StockInOut\StockInOutMaster as StockInOut;
-use StockTransfer\StockTransferMaster as StockTransfer;
+use StockInLogs\StockInLogsRepository as StockInLogs;
+use StockOutLogs\StockOutLogsRepository as StockOutLogs;
 use Illuminate\Support\MessageBag;
 use App;
-use DB;
 
 class StockInOutReportService
 {
-    protected $billOfPurchase;
-    protected $returnOfPurchase;
-    protected $billOfSale;
-    protected $returnOfSale;
-    protected $stockInOut;
-    protected $stockTransfer;
+    protected $stockInLogs;
+    protected $stockOutLogs;
 
     public function __construct(
-        BillOfPurchaseDetail $billOfPurchase,
-        ReturnOfPurchase $returnOfPurchase,
-        BillOfSale $billOfSale,
-        ReturnOfSale $returnOfSale,
-        StockInOut $stockInOut,
-        StockTransfer $stockTransfer)
+        StockInLogs $stockInLogs,
+        StockOutLogs $stockOutLogs)
     {
-        $this->billOfPurchase   = $billOfPurchase;
-        $this->returnOfPurchase = $returnOfPurchase;
-        $this->billOfSale       = $billOfSale;
-        $this->returnOfSale     = $returnOfSale;
-        $this->stockInOut       = $stockInOut;
-        $this->stockTransfer    = $stockTransfer;
+        $this->stockInLogs  = $stockInLogs;
+        $this->stockOutLogs = $stockOutLogs;
     }
 
-    public function getAllStockInOutRecordsInDateRange(
-        $stock_id, $warehouse_id = '', $start_date = '', $end_date = '')
+    /**
+     * 用取得料品的id取得出庫記錄，並且以created_at來排序
+     * @param  integer $stock_id     料品的ID
+     * @param  integer $warehouse_id 倉庫的ID
+     * @param  string $start_date    查詢的起始日期
+     * @param  string $end_date      查詢的結束日期
+     * @return Collection            包含了型別為 StockInLogs或StockOutLogs的資料
+     */
+    public function getStockInOutLogsByStockId(
+        $stock_id, $warehouse_id = null, $start_date = null, $end_date = null)
     {
-        $data = array();
-        $data = array_merge(
-            $data,
-
-            $this->getBillOfPurchaseRecordsInDateRange(
-                $stock_id, $warehouse_id, $start_date, $end_date),
-
-            $this->getReturnOfPurchaseRecordsInDateRange(
-                $stock_id, $warehouse_id, $start_date, $end_date),
-
-            $this->getBillOfSaleRecordsInDateRange(
-                $stock_id, $warehouse_id, $start_date, $end_date),
-
-            $this->getReturnOfSaleRecordsInDateRange(
-                $stock_id, $warehouse_id, $start_date, $end_date),
-
-            $this->getStockInOutRecordsInDateRange(
-                $stock_id, $warehouse_id, $start_date, $end_date)
-        );
-
-        return collect($data);
+        $data = collect([]);
+        //抓出這個料品ID的入庫資料
+        $data = $data->merge($this->stockInLogs->getStockInLogsByStockId(
+            $stock_id, $warehouse_id, $start_date, $end_date));
+        //抓出這個料品ID的出庫資料
+        $data = $data->merge($this->stockOutLogs->getStockOutLogsByStockId(
+            $stock_id, $warehouse_id, $start_date, $end_date));
+        //回傳的資料用created_at這個欄位來排序
+        return $data->sortBy('created_at');
     }
 
-    private function getBillOfPurchaseRecordsInDateRange(
-        $stock_id, $warehouse_id = '', $start_date = '', $end_date = '')
-    {
-        return $this->billOfPurchase
-            //預載入對應表身的關聯
-            ->with(['orderDetail' => function ($query) use($stock_id)
-            {
-                $query->select('stock_id', 'quantity', 'master_code');
-                $query->where('stock_id', '=', $stock_id);
-            }])
-            ->select('code', 'warehouse_id', 'created_at')
-            //設定單據的類型
-            ->addSelect(DB::raw('"進貨" as orderType'))
-            //過濾表頭的條件
-            ->where(function ($query) use ($warehouse_id, $start_date, $end_date)
-            {
-                if ($warehouse_id != '') {
-                    $query->where('warehouse_id', '=', $warehouse_id);
-                }
-
-                if ($start_date != '') {
-                    $query->where('created_at', '>=', $start_date);
-                }
-
-                if ($end_date != '') {
-                    $query->where('created_at', '<=', $end_date);
-                }
-            })
-            //關聯的表身中若有以下條件才把表頭資料抓出來
-            ->whereHas('orderDetail', function ($query) use($stock_id)
-            {
-                $query->where('stock_id', '=', $stock_id);
-            })
-            ->get()->all();
-    }
-
-    public function getReturnOfPurchaseRecordsInDateRange(
-        $stock_id, $warehouse_id = '', $start_date = '', $end_date = '')
-    {
-        return $this->returnOfPurchase
-            //預載入對應表身的關聯
-            ->with(['orderDetail' => function ($query) use($stock_id)
-            {
-                $query->select('stock_id', 'master_code');
-                $query->addSelect(DB::raw('quantity * -1 as quantity'));
-                $query->where('stock_id', '=', $stock_id);
-            }])
-            ->select('code', 'warehouse_id', 'created_at')
-            //設定單據的類型
-            ->addSelect(DB::raw('"進退" as orderType'))
-            //過濾表頭的條件
-            ->where(function ($query) use ($warehouse_id, $start_date, $end_date)
-            {
-                if ($warehouse_id != '') {
-                    $query->where('warehouse_id', '=', $warehouse_id);
-                }
-
-                if ($start_date != '') {
-                    $query->where('created_at', '>=', $start_date);
-                }
-
-                if ($end_date != '') {
-                    $query->where('created_at', '<=', $end_date);
-                }
-            })
-            //關聯的表身中若有以下條件才把表頭資料抓出來
-            ->whereHas('orderDetail', function ($query) use($stock_id)
-            {
-                $query->where('stock_id', '=', $stock_id);
-            })
-            ->get()->all();
-    }
-    public function getBillOfSaleRecordsInDateRange(
-        $stock_id, $warehouse_id = '', $start_date = '', $end_date = '')
-    {
-        return $this->billOfSale
-            //預載入對應表身的關聯
-            //因為是銷貨，數量乘以-1
-            ->with(['orderDetail' => function ($query) use($stock_id)
-            {
-                $query->select('stock_id', 'master_code');
-                $query->addSelect(DB::raw('quantity * -1 as quantity'));
-                $query->where('stock_id', '=', $stock_id);
-            }])
-            ->select('code', 'warehouse_id', 'created_at')
-            //設定單據的類型
-            ->addSelect(DB::raw('"銷貨" as orderType'))
-            //過濾表頭的條件
-            ->where(function ($query) use ($warehouse_id, $start_date, $end_date)
-            {
-                if ($warehouse_id != '') {
-                    $query->where('warehouse_id', '=', $warehouse_id);
-                }
-
-                if ($start_date != '') {
-                    $query->where('created_at', '>=', $start_date);
-                }
-
-                if ($end_date != '') {
-                    $query->where('created_at', '<=', $end_date);
-                }
-            })
-            //關聯的表身中若有以下條件才把表頭資料抓出來
-            ->whereHas('orderDetail', function ($query) use($stock_id)
-            {
-                $query->where('stock_id', '=', $stock_id);
-            })
-            ->get()->all();
-    }
-    public function getReturnOfSaleRecordsInDateRange(
-        $stock_id, $warehouse_id = '', $start_date = '', $end_date = '')
-    {
-        return $this->returnOfSale
-            //預載入對應表身的關聯
-            ->with(['orderDetail' => function ($query) use($stock_id)
-            {
-                $query->select('stock_id', 'quantity', 'master_code');
-                $query->where('stock_id', '=', $stock_id);
-            }])
-            ->select('code', 'warehouse_id', 'created_at')
-            //設定單據的類型
-            ->addSelect(DB::raw('"銷退" as orderType'))
-            //過濾表頭的條件
-            ->where(function ($query) use ($warehouse_id, $start_date, $end_date)
-            {
-                if ($warehouse_id != '') {
-                    $query->where('warehouse_id', '=', $warehouse_id);
-                }
-
-                if ($start_date != '') {
-                    $query->where('created_at', '>=', $start_date);
-                }
-
-                if ($end_date != '') {
-                    $query->where('created_at', '<=', $end_date);
-                }
-            })
-            //關聯的表身中若有以下條件才把表頭資料抓出來
-            ->whereHas('orderDetail', function ($query) use($stock_id)
-            {
-                $query->where('stock_id', '=', $stock_id);
-            })
-            ->get()->all();
-    }
-
-    public function getStockInOutRecordsInDateRange(
-        $stock_id, $warehouse_id = '', $start_date = '', $end_date = '')
-    {
-        return $this->stockInOut
-            //預載入對應表身的關聯
-            ->with(['orderDetail' => function ($query) use($stock_id)
-            {
-                $query->select('stock_id', 'quantity', 'master_code');
-                $query->where('stock_id', '=', $stock_id);
-            }])
-            ->select('code', 'warehouse_id', 'created_at')
-            //設定單據的類型
-            ->addSelect(DB::raw('"調整" as orderType'))
-            //過濾表頭的條件
-            ->where(function ($query) use ($warehouse_id, $start_date, $end_date)
-            {
-                if ($warehouse_id != '') {
-                    $query->where('warehouse_id', '=', $warehouse_id);
-                }
-
-                if ($start_date != '') {
-                    $query->where('created_at', '>=', $start_date);
-                }
-
-                if ($end_date != '') {
-                    $query->where('created_at', '<=', $end_date);
-                }
-            })
-            //關聯的表身中若有以下條件才把表頭資料抓出來
-            ->whereHas('orderDetail', function ($query) use($stock_id)
-            {
-                $query->where('stock_id', '=', $stock_id);
-            })
-            ->get()->all();
-    }
 }

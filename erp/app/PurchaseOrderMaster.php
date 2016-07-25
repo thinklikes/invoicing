@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\PurchaseOrderMaster
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\PurchaseOrderDetail[] $purchase_order_detail
+ * @property-read \Supplier\Supplier $supplier
+ * @mixin \Eloquent
+ */
 class PurchaseOrderMaster extends Model
 {
     use SoftDeletes;
@@ -29,6 +36,6 @@ class PurchaseOrderMaster extends Model
      */
     public function supplier()
     {
-        return $this->belongsTo('App\Supplier', 'supplier_code', 'code');
+        return $this->belongsTo('Supplier\Supplier', 'supplier_code', 'code');
     }
 }

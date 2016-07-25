@@ -3,22 +3,25 @@ namespace BillOfSale;
 
 use BillOfSale\BillOfSaleRepository as OrderRepository;
 use Stock\StockWarehouseRepository as StockWarehouse;
+use StockOutLogs\StockOutLogsRepository as StockOutLogs;
 use Illuminate\Support\MessageBag;
 use App\Presenters\OrderCalculator;
 
 class BillOfSaleService
 {
-    protected $orderRepository;
+    protected $orderRepository, $calculator, $stockOutLogs;
     protected $stock;
 
     public function __construct(
         OrderRepository $orderRepository,
         StockWarehouse $stock,
-        OrderCalculator $calculator
+        OrderCalculator $calculator,
+        StockOutLogs $stockOutLogs
     ) {
         $this->orderRepository = $orderRepository;
         $this->stock           = $stock;
         $this->calculator      = $calculator;
+        $this->stockOutLogs    = $stockOutLogs;
     }
 
     public function create($listener, $orderMaster, $orderDetail)
@@ -50,6 +53,14 @@ class BillOfSaleService
                 $value['stock_id'],
                 $orderMaster['warehouse_id']
             );
+            //添加一筆庫存出庫記錄
+            $this->stockOutLogs->addStockOutLog(
+                'billOfSale',
+                $value['master_code'],
+                $orderMaster['warehouse_id'],
+                $value['stock_id'],
+                -$value['quantity']
+            );
         }
 
         //return $isCreated;
@@ -69,7 +80,14 @@ class BillOfSaleService
 
         //將庫存數量恢復到未開單前
         $this->revertStockInventory($code);
+        //移除本單據的庫存出庫記錄
+        $this->stockOutLogs->deleteStockOutLogsByOrderCode('billOfSale', $code);
 
+        $this->calculator->setOrderMaster($orderMaster);
+        $this->calculator->setOrderDetail($orderDetail);
+        $this->calculator->calculate();
+
+        $orderMaster['total_amount'] = $this->calculator->getTotalAmount();
         //先存入表頭
         $isUpdated = $isUpdated && $this->orderRepository->updateOrderMaster(
             $orderMaster, $code
@@ -92,6 +110,14 @@ class BillOfSaleService
                 $value['stock_id'],
                 $orderMaster['warehouse_id']
             );
+            //添加一筆庫存出庫記錄
+            $this->stockOutLogs->addStockOutLog(
+                'billOfSale',
+                $value['master_code'],
+                $orderMaster['warehouse_id'],
+                $value['stock_id'],
+                -$value['quantity']
+            );
         }
 
         //return $isUpdated;
@@ -111,7 +137,8 @@ class BillOfSaleService
 
         //將庫存數量恢復到未開單前
         $this->revertStockInventory($code);
-
+        //移除本單據的庫存出庫記錄
+        $this->stockOutLogs->deleteStockOutLogsByOrderCode('billOfSale', $code);
         //將這張單作廢
         $isDeleted = $isDeleted && $this->orderRepository->deleteOrderMaster($code);
         //$this->orderRepository->deleteOrderDetail($code);

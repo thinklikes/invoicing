@@ -12,57 +12,85 @@ use DB;
  */
 class StockInLogsRepository extends BasicRepository
 {
-    protected $mainModel;
     /**
-     * StockInLogsRepository constructor.
-     *
-     * @param StockInLogs\StockInLogs $mainModel
+     * 主要的model
+     * @var StockInLogs\StockInLogs
      */
+    protected $mainModel;
+
     public function __construct(MainModel $mainModel)
     {
         $this->mainModel = $mainModel;
     }
 
     /**
-     * find a page of orders
-     * @return array all purchases
+     * 新增一筆入庫記錄
+     * @param string $order_type   單據類別
+     * @param string $order_code   單據號碼
+     * @param integer $warehouse_id 倉庫的id
+     * @param integer $stock_id     料品的id
+     * @param decimal $quantity     入庫數量
      */
-    public function getOrdersPaginated($ordersPerPage)
+    public function addStockInLog($order_type, $order_code,
+        $warehouse_id, $stock_id, $quantity)
     {
-        return $this->mainModel->orderBy('id', 'desc')->paginate($ordersPerPage);
-    }
+        $this->mainModel = new MainModel;
 
-    /**
-     * store billOfPurchaseMaster
-     * @param  Array billOfPurchaseMaster
-     * @return boolean
-     */
-    public function store($data)
-    {
-        $columns = $this->getTableColumnList($this->mainModel);
+        $this->mainModel->order_type = $order_type;
 
-        $this->mainModel->newInstance();
+        $this->mainModel->order_code = $order_code;
 
-        //判斷request傳來的欄位是否存在，有才存入此欄位數值
-        foreach($data as $key) {
-            if (isset($orderMaster[$key])) {
-                $this->mainModel->{$key} = $orderMaster[$key];
-            }
-        }
+        $this->mainModel->warehouse_id = $warehouse_id;
 
-        //開始存入表頭
+        $this->mainModel->stock_id = $stock_id;
+
+        $this->mainModel->quantity = $quantity;
+        //開始存入
         return $this->mainModel->save();
     }
 
     /**
-     * delete a Purchase
-     * @param  integer $id The id of purchase
-     * @return void
+     * 刪除指定單據單號的入庫記錄
+     * @param  string $order_type 單據類型
+     * @param  string $order_code 單據號碼
+     * @return boolean             刪除是否成功
      */
-    public function delete($code)
+    public function deleteStockInLogsByOrderCode($order_type, $order_code)
     {
         return $this->mainModel
-            ->where('code', $code)
+            ->where('order_code', $order_code)
+            ->where('order_type', $order_type)
             ->delete();
     }
+
+    /**
+     * 用取得料品的id取得入庫記錄
+     * @param  integer $stock_id     料品的ID
+     * @param  integer $warehouse_id 倉庫的ID
+     * @param  string $start_date    查詢的起始日期
+     * @param  string $end_date      查詢的結束日期
+     * @return Collection            包含了型別為 StockInLogs的資料
+     */
+    public function getStockInLogsByStockId (
+        $stock_id, $warehouse_id = '', $start_date = '', $end_date = '')
+    {
+        return $this->mainModel
+            ->where('stock_id', $stock_id)
+            ->where(function ($query) use ($warehouse_id, $start_date, $end_date)
+            {
+                if ($warehouse_id != '') {
+                    $query->where('warehouse_id', '=', $warehouse_id);
+                }
+
+                if ($start_date != '') {
+                    $query->where('created_at', '>=', $start_date);
+                }
+
+                if ($end_date != '') {
+                    $query->where('created_at', '<=', $end_date);
+                }
+            })
+            ->get();
+    }
+
 }

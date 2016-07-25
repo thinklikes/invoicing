@@ -10,7 +10,6 @@ class StockInOutReportController extends BasicController
 {
     private $orderMasterInputName = 'stockInOutReport';
     private $routeName = 'erp.stockManager.stockInOutReport';
-    private $ordersPerPage = 15;
     /**
      * CompanyController constructor.
      *
@@ -41,14 +40,26 @@ class StockInOutReportController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function print(Request $request)
+    public function printing(Request $request)
     {
-        if ($request->input($this->orderMasterInputName.".stock_id")) {
+        if ($request->input($this->orderMasterInputName.".stock_id") != '') {
             $stock_id = $request->input($this->orderMasterInputName.".stock_id");
         } else {
             $stock_id = 1;
         }
-        return $this->orderService->getStockInOutRecordsInDateRange($stock_id);
+
+        $warehouse_id = $request->input($this->orderMasterInputName.".warehouse_id");
+
+        $start_date = $request->input($this->orderMasterInputName.".start_date");
+
+        $end_date = $request->input($this->orderMasterInputName.".end_date");
+
+        return view($this->routeName.'.printing', [
+            'start_date' => $request->input('start_date'),
+            'end_date' => $request->input('end_date'),
+            'data' => $this->orderService->getStockInOutLogsByStockId(
+                $stock_id, $warehouse_id, $start_date, $end_date)
+        ]);
 
     }
 

@@ -5,7 +5,7 @@
         <script type="text/javascript">
 
         </script>
-        <script type="text/javascript" src="{{ asset('assets/js/sale/bindCompanyAutocomplete.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/AjaxCombobox.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/WriteOffCalculator.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/sale/receivableWriteOff.js') }}"></script>
         <form action=" {{ url("/receivableWriteOff") }}" method="POST">
