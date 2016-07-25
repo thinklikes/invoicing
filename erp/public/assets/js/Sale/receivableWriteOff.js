@@ -11,7 +11,7 @@ $(function () {
      */
     $('.company_autocomplete').AjaxCombobox({
         url: '/company/json',
-        afterSelect : function (ui) {
+        afterSelect : function (ecent, ui) {
             $('input.company_id').val(ui.item.id);
 
             getReceivableByCompanyId(ui.item.id);
@@ -22,6 +22,14 @@ $(function () {
 
             setTimeout('', 100);
         },
+        response : function (item) {
+            return {
+                label: item.company_abb + ' - ' + item.company_name,
+                value: item.company_name,
+                id   : item.auto_id,
+                //code   : item.code,
+            }
+        }
     });
 });
 

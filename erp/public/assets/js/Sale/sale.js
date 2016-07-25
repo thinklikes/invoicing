@@ -16,19 +16,29 @@ var class_name = {
 var calculator = new OrderCalculator(class_name);
 
 $(function() {
+    console.log($('.company_autocomplete'));
     /**
      * 綁定客戶名稱自動完成的事件
      * @type {AjaxCombobox}
      */
+
     $('.company_autocomplete').AjaxCombobox({
         url: '/company/json',
-        afterSelect : function (ui) {
+        afterSelect : function (event, ui) {
             $('input.company_id').val(ui.item.id)
         },
+        response : function (item) {
+            return {
+                label: item.company_abb + ' - ' + item.company_name,
+                value: item.company_name,
+                id   : item.auto_id,
+                //code   : item.code,
+            }
+        }
     });
 
     //綁定料品品名自動完成的事件
-    rebindStockAutocomplete();
+    rebindStockCombobox();
     //rebindQuantityBlur();
     rebindDeleteButton();
 
@@ -59,13 +69,69 @@ $(function() {
                 <td><input type="text" class="stock_no_tax_amount" style="text-align:right;" size="10"></td>\
             </tr>';
         $('table#detail tbody').append(html);
-        rebindStockAutocomplete();
+        rebindStockCombobox();
         //rebindQuantityBlur();
         rebindDeleteButton();
     });
 
 });
 
+function rebindStockCombobox() {
+    $( "input.stock_autocomplete" ).each(function () {
+        if (typeof $(this).AjaxCombobox("instance") != "undefined") {
+            $(this).AjaxCombobox('destroy');
+        }
+        //console.log($(this));
+        $(this).AjaxCombobox({
+            url: '/stock/json',
+            afterSelect : function (event, ui) {
+
+                var index = event.target.name.match(/\d+/g)[0];
+
+                $('input.stock_code:eq('+index+')').val(ui.item.code);
+                $('input.stock_id').eq(index).val(ui.item.id);
+                $('input.stock_no_tax_price').eq(index).val(ui.item.price);
+                $('input.stock_unit').eq(index).val(ui.item.unit);
+            },
+            response : function (item) {
+                return {
+                    label: item.code + ' - ' + item.name,
+                    value: item.name,
+                    id   : item.id,
+                    code : item.code,
+                    price : item.no_tax_price_of_sold,
+                    unit : item.unit.comment
+                }
+            }
+        });
+    });
+
+    /**
+     * 綁定客戶名稱自動完成的事件
+     * @type {AjaxCombobox}
+     */
+    // $('.stock_autocomplete').AjaxCombobox({
+    //     url: '/stock/json',
+    //     afterSelect : function (ui) {
+    //         var index = $(this).index('input.stock_autocomplete');
+    //         console.log(index);
+    //         $('input.stock_code').eq(index).val(ui.item.code);
+    //         $('input.stock_id').eq(index).val(ui.item.id);
+    //         $('input.stock_no_tax_price').eq(index).val(ui.item.price);
+    //         $('input.stock_unit').eq(index).val(ui.item.unit);
+    //     },
+    //     response : function (item) {
+    //         return {
+    //             label: item.code + ' - ' + item.name,
+    //             value: item.name,
+    //             id   : item.id,
+    //             code : item.code,
+    //             price : item.no_tax_price_of_sold,
+    //             unit : item.unit.comment
+    //         }
+    //     }
+    // });
+}
 /**
  * 重新綁定料品名稱自動完成的事件
  * @return void

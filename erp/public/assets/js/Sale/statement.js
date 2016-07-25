@@ -6,9 +6,17 @@ $(function() {
      */
     $('.company_autocomplete').AjaxCombobox({
         url: '/company/json',
-        afterSelect : function (ui) {
+        afterSelect : function (event, ui) {
             $('input.company_id').val(ui.item.id)
         },
+        response : function (item) {
+            return {
+                label: item.company_abb + ' - ' + item.company_name,
+                value: item.company_name,
+                id   : item.auto_id,
+                //code   : item.code,
+            }
+        }
     });
     // var autocompleter = new CompanyAutocompleter({
     //     request_url : '/company/json',

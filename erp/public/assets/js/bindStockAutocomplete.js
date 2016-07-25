@@ -36,7 +36,7 @@ function rebindStockAutocomplete() {
             var index = $(this).index('input.stock_autocomplete');
             $('input.stock_code').eq(index).val(ui.item.code);
             $('input.stock_id').eq(index).val(ui.item.id);
-            //$('input.stock_no_tax_price').eq(index).val(ui.item.price);
+            $('input.stock_no_tax_price').eq(index).val(ui.item.price);
             $('input.stock_unit').eq(index).val(ui.item.unit);
         },
         minLength: 2

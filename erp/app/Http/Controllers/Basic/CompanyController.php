@@ -15,6 +15,7 @@ class CompanyController extends BasicController
     public function __construct(Repository $repository)
     {
         $this->repository = $repository;
+        $this->repository->countsPerPage = 20;
     }
     public function json(Request $request)
     {

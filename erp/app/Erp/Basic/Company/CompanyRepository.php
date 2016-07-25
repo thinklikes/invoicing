@@ -9,6 +9,7 @@ class CompanyRepository extends BasicRepository
 {
     protected $company;
 
+    public $countsPerPage = 15;
     /**
      * UserRepository constructor.
      *
@@ -36,7 +37,7 @@ class CompanyRepository extends BasicRepository
             })
             ->orderBy('auto_id')
             ->skip(0)
-            ->take(15)
+            ->take($this->countsPerPage)
             ->get();
     }
 
