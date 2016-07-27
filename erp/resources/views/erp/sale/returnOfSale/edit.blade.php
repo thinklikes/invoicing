@@ -9,8 +9,6 @@
         {{ $OrderCalculator->setOrderDetail($returnOfSaleDetail) }}
         {{ $OrderCalculator->calculate() }}
         <script type="text/javascript">
-            var company_url = '{{ url("/companys/json") }}';
-            var stock_url    = '{{ url("/stocks/json") }}';
             var app_name     = 'returnOfSale';
 
             var _tax_rate       = {{ Config::get('system_configs')['sale_tax_rate'] }};
@@ -22,8 +20,8 @@
         </script>
         <script type="text/javascript" src="{{ asset('assets/js/OrderCalculator.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/AjaxCombobox.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/AjaxFetchDataByField.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/sale/sale.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('assets/js/sale/bindStockAutocomplete.js') }}"></script>
         <form action="{{ url("/returnOfSale/".$returnOfSaleMaster['code']) }}" method="POST">
             {{ csrf_field() }}
             {{ method_field('PUT') }}

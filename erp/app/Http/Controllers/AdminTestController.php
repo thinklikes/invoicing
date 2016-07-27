@@ -21,6 +21,7 @@ class AdminTestController extends Controller
 
     public function index()
     {
-        return view('layouts.test');
+        $a = App::make('Statement\StatementService');
+        return $a->findCompanyByCompanyId(1)->company_name;
     }
 }

@@ -1,7 +1,5 @@
 //借方項目的index
 var index = 0;
-//供應商自動完成所需資訊
-var supplier_url = '/supplier/json';
 
 var triggered_by = {
     autocomplete: 'input.supplier_autocomplete',
@@ -15,18 +13,6 @@ var auto_fill = {
 };
 
 var after_triggering = {
-    autocomplete: function (supplier_id)
-    {
-        index = 0;
-
-        getPayableBySupplierId(supplier_id);
-
-        setTimeout('', 100);
-
-        getPaymentBySupplierId(supplier_id);
-
-        setTimeout('', 100);
-    },
     scan: function (supplier_id)
     {
         if ($('input.stock_code:first').length > 0) {
@@ -45,14 +31,63 @@ var after_triggering = {
     }
 };
 
-var supplierAutocompleter = new SupplierAutocompleter(supplier_url, triggered_by, auto_fill, after_triggering);
-
 var writeOffCalculator = new WriteOffCalculator(
     'credit_checked', 'credit_amount', 'total_credit_amount',
     'debit_checked', 'debit_amount', 'total_debit_amount');
 
 $(function () {
-    supplierAutocompleter.eventBind();
+    /**
+     * 綁定供應商名稱的自動完成
+     * @type {AjaxCombobox}
+     */
+
+    $('.supplier_autocomplete').AjaxCombobox({
+        url: '/supplier/json',
+        afterSelect : function (event, ui) {
+            $('input.supplier_id').val(ui.item.id);
+            $('input.supplier_code').val(ui.item.code);
+
+            index = 0;
+
+            getPayableBySupplierId(ui.item.id);
+
+            setTimeout('', 100);
+
+            getPaymentBySupplierId(ui.item.id);
+
+            setTimeout('', 100);
+        },
+        response : function (item) {
+            return {
+                label: item.shortName + ' - ' + item.name,
+                value: item.name,
+                id   : item.id,
+                code   : item.code,
+            }
+        }
+    });
+    $('.supplier_code').AjaxFetchDataByField({
+        url: '/supplier/json',
+        field_name : 'code',
+        triggered_by : $('.supplier_code'),
+        afterFetch : function (event, data) {
+            $('input.supplier_id').val(data[0].id);
+            $('input.supplier_autocomplete').val(data[0].name);
+            index = 0;
+
+            getPayableBySupplierId(data[0].id);
+
+            setTimeout('', 100);
+
+            getPaymentBySupplierId(data[0].id);
+
+            setTimeout('', 100);
+        },
+        removeIfInvalid : function () {
+            $('input.supplier_id').val('');
+            $('input.supplier_autocomplete').val('');
+        }
+    });
 });
 
 function fill_amount(index) {

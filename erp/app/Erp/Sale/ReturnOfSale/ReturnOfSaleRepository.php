@@ -28,59 +28,6 @@ class ReturnOfSaleRepository extends BasicRepository
     }
 
     /**
-     * 找出輸入的供應商id未收款的所有應付帳款
-     * @return array all suppliers
-     */
-    public function getReceivableByCompanyId($company_id)
-    {
-        return $this->orderMaster->select('id', 'code', 'invoice_code','total_amount', 'received_amount', 'created_at')
-            ->where('company_id', $company_id)
-            ->where('is_received', '0')
-            ->orderBy('code')
-            ->get();
-    }
-
-    /**
-     * [getNewMasterCode 回傳新一組的表頭CODE]
-     *
-     * @return string      newMasterCode
-     */
-    public function getNewOrderCode()
-    {
-        $code = $this->orderMaster->select('code')
-            ->where('code', 'like', date('Ymd').'%')
-            ->orderBy('code', 'desc')
-            ->withTrashed()
-            ->take(1)
-            ->value('code');
-        if (is_null($code)) {
-            return date('Ymd').'001';
-        } else {
-            return $code + 1;
-        }
-    }
-
-    /**
-     * find a page of orders
-     * @return array all purchases
-     */
-    public function getOrdersPaginated($ordersPerPage)
-    {
-        return $this->orderMaster->orderBy('id', 'desc')->paginate($ordersPerPage);
-    }
-
-    public function getOrderMasterfield($field, $code)
-    {
-        return $this->orderMaster->where('code', $code)->value($field);
-    }
-
-    public function getNotReceivedAmount($code)
-    {
-        return $this->orderMaster->select(DB::raw('(total_amount - received_amount) as not_received_amount'))
-            ->where('code', $code)->value('not_received_amount');
-    }
-
-    /**
      * find master of a order
      * @param  integer $id The id of purchase
      * @return array       one purchase
@@ -207,5 +154,109 @@ class ReturnOfSaleRepository extends BasicRepository
         return $this->orderDetail
             ->where('master_code', $code)
             ->delete();
+    }
+
+    /**
+     * 找出輸入的客戶id的銷退記錄
+     * @param  integer $company_id 客戶的id
+     * @param  integer $stock_id   料品的id
+     * @param  date $start_date 資料範圍的起始日期
+     * @param  date $end_date   資料範圍的終止日期
+     * @return ReturnOfSaleMaster
+     */
+    public function getFullOrderDetailByConditions(
+        $company_id = null, $stock_id = null, $start_date = null, $end_date = null)
+    {
+        return $this->orderMaster
+            ->with(['orderDetail' => function ($query) use ($stock_id) {
+                if ($stock_id) {
+                    $query->where('stock_id', '=', $stock_id);
+                }
+            }])
+            ->whereHas('orderDetail', function ($query) use ($stock_id) {
+                if ($stock_id) {
+                    $query->where('stock_id', '=', $stock_id);
+                }
+            })
+            ->Where(function ($query) use ($company_id, $start_date, $end_date) {
+                if ($company_id) {
+                    $query->where('created_at', '>=', $start_date);
+                }
+                if ($start_date) {
+                    $query->where('created_at', '>=', $start_date);
+                }
+                if ($start_date) {
+                    $query->where('created_at', '<=', $end_date);
+                }
+            })
+            ->orderBy('code')
+            ->get();
+    }
+
+    /**
+     * 找出輸入的客戶id未收款的所有應收帳款
+     * @param  integer $company_id 客戶的ID
+     * @param  string $start_date 資料範圍的起始日
+     * @param  string $end_date   資料範圍的終止日
+     * @return ReturnOfSale
+     */
+    public function getReceivableByCompanyId(
+        $company_id, $start_date = null, $end_date = null)
+    {
+        return $this->orderMaster
+            ->select('id', 'code', 'tax_rate_code', 'invoice_code',
+                'total_amount', 'received_amount', 'created_at')
+            ->where('company_id', $company_id)
+            ->Where(function ($query) use ($start_date, $end_date) {
+                if ($start_date) {
+                    $query->where('created_at', '>=', $start_date);
+                }
+                if ($start_date) {
+                    $query->where('created_at', '<=', $end_date);
+                }
+            })
+            ->where('is_received', '0')
+            ->orderBy('code')
+            ->get();
+    }
+
+    /**
+     * [getNewMasterCode 回傳新一組的表頭CODE]
+     *
+     * @return string      newMasterCode
+     */
+    public function getNewOrderCode()
+    {
+        $code = $this->orderMaster->select('code')
+            ->where('code', 'like', date('Ymd').'%')
+            ->orderBy('code', 'desc')
+            ->withTrashed()
+            ->take(1)
+            ->value('code');
+        if (is_null($code)) {
+            return date('Ymd').'001';
+        } else {
+            return $code + 1;
+        }
+    }
+
+    /**
+     * find a page of orders
+     * @return array all purchases
+     */
+    public function getOrdersPaginated($ordersPerPage)
+    {
+        return $this->orderMaster->orderBy('id', 'desc')->paginate($ordersPerPage);
+    }
+
+    public function getOrderMasterfield($field, $code)
+    {
+        return $this->orderMaster->where('code', $code)->value($field);
+    }
+
+    public function getNotReceivedAmount($code)
+    {
+        return $this->orderMaster->select(DB::raw('(total_amount - received_amount) as not_received_amount'))
+            ->where('code', $code)->value('not_received_amount');
     }
 }

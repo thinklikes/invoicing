@@ -152,7 +152,7 @@ return [
          * Application Service Providers...
          */
         //載入debuger的Provider：Barryvdh\Debugbar\ServiceProvider::class
-        //App\Providers\DebugerServiceProvider::class,
+        App\Providers\DebugerServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,

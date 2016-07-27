@@ -1,5 +1,5 @@
 {{-- 注入庫存異動報表的presenter --}}
-@inject('presenter', 'StockInOutReport\StockInOutReportPresenter')
+@inject('presenter', 'Statement\StatementPresenter')
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/print.css') }}">
 <div class="main_page">
     <div class="information_container">
@@ -13,11 +13,11 @@
         <div class="order_information">
             <table>
                 <tr>
-                    <td colspan="2">庫存異動表</td>
+                    <td colspan="2">對帳單</td>
                 </tr>
                 <tr>
                     <td>製表日期：</td>
-                    <td>{{ Carbon::today()->format('Y-m-d') }}</td>
+                    <td>{{ Carbon\Carbon::today()->format('Y-m-d') }}</td>
                 </tr>
                 <tr>
                     <td>資料區間：</td>
@@ -26,15 +26,35 @@
             </table>
         </div>
     </div>
+    <table id="master">
+        <tr>
+            <th>統一編號</th>
+            <td>
+                {{ $company->VTA_NO }}
+            </td>
+            <th>客戶名稱</th>
+            <td>{{ $company->company_name }}</td>
+        </tr>
+        <tr>
+            <th>電話</th>
+            <td>
+                {{ $company->company_tel }}
+            </td>
+            <th>地址</th>
+            <td>{{ $company->company_add }}</td>
+        </tr>
+    </table>
+    <hr>
     <table width="100%">
         <thead>
             <tr>
                 <th class="string">日期</th>
                 <th class="string">單據號碼</th>
-                <th class="string">倉庫</th>
-                <th class="string">料品代號</th>
-                <th class="string">料品名稱</th>
-                <th class="numeric">數量</th>
+                <th class="string">發票號碼</th>
+                <th class="numeric">未稅金額</th>
+                <th class="numeric">營業稅</th>
+                <th class="numeric">已收金額</th>
+                <th class="numeric">應收金額</th>
             </tr>
         </thead>
 @if(count($data) > 0)
@@ -44,26 +64,27 @@
                 <td class="string">{{ $value->created_at->format('Y-m-d') }}</td>
                 <td class="string">
                     {{ $presenter->getOrderLocalNameByOrderType(
-                        $value->order_type, class_basename($value))
+                        class_basename($value))
                     }}
-                    {{ $value->order_code }}
+                    {{ $value->code }}
                 </td>
-                <td class="string">{{ $value->warehouse->name }}</td>
-                <td class="string">{{ $value->stock->code }}</td>
-                <td class="string">{{ $value->stock->name }}</td>
-                <td class="numeric">{{ $value->quantity }}</td>
+                <td class="string">{{ $value->invoice_code }}</td>
+                <td class="string">{{ $value->total_no_tax_amount }}</td>
+                <td class="string">{{ $value->tax }}</td>
+                <td class="string">{{ $value->received_amount }}</td>
+                <td class="numeric">{{ $value->total_amount -  $value->received_amount}}</td>
             </tr>
     @endforeach
 @endif
         </tbody>
         <tfoot>
             <tr>
-                <td class="numeric" colspan="5">小計</td>
+                <td class="numeric" colspan="6">小計</td>
                 <td class="numeric">
                     {{
                         //計算小計
                         $data->sum(function ($item) {
-                            return $item->quantity;
+                            return $item->total_amount - $item->received_amount;
                         })
                     }}
                 </td>

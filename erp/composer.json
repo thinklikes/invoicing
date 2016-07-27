@@ -45,7 +45,9 @@
             "StockTransfer\\": "app/Erp/StockManager/StockTransfer",
             "StockInOutReport\\": "app/Erp/StockManager/StockInOutReport",
             "StockInLogs\\": "app/Erp/StockManager/StockInLogs",
-            "StockOutLogs\\": "app/Erp/StockManager/StockOutLogs"
+            "StockOutLogs\\": "app/Erp/StockManager/StockOutLogs",
+            "Statement\\": "app/Erp/Sale/Statement",
+            "SaleReport\\": "app/Erp/Sale/SaleReport"
         }
     },
     "autoload-dev": {

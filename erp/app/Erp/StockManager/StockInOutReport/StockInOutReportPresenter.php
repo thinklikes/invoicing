@@ -1,10 +1,19 @@
 <?php
 
 namespace StockInOutReport;
-
+/**
+ * 庫存異動報表顯示邏輯
+ */
 class StockInOutReportPresenter
 {
-    public function getOrderLocalNameByOrderType($order_type, $class_name) {
+    /**
+     * 回傳單據類型的中文名稱
+     * @param  string $order_type 單據類型
+     * @param  string $class_name 此資料model的class name
+     * @return string             單據類型的中文名稱
+     */
+    public function getOrderLocalNameByOrderType($order_type, $class_name) 
+    {
         switch ($order_type) {
             case 'billOfPurchase':
                 return '進貨';
@@ -31,5 +40,10 @@ class StockInOutReportPresenter
                 return '';
                 break;
         }
+    }
+
+    public function getNoTaxTotalAmount($tax_rate_code, $totalAmountWithTax)
+    {
+        
     }
 }

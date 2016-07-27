@@ -41,6 +41,13 @@ class CompanyRepository extends BasicRepository
             ->get();
     }
 
+    public function getCompanyById($id)
+    {
+        return $this->company
+            ->where('auto_id', $id)
+            ->firstOrFail();
+    }
+
     /**
      * find One page of suppliers
      * @return array all suppliers

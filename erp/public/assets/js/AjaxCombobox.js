@@ -12,11 +12,21 @@ $.widget( "custom.AjaxCombobox", {
     defaultElement:"<input>",
 
     _create: function() {
+        this._afterSelect = this.options.afterSelect;
+        this._response = this.options.response;
+        this._url = this.options.url;
         this.input = this.element;
-
         this.button = null;
-
         this.messageBox = null;
+
+        if (typeof this._afterSelect != "function") {
+            throw "afterSelect is not a function";
+        }
+
+        if (typeof this._response != "function") {
+            throw "response is not a function";
+        }
+
         //設定ajax使用的token
         if (typeof $.ajaxSetup().headers == 'undefined') {
             $.ajaxSetup({
@@ -63,7 +73,7 @@ $.widget( "custom.AjaxCombobox", {
         //綁定autocomplete選取的事件
         this._on( this.input, {
             autocompleteselect: function ( event, ui ) {
-                this.options.afterSelect(event, ui);
+                this._afterSelect(event, ui);
             }
         });
     },
@@ -95,9 +105,9 @@ $.widget( "custom.AjaxCombobox", {
                 if ( wasOpen ) {
                     return;
                 }
-                var toSearch = (input.val() != "") ? input.val() : "  ";
                 // Pass empty string as value to search for, displaying all results
-                input.autocomplete( "search", toSearch );
+                //input.autocomplete( "search", toSearch );
+                input.autocomplete( "search", "  " );
             });
     },
     /**
@@ -116,10 +126,10 @@ $.widget( "custom.AjaxCombobox", {
      * @return {void}          不回傳任何值
      */
     _source: function (request, response) {
-        options = this.options;
+        var MyObj = this;
         $.ajax({
             method: "POST",
-            url: this.options.url,
+            url: MyObj._url,
             dataType: "json",
             data: {
                 'name': request.term,
@@ -128,32 +138,23 @@ $.widget( "custom.AjaxCombobox", {
                 if (data.length > 0) {
                     response(
                         $.map( data, function( item ) {
-                            return options.response(item);
+                            return MyObj._response(item);
                         })
                     );
                 } else {
-                    this._removeIfInvalid();
+                    // Remove invalid value
+                    MyObj.messageBox.text( "找不到搜尋的資料：" + MyObj.input.val() );
+
+                    MyObj.input.val("");
+
+                    MyObj._delay(function() {
+                        messageBox.text( "" );
+                    }, 2500 );
+
+                    MyObj.input.autocomplete( "instance" ).term = "";
                 }
             }
         });
-    },
-    /**
-     * 顯示搜尋不到的訊息
-     * @return {void} 不回傳任何值
-     */
-    _removeIfInvalid: function() {
-
-        // Remove invalid value
-        this.messageBox.text( "找不到搜尋的資料：" + this.input.val() );
-
-        this.input.val("");
-
-        messageBox = this.messageBox;
-        this._delay(function() {
-            messageBox.text( "" );
-        }, 2500 );
-
-        this.input.autocomplete( "instance" ).term = "";
     },
     /**
      * 移除這個UI工具

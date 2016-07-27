@@ -20,8 +20,8 @@
         </script>
         <script type="text/javascript" src="{{ asset('assets/js/OrderCalculator.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/AjaxCombobox.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/AjaxFetchDataByField.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/sale/sale.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('assets/js/sale/bindStockAutocomplete.js') }}"></script>
         <form action="{{ url("/billOfSale/".$billOfSaleMaster['code']) }}" method="POST">
             {{ csrf_field() }}
             {{ method_field('PUT') }}

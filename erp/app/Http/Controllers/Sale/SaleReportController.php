@@ -5,15 +5,15 @@ namespace App\Http\Controllers\Sale;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BasicController;
 use App\Http\Requests;
-use Statement\StatementService as OrderService;
+use SaleReport\SaleReportService as OrderService;
 
-class StatementController extends BasicController
+class SaleReportController extends BasicController
 {
     // protected $orderRepository;
     // protected $orderService;
-    private $orderMasterInputName = 'statement';
+    private $orderMasterInputName = 'saleReport';
     // private $orderDetailInputName = 'returnOfSaleDetail';
-    private $routeName = 'erp.sale.statement';
+    private $routeName = 'erp.sale.saleReport';
     //private $ordersPerPage = 15;
 
     public function __construct(
@@ -32,17 +32,15 @@ class StatementController extends BasicController
 
     public function printing(Request $request)
     {
-        $company_id = $request->input('statement')['company_id'];
-
-        $start_date = $request->input('statement')['start_date'];//string
-
-        $end_date = $request->input('statement')['end_date'];//string
+        $company_id = $request->input('saleReport')['company_id'];
+        $stock_id = $request->input('saleReport')['stock_id'];
+        $start_date = $request->input('saleReport')['start_date'];//string
+        $end_date = $request->input('saleReport')['end_date'];//string
 
         return view($this->routeName.".printing", [
             'start_date' => $start_date,
             'end_date' => $end_date,
-            'company' => $this->orderService->findCompanyByCompanyId($company_id),
-            'data' => $this->orderService->getStatementByCompanyId($company_id, $start_date, $end_date)
+            'data' => $this->orderService->getSaleReportByConditions($company_id, $stock_id, $start_date, $end_date)
         ]);
     }
 }

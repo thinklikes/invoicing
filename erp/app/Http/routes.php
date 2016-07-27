@@ -108,6 +108,10 @@ Route::group(['middleware' => 'auth'], function () {
         //對帳單
         Route::get('/statement', 'StatementController@index');
         Route::get('/statement/printing', 'StatementController@printing');
+
+        //銷貨日報表
+        Route::get('/saleReport', 'SaleReportController@index');
+        Route::get('/saleReport/printing', 'SaleReportController@printing');
     });
 
     //存貨管理作業

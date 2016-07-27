@@ -4,30 +4,44 @@
 
 @section('content')
 
-        <script type="text/javascript" src="{{ asset('assets/js/purchase/bindSupplierAutocomplete.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/AjaxCombobox.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/AjaxFetchDataByField.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/bindDatePicker.js') }}"></script>
         <script type="text/javascript">
-            //供應商自動完成所需資訊
-            var supplier_url = '/supplier/json';
-            var triggered_by = {
-                autocomplete: 'input.supplier_autocomplete',
-                scan: 'input.supplier_code'
-            };
-            var auto_fill = {
-                id: 'input.supplier_id',
-                code :'input.supplier_code',
-                name : 'input.supplier_autocomplete'
-            };
-            var after_triggering = {
-                scan: function () {
-                    if ($('input.stock_code:first').length > 0) {
-                        $('input.stock_code:first').focus();
-                    }
-                }
-            };
-            var supplierAutocompleter = new SupplierAutocompleter(supplier_url, triggered_by, auto_fill, after_triggering);
             $(function () {
-                supplierAutocompleter.eventBind();
+                /**
+                 * 綁定供應商名稱的自動完成
+                 * @type {AjaxCombobox}
+                 */
+
+                $('.supplier_autocomplete').AjaxCombobox({
+                    url: '/supplier/json',
+                    afterSelect : function (event, ui) {
+                        $('input.supplier_id').val(ui.item.id);
+                        $('input.supplier_code').val(ui.item.code);
+                    },
+                    response : function (item) {
+                        return {
+                            label: item.shortName + ' - ' + item.name,
+                            value: item.name,
+                            id   : item.id,
+                            code   : item.code,
+                        }
+                    }
+                });
+                $('.supplier_code').AjaxFetchDataByField({
+                    url: '/supplier/json',
+                    field_name : 'code',
+                    triggered_by : $('.supplier_code'),
+                    afterFetch : function (event, data) {
+                        $('input.supplier_id').val(data[0].id);
+                        $('input.supplier_autocomplete').val(data[0].name);
+                    },
+                    removeIfInvalid : function () {
+                        $('input.supplier_id').val('');
+                        $('input.supplier_autocomplete').val('');
+                    }
+                });
             });
         </script>
         <form action="{{ url("/payment/".$payment['code']) }}" method="POST">

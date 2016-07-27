@@ -15,8 +15,8 @@
         </script>
         <script type="text/javascript" src="{{ asset('assets/js/OrderCalculator.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/AjaxCombobox.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/AjaxFetchDataByField.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/sale/sale.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('assets/js/sale/bindStockAutocomplete.js') }}"></script>
         <form action=" {{ url("/returnOfSale") }}" method="POST">
             {{ csrf_field() }}
             <table id="master" width="100%">

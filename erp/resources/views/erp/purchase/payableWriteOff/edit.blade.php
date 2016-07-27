@@ -4,7 +4,8 @@
 
 @section('content')
 
-        <script type="text/javascript" src="{{ asset('assets/js/purchase/bindSupplierAutocomplete.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/AjaxCombobox.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/AjaxFetchDataByField.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/WriteOffCalculator.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/purchase/payableWriteOff.js') }}"></script>
         <form action="{{ url("/payableWriteOff/".$payableWriteOff->code) }}" method="POST">

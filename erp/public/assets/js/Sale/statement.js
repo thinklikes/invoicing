@@ -18,27 +18,4 @@ $(function() {
             }
         }
     });
-    // var autocompleter = new CompanyAutocompleter({
-    //     request_url : '/company/json',
-    //     triggered_by_class : 'input.company_autocomplete',
-
-    //     after_triggering : {}
-    // });
-
-
-    // var scaner = new Scaner({
-    //     request_url : '/company/json',
-    //     triggered_by_class : 'input.company_code',
-    //     auto_fill_by_id : {
-    //         id: 'input.company_id',
-    //         //code :'input.company_code',
-    //         name : 'input.company_autocomplete'
-    //     },
-    //     after_triggering : function () {
-    //         if ($('input.stock_code:first').length > 0) {
-    //             $('input.stock_code:first').focus();
-    //         }
-    //     }
-    // });
-
 });

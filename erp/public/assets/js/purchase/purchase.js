@@ -18,8 +18,6 @@ var after_triggering = {
     }
 };
 
-var supplierAutocompleter = new SupplierAutocompleter(supplier_url, triggered_by, auto_fill, after_triggering);
-
 //表單計算機所需資訊
 var class_name = {
     master: {
@@ -38,11 +36,41 @@ var class_name = {
 var calculator = new OrderCalculator(class_name);
 
 $(function() {
-    //綁定供應商名稱的自動完成
-    supplierAutocompleter.eventBind();
+    /**
+     * 綁定供應商名稱的自動完成
+     * @type {AjaxCombobox}
+     */
+    $('.supplier_autocomplete').AjaxCombobox({
+        url: '/supplier/json',
+        afterSelect : function (event, ui) {
+            $('input.supplier_id').val(ui.item.id);
+            $('input.supplier_code').val(ui.item.code);
+        },
+        response : function (item) {
+            return {
+                label: item.shortName + ' - ' + item.name,
+                value: item.name,
+                id   : item.id,
+                code   : item.code,
+            }
+        }
+    });
 
+    $('.supplier_code').AjaxFetchDataByField({
+        url: '/supplier/json',
+        field_name : 'code',
+        triggered_by : $('.supplier_code'),
+        afterFetch : function (event, data) {
+            $('input.supplier_id').val(data[0].id);
+            $('input.supplier_autocomplete').val(data[0].name);
+        },
+        removeIfInvalid : function () {
+            $('input.supplier_id').val('');
+            $('input.supplier_autocomplete').val('');
+        }
+    });
     //綁定料品品名自動完成的事件
-    rebindStockAutocomplete();
+    rebindStockCombobox();
     //rebindQuantityBlur();
     rebindDeleteButton();
 
@@ -73,12 +101,69 @@ $(function() {
                 <td><input type="text" class="stock_no_tax_amount" style="text-align:right;" size="10"></td>\
             </tr>';
         $('table#detail tbody').append(html);
-        rebindStockAutocomplete();
+        rebindStockCombobox();
         //rebindQuantityBlur();
         rebindDeleteButton();
     });
 
 });
+
+function rebindStockCombobox() {
+    $( "input.stock_autocomplete" ).each(function () {
+        if ($(this).AjaxCombobox("instance")) {
+            $(this).AjaxCombobox('destroy');
+        }
+        //console.log($(this));
+        $(this).AjaxCombobox({
+            url: '/stock/json',
+            afterSelect : function (event, ui) {
+
+                var index = event.target.name.match(/\d+/g)[0];
+
+                $('input.stock_code:eq('+index+')').val(ui.item.code);
+                $('input.stock_id').eq(index).val(ui.item.id);
+                $('input.stock_no_tax_price').eq(index).val(ui.item.price);
+                $('input.stock_unit').eq(index).val(ui.item.unit);
+            },
+            response : function (item) {
+                return {
+                    label: item.code + ' - ' + item.name,
+                    value: item.name,
+                    id   : item.id,
+                    code : item.code,
+                    price : item.no_tax_price_of_purchased,
+                    unit : item.unit.comment
+                }
+            }
+        });
+    });
+    $( "input.stock_code" ).each(function () {
+        if ($(this).AjaxFetchDataByField("instance")) {
+            $(this).AjaxFetchDataByField('destroy');
+        }
+        var index = $(this).index(".stock_code");
+        $(this).AjaxFetchDataByField({
+            url: '/stock/json',
+            field_name : 'code',
+            triggered_by : $('.stock_code').eq(index),
+            afterFetch : function (event, data) {
+                //var index2 = event.target.name.match(/\d+/g)[0];
+
+                $('input.stock_autocomplete').eq(index).val(data[0].name);
+                $('input.stock_id').eq(index).val(data[0].id);
+                $('input.stock_no_tax_price').eq(index).val(data[0].no_tax_price_of_purchased);
+                $('input.stock_unit').eq(index).val(data[0].unit.comment);
+            },
+            removeIfInvalid : function () {
+                console.log(index);
+                $('input.stock_autocomplete').eq(index).val('');
+                $('input.stock_id').eq(index).val('');
+                $('input.stock_no_tax_price').eq(index).val('');
+                $('input.stock_unit').eq(index).val('');
+            }
+        });
+    });
+}
 
 /**
  * 重新綁定料品名稱自動完成的事件
