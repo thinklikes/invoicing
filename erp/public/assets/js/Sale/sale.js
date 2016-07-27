@@ -1,19 +1,17 @@
-//表單計算機所需資訊
-var class_name = {
-    master: {
-        total_no_tax_amount : 'total_no_tax_amount',
-        tax : 'tax',
-        total_amount : 'total_amount'
-    },
-    detail: {
-        quantity : 'stock_quantity',
-        no_tax_price : 'stock_no_tax_price',
-        no_tax_amount : 'stock_no_tax_amount'
-    },
-    tax_rate_code : 'tax_rate_code'
-}
-
-var calculator = new OrderCalculator(class_name);
+var calculator = new OrderCalculator({
+    taxEnable:true,
+    discountEnable:true,
+    class_name: {
+        quantity: 'stock_quantity',
+        discount: 'stock_discount',
+        no_tax_price: 'stock_no_tax_price',
+        subtotal: 'stock_no_tax_amount',
+        tax_or_not: 'tax_rate_code',
+        total_no_tax_amount: 'total_no_tax_amount',
+        tax: 'tax',
+        total_amount: 'total_amount'
+    }
+});
 
 $(function() {
     /**
@@ -35,7 +33,8 @@ $(function() {
             }
         }
     });
-
+    //將表單元素綁定到單據計算機的內部
+    calculator.reCreateWidgets();
     //綁定料品品名自動完成的事件
     rebindStockCombobox();
     //rebindQuantityBlur();
@@ -62,12 +61,13 @@ $(function() {
                 <td>\
                     <input type="text" class="stock_autocomplete" name="' + app_name + 'Detail[' + new_id + '][stock_name]">\
                 </td>\
-                <td><input type="text" class="stock_quantity" name="' + app_name + 'Detail[' + new_id + '][quantity]" onkeyup="calculator.calculate();" style="text-align:right;" size="5"></td>\
+                <td><input type="text" class="stock_quantity" name="' + app_name + 'Detail[' + new_id + '][quantity]" style="text-align:right;" size="5"></td>\
                 <td><input type="text" class="stock_unit" name="' + app_name + 'Detail[' + new_id + '][unit]" readonly="" size="5"></td>\
                 <td><input type="text" class="stock_no_tax_price" name="' + app_name + 'Detail[' + new_id + '][no_tax_price]" style="text-align:right;" size="10"></td>\
                 <td><input type="text" class="stock_no_tax_amount" style="text-align:right;" size="10"></td>\
             </tr>';
         $('table#detail tbody').append(html);
+        calculator.reCreateWidgets();
         rebindStockCombobox();
         //rebindQuantityBlur();
         rebindDeleteButton();
@@ -91,6 +91,8 @@ function rebindStockCombobox() {
                 $('input.stock_id').eq(index).val(ui.item.id);
                 $('input.stock_no_tax_price').eq(index).val(ui.item.price);
                 $('input.stock_unit').eq(index).val(ui.item.unit);
+
+                calculator.calculate();
             },
             response : function (item) {
                 return {
@@ -120,6 +122,7 @@ function rebindStockCombobox() {
                 $('input.stock_id').eq(index).val(data[0].id);
                 $('input.stock_no_tax_price').eq(index).val(data[0].no_tax_price_of_sold);
                 $('input.stock_unit').eq(index).val(data[0].unit.comment);
+                calculator.calculate();
             },
             removeIfInvalid : function () {
                 console.log(index);

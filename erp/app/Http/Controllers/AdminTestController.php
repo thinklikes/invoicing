@@ -19,9 +19,11 @@ class AdminTestController extends Controller
         $this->test = $orderTest;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $a = App::make('Statement\StatementService');
-        return $a->findCompanyByCompanyId(1)->company_name;
+        return view('layouts.create', [
+            'billOfSaleMaster' => $request->old('billOfSaleMaster'),
+            'billOfSaleDetail' => $request->old('billOfSaleDetail'),
+        ]);
     }
 }
