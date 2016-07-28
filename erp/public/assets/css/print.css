@@ -35,3 +35,15 @@
 .information_container {
     //border-bottom: 1px solid black;
 }
+/**
+ * 數值或數值標題的樣式設定
+ */
+.numeric {
+    text-align: right;
+}
+/**
+ * 字串或字串標題的樣式設定
+ */
+.string {
+    text-align:center;
+}
