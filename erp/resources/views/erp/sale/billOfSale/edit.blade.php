@@ -3,6 +3,7 @@
 @inject('PublicPresenter', 'App\Presenters\PublicPresenter')
 @inject('OrderCalculator', 'App\Presenters\OrderCalculator')
 @inject('WarehousePresenter', 'Warehouse\WarehousePresenter')
+@inject('discount', 'Sale\Discount\DiscountPresenter')
 
 @section('content')
         {{ $OrderCalculator->setOrderMaster($billOfSaleMaster) }}
@@ -21,7 +22,7 @@
         <script type="text/javascript" src="{{ asset('assets/js/OrderCalculator.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/AjaxCombobox.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/AjaxFetchDataByField.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('assets/js/sale/sale.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/sale/billOfSale.js') }}"></script>
         <form action="{{ url("/billOfSale/".$billOfSaleMaster['code']) }}" method="POST">
             {{ csrf_field() }}
             {{ method_field('PUT') }}
@@ -86,6 +87,14 @@
                         <td>
                             <input type="text" class="stock_autocomplete" name="billOfSaleDetail[{{ $i }}][stock_name]" value="{{ $billOfSaleDetail[$i]['stock_name'] }}">
                         </td>
+                        <td>
+                            <select name="billOfSaleDetail[{{ $i }}][discount]" class="discount">
+                                {!! $discount->renderOptions($value['discount']) !!}
+                            </select>
+                            <script type="text/javascript">
+                                calculator.setDiscountByIndex({{ $i }}, {{ $value['discount'] }});
+                            </script>
+                        </td>
                         <td><input type="text" class="stock_quantity" name="billOfSaleDetail[{{ $i }}][quantity]" onkeyup="calculator.calculate();" value="{{ $billOfSaleDetail[$i]['quantity'] }}" style="text-align:right;" size="5"></td>
                         <td><input type="text" class="stock_unit" name="billOfSaleDetail[{{ $i }}][unit]" value="{{ $billOfSaleDetail[$i]['unit'] }}" readonly="" size="5"></td>
                         <td><input type="text" class="stock_no_tax_price" name="billOfSaleDetail[{{ $i }}][no_tax_price]" onkeyup="calculator.calculate();" value="{{ $billOfSaleDetail[$i]['no_tax_price'] }}" style="text-align:right;" size="10"></td>
@@ -104,6 +113,11 @@
                         </td>
                         <td>
                             <input type="text" class="stock_autocomplete" name="billOfSaleDetail[{{ $i }}][stock_name]" value="">
+                        </td>
+                        <td>
+                            <select name="billOfSaleDetail[{{ $i }}][discount]" class="discount">
+                                {!! $discount->renderOptions() !!}
+                            </select>
                         </td>
                         <td><input type="text" class="stock_quantity" name="billOfSaleDetail[{{ $i }}][quantity]" onkeyup="calculator.calculate();" value="" style="text-align:right;" size="5"></td>
                         <td><input type="text" class="stock_unit" name="billOfSaleDetail[{{ $i }}][unit]" value="" readonly="" size="5"></td>

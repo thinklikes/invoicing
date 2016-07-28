@@ -27,6 +27,7 @@
                         <th></th>
                         <th>料品編號</th>
                         <th>品名</th>
+                        <th>折扣</th>
                         <th>數量</th>
                         <th>單位</th>
                         <th>稅前單價</th>
@@ -47,6 +48,16 @@
                         <td>
                             <input type="text" class="stock_autocomplete" name="billOfSaleDetail[{{ $i }}][stock_name]" value="{{ $billOfSaleDetail[$i]['stock_name'] }}">
                         </td>
+                        <td>
+                            <select name="billOfSaleDetail[{{ $i }}][discount]" class="discount">
+                                <option value="1" {{ ($value['stock_name'] == 1) ? "selected" : "" }}>不打折</option>
+                                <option value="0.9" {{ ($value['stock_name'] == 0.9) ? "selected" : "" }}>9折</option>
+                                <option value="0.8" {{ ($value['stock_name'] == 0.8) ? "selected" : "" }}>8折</option>
+                                <option value="0.7" {{ ($value['stock_name'] == 0.7) ? "selected" : "" }}>7折</option>
+                                <option value="0.6" {{ ($value['stock_name'] == 0.6) ? "selected" : "" }}>6折</option>
+                                <option value="0.5" {{ ($value['stock_name'] == 0.5) ? "selected" : "" }}>5折</option>
+                            </select>
+                        </td>
                         <td><input type="text" class="stock_quantity" name="billOfSaleDetail[{{ $i }}][quantity]" value="{{ $billOfSaleDetail[$i]['quantity'] }}" style="text-align:right;" size="5"></td>
                         <td><input type="text" class="stock_unit" name="billOfSaleDetail[{{ $i }}][unit]" value="{{ $billOfSaleDetail[$i]['unit'] }}" readonly="" size="5"></td>
                         <td><input type="text" class="stock_no_tax_price" name="billOfSaleDetail[{{ $i }}][no_tax_price]" value="{{ $billOfSaleDetail[$i]['no_tax_price'] }}" style="text-align:right;" size="10"></td>
@@ -65,6 +76,16 @@
                         </td>
                         <td>
                             <input type="text" class="stock_autocomplete" name="billOfSaleDetail[{{ $i }}][stock_name]" value="">
+                        </td>
+                        <td>
+                            <select name="billOfSaleDetail[{{ $i }}][discount]" class="discount">
+                                <option value="1">不打折</option>
+                                <option value="0.9">9折</option>
+                                <option value="0.8">8折</option>
+                                <option value="0.7">7折</option>
+                                <option value="0.6">6折</option>
+                                <option value="0.5">5折</option>
+                            </select>
                         </td>
                         <td><input type="text" class="stock_quantity" name="billOfSaleDetail[{{ $i }}][quantity]" value="" style="text-align:right;" size="5"></td>
                         <td><input type="text" class="stock_unit" name="billOfSaleDetail[{{ $i }}][unit]" value="" readonly="" size="5"></td>

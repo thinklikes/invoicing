@@ -2,6 +2,7 @@
 
 @inject('PublicPresenter', 'App\Presenters\PublicPresenter')
 @inject('OrderCalculator', 'App\Presenters\OrderCalculator')
+@inject('discount', 'Sale\Discount\DiscountPresenter')
 
 @section('content')
         {{ $OrderCalculator->setOrderMaster($billOfSaleMaster) }}
@@ -40,24 +41,31 @@
         <table id="detail" width="100%">
             <thead>
                 <tr>
-                    <th>料品編號</th>
-                    <th>品名</th>
-                    <th>數量</th>
-                    <th>單位</th>
-                    <th>稅前單價</th>
-                    <th>小計</th>
+                    <th class="string">料品編號</th>
+                    <th class="string">品名</th>
+                    <th class="string">折扣</th>
+                    <th class="numeric">數量</th>
+                    <th class="string">單位</th>
+                    <th class="numeric">稅前單價</th>
+                    <th class="numeric">小計</th>
                 </tr>
             </thead>
             <tbody>
 
     @foreach($billOfSaleDetail as $i => $value)
                 <tr>
-                    <td>{{ $billOfSaleDetail[$i]['stock_code'] }}</td>
-                    <td>{{ $billOfSaleDetail[$i]['stock_name'] }}</td>
-                    <td align="right">{{ $billOfSaleDetail[$i]['quantity'] }}</td>
-                    <td>{{ $billOfSaleDetail[$i]['unit'] }}</td>
-                    <td align="right">{{ $billOfSaleDetail[$i]['no_tax_price'] }}</td>
-                    <td align="right">{{ $OrderCalculator->getNoTaxAmount($i) }}</td>
+                    <td class="string">{{ $billOfSaleDetail[$i]['stock_code'] }}</td>
+                    <td class="string">{{ $billOfSaleDetail[$i]['stock_name'] }}</td>
+                    <td class="string">
+                        {{
+                            $discount->getCommentByDiscountValue(
+                                $billOfSaleDetail[$i]['discount'])
+                        }}
+                    </td>
+                    <td class="numeric">{{ $billOfSaleDetail[$i]['quantity'] }}</td>
+                    <td class="string">{{ $billOfSaleDetail[$i]['unit'] }}</td>
+                    <td class="numeric">{{ $billOfSaleDetail[$i]['no_tax_price'] }}</td>
+                    <td class="numeric">{{ $OrderCalculator->getNoTaxAmount($i) }}</td>
                 </tr>
     @endforeach
 

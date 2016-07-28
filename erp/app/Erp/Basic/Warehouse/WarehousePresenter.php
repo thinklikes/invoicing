@@ -2,6 +2,9 @@
 
 namespace Warehouse;
 
+/**
+ * 產生倉庫選項
+ */
 class WarehousePresenter {
     protected $warehouseRepository;
 

@@ -1,6 +1,7 @@
 /**
  * 單據計算機的class
  * string (A, I) old_tax_type 記憶上一次的稅別
+ * array         old_discount 記憶上一次各個品項的折扣
  * Object        puller       資料抓取器
  * Object        pusher       資料發佈器
  * Object        data         資料的暫存器
@@ -8,12 +9,15 @@
  * function      push         發佈資料
  * function      createWidgets 把各個元素建立成widget
  * function      calculate    計算各項資料
+ * boolean       taxEnable    是否開啟稅
+ * boolean       discountEnable    是否開折扣
  */
 function OrderCalculator(options, puller = new Puller(), pusher = new Pusher()) {
     MyObj=this;
 
     options        = options
     old_tax_type   = 'A';
+    old_discount   = [1, 1, 1, 1, 1];
     puller         = puller;
     pusher         = pusher;
     data           = null;
@@ -44,6 +48,18 @@ function OrderCalculator(options, puller = new Puller(), pusher = new Pusher()) 
                     MyObj.calculate();
                 },
                 keyup:function () {
+                    MyObj.calculate();
+                },
+            });
+        });
+
+
+        $('.' + options.class_name.discount).each(function (index, ele) {
+            if ($(this).discount("instance")) {
+                $(this).discount("destroy")
+            }
+            $(this).discount({
+                change:function () {
                     MyObj.calculate();
                 },
             });
@@ -101,7 +117,7 @@ function OrderCalculator(options, puller = new Puller(), pusher = new Pusher()) 
         }
         $('.' + options.class_name.total_amount)
             .total_amount({});
-    },
+    }
 
     MyObj.calculate = function () {
         var total_no_tax_amount = 0;
@@ -117,13 +133,49 @@ function OrderCalculator(options, puller = new Puller(), pusher = new Pusher()) 
             var no_tax_price  = data['custom-no-tax-price'][key] * 1;
             var no_tax_amount = 0;
 
-            if (old_tax_type == 'A' && data['custom-tax-or-not'] == 'I') {
-                no_tax_price = no_tax_price / (1 + _tax_rate);
-            } else if (old_tax_type == 'I' && data['custom-tax-or-not'] == 'A') {
-                no_tax_price = no_tax_price * (1 + _tax_rate);
-            } else {
-                no_tax_price = no_tax_price;
+            if (!quantity && !no_tax_price) {
+                continue;
             }
+
+            //==========先還原單價=================開始
+            //先復原折扣
+            if (discountEnable) {
+                if (typeof old_discount[key] != 'undefined') {
+                    var discount = old_discount[key];
+                } else {
+                    var discount = 1;
+                }
+                no_tax_price = no_tax_price / discount;
+            }
+            //console.log("1@" + no_tax_price);
+            if (taxEnable) {
+                if (old_tax_type == 'A') {
+                    no_tax_price = no_tax_price / (1 + _tax_rate);
+                } else {
+                    no_tax_price = no_tax_price;
+                }
+            }
+            //console.log("2@" + no_tax_price);
+            //==========先還原單價=================結束
+
+            //==========計算單價===================開始
+            if (taxEnable) {
+                if (data['custom-tax-or-not'] == 'A') {
+                    no_tax_price = no_tax_price * (1 + _tax_rate);
+                } else {
+                    no_tax_price = no_tax_price;
+                }
+            }
+            //console.log("3@" + no_tax_price);
+            if (discountEnable) {
+                var discount = data['custom-discount'][key] * 1;
+                no_tax_price = no_tax_price * discount;
+                //將本次使用的discount記錄起來
+                old_discount[key] = discount;
+            }
+            //console.log("4@" + no_tax_price);
+            //==========計算單價===================結束
+
 
             //單價四捨五入至指定的小數位數
             var rf = _no_tax_price_round_off;
@@ -163,10 +215,18 @@ function OrderCalculator(options, puller = new Puller(), pusher = new Pusher()) 
         data['custom-tax']                 = tax;
         data['custom-total-amount']        = total_amount;
 
-        old_tax_type = data['custom-tax-or-not'];
+        if (taxEnable) {
+            old_tax_type = data['custom-tax-or-not'];
+        }
+
         //開始把資料拋回html文件
         //console.log(data);
         push(data);
+    }
+    //在編輯畫面時，可以設定折扣
+    MyObj.setDiscountByIndex = function (index, value) {
+        old_discount[index] = value;
+        $('.custom-discount').eq(index).val(value);
     }
 }
 
@@ -193,18 +253,25 @@ function Puller() {
             data['custom-quantity'][i] = ele.value;
             i ++;
         });
+        //折扣
+        data['custom-discount'] = [];
+        i = 0;
+        $('.custom-discount').each(function (index, ele) {
+            data['custom-discount'][i] = ele.value;
+            i ++;
+        });
         //單價
         data['custom-no-tax-price'] = [];
         i = 0;
         $('.custom-no-tax-price').each(function (index, ele) {
-            data['custom-no-tax-price'][index] = ele.value;
+            data['custom-no-tax-price'][i] = ele.value;
             i ++;
         });
         //小計
         data['custom-subtotal'] = [];
         i = 0;
         $('.custom-subtotal').each(function (index, ele) {
-            data['custom-subtotal'][index] = ele.value;
+            data['custom-subtotal'][i] = ele.value;
             i ++;
         });
 
@@ -263,9 +330,9 @@ $.widget('custom.quantity', {
 
         //綁定事件
         this._on( this.element, {
-            blur: function() {
-                this.options.blur();
-            },
+            // blur: function() {
+            //     this.options.blur();
+            // },
             keyup: function() {
                 this.options.keyup();
             },
@@ -319,9 +386,9 @@ $.widget('custom.no_tax_price', {
 
         //綁定事件
         this._on( this.element, {
-            blur: function() {
-                this.options.blur();
-            },
+            // blur: function() {
+            //     this.options.blur();
+            // },
             keyup: function() {
                 this.options.keyup();
             },

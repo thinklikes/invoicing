@@ -19,3 +19,15 @@ th {
     margin: 0;
     padding: 5px 10px;
 }
+/**
+ * 數值或數值標題的樣式設定
+ */
+.numeric {
+    text-align: right;
+}
+/**
+ * 字串或字串標題的樣式設定
+ */
+.string {
+    text-align:center;
+}

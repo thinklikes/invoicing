@@ -40,24 +40,24 @@
         <table id="detail" width="100%">
             <thead>
                 <tr>
-                    <th>料品編號</th>
-                    <th>品名</th>
-                    <th>數量</th>
-                    <th>單位</th>
-                    <th>稅前單價</th>
-                    <th>小計</th>
+                    <th class="string">料品編號</th>
+                    <th class="string">品名</th>
+                    <th class="numeric">數量</th>
+                    <th class="string">單位</th>
+                    <th class="numeric">稅前單價</th>
+                    <th class="numeric">小計</th>
                 </tr>
             </thead>
             <tbody>
 
     @foreach($returnOfPurchaseDetail as $i => $value)
                 <tr>
-                    <td>{{ $returnOfPurchaseDetail[$i]['stock_code'] }}</td>
-                    <td>{{ $returnOfPurchaseDetail[$i]['stock_name'] }}</td>
-                    <td align="right">{{ $returnOfPurchaseDetail[$i]['quantity'] }}</td>
-                    <td>{{ $returnOfPurchaseDetail[$i]['unit'] }}</td>
-                    <td align="right">{{ $returnOfPurchaseDetail[$i]['no_tax_price'] }}</td>
-                    <td align="right">{{ $OrderCalculator->getNoTaxAmount($i) }}</td>
+                    <td class="string">{{ $returnOfPurchaseDetail[$i]['stock_code'] }}</td>
+                    <td class="string">{{ $returnOfPurchaseDetail[$i]['stock_name'] }}</td>
+                    <td class="numeric">{{ $returnOfPurchaseDetail[$i]['quantity'] }}</td>
+                    <td class="string">{{ $returnOfPurchaseDetail[$i]['unit'] }}</td>
+                    <td class="numeric">{{ $returnOfPurchaseDetail[$i]['no_tax_price'] }}</td>
+                    <td class="numeric">{{ $OrderCalculator->getNoTaxAmount($i) }}</td>
                 </tr>
     @endforeach
 

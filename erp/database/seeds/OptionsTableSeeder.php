@@ -170,6 +170,72 @@ class OptionsTableSeeder extends Seeder
                 'comment' => '電匯',
                 'value'   => '',
             ],
+            [
+                'class'   => 'discount',
+                'code'    => '100%',
+                'comment' => '不打折',
+                'value'   => '1',
+            ],
+            [
+                'class'   => 'discount',
+                'code'    => '95%',
+                'comment' => '95折',
+                'value'   => '0.95',
+            ],
+            [
+                'class'   => 'discount',
+                'code'    => '90%',
+                'comment' => '9折',
+                'value'   => '0.9',
+            ],
+            [
+                'class'   => 'discount',
+                'code'    => '85%',
+                'comment' => '85折',
+                'value'   => '0.85',
+            ],
+            [
+                'class'   => 'discount',
+                'code'    => '80%',
+                'comment' => '8折',
+                'value'   => '0.8',
+            ],
+            [
+                'class'   => 'discount',
+                'code'    => '75%',
+                'comment' => '75折',
+                'value'   => '0.75',
+            ],
+            [
+                'class'   => 'discount',
+                'code'    => '70%',
+                'comment' => '7折',
+                'value'   => '0.7',
+            ],
+            [
+                'class'   => 'discount',
+                'code'    => '65%',
+                'comment' => '65折',
+                'value'   => '0.65',
+            ],
+            [
+                'class'   => 'discount',
+                'code'    => '60%',
+                'comment' => '6折',
+                'value'   => '0.6',
+            ],
+            [
+                'class'   => 'discount',
+                'code'    => '55%',
+                'comment' => '55折',
+                'value'   => '0.55',
+            ],
+            [
+                'class'   => 'discount',
+                'code'    => '50%',
+                'comment' => '5折',
+                'value'   => '0.5',
+            ],
         ]);
     }
 }

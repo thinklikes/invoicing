@@ -3,7 +3,7 @@ var calculator = new OrderCalculator({
     discountEnable:true,
     class_name: {
         quantity: 'stock_quantity',
-        discount: 'stock_discount',
+        discount: 'discount',
         no_tax_price: 'stock_no_tax_price',
         subtotal: 'stock_no_tax_amount',
         tax_or_not: 'tax_rate_code',
@@ -61,6 +61,16 @@ $(function() {
                 <td>\
                     <input type="text" class="stock_autocomplete" name="' + app_name + 'Detail[' + new_id + '][stock_name]">\
                 </td>\
+                <td>\
+                    <select name="' + app_name + 'Detail[' + new_id + '][discount]" class="discount">\
+                        <option value="1">不打折</option>\
+                        <option value="0.9">9折</option>\
+                        <option value="0.8">8折</option>\
+                        <option value="0.7">7折</option>\
+                        <option value="0.6">6折</option>\
+                        <option value="0.5">5折</option>\
+                    </select>\
+                </td>\
                 <td><input type="text" class="stock_quantity" name="' + app_name + 'Detail[' + new_id + '][quantity]" style="text-align:right;" size="5"></td>\
                 <td><input type="text" class="stock_unit" name="' + app_name + 'Detail[' + new_id + '][unit]" readonly="" size="5"></td>\
                 <td><input type="text" class="stock_no_tax_price" name="' + app_name + 'Detail[' + new_id + '][no_tax_price]" style="text-align:right;" size="10"></td>\
@@ -92,6 +102,7 @@ function rebindStockCombobox() {
                 $('input.stock_no_tax_price').eq(index).val(ui.item.price);
                 $('input.stock_unit').eq(index).val(ui.item.unit);
 
+                calculator.setDiscountByIndex(index, 1);
                 calculator.calculate();
             },
             response : function (item) {
@@ -122,6 +133,7 @@ function rebindStockCombobox() {
                 $('input.stock_id').eq(index).val(data[0].id);
                 $('input.stock_no_tax_price').eq(index).val(data[0].no_tax_price_of_sold);
                 $('input.stock_unit').eq(index).val(data[0].unit.comment);
+                calculator.setDiscountByIndex(index, 1);
                 calculator.calculate();
             },
             removeIfInvalid : function () {

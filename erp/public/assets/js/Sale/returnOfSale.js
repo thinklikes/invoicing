@@ -1,9 +1,9 @@
 var calculator = new OrderCalculator({
-    taxEnable:false,
+    taxEnable:true,
     discountEnable:false,
     class_name: {
         quantity: 'stock_quantity',
-        discount: 'discount',
+        //discount: 'discount',
         no_tax_price: 'stock_no_tax_price',
         subtotal: 'stock_no_tax_amount',
         tax_or_not: 'tax_rate_code',
@@ -14,6 +14,25 @@ var calculator = new OrderCalculator({
 });
 
 $(function() {
+    /**
+     * 綁定客戶名稱自動完成的事件
+     * @type {AjaxCombobox}
+     */
+
+    $('.company_autocomplete').AjaxCombobox({
+        url: '/company/json',
+        afterSelect : function (event, ui) {
+            $('input.company_id').val(ui.item.id)
+        },
+        response : function (item) {
+            return {
+                label: item.company_abb + ' - ' + item.company_name,
+                value: item.company_name,
+                id   : item.auto_id,
+                //code   : item.code,
+            }
+        }
+    });
     //將表單元素綁定到單據計算機的內部
     calculator.reCreateWidgets();
     //綁定料品品名自動完成的事件
@@ -42,7 +61,17 @@ $(function() {
                 <td>\
                     <input type="text" class="stock_autocomplete" name="' + app_name + 'Detail[' + new_id + '][stock_name]">\
                 </td>\
-                <td><input type="text" class="stock_quantity" name="' + app_name + 'Detail[' + new_id + '][quantity]" onkeyup="calculator.calculate();" style="text-align:right;" size="5"></td>\
+                <td>\
+                    <select name="' + app_name + 'Detail[' + new_id + '][discount]" class="discount">\
+                        <option value="1">不打折</option>\
+                        <option value="0.9">9折</option>\
+                        <option value="0.8">8折</option>\
+                        <option value="0.7">7折</option>\
+                        <option value="0.6">6折</option>\
+                        <option value="0.5">5折</option>\
+                    </select>\
+                </td>\
+                <td><input type="text" class="stock_quantity" name="' + app_name + 'Detail[' + new_id + '][quantity]" style="text-align:right;" size="5"></td>\
                 <td><input type="text" class="stock_unit" name="' + app_name + 'Detail[' + new_id + '][unit]" readonly="" size="5"></td>\
                 <td><input type="text" class="stock_no_tax_price" name="' + app_name + 'Detail[' + new_id + '][no_tax_price]" style="text-align:right;" size="10"></td>\
                 <td><input type="text" class="stock_no_tax_amount" style="text-align:right;" size="10"></td>\
@@ -56,13 +85,9 @@ $(function() {
 
 });
 
-/**
- * 重新綁定料品名稱自動完成的事件
- * @return void
-*/
 function rebindStockCombobox() {
     $( "input.stock_autocomplete" ).each(function () {
-        if ($(this).AjaxCombobox("instance")) {
+        if (typeof $(this).AjaxCombobox("instance") != "undefined") {
             $(this).AjaxCombobox('destroy');
         }
         //console.log($(this));
@@ -77,6 +102,7 @@ function rebindStockCombobox() {
                 $('input.stock_no_tax_price').eq(index).val(ui.item.price);
                 $('input.stock_unit').eq(index).val(ui.item.unit);
 
+                //calculator.setDiscountByIndex(index, 1);
                 calculator.calculate();
             },
             response : function (item) {
@@ -85,7 +111,7 @@ function rebindStockCombobox() {
                     value: item.name,
                     id   : item.id,
                     code : item.code,
-                    price : item.no_tax_price_of_purchased,
+                    price : item.no_tax_price_of_sold,
                     unit : item.unit.comment
                 }
             }
@@ -105,9 +131,9 @@ function rebindStockCombobox() {
 
                 $('input.stock_autocomplete').eq(index).val(data[0].name);
                 $('input.stock_id').eq(index).val(data[0].id);
-                $('input.stock_no_tax_price').eq(index).val(data[0].no_tax_price_of_purchased);
+                $('input.stock_no_tax_price').eq(index).val(data[0].no_tax_price_of_sold);
                 $('input.stock_unit').eq(index).val(data[0].unit.comment);
-
+                //calculator.setDiscountByIndex(index, 1);
                 calculator.calculate();
             },
             removeIfInvalid : function () {
@@ -120,7 +146,6 @@ function rebindStockCombobox() {
         });
     });
 }
-
 /**
  * 重新綁定料品名稱自動完成的事件
  * @return void

@@ -82,6 +82,32 @@ class OptionRepository
     }
 
     /**
+     * 用class找出資料
+     * @param  string $class 資料所屬的class名稱
+     * @return collection        所有符合條件的資料集合
+     */
+    public function getOptionsByClass($class)
+    {
+        $options = Option::where('class', $class)->get();
+        return $options;
+    }
+
+    /**
+     *  用value找出一筆資料
+     * @param  string $class 資料所屬的class
+     * @param  string/number $value 資料的數值
+     * @return string        資料的comment欄位值
+     */
+    public function getCommentByValue($class, $value)
+    {
+        $options = Option::select('comment')
+            ->where('class', $class)
+            ->where('value', $value)
+            ->value('comment');
+        return $options;
+    }
+
+    /**
      * find all pair options = id:fullcomment
      * @return array all options
      */

@@ -40,7 +40,6 @@ class BillOfSaleRequest extends Request implements FormRequestInterface
                     => "required",
         ];
 
-
         if ($this->input($this->orderDetailInputName)) {
             $code = $this->input("$this->orderMasterInputName.code");
             $min_index = min(array_keys($this->input($this->orderDetailInputName)));
