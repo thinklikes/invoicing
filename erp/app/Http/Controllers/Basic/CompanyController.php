@@ -25,6 +25,12 @@ class CompanyController extends BasicController
         $this->orderService = $orderService;
         $this->setFullClassName();
     }
+    public function printBarcode(Request $request)
+    {
+        $param = $request->input();
+        return $this->orderRepository->getCompanyJson($param);
+    }
+
     public function json(Request $request)
     {
         $param = $request->input();

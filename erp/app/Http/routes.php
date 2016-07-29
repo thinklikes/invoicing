@@ -40,13 +40,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/system_config/update', 'SystemConfigController@update');
 
         //客戶資料管理
+        Route::get('/company/printBarcode', 'CompanyController@printBarcode');
         Route::post('/company/json', 'CompanyController@json');
         Route::resource('/company', 'CompanyController');
         //供應商資料管理
+        Route::get('/supplier/printBarcode', 'SupplierController@printBarcode');
         Route::post('/supplier/json', 'SupplierController@json');
         Route::resource('/supplier', 'SupplierController');
 
         //料品資料管理
+        Route::get('/stock/printBarcode', 'StockController@printBarcode');
         Route::post('/stock/json', 'StockController@json');
         Route::resource('/stock', 'StockController');
 

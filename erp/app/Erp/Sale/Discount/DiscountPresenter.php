@@ -26,7 +26,11 @@ class DiscountPresenter {
     public function getCommentByDiscountValue($value)
     {
         //$value = sprintf()
+        if ($value == '' || $value == 0) {
+            return "不打折";
+        } else {
 
-        return $this->repository->getCommentByValue('discount', $value);
+            return $value."折";
+        }
     }
 }

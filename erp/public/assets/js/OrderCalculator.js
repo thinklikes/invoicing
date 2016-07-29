@@ -17,7 +17,7 @@ function OrderCalculator(options, puller = new Puller(), pusher = new Pusher()) 
 
     options        = options
     old_tax_type   = 'A';
-    old_discount   = [1, 1, 1, 1, 1];
+    old_discount   = ['', '', '', '', ''];
     puller         = puller;
     pusher         = pusher;
     data           = null;
@@ -59,7 +59,7 @@ function OrderCalculator(options, puller = new Puller(), pusher = new Pusher()) 
                 $(this).discount("destroy")
             }
             $(this).discount({
-                change:function () {
+                keyup:function () {
                     MyObj.calculate();
                 },
             });
@@ -143,9 +143,18 @@ function OrderCalculator(options, puller = new Puller(), pusher = new Pusher()) 
                 if (typeof old_discount[key] != 'undefined') {
                     var discount = old_discount[key];
                 } else {
-                    var discount = 1;
+                    var discount = 100;
                 }
-                no_tax_price = no_tax_price / discount;
+                try {
+                    // 需要測試的語句
+                    if (discount == '') {
+                        throw "no discount";
+                    }
+                    no_tax_price = no_tax_price / (discount / 100);
+                }
+                catch (e) {
+                    no_tax_price = no_tax_price / (100 / 100);
+                }
             }
             //console.log("1@" + no_tax_price);
             if (taxEnable) {
@@ -169,7 +178,18 @@ function OrderCalculator(options, puller = new Puller(), pusher = new Pusher()) 
             //console.log("3@" + no_tax_price);
             if (discountEnable) {
                 var discount = data['custom-discount'][key] * 1;
-                no_tax_price = no_tax_price * discount;
+
+                try {
+                    // 需要測試的語句
+                    if (discount == '') {
+                        throw "no discount";
+                    }
+                    no_tax_price = no_tax_price * (discount / 100);
+                }
+                catch (e) {
+                    no_tax_price = no_tax_price / (100 / 100);
+                }
+
                 //將本次使用的discount記錄起來
                 old_discount[key] = discount;
             }
@@ -218,9 +238,7 @@ function OrderCalculator(options, puller = new Puller(), pusher = new Pusher()) 
         if (taxEnable) {
             old_tax_type = data['custom-tax-or-not'];
         }
-
         //開始把資料拋回html文件
-        //console.log(data);
         push(data);
     }
     //在編輯畫面時，可以設定折扣
@@ -346,10 +364,10 @@ $.widget('custom.quantity', {
 });
 
 $.widget('custom.discount', {
-    defaultElement: "<select>",
+    defaultElement: "<input>",
     options: {
         //delay: 300,
-        change: null,
+        keyup: null,
     },
     _create: function () {
         //console.log(this.options.keyup);
@@ -358,8 +376,8 @@ $.widget('custom.discount', {
 
         //綁定事件
         this._on( this.element, {
-            change: function() {
-                this.options.change();
+            keyup: function() {
+                this.options.keyup();
             },
         });
     },

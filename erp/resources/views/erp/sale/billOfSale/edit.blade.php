@@ -88,12 +88,8 @@
                             <input type="text" class="stock_autocomplete" name="billOfSaleDetail[{{ $i }}][stock_name]" value="{{ $billOfSaleDetail[$i]['stock_name'] }}">
                         </td>
                         <td>
-                            <select name="billOfSaleDetail[{{ $i }}][discount]" class="discount">
-                                {!! $discount->renderOptions($value['discount']) !!}
-                            </select>
-                            <script type="text/javascript">
-                                calculator.setDiscountByIndex({{ $i }}, {{ $value['discount'] }});
-                            </script>
+                            <input type="text" name="billOfSaleDetail[{{ $i }}][discount]"
+                                class="discount numeric"  size="5" value="{{ $value['discount'] }}">％
                         </td>
                         <td><input type="text" class="stock_quantity" name="billOfSaleDetail[{{ $i }}][quantity]" onkeyup="calculator.calculate();" value="{{ $billOfSaleDetail[$i]['quantity'] }}" style="text-align:right;" size="5"></td>
                         <td><input type="text" class="stock_unit" name="billOfSaleDetail[{{ $i }}][unit]" value="{{ $billOfSaleDetail[$i]['unit'] }}" readonly="" size="5"></td>
@@ -115,9 +111,8 @@
                             <input type="text" class="stock_autocomplete" name="billOfSaleDetail[{{ $i }}][stock_name]" value="">
                         </td>
                         <td>
-                            <select name="billOfSaleDetail[{{ $i }}][discount]" class="discount">
-                                {!! $discount->renderOptions() !!}
-                            </select>
+                            <input type="text" name="billOfSaleDetail[{{ $i }}][discount]"
+                                class="discount numeric" size="5">％
                         </td>
                         <td><input type="text" class="stock_quantity" name="billOfSaleDetail[{{ $i }}][quantity]" onkeyup="calculator.calculate();" value="" style="text-align:right;" size="5"></td>
                         <td><input type="text" class="stock_unit" name="billOfSaleDetail[{{ $i }}][unit]" value="" readonly="" size="5"></td>
