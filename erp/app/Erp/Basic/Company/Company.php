@@ -11,5 +11,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Company extends Model
 {
+    protected $primaryKey = 'auto_id'; //定義主鍵
     protected $table = 'company_system';
 }

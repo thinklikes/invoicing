@@ -6,7 +6,7 @@ use App;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
 use Receipt\ReceiptRepository as OrderRepository;
-use Receipt\ReceiptService as orderService;
+use Receipt\ReceiptService as OrderService;
 use Illuminate\Http\Request;
 
 class ReceiptController extends BasicController

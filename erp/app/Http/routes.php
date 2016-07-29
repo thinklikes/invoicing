@@ -40,8 +40,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/system_config/update', 'SystemConfigController@update');
 
         //客戶資料管理
-        //Route::resource('/customer', 'CustomerController');
         Route::post('/company/json', 'CompanyController@json');
+        Route::resource('/company', 'CompanyController');
         //供應商資料管理
         Route::post('/supplier/json', 'SupplierController@json');
         Route::resource('/supplier', 'SupplierController');

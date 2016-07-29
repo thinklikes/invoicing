@@ -34,25 +34,23 @@
     <thead>
         <tr>
             <th>公司名稱</th>
-            <th>負責人</th>
             <th>聯絡人</th>
             <th>電話</th>
             <th>地址</th>
         </tr>
     </thead>
     <tbody>
-        @foreach ($customers as $customer)
+        @foreach ($company as $value)
         <tr>
-            <td><a href="{{ url("/customers/".$customer->id) }}">{{ $customer->name }}</a></td>
-            <td>{{ $customer->boss }}</td>
-            <td>{{ $customer->contactPerson }}</td>
-            <td>{{ $customer->telphone }}</td>
-            <td>{{ $customer->address }}</td>
+            <td><a href="{{ url("/company/".$value->auto_id) }}">{{ $value->company_name }}</a></td>
+            <td>{{ $value->company_contact }}</td>
+            <td>{{ $value->company_tel }}</td>
+            <td>{{ $value->company_add }}</td>
         </tr>
         @endforeach
     </tbody>
 </table>
-<div align="center">{!! $customers->render() !!}</div>
+<div align="center">{!! $company->render() !!}</div>
 <br>
-<a href="customers/create">新增客戶</a>
+<a href="company/create">新增客戶</a>
 @endsection

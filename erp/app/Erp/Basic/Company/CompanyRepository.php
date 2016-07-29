@@ -2,6 +2,7 @@
 
 namespace Company;
 
+use App;
 use App\Repositories\BasicRepository;
 use DB;
 
@@ -49,31 +50,83 @@ class CompanyRepository extends BasicRepository
     }
 
     /**
-     * find One page of suppliers
-     * @return array all suppliers
+     * find a page of orders
+     * @return array all purchases
      */
-    // public function getCompanyPaginated($param)
-    // {
-    //     return $this->company->select('auto_id', 'company_abb','company_name')
-    //         ->where(function ($query) use($param) {
-    //             if (isset($param['name']) && $param['name'] != "") {
-    //                 $query->orWhere('company_name', 'like', "%".trim($param['name'])."%");
-    //             }
-    //             // if (isset($param['code']) && $param['code'] != "") {
-    //             //     $query->orWhere('code', 'like', "%".trim($param['code'])."%");
-    //             // }
-    //             if (isset($param['address']) && $param['address'] != "") {
-    //                 $query->orWhere('company_add', 'like', "%".trim($param['address'])."%");
-    //             }
-    //         })->paginate(15);
-    // }
+    public function getCompanyPaginated($ordersPerPage)
+    {
+        return $this->company->orderBy('auto_id', 'desc')->paginate($ordersPerPage);
+    }
+
+    public function getCompanyfieldById($field, $id)
+    {
+        return $this->company->where('auto_id', $id)->value($field);
+    }
+
     /**
-     * find detail of one supplier
-     * @param  integer $id The id of supplier
-     * @return array       one supplier
+     * find master of a order
+     * @param  integer $id The id of purchase
+     * @return array       one purchase
      */
-    // public function getCompanyDetail($id)
-    // {
-    //     return $this->company->where('auto_id', $id)->first();
-    // }
+    public function getCompany($code)
+    {
+        return $this->company->where('code', $code)->firstOrFail();
+    }
+
+    /**
+     * store billOfPurchaseMaster
+     * @param  Array billOfPurchaseMaster
+     * @return boolean
+     */
+    public function storeCompany($company)
+    {
+        $columnsOfMaster = $this->getTableColumnList($this->company);
+        $this->company = App::make('Company\Company');
+        //判斷request傳來的欄位是否存在，有才存入此欄位數值
+        foreach($columnsOfMaster as $key) {
+            if (isset($company[$key])) {
+                $this->company->{$key} = $company[$key];
+            }
+        }
+
+        //開始存入表頭
+        return [$this->company->save(), $this->company->auto_id];
+    }
+
+    /**
+     * update billOfPurchaseMaster
+     * @param  integer $id The id of purchase
+     * @return void
+     */
+    public function updateCompany($company, $id)
+    {
+        $columnsOfMaster = $this->getTableColumnList($this->company);
+
+        $this->company = $this->company
+            ->where('auto_id', $id)
+            ->first();
+
+        //有這個欄位才存入
+        foreach($columnsOfMaster as $key) {
+            if (isset($company[$key])) {
+                $this->company->{$key} = $company[$key];
+            }
+        }
+        //$this->company->code = $code;
+        //開始存入表頭
+        return $this->company->save();
+    }
+
+    /**
+     * delete a Purchase
+     * @param  integer $id The id of purchase
+     * @return void
+     */
+    public function deleteCompany($id)
+    {
+        return $this->company
+            ->where('auto_id', $id)
+            ->first()
+            ->delete();
+    }
 }

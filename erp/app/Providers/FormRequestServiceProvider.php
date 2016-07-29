@@ -37,7 +37,6 @@ class FormRequestServiceProvider extends ServiceProvider
             'App\Contracts\FormRequestInterface',
             function ($app, $param = null) {
                 $requestMethod = '';
-
                 if (!empty($param)) {
                     switch ($param['className']) {
                         case 'Purchase\BillOfPurchaseController':

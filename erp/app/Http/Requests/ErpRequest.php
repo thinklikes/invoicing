@@ -46,15 +46,15 @@ class ErpRequest extends Request implements FormRequestInterface
 
         $rules = [
             //客戶資料表單驗證規則
-            'customer' => [
-                'name'        => 'required',
-                'email'       => 'email',
-                'zip'         => 'integer|digits_between:0,5',
-                'address'     => 'required',
-                'telphone'    => 'required',
-                'taxNumber'   => 'required|digits:8',
-                'tax_rate_id' => 'required',
-                'pay_way_id'  => 'required',
+            'company' => [
+                'company_code' => 'required',
+                'company_name' => 'required',
+                'boss'         => 'required',
+                'company_add'  => 'required',
+                'company_tel'  => 'required',
+                'VTA_NO'       => 'required|digits:8',
+                // 'tax_rate_id' => 'required',
+                // 'pay_way_id'  => 'required',
             ],
 
             //供應商資料表單驗證規則

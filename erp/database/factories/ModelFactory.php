@@ -20,27 +20,26 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Customer::class, function (Faker\Generator $faker) {
+$factory->define(Company\Company::class, function (Faker\Generator $faker) {
     $faker->addProvider(new Faker\Provider\zh_TW\Person($faker));
     $faker->addProvider(new Faker\Provider\zh_TW\Address($faker));
     $faker->addProvider(new Faker\Provider\zh_TW\PhoneNumber($faker));
     $faker->addProvider(new Faker\Provider\zh_TW\Company($faker));
 
     return [
-        'name'          => $faker->company,
-        'code'          => strtoupper($faker->randomLetter).$faker->randomNumber(4),
-        'shortName'     => $faker->companyPrefix,
-        'boss'          => $faker->name,
-        'contactPerson' => $faker->name,
-        'zip'           => $faker->postcode,
-        'address'       => $faker->address,
-        'email'         => $faker->email,
-        'telphone'      => $faker->PhoneNumber,
-        'cellphone'     => $faker->PhoneNumber,
-        'fax'           => $faker->phoneNumber,
-        'taxNumber'     => $faker->randomNumber(8),
-        'tax_rate_id'   => $faker->randomElement(['1','2','3']),
-        'pay_way_id'    => $faker->randomElement(['19','20','21', '22', '23', '24']),
+        'company_name'      => $faker->company,
+        'boss'              => $faker->name,
+        'company_code'      => strtoupper($faker->randomLetter).$faker->randomNumber(4),
+        'mailbox'           => $faker->randomNumber(3),
+        'company_abb'       => $faker->companyPrefix,
+        'company_contact'   => $faker->name,
+        'company_con_tel'   => $faker->phoneNumber,
+        'company_con_email' => $faker->email,
+        'company_con_fax'   => $faker->phoneNumber,
+        'company_tel'       => $faker->phoneNumber,
+        'company_fax'       => $faker->phoneNumber,
+        'company_add'       => $faker->address,
+        'VTA_NO'            => $faker->randomNumber(8),
     ];
 });
 
