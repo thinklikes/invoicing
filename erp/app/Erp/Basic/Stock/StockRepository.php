@@ -3,6 +3,7 @@
 namespace Stock;
 
 use DB;
+use Warehouse\WarehouseRepository as Warehouse;
 
 class StockRepository
 {
@@ -102,7 +103,7 @@ class StockRepository
 
         //寫入stocks_warehouses, 多對多關聯
         //Stock->warehouse() 記錄了多對多關聯
-        $new_stock->warehouse()->attach(OptionRepository::getAllOptionsId('warehouses'));
+        $new_stock->warehouse()->attach(Warehouse::getAllWarehousesId());
 
         return $new_stock->id;
     }

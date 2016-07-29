@@ -69,7 +69,7 @@ class Stock extends Model
     public function warehouse()
     {
         //dd($this->belongsToMany('App\Option', 'stocks_warehouses', 'stock_id', 'warehouse_id'));
-        return $this->belongsToMany('Warehouse\Warehouse', 'stocks_warehouses', 'stock_id', 'warehouse_id');
+        return $this->belongsToMany('Warehouse\Warehouse', 'erp_stock_warehouse', 'stock_id', 'warehouse_id');
     }
 
     /**
