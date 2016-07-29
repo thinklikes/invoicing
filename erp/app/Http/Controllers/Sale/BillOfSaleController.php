@@ -146,6 +146,8 @@ class BillOfSaleController extends BasicController
             //$orderMaster->company_code = $orderMaster->company->code;
             $orderMaster->company_name = $orderMaster->company->company_name;
 
+            $orderMaster->company_code = $orderMaster->company->company_code;
+
             $orderDetail = $this->orderRepository->getOrderDetail($code);
             foreach ($orderDetail as $key => $value) {
                 $orderDetail[$key]->stock_code = $orderDetail[$key]->stock->code;

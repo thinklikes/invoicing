@@ -23,7 +23,7 @@
                 <tr>
                     <th>客戶</th>
                     <td>
-                        {{-- <input type="text" class="stock_code" name="saleReport[stock_code]" value="" size="10"> --}}
+                        <input type="text" class="company_code" name="saleReport[company_code]" value="" size="10">
                         <input type="hidden" class="company_id" name="saleReport[company_id]" value="">
                         <input type="text" class="company_autocomplete" name="saleReport[company_name]" value="">
                     </td>

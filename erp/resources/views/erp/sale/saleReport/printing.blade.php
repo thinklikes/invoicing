@@ -30,6 +30,7 @@
     <table width="100%" style="border-top:solid 1px black;">
         <thead>
             <tr>
+                <th class="string">客戶編號</th>
                 <th class="string">客戶名稱</th>
                 <th class="string">日期</th>
                 <th class="string">單據號碼</th>
@@ -42,6 +43,7 @@
         </thead>
         <tbody>
             <tr>
+                <td class="string">{{ $value->company->company_code }}</td>
                 <td class="string">{{ $value->company->company_name }}</td>
                 <td class="string">{{ $value->created_at->format('Y-m-d') }}</td>
                 <td class="string">

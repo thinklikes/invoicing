@@ -22,9 +22,7 @@ $.widget( "custom.AjaxFetchDataByField", {
     },
     _create: function() {
         this._afterFetch = this.options.afterFetch;
-        this._data = this.options.data;
         this._url = this.options.url;
-        this._triggered_by = this.options.triggered_by;
         this._field_name = this.options.field_name;
         this.input = this.element;
 
@@ -55,17 +53,16 @@ $.widget( "custom.AjaxFetchDataByField", {
 
         var field_name = MyObj._field_name;
 
-        var triggered_by = MyObj._triggered_by;
         //綁定autocomplete選取的事件
         this._on( this.input, {
             blur: function (event, ui) {
-                if (triggered_by.val() == '') {
+                if (MyObj.element.value == '') {
                     return false;
                 }
                 var data_to_send = {};
 
-                data_to_send[field_name] = triggered_by.val();
-                //var id = $(this).attr('id').match(/\d+/g)[0];
+                data_to_send[field_name] = MyObj.element[0].value;
+
                 $.ajax({
                     method: "POST",
                     url: MyObj._url,

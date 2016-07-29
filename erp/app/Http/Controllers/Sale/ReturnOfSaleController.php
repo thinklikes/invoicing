@@ -144,7 +144,7 @@ class ReturnOfSaleController extends BasicController
         } else {
             $orderMaster = $this->orderRepository->getOrderMaster($code);
 
-            //$orderMaster->company_code = $orderMaster->company->code;
+            $orderMaster->company_code = $orderMaster->company->company_code;
 
             $orderMaster->company_name = $orderMaster->company->company_name;
 

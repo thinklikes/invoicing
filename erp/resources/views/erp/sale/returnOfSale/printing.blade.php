@@ -25,7 +25,7 @@
             <tr>
                 <th>客戶編號</th>
                 <td>
-                    {{ $returnOfSaleMaster->company->code }}
+                    {{ $returnOfSaleMaster->company->company_code }}
                 </td>
                 <th>客戶名稱</th>
                 <td>{{ $returnOfSaleMaster->company->company_name }}</td>

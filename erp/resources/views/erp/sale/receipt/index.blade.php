@@ -19,8 +19,8 @@
                 <tr>
                     <td>{{ $PublicPresenter->getFormatDate($order->created_at) }}</td>
                     <td><a href="{{ url("/receipt/$order->code") }}">{{ $order->code }}</a></td>
-                    <td>{{ $order->company->code }}</td>
-                    <td>{{ $order->company->name }}</td>
+                    <td>{{ $order->company->company_code }}</td>
+                    <td>{{ $order->company->company_name }}</td>
                     <td>{{ $order->type == 'cash' ? '現金' : '票據'}}</td>
                 </tr>
         @endforeach

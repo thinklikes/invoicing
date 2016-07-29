@@ -19,8 +19,8 @@
             <tr>
                 <th>客戶</th>
                 <td colspan="5">
-                    {{ $returnOfSaleMaster->company_code }}
-                    {{ $returnOfSaleMaster->company_name }}
+                    {{ $returnOfSaleMaster->company->company_code }}
+                    {{ $returnOfSaleMaster->company->company_name }}
                 </td>
             </tr>
             <tr>

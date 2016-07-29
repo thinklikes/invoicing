@@ -28,14 +28,18 @@
     </div>
     <table id="master">
         <tr>
+            <th>客戶編號</th>
+            <td>{{ $company->company_code }}</td>
+            <th>客戶名稱</th>
+            <td>{{ $company->company_name }}</td>
+            <th></th>
+            <td></td>
+        </tr>
+        <tr>
             <th>統一編號</th>
             <td>
                 {{ $company->VTA_NO }}
             </td>
-            <th>客戶名稱</th>
-            <td>{{ $company->company_name }}</td>
-        </tr>
-        <tr>
             <th>電話</th>
             <td>
                 {{ $company->company_tel }}

@@ -27,14 +27,17 @@ class CompanyRepository extends BasicRepository
      */
     public function getCompanyJson($param)
     {
-        return $this->company->select('auto_id', 'company_abb','company_name')
+        return $this->company
+            ->select('auto_id', 'company_code', 'company_abb', 'company_name')
             ->where(function ($query) use($param) {
                 if (isset($param['name'])) {
-                    $query->orWhere('company_name', 'like', "%".trim($param['name'])."%");
+                    $query->orWhere(
+                        'company_name', 'like', "%".trim($param['name'])."%");
                 }
-                // if (isset($param['code'])) {
-                //     $query->orWhere('code', trim($param['code']));
-                // }
+                if (isset($param['code'])) {
+                    $query->orWhere(
+                        'company_code', '=', trim($param['code']));
+                }
             })
             ->orderBy('auto_id')
             ->skip(0)

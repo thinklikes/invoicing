@@ -28,7 +28,7 @@ class CompanyController extends BasicController
     public function json(Request $request)
     {
         $param = $request->input();
-        return $this->repository->getCompanyJson($param);
+        return $this->orderRepository->getCompanyJson($param);
     }
     /**
      * Display a listing of the resource.

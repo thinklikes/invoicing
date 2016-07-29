@@ -32,7 +32,7 @@
                     <th>客戶</th>
                     <td colspan="5">
                         <input type="hidden" name="returnOfSaleMaster[company_id]" class="company_id" value="{{ $returnOfSaleMaster['company_id'] }}"  size="10">
-                        {{-- <input type="text" name="returnOfSaleMaster[company_code]" class="company_code" value="{{ $returnOfSaleMaster['company_code'] }}"  size="10"> --}}
+                        <input type="text" name="returnOfSaleMaster[company_code]" class="company_code" value="{{ $returnOfSaleMaster['company_code'] }}"  size="10">
                         <input type="text" name="returnOfSaleMaster[company_name]" class="company_autocomplete" value="{{ $returnOfSaleMaster['company_name'] }}">
                     </td>
                 </tr>

@@ -20,8 +20,8 @@
             <tr>
                 <th>客戶</th>
                 <td colspan="5">
-                    {{-- $billOfSaleMaster->company_code --}}
-                    {{ $billOfSaleMaster->company_name }}
+                    {{ $billOfSaleMaster->company->company_code }}
+                    {{ $billOfSaleMaster->company->company_name }}
                 </td>
             </tr>
             <tr>

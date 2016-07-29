@@ -4,6 +4,7 @@
 @inject('WarehousePresenter', 'Warehouse\WarehousePresenter')
 @section('content')
         <script type="text/javascript" src="{{ asset('assets/js/AjaxCombobox.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/AjaxFetchDataByField.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/bindDatePicker.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/sale/statement.js') }}"></script>
         <form action=" {{ url("/statement/printing") }}" method="GET">
@@ -22,7 +23,7 @@
                 <tr>
                     <th>客戶</th>
                     <td>
-                        {{-- <input type="text" class="stock_code" name="statement[stock_code]" value="" size="10"> --}}
+                        <input type="text" class="company_code" name="statement[company_code]" value="" size="10">
                         <input type="hidden" class="company_id" name="statement[company_id]" value="">
                         <input type="text" class="company_autocomplete" name="statement[company_name]" value="">
                     </td>

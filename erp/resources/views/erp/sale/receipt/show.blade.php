@@ -19,8 +19,8 @@
             <tr>
                 <th>客戶</th>
                 <td colspan="5">
-                    {{-- {{ $receipt->company_code }} --}}
-                    {{ $receipt->company_name }}
+                    {{ $receipt->company->company_code }}
+                    {{ $receipt->company->company_name }}
                 </td>
             </tr>
             <tr>

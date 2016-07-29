@@ -13,6 +13,7 @@ $(function () {
         url: '/company/json',
         afterSelect : function (ecent, ui) {
             $('input.company_id').val(ui.item.id);
+            $('input.company_code').val(ui.item.code);
 
             getReceivableByCompanyId(ui.item.id);
 
@@ -27,8 +28,20 @@ $(function () {
                 label: item.company_abb + ' - ' + item.company_name,
                 value: item.company_name,
                 id   : item.auto_id,
-                //code   : item.code,
+                code   : item.company_code,
             }
+        }
+    });
+    $('.company_code').AjaxFetchDataByField({
+        url: '/company/json',
+        field_name : 'code',
+        afterFetch : function (event, data) {
+            $('input.company_id').val(data[0].auto_id);
+            $('input.company_autocomplete').val(data[0].company_name);
+        },
+        removeIfInvalid : function () {
+            $('input.company_id').val('');
+            $('input.company_autocomplete').val('');
         }
     });
 });

@@ -39,7 +39,7 @@
                     <th>客戶</th>
                     <td colspan="5">
                         <input type="hidden" name="billOfSaleMaster[company_id]" class="company_id" value="{{ $billOfSaleMaster['company_id'] }}"  size="10">
-                        {{-- <input type="text" name="billOfSaleMaster[company_code]" class="company_code" value="{{ $billOfSaleMaster['company_code'] }}"  size="10"> --}}
+                        <input type="text" name="billOfSaleMaster[company_code]" class="company_code" value="{{ $billOfSaleMaster['company_code'] }}"  size="10">
                         <input type="text" name="billOfSaleMaster[company_name]" class="company_autocomplete" value="{{ $billOfSaleMaster['company_name'] }}">
                     </td>
                 </tr>

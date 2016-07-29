@@ -3,6 +3,7 @@
 @inject('PublicPresenter', 'App\Presenters\PublicPresenter')
 @section('content')
         <script type="text/javascript" src="{{ asset('assets/js/AjaxCombobox.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/js/AjaxFetchDataByField.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/bindDatePicker.js') }}"></script>
         <script type="text/javascript">
             $(function () {
@@ -13,15 +14,28 @@
                 $('.company_autocomplete').AjaxCombobox({
                     url: '/company/json',
                     afterSelect : function (event, ui) {
-                        $('input.company_id').val(ui.item.id)
+                        $('input.company_id').val(ui.item.id);
+                        $('input.company_code').val(ui.item.code);
                     },
                     response : function (item) {
                         return {
                             label: item.company_abb + ' - ' + item.company_name,
                             value: item.company_name,
                             id   : item.auto_id,
-                            //code   : item.code,
+                            code : item.company_code,
                         }
+                    }
+                });
+                $('.company_code').AjaxFetchDataByField({
+                    url: '/company/json',
+                    field_name : 'code',
+                    afterFetch : function (event, data) {
+                        $('input.company_id').val(data[0].auto_id);
+                        $('input.company_autocomplete').val(data[0].company_name);
+                    },
+                    removeIfInvalid : function () {
+                        $('input.company_id').val('');
+                        $('input.company_autocomplete').val('');
                     }
                 });
             });
@@ -41,7 +55,7 @@
                     <th>客戶</th>
                     <td colspan="5">
                         <input type="hidden" name="receipt[company_id]" class="company_id" value="{{ $receipt['company_id'] }}"  size="10">
-                        {{-- <input type="text" name="receipt[company_code]" class="company_code" value="{{ $receipt['company_code'] }}"  size="10"> --}}
+                        <input type="text" name="receipt[company_code]" class="company_code" value="{{ $receipt['company_code'] }}"  size="10">
                         <input type="text" name="receipt[company_name]" class="company_autocomplete" value="{{ $receipt['company_name'] }}">
                     </td>
                 </tr>
