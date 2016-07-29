@@ -62,5 +62,5 @@
         </table>
         <div align="center">{!! $suppliers->render() !!}</div>
         <br>
-        <a href="{{ url('/suppliers/create') }}">新增供應商</a>
+        <a href="{{ url('/supplier/create') }}">新增供應商</a>
 @endsection
