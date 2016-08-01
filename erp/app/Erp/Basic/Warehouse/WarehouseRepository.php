@@ -3,6 +3,8 @@
 namespace Warehouse;
 
 use DB;
+use App;
+use Stock\StockRepository;
 
 class WarehouseRepository
 {
@@ -61,11 +63,12 @@ class WarehouseRepository
     public static function storeWarehouse($warehouse)
     {
         $new_warehouse = new Warehouse;
-        $new_warehouse->class = $class;
         foreach($warehouse as $key => $value) {
             $new_warehouse->{$key} = $value;
         }
         $new_warehouse->save();
+        $stocks = App::make(StockRepository::class)->getAllStockNameAndCode();
+        $new_warehouse->stock()->attach($stocks->pluck('id')->all());
         return $new_warehouse->id;
     }
 
