@@ -16,6 +16,26 @@ Route::auth();
 
 Route::group(['middleware' => 'auth'], function () {
 
+    Route::get('/updateLogs/{page?}', function ($page = 0) {
+        //顯示git更新記錄
+        //exec('git log --pretty=oneline --since="2016-08-01"', $output);
+        if (!$page) {
+            $page = 0;
+        }
+        $skip = 10 * $page;
+        // git log --skip 1 -n 1 --format=%cd%n%s --d
+        // ate=short
+        exec('git log -10 --skip='.$skip.' --format=%cd%s --date=short --grep="\[visiable\]"', $git_logs);
+        //exec('whoami', $output);
+        $logs = '';
+        $i = 0;
+        foreach ($git_logs as $line => $content) {
+            $logs .= str_replace('[visiable]', '<br>', (trim($content)));
+            $i ++;
+
+        }
+        return nl2br($logs);
+    });
     //首頁
     Route::get('/', 'PageController@index');
 
