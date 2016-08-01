@@ -16,12 +16,10 @@ Route::auth();
 
 Route::group(['middleware' => 'auth'], function () {
 
-    Route::get('/test', 'AdminTestController@index');
-
     //首頁
-    Route::get('/', 'PageController@portal');
+    Route::get('/', 'PageController@index');
 
-    Route::get('/erp', 'PageController@index');
+    //Route::get('/erp', 'PageController@index');
 
     Route::get('/basic', 'PageController@basic');
 
