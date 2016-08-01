@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Schema;
+use App;
 use Illuminate\Support\ServiceProvider;
 use Option\OptionRepository;
 
@@ -13,26 +15,25 @@ class SystemConfigsServiceProvider extends ServiceProvider
      * @var bool
      */
     //protected $defer = true;
-    /**
-     * Bootstrap the application services.
-     *
-     * @return void
-     */
+
     public function boot()
     {
         /**
          * 把系統設定值放入Config
          *
          */
-        $configs = OptionRepository::getAllConfigs();
-        $output = [];
-        foreach ($configs as $key => $value) {
-            $output[$value['code']] = $value['value'];
+        //如果有這個資料表
+        if (Schema::hasTable('erp_options'))
+        {
+            $configs = App::make(OptionRepository::class)->getAllConfigs();
+            $output = [];
+            foreach ($configs as $key => $value) {
+                $output[$value['code']] = $value['value'];
+            }
+            config([
+                'system_configs' => $output
+            ]);
         }
-        config([
-            'system_configs' => $output
-        ]);
-
     }
 
     /**

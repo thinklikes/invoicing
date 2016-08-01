@@ -36,13 +36,6 @@ class OptionRepository
         return $settings;
     }
 
-    public static function getAllConfigs()
-    {
-        $configs = Option::select('code', 'value', 'comment')
-            ->where('class', 'system_configs')
-            ->get();
-        return $configs;
-    }
     /**
      * 找出網站標題
      * @return string 網站標題的內容
@@ -90,6 +83,14 @@ class OptionRepository
     {
         $options = Option::where('class', $class)->get();
         return $options;
+    }
+
+    public function getAllConfigs()
+    {
+        $configs = Option::select('code', 'value', 'comment')
+            ->where('class', 'system_configs')
+            ->get();
+        return $configs;
     }
 
     /**
