@@ -41,6 +41,16 @@ class Warehouse extends Model
     public function StockWarehouse()
     {
         //dd($this->belongsToMany('App\Option', 'stocks_warehouses', 'stock_id', 'warehouse_id'));
-        return $this->belongsToMany('Stock\Stock', 'stocks_warehouses', 'warehouse_id', 'stock_id');
+        return $this->belongsToMany('Stock\Stock', 'erp_stock_warehouse', 'warehouse_id', 'stock_id');
+    }
+
+    /**
+     * 回傳料品資料，可抓出此倉庫擁有哪幾個料品
+     * @return [type] [description]
+     */
+    public function stock()
+    {
+        //dd($this->belongsToMany('App\Option', 'stocks_warehouses', 'stock_id', 'warehouse_id'));
+        return $this->belongsToMany('Stock\Stock', 'erp_stock_warehouse', 'warehouse_id', 'stock_id');
     }
 }
