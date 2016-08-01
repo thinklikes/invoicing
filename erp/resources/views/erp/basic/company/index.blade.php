@@ -9,19 +9,27 @@
         <form action="" method="GET">
             <table>
                 <tr>
+                    <td>客戶編號</td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="code" size="15" value="{{ $code }}"></td>
+                </tr>
+                <tr>
                     <td>公司名稱</td>
                 </tr>
                 <tr>
-                    <td><input type="text" name="name" size="15"></td>
+                    <td><input type="text" name="name" size="15" value="{{ $name }}"></td>
                 </tr>
                 <tr>
                     <td>地址</td>
                 <tr>
-                    <td><input type="text" name="address" size="15"></td>
+                    <td><input type="text" name="address" size="15" value="{{ $address }}"></td>
                 </tr>
             </table>
             <button>搜尋</button>
         </form>
+        <br>
+        <a href="/company/printBarcode" target="_blank">條碼列印</a>
     </div>
 </div>
 

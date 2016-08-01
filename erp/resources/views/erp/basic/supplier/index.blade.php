@@ -28,6 +28,8 @@
             </table>
             <button>搜尋</button>
         </form>
+        <br>
+        <a href="/supplier/printBarcode" target="_blank">條碼列印</a>
     </div>
 </div>
 
@@ -39,23 +41,21 @@
         <table width="100%">
             <thead>
                 <tr>
-                    <th>供應商編號</th>
-                    <th>供應商名稱</th>
-                    <th>負責人</th>
-                    <th>聯絡人</th>
-                    <th>電話</th>
-                    <th>地址</th>
+                    <th class="string">供應商編號</th>
+                    <th class="string">供應商名稱</th>
+                    <th class="string">聯絡人</th>
+                    <th class="string">電話</th>
+                    <th class="string">地址</th>
                 </tr>
             </thead>
             <tbody>
         @foreach ($suppliers as $supplier)
                 <tr>
-                    <td>{{ $supplier->code }}</td>
-                    <td><a href="{{ url("/supplier/$supplier->id") }}">{{ $supplier->name }}</a></td>
-                    <td>{{ $supplier->boss }}</td>
-                    <td>{{ $supplier->contactPerson }}</td>
-                    <td>{{ $supplier->telphone }}</td>
-                    <td>{{ $supplier->address }}</td>
+                    <td class="string">{{ $supplier->code }}</td>
+                    <td class="string"><a href="{{ url("/supplier/$supplier->id") }}">{{ $supplier->name }}</a></td>
+                    <td class="string">{{ $supplier->contactPerson }}</td>
+                    <td class="string">{{ $supplier->telphone }}</td>
+                    <td class="string">{{ $supplier->address }}</td>
                 </tr>
         @endforeach
             </tbody>

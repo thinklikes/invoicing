@@ -25,10 +25,11 @@ class CompanyController extends BasicController
         $this->orderService = $orderService;
         $this->setFullClassName();
     }
-    public function printBarcode(Request $request)
+    public function printBarcode()
     {
-        $param = $request->input();
-        return $this->orderRepository->getCompanyJson($param);
+        return view($this->routeName.'.printBarcode', [
+            'companies' => $this->orderRepository->getAllCompanyNameAndCode()
+        ]);
     }
 
     public function json(Request $request)
@@ -41,10 +42,16 @@ class CompanyController extends BasicController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         return view($this->routeName.'.index', [
-            'company' => $this->orderRepository->getCompanyPaginated($this->ordersPerPage)
+            'code' => $request->input('code'),
+            'name' => $request->input('name'),
+            'address' => $request->input('address'),
+            'company' => $this->orderRepository
+                ->getCompanyPaginated(
+                    array_except($request->input(), 'page'),
+                    $this->ordersPerPage)
         ]);
     }
 

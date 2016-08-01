@@ -56,9 +56,21 @@ class CompanyRepository extends BasicRepository
      * find a page of orders
      * @return array all purchases
      */
-    public function getCompanyPaginated($ordersPerPage)
+    public function getCompanyPaginated($param, $ordersPerPage)
     {
-        return $this->company->orderBy('auto_id', 'desc')->paginate($ordersPerPage);
+        return $this->company->where(function ($query) use($param) {
+            if (isset($param['name']) && $param['name'] != "") {
+                $query->orWhere('company_name', 'like', "%".trim($param['name'])."%");
+            }
+            if (isset($param['code']) && $param['code'] != "") {
+                $query->orWhere('company_code', 'like', "%".trim($param['code'])."%");
+            }
+            if (isset($param['address']) && $param['address'] != "") {
+                $query->orWhere('company_add', 'like', "%".trim($param['address'])."%");
+            }
+        })
+        ->orderBy('auto_id', 'desc')
+        ->paginate($ordersPerPage);
     }
 
     public function getCompanyfieldById($field, $id)
@@ -67,13 +79,14 @@ class CompanyRepository extends BasicRepository
     }
 
     /**
-     * find master of a order
-     * @param  integer $id The id of purchase
-     * @return array       one purchase
+     * 取得所有的客戶編號與名稱
+     * @return collection     內容是Company\Company的集合
      */
-    public function getCompany($code)
+    public function getAllCompanyNameAndCode()
     {
-        return $this->company->where('code', $code)->firstOrFail();
+        return $this->company
+            ->select('company_code', 'company_name')
+            ->orderBy('auto_id', 'desc')->get();
     }
 
     /**

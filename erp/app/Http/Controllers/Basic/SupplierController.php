@@ -22,6 +22,13 @@ class SupplierController extends BasicController
         $this->supplierRepository = $supplierRepository;
         $this->setFullClassName();
     }
+
+    public function printBarcode()
+    {
+        return view($this->routeName.'.printBarcode', [
+            'suppliers' => $this->supplierRepository->getAllSupplierNameAndCode()
+        ]);
+    }
     /**
      * 回傳Json格式的供應商陣列，若有request 'with'，
      * 則將相關的進貨單或進或退回單回傳
@@ -42,9 +49,12 @@ class SupplierController extends BasicController
      */
     public function index(Request $request)
     {
-        $suppliers = $this->supplierRepository->getSuppliersPaginated(array_except($request->input(), 'page'));
-        //$suppliers = SupplierRepository::getSuppliersOnePage($request->input());
-        return view($this->routeName.'.index', ['suppliers' => $suppliers]);
+        return view($this->routeName.'.index', [
+            'code' => $request->input('code'),
+            'name' => $request->input('name'),
+            'suppliers' => $this->supplierRepository
+                ->getSuppliersPaginated(
+                    array_except($request->input(), 'page'))]);
     }
 
     /**

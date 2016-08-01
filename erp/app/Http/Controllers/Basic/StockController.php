@@ -3,16 +3,18 @@
 namespace App\Http\Controllers\Basic;
 
 use Illuminate\Http\Request;
-use Stock\StockRepository;
+use Stock\StockRepository as Stock;
 use App\Contracts\FormRequestInterface;
 use App\Http\Controllers\BasicController;
 
 class StockController extends BasicController
 {
     private $routeName = 'erp.basic.stock';
+    private $stock;
 
-    public function __construct()
+    public function __construct(Stock $stock)
     {
+        $this->stock = $stock;
         $this->setFullClassName();
     }
     /**
@@ -22,8 +24,15 @@ class StockController extends BasicController
      */
     public function json(Request $request)
     {
-        $stocks = StockRepository::getStocksJson($request->input());
+        $stocks = $this->stock->getStocksJson($request->input());
         return response()->json($stocks);
+    }
+    //條碼列印
+    public function printBarcode()
+    {
+        return view($this->routeName.'.printBarcode', [
+            'stocks' => $this->stock->getAllStockNameAndCode()
+        ]);
     }
     /**
      * Display a listing of the resource.
@@ -32,9 +41,15 @@ class StockController extends BasicController
      */
     public function index(Request $request)
     {
-        $param = $request->input('search');
-        $stocks = StockRepository::getStocksOnePage($param);
-        return view($this->routeName.'.index', ['stocks' => $stocks]);
+        return view($this->routeName.'.index', [
+            'code' => $request->input('code'),
+            'name' => $request->input('name'),
+            'stocks' => $this->stock
+                ->getStockPaginated(
+                    array_except($request->input(), 'page')
+                ),
+
+        ]);
     }
 
     /**
@@ -60,7 +75,7 @@ class StockController extends BasicController
     {
         //抓出使用者輸入的資料
         $stock = $request->input('stock');
-        $new_id = StockRepository::storeStock($stock);
+        $new_id = $this->stock->storeStock($stock);
 
         //導回去此新增品項的詳細資料頁
         return redirect()->action("$this->className@show", ['id' => $new_id])
@@ -75,7 +90,7 @@ class StockController extends BasicController
      */
     public function show($id)
     {
-        $stock = StockRepository::getStockDetail($id);
+        $stock = $this->stock->getStockDetail($id);
         return view($this->routeName.'.show', ['id' => $id, 'stock' => $stock]);
     }
 
@@ -90,7 +105,7 @@ class StockController extends BasicController
         if (count($request->old('stock')) > 0) {
             $stock = $request->old('stock');
         } else {
-            $stock = StockRepository::getStockDetail($id);
+            $stock = $this->stock->getStockDetail($id);
         }
         return view($this->routeName.'.edit', ['id' => $id, 'stock' => $stock]);
     }
@@ -105,7 +120,7 @@ class StockController extends BasicController
     public function update(FormRequestInterface $request, $id)
     {
         $stock = $request->input('stock');
-        StockRepository::updateStock($stock, $id);
+        $this->stock->updateStock($stock, $id);
         return redirect()->action("$this->className@show", ['id' => $id])
                             ->with('status', [0 => '料品資料已更新!']);
     }
@@ -119,12 +134,13 @@ class StockController extends BasicController
     public function destroy($id)
     {
         //檢查是否還有庫存量，若有則導回去詳細資料頁，並顯示不能刪除
-        if (StockRepository::hasStockInventory($id)) {
+        if ($this->stock->hasStockInventory($id)) {
             return redirect()->action("$this->className@show", ['id' => $id])
                                 ->withErrors([0 => '這個料品在倉庫尚有庫存量，不能刪除!']);
         }
-        StockRepository::deleteStock($id);
+        $this->stock->deleteStock($id);
         return redirect()->action("$this->className@index")
                             ->with('status', [0 => '料品資料已刪除!']);
     }
 }
+

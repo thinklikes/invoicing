@@ -1,0 +1,9 @@
+.barcode_container {
+    width: 700px;
+}
+.barcode_content {
+    width: 200px;
+    float: left;
+    display: inline;
+    font-size:12px;
+}

@@ -11,7 +11,7 @@ class StockRepository
      * find 15 Stocks to JSON
      * @return array all suppliers
      */
-    public static function getStocksJson($param)
+    public function getStocksJson($param)
     {
         $stocks = Stock::select('id', 'code', 'name', 'unit_id',
             'no_tax_price_of_purchased', 'no_tax_price_of_sold')
@@ -37,7 +37,7 @@ class StockRepository
      * 回傳是否在倉庫中尚有數量
      * @return boolean hasStockInventory
      */
-    public static function hasStockInventory($id) {
+    public function hasStockInventory($id) {
         $stock = Stock::find($id)->stocks_warehouses->sum('inventory');
         return (Integer) $stock <> 0;
     }
@@ -46,7 +46,7 @@ class StockRepository
      * find all stocks
      * @return array all stocks
      */
-    public static function getAllStocksId()
+    public function getAllStocksId()
     {
         $stocks = Stock::select('id')
             ->get();
@@ -57,7 +57,7 @@ class StockRepository
      * find a page of stocks pair
      * @return array all stocks
      */
-    public static function getStocksOnePage($param)
+    public function getStockPaginated($param)
     {
         return Stock::where(function ($query) use($param) {
             if (isset($param['name']) && $param['name'] != "") {
@@ -82,10 +82,20 @@ class StockRepository
      * @param  integer $id The id of stock
      * @return array       one stock
      */
-    public static function getStockDetail($id)
+    public function getStockDetail($id)
     {
         $stocks = Stock::find($id);
         return $stocks;
+    }
+
+    /**
+     * 取得所有的料品編號與名稱
+     * @return collection     內容是Stock\Stock的集合
+     */
+    public function getAllStockNameAndCode()
+    {
+        return Stock::select('code', 'name')
+            ->orderBy('id', 'desc')->get();
     }
 
     /**
@@ -93,7 +103,7 @@ class StockRepository
      * @param  integer $id The id of stock
      * @return void
      */
-    public static function storeStock($stock)
+    public function storeStock($stock)
     {
         $new_stock = new Stock;
         foreach($stock as $key => $value) {
@@ -113,7 +123,7 @@ class StockRepository
      * @param  integer $id The id of stock
      * @return void
      */
-    public static function updateStock($stock, $id)
+    public function updateStock($stock, $id)
     {
         $tmp_stock = Stock::find($id);
         foreach($stock as $key => $value) {
@@ -127,7 +137,7 @@ class StockRepository
      * @param  integer $id The id of stock
      * @return void
      */
-    public static function deleteStock($id)
+    public function deleteStock($id)
     {
         $tmp_stock = Stock::find($id);
         $tmp_stock->delete();

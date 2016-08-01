@@ -46,7 +46,7 @@ class SupplierRepository extends BasicRepository
      */
     public function getSuppliersPaginated($param)
     {
-        $suppliers = $this->supplier->where(function ($query) use($param) {
+        return $this->supplier->where(function ($query) use($param) {
             if (isset($param['name']) && $param['name'] != "") {
                 $query->orWhere('name', 'like', "%".trim($param['name'])."%");
             }
@@ -57,9 +57,17 @@ class SupplierRepository extends BasicRepository
                 $query->orWhere('address', 'like', "%".trim($param['address'])."%");
             }
         })->paginate(15);
-        return $suppliers;
-        //$suppliers->setPath('suppliers/test/gogogo');
-        //return $suppliers;
+    }
+
+    /**
+     * 取得所有的供應商編號與名稱
+     * @return collection     內容是Supplier\Supplier的集合
+     */
+    public function getAllSupplierNameAndCode()
+    {
+        return $this->supplier
+            ->select('code', 'name')
+            ->orderBy('id', 'desc')->get();
     }
     /**
      * find detail of one supplier
