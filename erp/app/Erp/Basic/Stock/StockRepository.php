@@ -43,17 +43,6 @@ class StockRepository
     }
 
     /**
-     * find all stocks
-     * @return array all stocks
-     */
-    public function getAllStocksId()
-    {
-        $stocks = Stock::select('id')
-            ->get();
-        return $stocks;
-    }
-
-    /**
      * find a page of stocks pair
      * @return array all stocks
      */
@@ -94,7 +83,7 @@ class StockRepository
      */
     public function getAllStockNameAndCode()
     {
-        return Stock::select('code', 'name')
+        return Stock::select('id', 'code', 'name')
             ->orderBy('id', 'desc')->get();
     }
 

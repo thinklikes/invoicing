@@ -15,7 +15,8 @@ class StockWarehouseSeeder extends Seeder
      */
     public function run()
     {
-        $stocks     = StockRepository::getAllStocksId();
+        DB::table('erp_stock_warehouse')->truncate();
+        $stocks     = App::make(StockRepository::class);
         $warehouses = WarehouseRepository::getAllWarehousesId();
         $faker = new Faker\Generator;
         $faker->addProvider(new Faker\Provider\zh_TW\Person($faker));
@@ -24,15 +25,8 @@ class StockWarehouseSeeder extends Seeder
         $faker->addProvider(new Faker\Provider\zh_TW\Company($faker));
         $stocks_warehouses = array();
         $i = 0;
-        foreach ($stocks as $stock) {
-            foreach ($warehouses as $warehouse) {
-                $stocks_warehouses[$i]['stock_id']     = $stock->id;
-                $stocks_warehouses[$i]['warehouse_id'] = $warehouse;
-                $stocks_warehouses[$i]['inventory']    = 0.00;
-                $i ++;
-            }
+        foreach ($stocks->getAllStockNameAndCode() as $stock) {
+            $stock->warehouse()->attach(WarehouseRepository::getAllWarehousesId());
         }
-        DB::table('erp_stock_warehouse')->truncate();
-        DB::table('erp_stock_warehouse')->insert($stocks_warehouses);
     }
 }
