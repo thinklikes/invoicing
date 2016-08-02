@@ -30,6 +30,14 @@ class AuthController extends Controller
      */
     protected $redirectTo = '/';
 
+
+    /**
+     * login by name field.
+     *
+     * @var string
+     */
+    protected $username = 'name';
+
     /**
      * Create a new authentication controller instance.
      *
@@ -68,5 +76,14 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    /**
+     * 設定系統註冊使用者
+     * @return void
+     */
+    public function showRegistrationForm()
+    {
+        abort(404);
     }
 }

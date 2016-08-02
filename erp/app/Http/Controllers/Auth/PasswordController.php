@@ -29,4 +29,13 @@ class PasswordController extends Controller
     {
         $this->middleware('guest');
     }
+
+    /**
+     * 設定系統無法重設密碼
+     * @return void
+     */
+    public function showResetForm()
+    {
+        abort(404);
+    }
 }

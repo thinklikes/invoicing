@@ -21,90 +21,127 @@
             </table>
         </div>
     </div>
-        <table id="master">
+    <div class="clear"></div>    
+     <hr />   
+        <table id="master" class="l_move d_01">
             <tr>
-                <th>客戶編號</th>
+                <th>客戶名稱：</th>
+                <td>{{ $billOfSaleMaster->company->company_name }}</td>
+                <th>客戶編號：</th>
                 <td>
                     {{ $billOfSaleMaster->company->company_code }}
                 </td>
-                <th>客戶名稱</th>
-                <td>{{ $billOfSaleMaster->company->company_name }}</td>
             </tr>
             <tr>
-                <th>銷貨日期</th>
-                <td>{{ $PublicPresenter->getFormatDate($billOfSaleMaster->created_at) }}</td>
-                <th>銷貨單號</th>
-                <td>{{ $billOfSaleMaster->code }}</td>
+                <th>統一編號：</th>
+                <td></td>
+                <th>電話：</th>
+                <td></td>
             </tr>
             <tr>
-                <th>銷貨倉庫</th>
-                <td colspan="3">
-                    {{ $billOfSaleMaster->warehouse->name }}
-                </td>
+                <th>聯絡地址：</th>
+                <td colspan="3"></td>
             </tr>
             <tr>
-                <th>銷貨單備註</th>
-                <td colspan="3">
-                    {{ $billOfSaleMaster->note }}
-                </td>
+                <th>送貨地址：</th>
+                <td colspan="3"></td>
             </tr>
         </table>
-        <hr>
-        <table id="detail">
+        <table class="r_move">
+           <tr>
+             <th>銷貨日期：</th>
+             <td>{{ $PublicPresenter->getFormatDate($billOfSaleMaster->created_at) }}</td>
+          </tr>
+           <tr>
+             <th>銷貨單號：</th>
+             <td>{{ $billOfSaleMaster->code }}</td>
+          </tr>
+           <tr>
+             <th>發票編號：</th>
+             <td></td>
+          </tr>
+          <tr>
+             <th>銷貨倉庫：</th>
+              <td colspan="3">
+                 {{ $billOfSaleMaster->warehouse->name }}
+              </td>
+          </tr>
+        </table>
+        <div class="clear"></div>
+        <hr />
+        <table id="detail" class="width_01">
             <thead>
                 <tr>
-                    <th class="string">料品編號</th>
-                    <th class="string">品名</th>
-                    <th class="numeric">數量</th>
-                    <th class="string">單位</th>
-                    <th class="numeric">稅前單價</th>
-                    <th class="numeric">小計</th>
+                    <th>料品編號</th>
+                    <th>品名</th>
+                    <th>數量</th>
+                    <th>單位</th>
+                    <th>稅前單價</th>
+                    <th>小計</th>
                 </tr>
             </thead>
             <tbody>
 
     @foreach($billOfSaleDetail as $i => $value)
                 <tr>
-                    <td class="string">{{ $billOfSaleDetail[$i]->stock->code }}</td>
-                    <td class="string">{{ $billOfSaleDetail[$i]->stock->name }}</td>
-                    <td class="numeric">{{ $billOfSaleDetail[$i]['quantity'] }}</td>
-                    <td class="string">{{ $billOfSaleDetail[$i]->stock->unit->comment }}</td>
-                    <td class="numeric">{{ $billOfSaleDetail[$i]['no_tax_price'] }}</td>
-                    <td class="numeric">{{ $OrderCalculator->getNoTaxAmount($i) }}</td>
+                    <td>{{ $billOfSaleDetail[$i]->stock->code }}</td>
+                    <td>{{ $billOfSaleDetail[$i]->stock->name }}</td>
+                    <td>{{ $billOfSaleDetail[$i]['quantity'] }}</td>
+                    <td>{{ $billOfSaleDetail[$i]->stock->unit->comment }}</td>
+                    <td>{{ $billOfSaleDetail[$i]['no_tax_price'] }}</td>
+                    <td>{{ $OrderCalculator->getNoTaxAmount($i) }}</td>
                 </tr>
     @endforeach
 
             </tbody>
         </table>
-        <hr>
+        <hr />
         <div class="subTotal">
-            <table>
+            <table class="width_01 d_02">
                 <tr>
-                    <td>稅前合計：</td>
+                    <th>折讓金額：</th>
+                    <td></td>
+                    <th>稅前合計：</th>
                     <td>{{ $OrderCalculator->getTotalNoTaxAmount() }}</td>
-                    <td>營業稅：</td>
+                </tr>
+                <tr>
+                    <th>已收金額：</th>
+                    <td></td>
+                    <th>營業稅：</th>
                     <td>{{ $OrderCalculator->getTax() }}</td>
-                    <td>應付總計：</td>
+                </tr><tr>
+                    <th>應收金額：</th>
+                    <td></td>
+                    <th>應付總計：</th>
                     <td>{{ $OrderCalculator->getTotalAmount() }}</td>
                 </tr>
             </table>
         </div>
-        <hr>
+        <hr />
+        <table>
+           <tr>
+                <th>銷貨單備註：</th>
+                <td colspan="3">
+                    {{ $billOfSaleMaster->note }}
+                </td>
+            </tr>
+        </table>
+        <hr />
         <div class="signOn">
-            <table>
+            <table class="width_01 d_03">
                 <tr>
-                    <td>審核：</td>
+                    <th>審核：</th>
                     <td></td>
-                    <td>經辦：</td>
+                    <th>經辦：</th>
                     <td></td>
-                    <td>會計：</td>
+                    <th>會計：</th>
                     <td></td>
-                    <td>業務：</td>
+                    <th>業務：</th>
                     <td></td>
-                    <td>簽收：</td>
+                    <th>簽收：</th>
                     <td></td>
                 </tr>
             </table>
         </div>
 </div>
-<script type="text/javascript">window.print();</script>
+<!--<script type="text/javascript">window.print();</script> -->
