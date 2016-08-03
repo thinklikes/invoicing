@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Basic;
 use Illuminate\Http\Request;
 use Option\OptionRepository;
 use App\Contracts\FormRequestInterface;
+use App\Http\Requests\DestroyRequest;
 use App\Http\Controllers\BasicController;
 
 class UnitController extends BasicController
@@ -104,7 +105,7 @@ class UnitController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DestroyRequest $request, $id)
     {
         OptionRepository::deleteOption($this->option_class, $id);
         return redirect()->action("$this->className@index")

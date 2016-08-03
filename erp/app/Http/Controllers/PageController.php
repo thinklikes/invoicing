@@ -5,70 +5,51 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-use Page\Page;
-
+use Page\PageService as Service;
+use Gate;
 use Auth;
 
 class PageController extends Controller
 {
+    private $service;
     /**
      * 建立一個新的控制器實例。
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Service $service)
     {
-        session_start();
-        $_SESSION['MM_Username'] = Auth::user()->name;
+        //記錄到PH Psession給CRM
+        // session_start();
+        // $_SESSION['MM_Username'] = Auth::user()->name;
+
+        $this->service = $service;
     }
     public function portal()
     {
         return view('portal');
     }
-    public function index()
+    public function index(Request $request)
     {
-        $pages = Page::where('level', 1)
-            ->where('enabled', 1)
-            ->get();
-        return view('home', ['pages' => $pages]);
+        return view('home', ['pages' => $this->service->getSubPagesOfIndex($request)]);
     }
-    public function basic()
+    public function basic(Request $request)
     {
-        $parent_code = Page::where('action', 'PageController@basic')->value('code');
-        $pages = Page::where('level', 2)
-            ->where('enabled', 1)
-            ->where('code', 'like', $parent_code.'%')
-            ->get();
-        return view('home', ['pages' => $pages]);
+        return view('home', ['pages' => $this->service->getSubPagesOfSubIndex($request, "basic")]);
     }
 
-    public function purchase()
+    public function purchase(Request $request)
     {
-        $parent_code = Page::where('action', 'PageController@purchase')->value('code');
-        $pages = Page::where('level', 2)
-            ->where('enabled', 1)
-            ->where('code', 'like', $parent_code.'%')
-            ->get();
-        return view('home', ['pages' => $pages]);
+        return view('home', ['pages' => $this->service->getSubPagesOfSubIndex($request, "purchase")]);
     }
 
-    public function sale()
+    public function sale(Request $request)
     {
-        $parent_code = Page::where('action', 'PageController@sale')->value('code');
-        $pages = Page::where('level', 2)
-            ->where('enabled', 1)
-            ->where('code', 'like', $parent_code.'%')
-            ->get();
-        return view('home', ['pages' => $pages]);
+        return view('home', ['pages' => $this->service->getSubPagesOfSubIndex($request, "sale")]);
     }
 
-    public function stockManager()
+    public function stockManager(Request $request)
     {
-        $parent_code = Page::where('action', 'PageController@stockManager')->value('code');
-        $pages = Page::where('level', 2)
-            ->where('enabled', 1)
-            ->where('code', 'like', $parent_code.'%')
-            ->get();
-        return view('home', ['pages' => $pages]);
+        return view('home', ['pages' => $this->service->getSubPagesOfSubIndex($request, "stockManager")]);
     }
 }

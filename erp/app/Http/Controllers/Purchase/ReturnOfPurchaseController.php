@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Purchase;
 
 use App;
 use App\Contracts\FormRequestInterface;
+use App\Http\Requests\DestroyRequest;
 use App\Http\Controllers\BasicController;
 use ReturnOfPurchase\ReturnOfPurchaseRepository as OrderRepository;
 use ReturnOfPurchase\ReturnOfPurchaseService as orderService;
@@ -183,7 +184,7 @@ class ReturnOfPurchaseController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($code)
+    public function destroy(DestroyRequest $request, $code)
     {
         return $this->orderService->delete($this, $code);
     }

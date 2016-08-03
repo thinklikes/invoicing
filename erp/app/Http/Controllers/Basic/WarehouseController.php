@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Basic;
 use Illuminate\Http\Request;
 use Warehouse\WarehouseRepository;
 use App\Contracts\FormRequestInterface;
+use App\Http\Requests\DestroyRequest;
 use App\Http\Controllers\BasicController;
 
 class WarehouseController extends BasicController
@@ -103,7 +104,7 @@ class WarehouseController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DestroyRequest $request, $id)
     {
         WarehouseRepository::deleteWarehouse($id);
         return redirect()->action("$this->className@index")

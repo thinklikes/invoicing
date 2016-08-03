@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Sale;
 
 use App;
 use App\Contracts\FormRequestInterface;
+use App\Http\Requests\DestroyRequest;
 use App\Http\Controllers\BasicController;
 use ReceivableWriteOff\ReceivableWriteOffRepository as OrderRepository;
 use ReceivableWriteOff\ReceivableWriteOffService as OrderService;
@@ -118,7 +119,7 @@ class ReceivableWriteOffController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($code)
+    public function destroy(DestroyRequest $request, $code)
     {
         return $this->orderService->delete($this, $code);
     }

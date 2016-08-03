@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Basic;
 use Illuminate\Http\Request;
 use Supplier\SupplierRepository;
 use App\Contracts\FormRequestInterface;
+use App\Http\Requests\DestroyRequest;
 use App\Http\Controllers\BasicController;
 
 class SupplierController extends BasicController
@@ -134,7 +135,7 @@ class SupplierController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DestroyRequest $request, $id)
     {
         $this->supplierRepository->deleteSupplier($id);
         return redirect()->action("$this->className@index")

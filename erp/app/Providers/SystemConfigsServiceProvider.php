@@ -22,9 +22,8 @@ class SystemConfigsServiceProvider extends ServiceProvider
          * 把系統設定值放入Config
          *
          */
-        //如果有這個資料表
-        if (Schema::hasTable('erp_options'))
-        {
+
+        view()->composer('*', function ($view) {
             $configs = App::make(OptionRepository::class)->getAllConfigs();
             $output = [];
             foreach ($configs as $key => $value) {
@@ -33,9 +32,9 @@ class SystemConfigsServiceProvider extends ServiceProvider
             config([
                 'system_configs' => $output
             ]);
-        }
-    }
+        });
 
+    }
     /**
      * Register the application services.
      *

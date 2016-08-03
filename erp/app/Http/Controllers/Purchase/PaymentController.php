@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Purchase;
 
 use App;
 use App\Contracts\FormRequestInterface;
+use App\Http\Requests\DestroyRequest;
 use App\Http\Controllers\BasicController;
 use Payment\PaymentRepository as OrderRepository;
 use Payment\PaymentService as orderService;
@@ -160,7 +161,7 @@ class PaymentController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($code)
+    public function destroy(DestroyRequest $request, $code)
     {
         return $this->orderService->delete($this, $code);
     }

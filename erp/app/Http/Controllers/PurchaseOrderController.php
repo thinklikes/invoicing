@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Http\Requests\DestroyRequest;
 use App\Repositories\PurchaseOrderRepository;
 
 //use Validator;
@@ -183,7 +183,7 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($code)
+    public function destroy(DestroyRequest $request, $code)
     {
         $this->purchaseOrderRepository->deletePurchaseOrder($code);
         return redirect()->action('PurchaseOrderController@index')

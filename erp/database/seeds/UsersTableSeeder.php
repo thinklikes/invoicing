@@ -13,12 +13,30 @@ class UsersTableSeeder extends Seeder
     {
         DB::table('erp_users')->truncate();
         DB::table('erp_users')->insert([
+            [ //superAdmin帳號
+                'name' => 'superAdmin',
+                'email' => 'superAdmin@ezrun.com',
+                'password' => bcrypt('123456'),
+                'leavl' => '9',
+            ],
             [ //admin帳號
-                'id' => '1',
                 'name' => 'admin',
-                'email' => 'admin@admin.com',
-                'password' => '$2y$10$4yxyFxrRraGQnS8.M.KtVOcMXGeyVIogfqdBUE.fpmgm/l6R.3cK2'
-            ]
+                'email' => 'admin@ezrun.com',
+                'password' => bcrypt('123456'),
+                'leavl' => '1',
+            ],
+            [ //一般使用者帳號
+                'name' => 'user',
+                'email' => 'user@ezrun.com',
+                'password' => bcrypt('123456'),
+                'leavl' => '1',
+            ],
+            [ //測試使用者帳號
+                'name' => 'demo',
+                'email' => 'demo@ezrun.com',
+                'password' => bcrypt('123456'),
+                'leavl' => '-1',
+            ],
         ]);
     }
 }

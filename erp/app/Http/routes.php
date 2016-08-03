@@ -21,7 +21,7 @@ Route::group(['middleware' => 'auth'], function () {
     //首頁
     Route::get('/', 'PageController@index');
 
-    //Route::get('/erp', 'PageController@index');
+    Route::get('/test', 'AdminTestController@index');
 
     Route::get('/basic', 'PageController@basic');
 
@@ -32,6 +32,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/stockManager', 'PageController@stockManager');
     //採購單作業
     Route::resource('/purchase_orders', 'PurchaseOrderController');
+    //客戶訂單作業
+    Route::resource('/sale_orders', 'SaleOrderController');
 
     Route::group(['namespace' => 'Basic'], function() {
         //系統設定維護

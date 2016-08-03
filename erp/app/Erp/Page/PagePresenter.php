@@ -26,30 +26,30 @@ class PagePresenter
             return "Cannot find Current Web Route!!";
         }
         $action    = $this->exceptBaseNamesapce($currentRoute);
-        $code      = $this->page->getPageCode($action);
-        if (is_null($code)) {
+
+        $this_page = $this->page->getPageByAction($action);
+
+        if (is_null($this_page->code)) {
             return "Cannot find Current Web Route!!";
         }
         $WebRoute = '';
-        for ($i = 1; $i <= strlen($code); $i += 2) {
-            $tmp_code = substr($code, 0, $i);
-            $page = Page::where('code', substr($code, 0, $i))
-                                 ->first();
-            if ($i == strlen($code)) {
-                $WebRoute .= $page->name;
-            } else {
-                //$WebRoute .= '<a href="'.action($page->action).'">';
-                $WebRoute .= '<a href="'.action($page->action).'">';
-                $WebRoute .= $page->name.'</a>';
-            }
-            $WebRoute .= ' > ';
-        }
-        $WebRoute = substr($WebRoute, 0, -3);
+        $WebRoute .= $this->getParentPageRouteByCode($this_page->code);
+        $WebRoute .= '<a href="#">'.$this_page->name.'</a>';
+
         return $WebRoute;
     }
 
-    public function getPageAction($page)
+    public function getParentPageRouteByCode($code)
     {
-        return action($page->action);
+        if ((strlen($code)) < 2) {
+            return '';
+        }
+        $parent_code = substr($code, 0, -2);
+        $parent_page = $this->page->getPageByCode($parent_code);
+
+        $WebRoute = $this->getParentPageRouteByCode($parent_code);
+        $WebRoute .= '<a href="'.action($parent_page->action).'">'.$parent_page->name.'</a>';
+
+        return $WebRoute . " > ";
     }
 }

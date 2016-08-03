@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Basic;
 use Illuminate\Http\Request;
 use Stock\StockRepository as Stock;
 use App\Contracts\FormRequestInterface;
+use App\Http\Requests\DestroyRequest;
 use App\Http\Controllers\BasicController;
 
 class StockController extends BasicController
@@ -131,7 +132,7 @@ class StockController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DestroyRequest $request, $id)
     {
         //檢查是否還有庫存量，若有則導回去詳細資料頁，並顯示不能刪除
         if ($this->stock->hasStockInventory($id)) {

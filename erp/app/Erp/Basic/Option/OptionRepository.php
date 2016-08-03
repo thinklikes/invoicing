@@ -85,7 +85,7 @@ class OptionRepository
         return $options;
     }
 
-    public function getAllConfigs()
+    public static function getAllConfigs()
     {
         $configs = Option::select('code', 'value', 'comment')
             ->where('class', 'system_configs')

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Basic;
 
 use App;
 use App\Contracts\FormRequestInterface;
+use App\Http\Requests\DestroyRequest;
 use App\Http\Controllers\BasicController;
 use Company\CompanyRepository as Repository;
 use Company\CompanyService as Service;
@@ -139,7 +140,7 @@ class CompanyController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($code)
+    public function destroy(DestroyRequest $request, $code)
     {
         return $this->orderService->delete($this, $code);
     }
