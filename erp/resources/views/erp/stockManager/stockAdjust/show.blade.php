@@ -94,13 +94,12 @@
                 </tr>
             </table> --}}
         </div>
-        <a href="{{ url("/stockAdjust/{$stockAdjustMaster->code}/edit") }}">維護調整單</a>
-        <form action="{{ url("/stockAdjust/{$stockAdjustMaster->code}") }}" method="POST">
+        <a href="{{ url("/stockAdjust/{$stockAdjustMaster->code}/printing") }}" target="_blank" class="btn btn-default">列印調整單</a>
+        <a href="{{ url("/stockAdjust/{$stockAdjustMaster->code}/edit") }}" class="btn btn-default">維護調整單</a>
+        <form action="{{ url("/stockAdjust/{$stockAdjustMaster->code}") }}" class="form_of_delete" method="POST">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
 
-            <button>刪除調整單</button>
+            <button class="btn btn-danger">刪除調整單</button>
         </form>
-        <br>
-        <a href="{{ url("/stockAdjust/{$stockAdjustMaster->code}/printing") }}" target="_blank">列印調整單</a>
 @endsection

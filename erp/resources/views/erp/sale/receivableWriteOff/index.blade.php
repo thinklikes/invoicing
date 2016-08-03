@@ -26,5 +26,5 @@
         </table>
         <div align="center">{!! $orders->render() !!}</div>
         <br>
-        <a href="{{ url('/receivableWriteOff/create') }}">新增應收帳款沖銷單</a>
+        <a href="{{ url('/receivableWriteOff/create') }}" class="btn btn-default">新增應收帳款沖銷單</a>
 @endsection

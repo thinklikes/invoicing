@@ -28,5 +28,5 @@
         </table>
         <div align="center">{!! $orders->render() !!}</div>
         <br>
-        <a href="{{ url('/receipt/create') }}">新增收款單</a>
+        <a href="{{ url('/receipt/create') }}" class="btn btn-default">新增收款單</a>
 @endsection

@@ -6,7 +6,7 @@
         <form action="{{ url("/system_config/update") }}" method="POST">
             {{ csrf_field() }}
             {{ method_field('PUT') }}
-            <table width="50%" border="1">
+            <table width="50%" class="table">
             @foreach ($configs as $config)
                 <tr>
                     <th>{{ $config->comment }}</th>
@@ -14,7 +14,7 @@
                 </tr>
             @endforeach
             </table>
-            <button>確認送出</button>
+            <button class="btn btn-default">確認送出</button>
         </form>
 
 @endsection

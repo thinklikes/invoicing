@@ -4,7 +4,7 @@
 
         <form action="{{ url("/pay_way") }}" method="POST">
             {{ csrf_field() }}
-            <table width="100%">
+            <table width="100%" class="table">
                 <tr>
                     <th>單位代號</th>
                     <td><input type="text" name="pay_way[code]" id="code" value="{{ $pay_way['code'] }}"></td>
@@ -14,7 +14,7 @@
                     <td><input type="text" name="pay_way[comment]" id="comment" value="{{ $pay_way['comment'] }}"></td>
                 </tr>
             </table>
-            <button>確認送出</button>
+            <button class="btn btn-default">確認送出</button>
         </form>
 
 @endsection

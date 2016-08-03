@@ -29,7 +29,7 @@
             <button>搜尋</button>
         </form>
         <br>
-        <a href="/supplier/printBarcode" target="_blank">條碼列印</a>
+        <a class="btn btn-default" href="/supplier/printBarcode" target="_blank">條碼列印</a>
     </div>
 </div>
 
@@ -38,7 +38,7 @@
 @section('content')
 
     <!-- Bootstrap 樣板... -->
-        <table width="100%">
+        <table width="100%" class="table">
             <thead>
                 <tr>
                     <th class="string">供應商編號</th>
@@ -62,5 +62,5 @@
         </table>
         <div align="center">{!! $suppliers->render() !!}</div>
         <br>
-        <a href="{{ url('/supplier/create') }}">新增供應商</a>
+        <a class="btn btn-default" href="{{ url('/supplier/create') }}">新增供應商</a>
 @endsection

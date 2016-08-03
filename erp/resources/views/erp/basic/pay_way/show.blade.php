@@ -8,7 +8,7 @@
 --}}
 @section('content')
 
-        <table width="100%">
+        <table width="100%" class="table">
             <tr>
                 <th>付款方式代號</th>
                 <td>{{ $pay_way->code }}</td>
@@ -18,11 +18,11 @@
                 <td>{{ $pay_way->comment }}</td>
             </tr>
         </table>
-        <a href="{{ url("/pay_way/$id/edit") }}">維護付款方式資料</a>
-        <form action="{{ url("/pay_way/$id") }}" method="POST">
+        <a href="{{ url("/pay_way/$id/edit") }}" class="btn btn-default">維護付款方式資料</a>
+        <form action="{{ url("/pay_way/$id") }}" class="form_of_delete" method="POST">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
 
-            <button>刪除付款方式</button>
+            <button class="btn btn-danger">刪除付款方式</button>
         </form>
 @endsection

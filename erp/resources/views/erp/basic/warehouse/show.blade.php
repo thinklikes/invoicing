@@ -18,11 +18,11 @@
                 <td>{{ $warehouse->comment }}</td>
             </tr>
         </table>
-        <a href="{{ url("/warehouse/$id/edit") }}">維護倉庫資料</a>
-        <form action="{{ url("/warehouse/$id") }}" method="POST">
+        <a href="{{ url("/warehouse/$id/edit") }}" class="btn btn-default">維護倉庫資料</a>
+        <form action="{{ url("/warehouse/$id") }}" class="form_of_delete" method="POST">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
 
-            <button>刪除倉庫</button>
+            <button class="btn btn-danger">刪除倉庫</button>
         </form>
 @endsection

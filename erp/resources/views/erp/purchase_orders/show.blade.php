@@ -77,12 +77,12 @@
         <div style="width:50%;height:100px;float:right;">
             營業稅 {{ $PublicPresenter->getTaxComment($purchase_order_master->tax_rate_code) }}
         </div>
-        <a href="{{ url("/purchase_orders/$code/edit") }}">維護採購單</a>
-        <form action="{{ url("/purchase_orders/$code") }}" method="POST">
+        <a href="{{ url("/purchase_orders/$code/edit") }}" class="btn btn-default">維護採購單</a>
+        <form action="{{ url("/purchase_orders/$code") }}" class="form_of_delete" method="POST">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
 
-            <button>刪除採購單</button>
+            <button class="btn btn-danger">刪除採購單</button>
         </form>
 
 @endsection

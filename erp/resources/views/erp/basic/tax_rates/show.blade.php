@@ -22,11 +22,11 @@
                 <td>{{ $tax_rate->rate }}</td>
             </tr>
         </table>
-        <a href="{{ url("/tax_rates/$id/edit") }}">維護稅別資料</a>
-        <form action="{{ url("/tax_rates/$id") }}" method="POST">
+        <a href="{{ url("/tax_rates/$id/edit") }}" class="btn btn-default">維護稅別資料</a>
+        <form action="{{ url("/tax_rates/$id") }}" class="form_of_delete" method="POST">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
 
-            <button>刪除稅別</button>
+            <button class="btn btn-danger">刪除稅別</button>
         </form>
 @endsection

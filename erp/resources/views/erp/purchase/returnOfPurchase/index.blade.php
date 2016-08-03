@@ -26,5 +26,5 @@
         </table>
         <div align="center">{!! $orders->render() !!}</div>
         <br>
-        <a href="{{ url('/returnOfPurchase/create') }}">新增進貨退回單</a>
+        <a href="{{ url('/returnOfPurchase/create') }}" class="btn btn-default">新增進貨退回單</a>
 @endsection

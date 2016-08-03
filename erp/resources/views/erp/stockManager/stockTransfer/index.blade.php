@@ -26,5 +26,5 @@
         </table>
         <div align="center">{!! $orders->render() !!}</div>
         <br>
-        <a href="{{ url('/stockTransfer/create') }}">新增轉倉單</a>
+        <a href="{{ url('/stockTransfer/create') }}" class="btn btn-default">新增轉倉單</a>
 @endsection

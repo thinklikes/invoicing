@@ -24,5 +24,5 @@
         </table>
         <div align="center">{!! $orders->render() !!}</div>
         <br>
-        <a href="{{ url('/stockAdjust/create') }}">新增調整單</a>
+        <a href="{{ url('/stockAdjust/create') }}" class="btn btn-default">新增調整單</a>
 @endsection

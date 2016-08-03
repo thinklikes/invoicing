@@ -3,7 +3,7 @@
 @section('content')
 
     <!-- Bootstrap 樣板... -->
-        <table width="50%" border="1">
+        <table width="50%" class="table">
         @foreach ($configs as $config)
             <tr>
                 <th>{{ $config->comment }}</th>
@@ -11,5 +11,5 @@
             </tr>
         @endforeach
         </table>
-        <a href="{{ url('/system_config/edit') }}">開始編輯</a>
+        <a href="{{ url('/system_config/edit') }}" class="btn btn-default">開始編輯</a>
 @endsection

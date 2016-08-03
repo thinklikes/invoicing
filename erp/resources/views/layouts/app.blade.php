@@ -27,10 +27,11 @@
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
 
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/general.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/custom.css') }}">
     <style>
         body {
             font-family: 'Lato';
-        }
+		}
 
         .fa-btn {
             margin-right: 6px;
@@ -100,6 +101,7 @@
 @yield('content')
                     </div>
                 </div>
+            <div class="reflective"></div>
             </div>
         </div>
     </div>

@@ -29,10 +29,10 @@
 @endsection
 
 @section('content')
-        <div style="float:right;">
+        <div style="float:right; margin-bottom:10px;">
             <img src="data:image/png;base64, {{ base64_encode($BarcodeGenerator->getBarcode($stock->code, $BarcodeGenerator::TYPE_CODE_128)) }}">
         </div>
-        <table width="100%">
+        <table width="100%" class="table">
             <tr>
                 <th>料品代號</th>
                 <td>{{ $stock->code }}</td>
@@ -66,11 +66,11 @@
                 <td>{{ $stock->no_tax_price_of_sold }}</td>
             </tr>
         </table>
-        <a href="{{ url("/stock/$id/edit") }}">維護料品資料</a>
-        <form action="{{ url("/stock/$id") }}" method="POST">
+        <a class="btn btn-default" href="{{ url("/stock/$id/edit") }}">維護料品資料</a>
+        <form action="{{ url("/stock/$id") }}" method="POST" class="form_of_delete">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
 
-            <button>刪除料品</button>
+            <button class="btn btn-danger">刪除料品</button>
         </form>
 @endsection

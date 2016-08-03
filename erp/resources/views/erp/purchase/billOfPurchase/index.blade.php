@@ -28,5 +28,5 @@
         </table>
         <div align="center">{!! $orders->render() !!}</div>
         <br>
-        <a href="{{ url('/billOfPurchase/create') }}">新增進貨單</a>
+        <a href="{{ url('/billOfPurchase/create') }}" class="btn btn-default">新增進貨單</a>
 @endsection

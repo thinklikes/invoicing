@@ -9,23 +9,23 @@
 @section('content')
 
     <!-- Bootstrap 樣板... -->
-        <table width="100%">
+        <table width="100%" class="table">
             <thead>
                 <tr>
-                    <th>料品單位代號</th>
-                    <th>料品單位說明</th>
+                    <th class="string">料品單位代號</th>
+                    <th class="string">料品單位說明</th>
                 </tr>
             </thead>
             <tbody>
         @foreach ($units as $unit)
                 <tr>
-                    <td><a href="{{ url("/unit/$unit->id") }}">{{ $unit->code }}</a></td>
-                    <td>{{ $unit->comment }}</td>
+                    <td class="string"><a href="{{ url("/unit/$unit->id") }}">{{ $unit->code }}</a></td>
+                    <td class="string">{{ $unit->comment }}</td>
                 </tr>
         @endforeach
             </tbody>
         </table>
         <div align="center">{!! $units->render() !!}</div>
         <br>
-        <a href="{{ url('/unit/create') }}">新增料品單位</a>
+        <a href="{{ url('/unit/create') }}" class="btn btn-default">新增料品單位</a>
 @endsection

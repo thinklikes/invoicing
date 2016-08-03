@@ -33,5 +33,5 @@
         </table>
         <div align="center">{!! $tax_rates->render() !!}</div>
         <br>
-        <a href="{{ url('/tax_rates/create') }}">新增稅別</a>
+        <a href="{{ url('/tax_rates/create') }}" class="btn btn-default">新增稅別</a>
 @endsection

@@ -63,12 +63,12 @@
         </div>
         <hr>
     @if ($payment->isWrittenOff == 0)
-        <a href="{{ url("/payment/{$payment->code}/edit") }}">維護付款單</a>
-        <form action="{{ url("/payment/{$payment->code}") }}" method="POST">
+        <a href="{{ url("/payment/{$payment->code}/edit") }}" class="btn btn-default">維護付款單</a>
+        <form action="{{ url("/payment/{$payment->code}") }}" class="form_of_delete" method="POST">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
 
-            <button>刪除付款單</button>
+            <button class="btn btn-danger">刪除付款單</button>
         </form>
     @endif
 @endsection

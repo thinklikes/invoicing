@@ -4,7 +4,7 @@
 
         <form action="{{ url("/supplier") }}" method="POST">
             {{ csrf_field() }}
-            <table width="100%">
+            <table width="100%" class="table">
                 <tr>
                     <th>供應商編號</th>
                     <td><input type="text" name="supplier[code]" id="code" value="{{ $supplier['code'] }}"></td>
@@ -58,7 +58,7 @@
                     <td><input type="text" name="supplier[taxNumber]" id="taxNumber" value="{{ $supplier['taxNumber'] }}"></td>
                 </tr>
             </table>
-            <button>確認送出</button>
+            <button class="btn btn-default">確認送出</button>
         </form>
 
 @endsection

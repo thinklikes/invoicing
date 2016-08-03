@@ -126,12 +126,12 @@
                     </tfoot>
                 </table>
             </div>
-        {{-- <a href="{{ url("/payableWriteOff/{$payableWriteOff->code}/edit") }}">維護應付帳款沖銷單</a> --}}
-        <form action="{{ url("/payableWriteOff/{$payableWriteOff->code}") }}" method="POST">
+        {{-- <a href="{{ url("/payableWriteOff/{$payableWriteOff->code}/edit") }}" class="btn btn-default">維護應付帳款沖銷單</a> --}}
+        <form action="{{ url("/payableWriteOff/{$payableWriteOff->code}") }}" class="form_of_delete" method="POST">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
 
-            <button>刪除應付帳款沖銷單</button>
+            <button class="btn btn-danger">刪除應付帳款沖銷單</button>
         </form>
 
 @endsection

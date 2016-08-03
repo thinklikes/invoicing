@@ -4,7 +4,7 @@
 
         <form action="{{ url("/company") }}" method="POST">
             {{ csrf_field() }}
-            <table width="100%">
+            <table width="100%" class="table">
                 <tr>
                     <th>客戶編號</th>
                     <td><input type="text" name="company[company_code]" size="10"
@@ -97,7 +97,7 @@
                     </td>
                 </tr> --}}
             </table>
-            <button>確認送出</button>
+            <button class="btn btn-default">確認送出</button>
         </form>
 
 @endsection

@@ -27,5 +27,5 @@
         </table>
         <div align="center">{!! $warehouses->render() !!}</div>
         <br>
-        <a href="{{ url('/warehouse/create') }}">新增倉庫</a>
+        <a href="{{ url('/warehouse/create') }}" class="btn btn-default">新增倉庫</a>
 @endsection

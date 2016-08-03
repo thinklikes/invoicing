@@ -117,7 +117,7 @@
                 <div><input type="radio" name="purchase_order_master[tax_rate_code]" value="A" checked="">稅外加</div>
                 <div><input type="radio" name="purchase_order_master[tax_rate_code]" value="I">稅內含</div>
             </div>
-            <button type="submit">確認送出</button>
+            <button type="submit" class="btn btn-default">確認送出</button>
         </form>
 
 @endsection

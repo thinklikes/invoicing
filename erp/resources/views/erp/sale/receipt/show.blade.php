@@ -63,12 +63,12 @@
         </div>
         <hr>
     @if ($receipt->isWrittenOff == 0)
-        <a href="{{ url("/receipt/{$receipt->code}/edit") }}">維護收款單</a>
-        <form action="{{ url("/receipt/{$receipt->code}") }}" method="POST">
+        <a href="{{ url("/receipt/{$receipt->code}/edit") }}" class="btn btn-default">維護收款單</a>
+        <form action="{{ url("/receipt/{$receipt->code}") }}" class="form_of_delete" method="POST">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
 
-            <button>刪除收款單</button>
+            <button class="btn btn-danger">刪除收款單</button>
         </form>
     @endif
 @endsection

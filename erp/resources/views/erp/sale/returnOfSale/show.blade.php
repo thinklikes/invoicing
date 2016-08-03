@@ -97,15 +97,14 @@
                 </tr>
             </table>
         </div>
+        <a href="{{ url("/returnOfSale/{$returnOfSaleMaster->code}/printing") }}" target="_blank" class="btn btn-default">列印銷貨退回單</a>
     @if ($returnOfSaleMaster['received_amount'] == 0)
-        <a href="{{ url("/returnOfSale/{$returnOfSaleMaster->code}/edit") }}">維護銷貨退回單</a>
-        <form action="{{ url("/returnOfSale/{$returnOfSaleMaster->code}") }}" method="POST">
+        <a href="{{ url("/returnOfSale/{$returnOfSaleMaster->code}/edit") }}" class="btn btn-default">維護銷貨退回單</a>
+        <form action="{{ url("/returnOfSale/{$returnOfSaleMaster->code}") }}" class="form_of_delete" method="POST">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
 
-            <button>刪除銷貨退回單</button>
+            <button class="btn btn-danger">刪除銷貨退回單</button>
         </form>
     @endif
-        <br>
-        <a href="{{ url("/returnOfSale/{$returnOfSaleMaster->code}/printing") }}" target="_blank">列印銷貨退回單</a>
 @endsection

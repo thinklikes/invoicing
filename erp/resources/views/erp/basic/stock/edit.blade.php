@@ -5,7 +5,7 @@
         <form action="{{ url("/stock/$id") }}" method="POST">
             {{ csrf_field() }}
             {{ method_field('PUT') }}
-            <table width="100%">
+            <table width="100%" class="table">
                 <tr>
                     <th>料品代號</th>
                     <td><input type="text" name="stock[code]" id="code" value="{{ $stock['code'] }}"></td>
@@ -53,7 +53,7 @@
                     <td><input type="text" name="stock[no_tax_price_of_sold]" id="no_tax_price_of_sold" value="{{ $stock['no_tax_price_of_sold'] }}"></td>
                 </tr>
             </table>
-            <button>確認送出</button>
+            <button class="btn btn-default">確認送出</button>
         </form>
 
 @endsection

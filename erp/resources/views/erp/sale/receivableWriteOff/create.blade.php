@@ -193,7 +193,7 @@
 
             </div>
             <hr>
-            <button type="submit">確認送出</button>
+            <button type="submit" class="btn btn-default">確認送出</button>
         </form>
 
 @endsection

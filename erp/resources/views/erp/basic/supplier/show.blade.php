@@ -14,10 +14,10 @@
 @endsection
 --}}
 @section('content')
-        <div style="float:right;">
+        <div style="float:right; margin-bottom:10px;">
             <img src="data:image/png;base64, {{ base64_encode($BarcodeGenerator->getBarcode($supplier->code, $BarcodeGenerator::TYPE_CODE_128)) }}">
         </div>
-        <table width="100%">
+        <table width="100%" class="table">
             <tr>
                 <th>供應商編號</th>
                 <td>{{ $supplier->code }}</td>
@@ -67,11 +67,11 @@
                 <td>{{ $supplier->taxNumber }}</td>
             </tr>
         </table>
-        <a href="{{ url("/supplier/$id/edit") }}">維護供應商資料</a>
-        <form action="{{ url("/supplier/$id") }}" method="POST">
+        <a class="btn btn-default" href="{{ url("/supplier/$id/edit") }}">維護供應商資料</a>
+        <form action="{{ url("/supplier/$id") }}" method="POST" class="form_of_delete">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
 
-            <button>刪除供應商</button>
+            <button class="btn btn-danger">刪除供應商</button>
         </form>
 @endsection

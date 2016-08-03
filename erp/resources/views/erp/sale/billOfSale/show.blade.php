@@ -105,15 +105,14 @@
                 </tr>
             </table>
         </div>
+        <a href="{{ url("/billOfSale/{$billOfSaleMaster->code}/printing") }}" target="_blank" class="btn btn-default">列印銷貨單</a>
     @if ($billOfSaleMaster['received_amount'] == 0)
-        <a href="{{ url("/billOfSale/{$billOfSaleMaster->code}/edit") }}">維護銷貨單</a>
-        <form action="{{ url("/billOfSale/{$billOfSaleMaster->code}") }}" method="POST">
+        <a href="{{ url("/billOfSale/{$billOfSaleMaster->code}/edit") }}" class="btn btn-default">維護銷貨單</a>
+        <form action="{{ url("/billOfSale/{$billOfSaleMaster->code}") }}" class="form_of_delete" method="POST">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
 
-            <button>刪除銷貨單</button>
+            <button class="btn btn-danger">刪除銷貨單</button>
         </form>
     @endif
-        <br>
-        <a href="{{ url("/billOfSale/{$billOfSaleMaster->code}/printing") }}" target="_blank">列印銷貨單</a>
 @endsection

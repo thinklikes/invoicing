@@ -4,7 +4,7 @@
 
         <form action=" {{ url("/unit") }}" method="POST">
             {{ csrf_field() }}
-            <table width="100%">
+            <table width="100%" class="table">
                 <tr>
                     <th>料品單位代號</th>
                     <td><input type="text" name="unit[code]" id="code" value="{{ $unit['code'] }}"></td>
@@ -14,7 +14,7 @@
                     <td><input type="text" name="unit[comment]" id="comment" value="{{ $unit['comment'] }}"></td>
                 </tr>
             </table>
-            <button>確認送出</button>
+            <button class="btn btn-default">確認送出</button>
         </form>
 
 @endsection
