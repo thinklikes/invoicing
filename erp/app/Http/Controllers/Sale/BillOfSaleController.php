@@ -6,14 +6,14 @@ use App;
 use App\Contracts\FormRequestInterface;
 use App\Http\Requests\DestroyRequest;
 use App\Http\Controllers\BasicController;
-use BillOfSale\BillOfSaleRepository as OrderRepository;
-use BillOfSale\BillOfSaleService as OrderService;
+use BillOfSale\BillOfSaleRepository as Order;
+use BillOfSale\BillOfSaleService as Service;
 use Illuminate\Http\Request;
 
 class BillOfSaleController extends BasicController
 {
-    protected $orderRepository;
-    protected $orderService;
+    protected $order;
+    protected $service;
     private $orderMasterInputName = 'billOfSaleMaster';
     private $orderDetailInputName = 'billOfSaleDetail';
     private $routeName = 'erp.sale.billOfSale';
@@ -24,11 +24,11 @@ class BillOfSaleController extends BasicController
      * @param CompanyRepository $companyRepository
      */
     public function __construct(
-        OrderRepository $orderRepository,
-        OrderService $orderService
+        Order $order,
+        Service $service
     ) {
-        $this->orderRepository = $orderRepository;
-        $this->orderService    = $orderService;
+        $this->order   = $order;
+        $this->service = $service;
         $this->setFullClassName();
     }
 
@@ -42,7 +42,7 @@ class BillOfSaleController extends BasicController
     {
         switch ($data_mode) {
             case 'getReceivableByCompanyId':
-                $orderMaster = $this->orderRepository->getReceivableByCompanyId($code);
+                $orderMaster = $this->order->getReceivableByCompanyId($code);
                 break;
             default:
                 # code...
@@ -59,7 +59,7 @@ class BillOfSaleController extends BasicController
     public function index()
     {
         return view($this->routeName.'.index', [
-            'orders' => $this->orderRepository->getOrdersPaginated($this->ordersPerPage)
+            'orders' => $this->order->getOrdersPaginated($this->ordersPerPage)
         ]);
     }
 
@@ -70,11 +70,12 @@ class BillOfSaleController extends BasicController
      */
     public function create(Request $request)
     {
-        return view($this->routeName.'.create', [
-            'new_master_code'           => $this->orderRepository->getNewOrderCode(),
-            $this->orderMasterInputName => $request->old($this->orderMasterInputName),
-            $this->orderDetailInputName => $request->old($this->orderDetailInputName),
-        ]);
+        $master = $request->old($this->masterInputName);
+
+        $details = $request->old($this->detailInputName);
+
+        return view($this->routeName.'.create',
+            $this->service->getDataBeforeShown($master, $details));
     }
 
     /**
@@ -92,10 +93,10 @@ class BillOfSaleController extends BasicController
         );
 
         //抓出使用者輸入的資料
-        $orderMaster = $request->input($this->orderMasterInputName);
-        $orderDetail = $request->input($this->orderDetailInputName);
+        $master = $request->input($this->orderMasterInputName);
+        $details = $request->input($this->orderDetailInputName);
 
-        return $this->orderService->create($this, $orderMaster, $orderDetail);
+        return $this->service->create($this, $master, $details);
     }
 
     /**
@@ -106,11 +107,11 @@ class BillOfSaleController extends BasicController
      */
     public function show($code)
     {
-        $orderMaster = $this->orderRepository->getOrderMaster($code);
+        $orderMaster = $this->order->getOrderMaster($code);
         //$orderMaster->company_code = $orderMaster->company->code;
         $orderMaster->company_name = $orderMaster->company->company_name;
 
-        $orderDetail = $this->orderRepository->getOrderDetail($code);
+        $orderDetail = $this->order->getOrderDetail($code);
         foreach ($orderDetail as $key => $value) {
             $orderDetail[$key]->stock_code = $orderDetail[$key]->stock->code;
             $orderDetail[$key]->stock_name = $orderDetail[$key]->stock->name;
@@ -133,23 +134,23 @@ class BillOfSaleController extends BasicController
         if ($request->old()) {
             $orderMaster = $request->old($this->orderMasterInputName);
 
-            $orderMaster['created_at'] = $this->orderRepository
+            $orderMaster['created_at'] = $this->order
                 ->getOrderMasterfield('created_at', $code);
 
-            $orderMaster['received_amount'] = $this->orderRepository
+            $orderMaster['received_amount'] = $this->order
                 ->getOrderMasterfield('received_amount', $code);
 
             $orderMaster['code'] = $code;
 
             $orderDetail = $request->old($this->orderDetailInputName);
         } else {
-            $orderMaster = $this->orderRepository->getOrderMaster($code);
+            $orderMaster = $this->order->getOrderMaster($code);
             //$orderMaster->company_code = $orderMaster->company->code;
             $orderMaster->company_name = $orderMaster->company->company_name;
 
             $orderMaster->company_code = $orderMaster->company->company_code;
 
-            $orderDetail = $this->orderRepository->getOrderDetail($code);
+            $orderDetail = $this->order->getOrderDetail($code);
             foreach ($orderDetail as $key => $value) {
                 $orderDetail[$key]->stock_code = $orderDetail[$key]->stock->code;
                 $orderDetail[$key]->stock_name = $orderDetail[$key]->stock->name;
@@ -181,7 +182,7 @@ class BillOfSaleController extends BasicController
         $orderMaster = $request->input($this->orderMasterInputName);
         $orderDetail = $request->input($this->orderDetailInputName);
 
-        return $this->orderService->update($this, $orderMaster, $orderDetail, $code);
+        return $this->service->update($this, $orderMaster, $orderDetail, $code);
     }
 
     /**
@@ -192,14 +193,14 @@ class BillOfSaleController extends BasicController
      */
     public function destroy(DestroyRequest $request, $code)
     {
-        return $this->orderService->delete($this, $code);
+        return $this->service->delete($this, $code);
     }
 
     public function printing($code)
     {
         return view($this->routeName.'.printing', [
-            $this->orderMasterInputName => $this->orderRepository->getOrderMaster($code),
-            $this->orderDetailInputName => $this->orderRepository->getOrderDetail($code),
+            $this->orderMasterInputName => $this->order->getOrderMaster($code),
+            $this->orderDetailInputName => $this->order->getOrderDetail($code),
         ]);
     }
 

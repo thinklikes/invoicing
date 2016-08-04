@@ -23,7 +23,7 @@ class SystemConfigsServiceProvider extends ServiceProvider
          *
          */
 
-        view()->composer('*', function ($view) {
+        if (Schema::hasTable('erp_options')) {
             $configs = App::make(OptionRepository::class)->getAllConfigs();
             $output = [];
             foreach ($configs as $key => $value) {
@@ -32,7 +32,7 @@ class SystemConfigsServiceProvider extends ServiceProvider
             config([
                 'system_configs' => $output
             ]);
-        });
+        }
 
     }
     /**

@@ -15,6 +15,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0-rc.2/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <!-- Custom Javascript files -->
+    <script type="text/javascript" src="{{ asset('assets/js/OrderCalculator.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/AjaxCombobox.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/bindDatePicker.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/AjaxFetchDataByField.js') }}"></script>
     {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0-rc.2/jquery-ui.min.css">
@@ -28,6 +34,7 @@
 
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/general.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/custom.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/custom_table.css') }}">
     <style>
         body {
             font-family: 'Lato';

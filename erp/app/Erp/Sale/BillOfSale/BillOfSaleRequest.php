@@ -4,13 +4,14 @@ namespace BillOfSale;
 
 use App\Http\Requests\Request;
 use App\Contracts\FormRequestInterface;
+use Carbon\Carbon;
 
 class BillOfSaleRequest extends Request implements FormRequestInterface
 {
 
-    protected $orderMasterInputName = 'billOfSaleMaster';
-    protected $orderDetailInputName = 'billOfSaleDetail';
-    protected $table_name           = 'bill_of_purchase_master';
+    protected $masterInputName = 'billOfSaleMaster';
+    protected $detailInputName = 'billOfSaleDetail';
+    protected $table_name      = 'bill_of_purchase_master';
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -29,39 +30,43 @@ class BillOfSaleRequest extends Request implements FormRequestInterface
      */
     public function rules()
     {
+
+        $lastDayOfPrevMonth = Carbon::now()->subMonth()
+            ->format('Y-m-01');
+
         $rules = [
                 //表頭驗證規則
-                // "{$this->orderMasterInputName}.code"
-                //     => "required|unique:{$this->table_name},code,{$code},code",
-                "{$this->orderMasterInputName}.company_id"
+                "{$this->masterInputName}.date"
+                    => "required|date|after:".$lastDayOfPrevMonth,
+                "{$this->masterInputName}.company_id"
                     => "required",
-                // "{$this->orderMasterInputName}.tax_rate_code"
+                // "{$this->masterInputName}.tax_rate_code"
                 //     => "required",
-                "{$this->orderMasterInputName}.warehouse_id"
+                "{$this->masterInputName}.warehouse_id"
                     => "required",
         ];
 
-        if ($this->input($this->orderDetailInputName)) {
-            $code = $this->input("$this->orderMasterInputName.code");
-            $min_index = min(array_keys($this->input($this->orderDetailInputName)));
+        if ($this->input($this->detailInputName)) {
+            $code = $this->input("$this->masterInputName.code");
+            $min_index = min(array_keys($this->input($this->detailInputName)));
             $rules_stock = "|required_without_all:";
-            foreach ($this->input($this->orderDetailInputName) as $key => $fields) {
+            foreach ($this->input($this->detailInputName) as $key => $fields) {
                 if ($key != $min_index) {
-                    $rules_stock .= "{$this->orderDetailInputName}.{$key}.stock_id,";
+                    $rules_stock .= "{$this->detailInputName}.{$key}.stock_id,";
                 }
                 foreach ($fields as $key2 => $value) {
 
-                    $rules["{$this->orderDetailInputName}.{$key}.stock_id"]
-                        = "required_unless:{$this->orderDetailInputName}.{$key}.quantity,0,\"\"";
+                    $rules["{$this->detailInputName}.{$key}.stock_id"]
+                        = "required_unless:{$this->detailInputName}.{$key}.quantity,0,\"\"";
 
-                    $rules["{$this->orderDetailInputName}.{$key}.quantity"]
-                        = "numeric|required_with:{$this->orderDetailInputName}.{$key}.stock_id";
+                    $rules["{$this->detailInputName}.{$key}.quantity"]
+                        = "numeric|required_with:{$this->detailInputName}.{$key}.stock_id";
 
-                    $rules["{$this->orderDetailInputName}.{$key}.no_tax_price"]
+                    $rules["{$this->detailInputName}.{$key}.no_tax_price"]
                         = 'numeric';
                 }
             }
-            $rules["{$this->orderDetailInputName}.{$min_index}.stock_id"]
+            $rules["{$this->detailInputName}.{$min_index}.stock_id"]
                 .= substr($rules_stock, 0, -1);
         }
 

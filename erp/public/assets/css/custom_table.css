@@ -1,0 +1,141 @@
+.custom-table {
+    display: table;
+    width: 99.9%;
+}
+.custom-table {
+    display: table;
+    border-collapse: collapse;
+}
+.custom-table .thead {
+    display: table-header-group;
+}
+.custom-table .tbody {
+    display: table-row-group;
+}
+.custom-table .tr {
+    display: table-row;
+}
+.custom-table .th, .custom-table .td {
+    display: table-cell;
+}
+
+#add_a_row {
+    margin-left: 0px;
+}
+
+@media only screen and (max-width: 960px) {
+    .hide-column .large{
+        display: none;
+    }
+    .css-table{
+        background-color: transparent;
+    }
+    .css-table .thead{
+        display: none;
+    }
+    .css-table .tr{
+        display:block;
+        border: #ddd 1px solid;
+        margin-bottom: 5px;
+        background: #ffffff;
+    }
+    .css-table .th,
+    .css-table .td{
+        display:inline-block;
+        width: 48%;
+        border: none;
+    }
+    .remove_button {
+        margin-top: 20px;
+    }
+}
+@media only screen and (max-width: 720px) {
+/*    .hide-column .mobile{
+        display: none;
+    }
+
+    .scroll-left:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
+    .scroll-left thead:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
+    .scroll-left{ width: 100%; border-collapse: collapse; border-spacing: 0; }
+    .scroll-left th,
+    .scroll-left td { margin: 0; vertical-align: top; }
+    .scroll-left th { text-align: left; }
+    .scroll-left{ display: block!important; position: relative; width: 100%; }
+    .scroll-left thead { display: block; float: left; }
+    .scroll-left tbody { display: block; width: auto; position: relative; overflow-x: auto; white-space: nowrap; }
+    .scroll-left thead tr { display: block; }
+    .scroll-left th { display: block; text-align: right; }
+    .scroll-left tbody tr { display: inline-block; vertical-align: top; margin:0px -2px;}
+    .scroll-left td { display: block; min-height: 1.25em; text-align: left; }*/
+
+    /* sort out borders */
+    //.scroll-left th { border-bottom: 0; border-left: 0; }
+    //.scroll-left td { border-left: 0; border-right: 0; border-bottom: 0; }
+    //.scroll-left tbody tr { /*border-left: 1px solid #babcbf;*/ }
+    //.scroll-left th:last-child,
+    //.scroll-left td:last-child { border-bottom: 1px solid #babcbf; }
+
+
+    /* Force table to not be like tables anymore */
+/*    .break-table{
+        background-color: transparent !important;  
+    }
+    .break-table, 
+    .break-table thead, 
+    .break-table tbody, 
+    .break-table th, 
+    .break-table td, 
+    .break-table tr { 
+        display: block; 
+    }*/
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+/*    .break-table thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    .break-table tr { border: 1px solid #ccc; margin-bottom: 10px; background-color: #ffffff;}
+*/
+    /* Behave  like a "row" */
+/*    .break-table td { 
+        
+        border: none !important;
+        border-bottom: 1px solid #eee !important;  
+        position: relative;
+        padding-left: 35% !important; 
+        white-space: normal;
+        text-align:left;
+    }
+*/
+/*
+    .break-table td:before { 
+         Now like a table header 
+        position: absolute;
+        Top/left values mimic padding
+        top: 6px;
+        left: 6px;
+        width: 30%; 
+        padding-right: 10px; 
+        white-space: nowrap;
+        text-align:left;
+        font-weight: bold;
+        color: #1a1a1a;
+    }
+    .break-table td:before { content: attr(data-title); }
+     */
+    .custom-table .th {
+        display:none;
+    }
+    .custom-table .td {
+        display:block;
+        width: 100%;
+    }
+    .custom-table .td:before { content: attr(data-title); }
+}
+@media only screen and (max-width: 480px) {
+/*    .hide-column .small{
+        display: none;
+    }*/
+}

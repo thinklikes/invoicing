@@ -64,6 +64,11 @@ body#app-layout{
 
 }
 
+a.btn-default{
+	font: bold 16px "微軟正黑體", "新細明體", Arial, Helvetica, sans-serif;
+	color: #555;
+}
+
 .reflective{
 	height: 100px;
 	width: 100%;
@@ -79,6 +84,7 @@ body#app-layout{
 }
 
 .form_of_delete .btn-danger{
-    padding: 10px;
+    font: bold 16px "微軟正黑體", "新細明體", Arial, Helvetica, sans-serif;
+	padding: 10px;
 	margin: 5px;
 }

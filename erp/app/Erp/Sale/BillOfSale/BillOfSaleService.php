@@ -1,63 +1,104 @@
 <?php
 namespace BillOfSale;
 
-use BillOfSale\BillOfSaleRepository as OrderRepository;
+use BillOfSale\BillOfSaleRepository as Order;
 use Stock\StockWarehouseRepository as StockWarehouse;
 use StockOutLogs\StockOutLogsRepository as StockOutLogs;
 use Illuminate\Support\MessageBag;
-use App\Presenters\OrderCalculator;
+use App\Libaries\OrderCalculator;
 
 class BillOfSaleService
 {
-    protected $orderRepository, $calculator, $stockOutLogs;
+    protected $order, $calculator, $stockOutLogs;
     protected $stock;
+    private $masterInputName = 'billOfSaleMaster';
+    private $detailInputName = 'billOfSaleDetail';
+    private $routeName = 'erp.sale.billOfSale';
 
     public function __construct(
-        OrderRepository $orderRepository,
+        Order $order,
         StockWarehouse $stock,
         OrderCalculator $calculator,
         StockOutLogs $stockOutLogs
     ) {
-        $this->orderRepository = $orderRepository;
-        $this->stock           = $stock;
-        $this->calculator      = $calculator;
-        $this->stockOutLogs    = $stockOutLogs;
+        $this->order        = $order;
+        $this->stock        = $stock;
+        $this->calculator   = $calculator;
+        $this->stockOutLogs = $stockOutLogs;
     }
 
-    public function create($listener, $orderMaster, $orderDetail)
+    /**
+     * 攔截輸入過的表單建立資料以顯示
+     * @param  Request $request 請求的資料
+     * @return array
+     */
+    public function getCreateDataBeforeShown($master, $details)
     {
+        if (count($master) > 0) {
+            //資料輸入計算機並且開始計算
+            $this->calculator->setValuesAndCalculate([
+                'quantity'     => array_pluck($details, 'quantity'),
+                'no_tax_price' => array_pluck($details, 'no_tax_price'),
+                'discount'     => array_pluck($details, 'discount'),
+                'discount_enabled' => true,
+            ]);
+
+            //把未稅金額放到陣列
+            foreach($details as $key => $value) {
+                $details[$key]['no_tax_amount'] = $this->calculator->getNoTaxAmount($key);
+            };
+
+            //dd($details);
+            $master['total_no_tax_amount'] = $this->calculator->getTotalNoTaxAmount();
+            $master['tax'] = $this->calculator->getTax();
+            $master['total_amount'] = $this->calculator->getTotalAmount();
+        }
+        return [
+            'new_master_code'  => $this->order->getNewOrderCode(),
+            $this->masterInputName => $master,
+            $this->detailInputName => $details,
+        ];
+    }
+
+    public function create($listener, $master, $details)
+    {
+
         $isCreated = true;
-        $code = $this->orderRepository->getNewOrderCode();
-        $orderMaster['code'] = $code;
+        $code = $this->order->getNewOrderCode();
+        $master['code'] = $code;
 
-        $this->calculator->setOrderMaster($orderMaster);
-        $this->calculator->setOrderDetail($orderDetail);
-        $this->calculator->calculate();
+        //資料輸入計算機並且開始計算
+        $this->calculator->setValuesAndCalculate([
+            'quantity'     => array_pluck($details, 'quantity'),
+            'no_tax_price' => array_pluck($details, 'no_tax_price'),
+            'discount'     => array_pluck($details, 'discount'),
+            'discount_enabled' => true,
+        ]);
 
-        $orderMaster['total_amount'] = $this->calculator->getTotalAmount();
+        $master['total_amount'] = $this->calculator->getTotalAmount();
         //新增銷貨單表頭
-        $isCreated = $isCreated && $this->orderRepository->storeOrderMaster($orderMaster);
+        $isCreated = $isCreated && $this->order->storeOrderMaster($master);
 
         //新增銷貨單表身
-        foreach($orderDetail as $key => $value) {
+        foreach($details as $key => $value) {
             if ($value['quantity'] == 0 || $value['quantity'] == "") {
                 continue;
             }
             $value['master_code'] = $code;
             //存入表身
-            $isCreated = $isCreated && $this->orderRepository
+            $isCreated = $isCreated && $this->order
                 ->storeOrderDetail($value);
             //更新倉庫數量，因為是銷貨，扣掉數量
             $this->stock->incrementInventory(
                 -$value['quantity'],
                 $value['stock_id'],
-                $orderMaster['warehouse_id']
+                $master['warehouse_id']
             );
             //添加一筆庫存出庫記錄
             $this->stockOutLogs->addStockOutLog(
                 'billOfSale',
                 $value['master_code'],
-                $orderMaster['warehouse_id'],
+                $master['warehouse_id'],
                 $value['stock_id'],
                 -$value['quantity']
             );
@@ -74,7 +115,7 @@ class BillOfSaleService
         );
     }
 
-    public function update($listener, $orderMaster, $orderDetail, $code)
+    public function update($listener, $master, $details, $code)
     {
         $isUpdated = true;
 
@@ -83,38 +124,38 @@ class BillOfSaleService
         //移除本單據的庫存出庫記錄
         $this->stockOutLogs->deleteStockOutLogsByOrderCode('billOfSale', $code);
 
-        $this->calculator->setOrderMaster($orderMaster);
-        $this->calculator->setOrderDetail($orderDetail);
+        $this->calculator->setOrderMaster($master);
+        $this->calculator->setOrderDetail($details);
         $this->calculator->calculate();
 
-        $orderMaster['total_amount'] = $this->calculator->getTotalAmount();
+        $master['total_amount'] = $this->calculator->getTotalAmount();
         //先存入表頭
-        $isUpdated = $isUpdated && $this->orderRepository->updateOrderMaster(
-            $orderMaster, $code
+        $isUpdated = $isUpdated && $this->order->updateOrderMaster(
+            $master, $code
         );
 
         //dd($isUpdated);
         //清空表身
-        $this->orderRepository->deleteOrderDetail($code);
+        $this->order->deleteOrderDetail($code);
 
-        foreach ($orderDetail as $key => $value) {
+        foreach ($details as $key => $value) {
             if ($value['quantity'] == 0 || $value['quantity'] == "") {
                 continue;
             }
             $value['master_code'] = $code;
             //存入表身
-            $isUpdated = $isUpdated && $this->orderRepository->storeOrderDetail($value);
+            $isUpdated = $isUpdated && $this->order->storeOrderDetail($value);
             //更新數量
             $this->stock->incrementInventory(
                 -$value['quantity'],
                 $value['stock_id'],
-                $orderMaster['warehouse_id']
+                $master['warehouse_id']
             );
             //添加一筆庫存出庫記錄
             $this->stockOutLogs->addStockOutLog(
                 'billOfSale',
                 $value['master_code'],
-                $orderMaster['warehouse_id'],
+                $master['warehouse_id'],
                 $value['stock_id'],
                 -$value['quantity']
             );
@@ -140,8 +181,8 @@ class BillOfSaleService
         //移除本單據的庫存出庫記錄
         $this->stockOutLogs->deleteStockOutLogsByOrderCode('billOfSale', $code);
         //將這張單作廢
-        $isDeleted = $isDeleted && $this->orderRepository->deleteOrderMaster($code);
-        //$this->orderRepository->deleteOrderDetail($code);
+        $isDeleted = $isDeleted && $this->order->deleteOrderMaster($code);
+        //$this->order->deleteOrderDetail($code);
 
         if (!$isDeleted) {
             return $listener->orderDeletedErrors(
@@ -155,8 +196,8 @@ class BillOfSaleService
 
     public function revertStockInventory($code) {
         //將庫存數量恢復到未開單前
-        $old_OrderMaster = $this->orderRepository->getOrderMaster($code);
-        $old_OrderDetail = $this->orderRepository->getOrderDetail($code);
+        $old_OrderMaster = $this->order->getOrderMaster($code);
+        $old_OrderDetail = $this->order->getOrderDetail($code);
         //因為是銷貨，把數量加回來
 
         foreach ($old_OrderDetail as $key => $value) {

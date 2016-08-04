@@ -47,3 +47,42 @@
 .string {
     text-align:center;
 }
+
+/*new add*/
+
+table {
+	text-align: left;
+	table-layout:fixed;
+	word-break:break-all;
+    word-wrap:break-word;
+}
+
+.width_01{
+	width: 100%;
+	text-align: left;
+}
+.clear{
+	clear: both;
+}
+.r_move{
+	float: right;
+}
+.l_move{
+	float: left;
+}
+
+.d_01{
+	width: 500px;
+}
+
+.d_01 th{
+	width: 20%;
+}
+
+.d_02 th{
+	width: 13%;
+}
+
+.d_03 th{
+	width: 7%;
+}
