@@ -40,6 +40,7 @@
  */
 .numeric {
     text-align: right;
+    padding-right: 15px;
 }
 /**
  * 字串或字串標題的樣式設定

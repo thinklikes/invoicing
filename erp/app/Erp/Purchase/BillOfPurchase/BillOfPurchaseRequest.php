@@ -4,6 +4,7 @@ namespace BillOfPurchase;
 
 use App\Http\Requests\Request;
 use App\Contracts\FormRequestInterface;
+use Carbon\Carbon;
 
 class BillOfPurchaseRequest extends Request implements FormRequestInterface
 {
@@ -29,10 +30,13 @@ class BillOfPurchaseRequest extends Request implements FormRequestInterface
      */
     public function rules()
     {
+        $lastDayOfPrevMonth = Carbon::now()->subMonth()
+            ->format('Y-m-t');
+
         $rules = [
                 //表頭驗證規則
-                // "{$this->orderMasterInputName}.code"
-                //     => "required|unique:{$this->table_name},code,{$code},code",
+                "{$this->orderMasterInputName}.date"
+                    => "required|date|after:".$lastDayOfPrevMonth,
                 "{$this->orderMasterInputName}.supplier_id"
                     => "required",
                 // "{$this->orderMasterInputName}.tax_rate_code"

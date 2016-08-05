@@ -6,28 +6,24 @@ use App;
 use App\Contracts\FormRequestInterface;
 use App\Http\Requests\DestroyRequest;
 use App\Http\Controllers\BasicController;
-use BillOfSale\BillOfSaleRepository as Order;
 use BillOfSale\BillOfSaleService as Service;
 use Illuminate\Http\Request;
 
 class BillOfSaleController extends BasicController
 {
-    protected $order;
     protected $service;
-    private $orderMasterInputName = 'billOfSaleMaster';
-    private $orderDetailInputName = 'billOfSaleDetail';
+    private $headName = 'billOfSaleMaster';
+    private $bodyName = 'billOfSaleDetail';
     private $routeName = 'erp.sale.billOfSale';
-    private $ordersPerPage = 15;
+    private $countPerPage = 15;
     /**
      * CompanyController constructor.
      *
      * @param CompanyRepository $companyRepository
      */
     public function __construct(
-        Order $order,
         Service $service
     ) {
-        $this->order   = $order;
         $this->service = $service;
         $this->setFullClassName();
     }
@@ -40,15 +36,9 @@ class BillOfSaleController extends BasicController
      */
     public function json($data_mode, $code)
     {
-        switch ($data_mode) {
-            case 'getReceivableByCompanyId':
-                $orderMaster = $this->order->getReceivableByCompanyId($code);
-                break;
-            default:
-                # code...
-                break;
-        }
-        return response()->json($orderMaster->all());
+        $data = $this->service->getJsonDataByMode($data_mode, $code);
+
+        return response()->json($data->all());
     }
 
     /**
@@ -59,7 +49,7 @@ class BillOfSaleController extends BasicController
     public function index()
     {
         return view($this->routeName.'.index', [
-            'orders' => $this->order->getOrdersPaginated($this->ordersPerPage)
+            'orders' => $this->service->showOrders($this->countPerPage)
         ]);
     }
 
@@ -70,12 +60,19 @@ class BillOfSaleController extends BasicController
      */
     public function create(Request $request)
     {
-        $master = $request->old($this->masterInputName);
+        $master = $request->old($this->headName);
 
-        $details = $request->old($this->detailInputName);
+        $details = $request->old($this->bodyName);
 
-        return view($this->routeName.'.create',
-            $this->service->getDataBeforeShown($master, $details));
+        $data = $this->service->getCreateFormData($master, $details);
+
+        return view($this->routeName.'.create', [
+            'new_master_code' => $data['new_master_code'],
+            'headName' => $this->headName,
+            'bodyName' => $this->bodyName,
+            $this->headName => $data['master'],
+            $this->bodyName => $data['details'],
+        ]);
     }
 
     /**
@@ -93,8 +90,8 @@ class BillOfSaleController extends BasicController
         );
 
         //抓出使用者輸入的資料
-        $master = $request->input($this->orderMasterInputName);
-        $details = $request->input($this->orderDetailInputName);
+        $master = $request->input($this->headName);
+        $details = $request->input($this->bodyName);
 
         return $this->service->create($this, $master, $details);
     }
@@ -107,19 +104,11 @@ class BillOfSaleController extends BasicController
      */
     public function show($code)
     {
-        $orderMaster = $this->order->getOrderMaster($code);
-        //$orderMaster->company_code = $orderMaster->company->code;
-        $orderMaster->company_name = $orderMaster->company->company_name;
+        $data = $this->service->getShowTableData($code);
 
-        $orderDetail = $this->order->getOrderDetail($code);
-        foreach ($orderDetail as $key => $value) {
-            $orderDetail[$key]->stock_code = $orderDetail[$key]->stock->code;
-            $orderDetail[$key]->stock_name = $orderDetail[$key]->stock->name;
-            $orderDetail[$key]->unit = $orderDetail[$key]->stock->unit->comment;
-        }
         return view($this->routeName.'.show', [
-            $this->orderMasterInputName => $orderMaster,
-            $this->orderDetailInputName => $orderDetail,
+            $this->headName => $data['master'],
+            $this->bodyName => $data['details'],
         ]);
     }
 
@@ -131,36 +120,17 @@ class BillOfSaleController extends BasicController
      */
     public function edit(Request $request, $code)
     {
-        if ($request->old()) {
-            $orderMaster = $request->old($this->orderMasterInputName);
+        $master = $request->old($this->headName);
 
-            $orderMaster['created_at'] = $this->order
-                ->getOrderMasterfield('created_at', $code);
+        $details = $request->old($this->bodyName);
 
-            $orderMaster['received_amount'] = $this->order
-                ->getOrderMasterfield('received_amount', $code);
-
-            $orderMaster['code'] = $code;
-
-            $orderDetail = $request->old($this->orderDetailInputName);
-        } else {
-            $orderMaster = $this->order->getOrderMaster($code);
-            //$orderMaster->company_code = $orderMaster->company->code;
-            $orderMaster->company_name = $orderMaster->company->company_name;
-
-            $orderMaster->company_code = $orderMaster->company->company_code;
-
-            $orderDetail = $this->order->getOrderDetail($code);
-            foreach ($orderDetail as $key => $value) {
-                $orderDetail[$key]->stock_code = $orderDetail[$key]->stock->code;
-                $orderDetail[$key]->stock_name = $orderDetail[$key]->stock->name;
-                $orderDetail[$key]->unit = $orderDetail[$key]->stock->unit->comment;
-            }
-        }
+        $data = $this->service->getEditFormData($code, $master, $details);
 
         return view($this->routeName.'.edit', [
-            $this->orderMasterInputName => $orderMaster,
-            $this->orderDetailInputName => $orderDetail,
+            'headName' => $this->headName,
+            'bodyName' => $this->bodyName,
+            $this->headName => $data['master'],
+            $this->bodyName => $data['details'],
         ]);
     }
 
@@ -179,10 +149,10 @@ class BillOfSaleController extends BasicController
             ['className' => $this->className]
         );
 
-        $orderMaster = $request->input($this->orderMasterInputName);
-        $orderDetail = $request->input($this->orderDetailInputName);
+        $master = $request->input($this->headName);
+        $details = $request->input($this->bodyName);
 
-        return $this->service->update($this, $orderMaster, $orderDetail, $code);
+        return $this->service->update($this, $master, $details, $code);
     }
 
     /**
@@ -198,9 +168,14 @@ class BillOfSaleController extends BasicController
 
     public function printing($code)
     {
-        return view($this->routeName.'.printing', [
-            $this->orderMasterInputName => $this->order->getOrderMaster($code),
-            $this->orderDetailInputName => $this->order->getOrderDetail($code),
+        $data = $this->service->getShowTableData($code);
+
+        return view('erp.sale.order_printing', [
+            'chname' => '銷貨單',
+            'headName' => $this->headName,
+            'bodyName' => $this->bodyName,
+            $this->headName => $data['master'],
+            $this->bodyName => $data['details'],
         ]);
     }
 

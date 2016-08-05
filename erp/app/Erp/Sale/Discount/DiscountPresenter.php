@@ -23,7 +23,7 @@ class DiscountPresenter {
         return $options_html;
     }
 
-    public function getCommentByDiscountValue($value)
+    public function generateDiscountComment($value)
     {
         //$value = sprintf()
         if ($value == '' || $value == 0) {

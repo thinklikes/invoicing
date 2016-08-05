@@ -1,16 +1,20 @@
 @extends('layouts.app')
-
 @inject('PublicPresenter', 'App\Presenters\PublicPresenter')
-@inject('OrderCalculator', 'App\Presenters\OrderCalculator')
+
+@include('erp.show_button_group', [
+    'print_enabled' => true,
+    'delete_enabled' => $returnOfPurchaseMaster['paid_amount'] == 0,
+    'edit_enabled'   => $returnOfPurchaseMaster['paid_amount'] == 0,
+    'chname'         => '進貨退回單',
+    'route_name'     => 'returnOfPurchase',
+    'code'           => $returnOfPurchaseMaster->code
+])
 
 @section('content')
-        {{ $OrderCalculator->setOrderMaster($returnOfPurchaseMaster) }}
-        {{ $OrderCalculator->setOrderDetail($returnOfPurchaseDetail) }}
-        {{ $OrderCalculator->calculate() }}
         <table id="master" width="100%">
             <tr>
-                <td>進貨退回日期</td>
-                <td>{{ $PublicPresenter->getFormatDate($returnOfPurchaseMaster->created_at) }}</td>
+                <td>開單日期</td>
+                <td>{{ $returnOfPurchaseMaster->date }}</td>
                 <td>進貨退回單號</td>
                 <td>{{ $returnOfPurchaseMaster->code }}</td>
                 <td>發票號碼</td>
@@ -19,8 +23,8 @@
             <tr>
                 <th>供應商</th>
                 <td colspan="5">
-                    {{ $returnOfPurchaseMaster->supplier_code }}
-                    {{ $returnOfPurchaseMaster->supplier_name }}
+                    {{ $returnOfPurchaseMaster->supplier->code }}
+                    {{ $returnOfPurchaseMaster->supplier->name }}
                 </td>
             </tr>
             <tr>
@@ -40,24 +44,24 @@
         <table id="detail" width="100%">
             <thead>
                 <tr>
-                    <th class="string">料品編號</th>
-                    <th class="string">品名</th>
-                    <th class="numeric">數量</th>
-                    <th class="string">單位</th>
+                    <th>料品編號</th>
+                    <th>料品名稱</th>
+                    <th class="numeric">料品數量</th>
+                    <th class="string">料品單位</th>
                     <th class="numeric">稅前單價</th>
-                    <th class="numeric">小計</th>
+                    <th class="numeric">未稅金額</th>
                 </tr>
             </thead>
             <tbody>
 
     @foreach($returnOfPurchaseDetail as $i => $value)
                 <tr>
-                    <td class="string">{{ $returnOfPurchaseDetail[$i]['stock_code'] }}</td>
-                    <td class="string">{{ $returnOfPurchaseDetail[$i]['stock_name'] }}</td>
+                    <td>{{ $returnOfPurchaseDetail[$i]['stock']->code }}</td>
+                    <td>{{ $returnOfPurchaseDetail[$i]['stock']->name }}</td>
                     <td class="numeric">{{ $returnOfPurchaseDetail[$i]['quantity'] }}</td>
-                    <td class="string">{{ $returnOfPurchaseDetail[$i]['unit'] }}</td>
+                    <td class="string">{{ $returnOfPurchaseDetail[$i]['stock']->unit->comment }}</td>
                     <td class="numeric">{{ $returnOfPurchaseDetail[$i]['no_tax_price'] }}</td>
-                    <td class="numeric">{{ $OrderCalculator->getNoTaxAmount($i) }}</td>
+                    <td class="numeric">{{ $returnOfPurchaseDetail[$i]['no_tax_amount'] }}</td>
                 </tr>
     @endforeach
 
@@ -73,15 +77,15 @@
             <table>
                 <tr>
                     <td>稅前合計：</td>
-                    <td align="right">{{ $OrderCalculator->getTotalNoTaxAmount() }}</td>
+                    <td align="right">{{ $returnOfPurchaseMaster->total_no_tax_amount }}</td>
                 </tr>
                 <tr>
                     <td>營業稅：</td>
-                    <td align="right">{{ $OrderCalculator->getTax() }}</td>
+                    <td align="right">{{ $returnOfPurchaseMaster->tax }}</td>
                 </tr>
                 <tr>
                     <td>應付總計：</td>
-                    <td align="right">{{ $OrderCalculator->getTotalAmount() }}</td>
+                    <td align="right">{{ $returnOfPurchaseMaster->total_amount }}</td>
                 </tr>
             </table>
         </div>
@@ -93,18 +97,10 @@
                 </tr>
                 <tr>
                     <td>未付款：</td>
-                    <td align="right">{{ $OrderCalculator->getTotalAmount() - $returnOfPurchaseMaster->paid_amount }}</td>
+                    <td align="right">{{ $returnOfPurchaseMaster->total_amount
+                        - $returnOfPurchaseMaster->paid_amount }}</td>
                 </tr>
             </table>
         </div>
-        <a href="{{ url("/returnOfPurchase/{$returnOfPurchaseMaster->code}/printing") }}" target="_blank" class="btn btn-default">列印進貨退回單</a>
-    @if ($returnOfPurchaseMaster->paid_amount == 0)
-        <a href="{{ url("/returnOfPurchase/{$returnOfPurchaseMaster->code}/edit") }}" class="btn btn-default">維護進貨退回單</a>
-        <form action="{{ url("/returnOfPurchase/{$returnOfPurchaseMaster->code}") }}" class="form_of_delete" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('DELETE') }}
-
-            <button class="btn btn-danger">刪除進貨退回單</button>
-        </form>
-    @endif
+    @yield('show_button_group')
 @endsection

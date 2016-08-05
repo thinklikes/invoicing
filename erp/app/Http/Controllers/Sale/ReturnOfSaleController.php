@@ -6,30 +6,21 @@ use App;
 use App\Contracts\FormRequestInterface;
 use App\Http\Requests\DestroyRequest;
 use App\Http\Controllers\BasicController;
-use ReturnOfSale\ReturnOfSaleRepository as OrderRepository;
-use ReturnOfSale\ReturnOfSaleService as orderService;
-use Config;
+use ReturnOfSale\ReturnOfSaleService as Service;
 use Illuminate\Http\Request;
 
 class ReturnOfSaleController extends BasicController
 {
-    protected $orderRepository;
-    protected $orderService;
-    private $orderMasterInputName = 'returnOfSaleMaster';
-    private $orderDetailInputName = 'returnOfSaleDetail';
+    protected $service;
+    private $headName = 'returnOfSaleMaster';
+    private $bodyName = 'returnOfSaleDetail';
     private $routeName = 'erp.sale.returnOfSale';
-    private $ordersPerPage = 15;
-    /**
-     * SupplierController constructor.
-     *
-     * @param SupplierRepository $companyRepository
-     */
+    private $countPerPage = 15;
+
     public function __construct(
-        OrderRepository $orderRepository,
-        OrderService $orderService
+        Service $service
     ) {
-        $this->orderRepository = $orderRepository;
-        $this->orderService    = $orderService;
+        $this->service    = $service;
         $this->setFullClassName();
     }
 
@@ -41,15 +32,9 @@ class ReturnOfSaleController extends BasicController
      */
     public function json($data_mode, $code)
     {
-        switch ($data_mode) {
-            case 'getReceivableByCompanyId':
-                $orderMaster = $this->orderRepository->getReceivableByCompanyId($code);
-                break;
-            default:
-                # code...
-                break;
-        }
-        return response()->json($orderMaster->all());
+        $data = $this->service->getJsonDataByMode($data_mode, $code);
+
+        return response()->json($data->all());
     }
     /**
      * Display a listing of the resource.
@@ -59,7 +44,7 @@ class ReturnOfSaleController extends BasicController
     public function index()
     {
         return view($this->routeName.'.index', [
-            'orders' => $this->orderRepository->getOrdersPaginated($this->ordersPerPage)
+            'orders' => $this->service->showOrders($this->countPerPage)
         ]);
     }
 
@@ -70,10 +55,18 @@ class ReturnOfSaleController extends BasicController
      */
     public function create(Request $request)
     {
+        $master = $request->old($this->headName);
+
+        $details = $request->old($this->bodyName);
+
+        $data = $this->service->getCreateFormData($master, $details);
+
         return view($this->routeName.'.create', [
-            'new_master_code'           => $this->orderRepository->getNewOrderCode(),
-            $this->orderMasterInputName => $request->old($this->orderMasterInputName),
-            $this->orderDetailInputName => $request->old($this->orderDetailInputName),
+            'new_master_code' => $data['new_master_code'],
+            'headName' => $this->headName,
+            'bodyName' => $this->bodyName,
+            $this->headName => $data['master'],
+            $this->bodyName => $data['details'],
         ]);
     }
 
@@ -92,10 +85,10 @@ class ReturnOfSaleController extends BasicController
         );
 
         //抓出使用者輸入的資料
-        $orderMaster = $request->input($this->orderMasterInputName);
-        $orderDetail = $request->input($this->orderDetailInputName);
+        $master = $request->input($this->headName);
+        $details = $request->input($this->bodyName);
 
-        return $this->orderService->create($this, $orderMaster, $orderDetail);
+        return $this->service->create($this, $master, $details);
     }
 
     /**
@@ -106,19 +99,11 @@ class ReturnOfSaleController extends BasicController
      */
     public function show($code)
     {
-        $orderMaster = $this->orderRepository->getOrderMaster($code);
-        //$orderMaster->company_code = $orderMaster->company->code;
-        $orderMaster->company_name = $orderMaster->company->company_name;
+        $data = $this->service->getShowTableData($code);
 
-        $orderDetail = $this->orderRepository->getOrderDetail($code);
-        foreach ($orderDetail as $key => $value) {
-            $orderDetail[$key]->stock_code = $orderDetail[$key]->stock->code;
-            $orderDetail[$key]->stock_name = $orderDetail[$key]->stock->name;
-            $orderDetail[$key]->unit = $orderDetail[$key]->stock->unit->comment;
-        }
         return view($this->routeName.'.show', [
-            $this->orderMasterInputName => $orderMaster,
-            $this->orderDetailInputName => $orderDetail,
+            $this->headName => $data['master'],
+            $this->bodyName => $data['details'],
         ]);
     }
 
@@ -130,40 +115,17 @@ class ReturnOfSaleController extends BasicController
      */
     public function edit(Request $request, $code)
     {
-        if ($request->old()) {
-            $orderMaster = $request->old($this->orderMasterInputName);
+        $master = $request->old($this->headName);
 
-            $orderMaster['created_at'] = $this->orderRepository
-                ->getOrderMasterfield('created_at', $code);
+        $details = $request->old($this->bodyName);
 
-            $orderMaster['received_amount'] = $this->orderRepository
-                ->getOrderMasterfield('received_amount', $code);
-
-            $orderMaster['code'] = $code;
-
-            $orderDetail = $request->old($this->orderDetailInputName);
-        } else {
-            $orderMaster = $this->orderRepository->getOrderMaster($code);
-
-            $orderMaster->company_code = $orderMaster->company->company_code;
-
-            $orderMaster->company_name = $orderMaster->company->company_name;
-
-            $orderDetail = $this->orderRepository->getOrderDetail($code);
-
-            foreach ($orderDetail as $key => $value) {
-                $orderDetail[$key]->stock_code = $orderDetail[$key]->stock->code;
-
-                $orderDetail[$key]->stock_name = $orderDetail[$key]->stock->name;
-
-                $orderDetail[$key]->unit = $orderDetail[$key]->stock->unit->comment;
-            }
-        }
-
+        $data = $this->service->getEditFormData($code, $master, $details);
 
         return view($this->routeName.'.edit', [
-            $this->orderMasterInputName => $orderMaster,
-            $this->orderDetailInputName => $orderDetail,
+            'headName' => $this->headName,
+            'bodyName' => $this->bodyName,
+            $this->headName => $data['master'],
+            $this->bodyName => $data['details'],
         ]);
     }
 
@@ -182,10 +144,10 @@ class ReturnOfSaleController extends BasicController
             ['className' => $this->className]
         );
 
-        $orderMaster = $request->input($this->orderMasterInputName);
-        $orderDetail = $request->input($this->orderDetailInputName);
+        $master = $request->input($this->headName);
+        $details = $request->input($this->bodyName);
 
-        return $this->orderService->update($this, $orderMaster, $orderDetail, $code);
+        return $this->service->update($this, $master, $details, $code);
     }
 
     /**
@@ -196,14 +158,19 @@ class ReturnOfSaleController extends BasicController
      */
     public function destroy(DestroyRequest $request, $code)
     {
-        return $this->orderService->delete($this, $code);
+        return $this->service->delete($this, $code);
     }
 
     public function printing($code)
     {
-        return view($this->routeName.'.printing', [
-            $this->orderMasterInputName => $this->orderRepository->getOrderMaster($code),
-            $this->orderDetailInputName => $this->orderRepository->getOrderDetail($code),
+        $data = $this->service->getShowTableData($code);
+
+        return view('erp.sale.order_printing', [
+            'chname' => '銷貨退回單',
+            'headName' => $this->headName,
+            'bodyName' => $this->bodyName,
+            $this->headName => $data['master'],
+            $this->bodyName => $data['details'],
         ]);
     }
 }

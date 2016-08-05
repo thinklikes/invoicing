@@ -1,8 +1,3 @@
-@inject('PublicPresenter', 'App\Presenters\PublicPresenter')
-@inject('OrderCalculator', 'App\Presenters\OrderCalculator')
-        {{ $OrderCalculator->setOrderMaster($billOfSaleMaster) }}
-        {{ $OrderCalculator->setOrderDetail($billOfSaleDetail) }}
-        {{ $OrderCalculator->calculate() }}
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/print.css') }}">
 <div class="main_page">
     <div class="information_container">
@@ -16,54 +11,54 @@
         <div class="order_information">
             <table>
                 <tr>
-                    <td><u>銷貨單</u></td>
+                    <td><u>{{ $chname }}</u></td>
                 </tr>
             </table>
         </div>
     </div>
-    <div class="clear"></div>    
-     <hr />   
+    <div class="clear"></div>
+    <hr />
         <table id="master" class="l_move d_01">
             <tr>
-                <th>客戶名稱：</th>
-                <td>{{ $billOfSaleMaster->company->company_name }}</td>
-                <th>客戶編號：</th>
+                <th>供應商名稱：</th>
+                <td>{{ ${$headName}->supplier->name }}</td>
+                <th>供應商編號：</th>
                 <td>
-                    {{ $billOfSaleMaster->company->company_code }}
+                    {{ ${$headName}->supplier->code }}
                 </td>
             </tr>
             <tr>
                 <th>統一編號：</th>
-                <td></td>
+                <td>{{ ${$headName}->supplier->taxNumber }}</td>
                 <th>電話：</th>
-                <td></td>
+                <td>{{ ${$headName}->supplier->telphone }}</td>
             </tr>
             <tr>
                 <th>聯絡地址：</th>
-                <td colspan="3"></td>
+                <td colspan="3">{{ ${$headName}->supplier->address }}</td>
             </tr>
             <tr>
                 <th>送貨地址：</th>
-                <td colspan="3"></td>
+                <td colspan="3">{{ ${$headName}->supplier->address }}</td>
             </tr>
         </table>
         <table class="r_move">
            <tr>
-             <th>銷貨日期：</th>
-             <td>{{ $PublicPresenter->getFormatDate($billOfSaleMaster->created_at) }}</td>
+             <th>開單日期：</th>
+             <td>{{ ${$headName}->date }}</td>
           </tr>
            <tr>
-             <th>銷貨單號：</th>
-             <td>{{ $billOfSaleMaster->code }}</td>
+             <th>{{ $chname }}號：</th>
+             <td>{{ ${$headName}->code }}</td>
           </tr>
            <tr>
-             <th>發票編號：</th>
-             <td></td>
+             <th>發票號碼：</th>
+             <td>{{ ${$headName}->invoice_code }}</td>
           </tr>
           <tr>
-             <th>銷貨倉庫：</th>
+             <th>倉庫：</th>
               <td colspan="3">
-                 {{ $billOfSaleMaster->warehouse->name }}
+                 {{ ${$headName}->warehouse->name }}
               </td>
           </tr>
         </table>
@@ -73,23 +68,23 @@
             <thead>
                 <tr>
                     <th>料品編號</th>
-                    <th>品名</th>
-                    <th>數量</th>
-                    <th>單位</th>
-                    <th>稅前單價</th>
-                    <th>小計</th>
+                    <th>料品名稱</th>
+                    <th class="numeric">料品數量</th>
+                    <th class="numeric">料品單位</th>
+                    <th class="numeric">稅前單價</th>
+                    <th class="numeric">未稅金額</th>
                 </tr>
             </thead>
             <tbody>
 
-    @foreach($billOfSaleDetail as $i => $value)
+    @foreach(${$bodyName} as $i => $value)
                 <tr>
-                    <td>{{ $billOfSaleDetail[$i]->stock->code }}</td>
-                    <td>{{ $billOfSaleDetail[$i]->stock->name }}</td>
-                    <td>{{ $billOfSaleDetail[$i]['quantity'] }}</td>
-                    <td>{{ $billOfSaleDetail[$i]->stock->unit->comment }}</td>
-                    <td>{{ $billOfSaleDetail[$i]['no_tax_price'] }}</td>
-                    <td>{{ $OrderCalculator->getNoTaxAmount($i) }}</td>
+                    <td>{{ ${$bodyName}[$i]->stock->code }}</td>
+                    <td>{{ ${$bodyName}[$i]->stock->name }}</td>
+                    <td class="numeric">{{ ${$bodyName}[$i]['quantity'] }}</td>
+                    <td class="numeric">{{ ${$bodyName}[$i]->stock->unit->comment }}</td>
+                    <td class="numeric">{{ ${$bodyName}[$i]['no_tax_price'] }}</td>
+                    <td class="numeric">{{ ${$bodyName}[$i]['no_tax_amount'] }}</td>
                 </tr>
     @endforeach
 
@@ -99,30 +94,30 @@
         <div class="subTotal">
             <table class="width_01 d_02">
                 <tr>
-                    <th>折讓金額：</th>
+                    <th></th>
                     <td></td>
                     <th>稅前合計：</th>
-                    <td>{{ $OrderCalculator->getTotalNoTaxAmount() }}</td>
+                    <td class="numeric">{{ ${$headName}->total_no_tax_amount }}</td>
                 </tr>
                 <tr>
-                    <th>已收金額：</th>
-                    <td></td>
+                    <th>已付金額：</th>
+                    <td class="numeric">{{ ${$headName}->paid_amount }}</td>
                     <th>營業稅：</th>
-                    <td>{{ $OrderCalculator->getTax() }}</td>
+                    <td class="numeric">{{ ${$headName}->tax }}</td>
                 </tr><tr>
-                    <th>應收金額：</th>
-                    <td></td>
-                    <th>應付總計：</th>
-                    <td>{{ $OrderCalculator->getTotalAmount() }}</td>
+                    <th>應付金額：</th>
+                    <td class="numeric">{{ ${$headName}->total_amount - ${$headName}->paid_amount}}</td>
+                    <th>金額總計：</th>
+                    <td class="numeric">{{ ${$headName}->total_amount }}</td>
                 </tr>
             </table>
         </div>
         <hr />
         <table>
            <tr>
-                <th>銷貨單備註：</th>
+                <th>{{ $chname }}備註：</th>
                 <td colspan="3">
-                    {{ $billOfSaleMaster->note }}
+                    {{ ${$headName}->note }}
                 </td>
             </tr>
         </table>

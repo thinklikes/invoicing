@@ -1,12 +1,16 @@
 @extends('layouts.app')
-
 @inject('PublicPresenter', 'App\Presenters\PublicPresenter')
-@inject('OrderCalculator', 'App\Presenters\OrderCalculator')
+
+@include('erp.show_button_group', [
+    'print_enabled' => false,
+    'delete_enabled' => true,
+    'edit_enabled'   => true,
+    'chname'         => '調整單',
+    'route_name'     => 'stockAdjust',
+    'code'           => $stockAdjustMaster->code
+])
 
 @section('content')
-        {{ $OrderCalculator->setOrderMaster($stockAdjustMaster) }}
-        {{ $OrderCalculator->setOrderDetail($stockAdjustDetail) }}
-        {{ $OrderCalculator->calculate() }}
         <table id="master" width="100%">
             <tr>
                 <td>調整日期</td>
@@ -31,75 +35,38 @@
         <table id="detail" width="100%">
             <thead>
                 <tr>
-                    <th class="string">料品編號</th>
-                    <th class="string">品名</th>
-                    <th class="numeric">數量</th>
-                    <th class="string">單位</th>
-                    <th class="numeric">成本</th>
-                    <th class="numeric">金額</th>
+                    <th>料品編號</th>
+                    <th>料品名稱</th>
+                    <th class="numeric">料品數量</th>
+                    <th class="string">料品單位</th>
+                    <th class="numeric">未稅單價</th>
+                    <th class="numeric">金額總計</th>
                 </tr>
             </thead>
             <tbody>
 
     @foreach($stockAdjustDetail as $i => $value)
                 <tr>
-                    <td class="string">{{ $stockAdjustDetail[$i]['stock_code'] }}</td>
-                    <td class="string">{{ $stockAdjustDetail[$i]['stock_name'] }}</td>
+                    <td class="string">{{ $stockAdjustDetail[$i]['stock']->code }}</td>
+                    <td class="string">{{ $stockAdjustDetail[$i]['stock']->name }}</td>
                     <td class="numeric">{{ $stockAdjustDetail[$i]['quantity'] }}</td>
-                    <td class="string">{{ $stockAdjustDetail[$i]['unit'] }}</td>
+                    <td class="string">{{ $stockAdjustDetail[$i]['stock']->unit->comment }}</td>
                     <td class="numeric">{{ $stockAdjustDetail[$i]['no_tax_price'] }}</td>
-                    <td class="numeric">{{ $OrderCalculator->getNoTaxAmount($i) }}</td>
+                    <td class="numeric">{{ $stockAdjustDetail[$i]['no_tax_amount'] }}</td>
                 </tr>
     @endforeach
 
             </tbody>
         </table>
         <hr>
-{{--         <div style="width:50%;">
-            <p>
-                營業稅 {{ $PublicPresenter->getTaxComment($stockAdjustMaster->tax_rate_code) }}
-            </p>
-        </div> --}}
-        <div style="width:50%;height:100px;float:left;">
+        <div>
             <table>
                 <tr>
-                    <th>小計：</th>
-                    <td>{{ $OrderCalculator->getTotalNoTaxAmount() }}</td>
+                    <th>金額總計：</th>
+                    <td>{{ $stockAdjustMaster->total_no_tax_amount }}</td>
                 </tr>
             </table>
-{{--             <table>
-                <tr>
-                    <td>稅前合計：</td>
-                    <td align="right">{{ $OrderCalculator->getTotalNoTaxAmount() }}</td>
-                </tr>
-                <tr>
-                    <td>營業稅：</td>
-                    <td align="right">{{ $OrderCalculator->getTax() }}</td>
-                </tr>
-                <tr>
-                    <td>應付總計：</td>
-                    <td align="right">{{ $OrderCalculator->getTotalAmount() }}</td>
-                </tr>
-            </table> --}}
         </div>
-        <div style="width:50%;height:100px;float:left;">
-{{--             <table>
-                <tr>
-                    <td>已付款：</td>
-                    <td align="right">{{ $stockAdjustMaster->paid_amount }}</td>
-                </tr>
-                <tr>
-                    <td>未付款：</td>
-                    <td align="right">{{ $OrderCalculator->getTotalAmount() - $stockAdjustMaster->paid_amount }}</td>
-                </tr>
-            </table> --}}
-        </div>
-        <a href="{{ url("/stockAdjust/{$stockAdjustMaster->code}/printing") }}" target="_blank" class="btn btn-default">列印調整單</a>
-        <a href="{{ url("/stockAdjust/{$stockAdjustMaster->code}/edit") }}" class="btn btn-default">維護調整單</a>
-        <form action="{{ url("/stockAdjust/{$stockAdjustMaster->code}") }}" class="form_of_delete" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('DELETE') }}
 
-            <button class="btn btn-danger">刪除調整單</button>
-        </form>
+        @yield('show_button_group')
 @endsection

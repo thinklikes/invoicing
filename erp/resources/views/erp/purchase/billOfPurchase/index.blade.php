@@ -11,7 +11,6 @@
                     <th>進貨單代號</th>
                     <th>供應商編號</th>
                     <th>供應商名稱</th>
-                    <th>交貨日期</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,7 +20,6 @@
                     <td><a href="{{ url("/billOfPurchase/$order->code") }}">{{ $order->code }}</a></td>
                     <td>{{ $order->supplier->code }}</td>
                     <td>{{ $order->supplier->name }}</td>
-                    <td>{{ $order->supplier->delivery_date }}</td>
                 </tr>
         @endforeach
             </tbody>

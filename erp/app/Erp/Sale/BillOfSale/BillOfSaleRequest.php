@@ -32,7 +32,7 @@ class BillOfSaleRequest extends Request implements FormRequestInterface
     {
 
         $lastDayOfPrevMonth = Carbon::now()->subMonth()
-            ->format('Y-m-01');
+            ->format('Y-m-t');
 
         $rules = [
                 //表頭驗證規則

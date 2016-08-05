@@ -1,4 +1,4 @@
-html{
+﻿html{
 	height: 100%;
 }
 
@@ -84,6 +84,12 @@ a.btn-default{
 }
 
 .form_of_delete .btn-danger{
+    font: bold 16px "微軟正黑體", "新細明體", Arial, Helvetica, sans-serif;
+	padding: 10px;
+	margin: 5px;
+}
+
+.btn-success{
     font: bold 16px "微軟正黑體", "新細明體", Arial, Helvetica, sans-serif;
 	padding: 10px;
 	margin: 5px;

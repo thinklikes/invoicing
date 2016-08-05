@@ -22,32 +22,7 @@ $(function() {
     rebindDeleteButton();
 
     $('#add_a_row').click(function () {
-        //console.log($('table#detail tbody tr:last').find('button:first').attr('id'));
-        if ($('table#detail tbody tr').length > 0) {
-            var new_id = $('table#detail tbody tr:last').find('input:first').attr('name').match(/\d+/g)[0];
-        } else {
-            new_id = 0;
-        }
-
-        new_id = parseInt(new_id) + 1;
-        var html ='\
-            <tr>\
-                <td>\
-                    <button type="button" class="remove_button"><i class="fa fa-remove"></i></button>\
-                </td>\
-                <td>\
-                    <input type="text" class="stock_code" name="' + app_name + 'Detail[' + new_id + '][stock_code]" size="10">\
-                    <input type="hidden" class="stock_id" name="' + app_name + 'Detail[' + new_id + '][stock_id]">\
-                </td>\
-                <td>\
-                    <input type="text" class="stock_autocomplete" name="' + app_name + 'Detail[' + new_id + '][stock_name]">\
-                </td>\
-                <td><input type="text" class="stock_quantity" name="' + app_name + 'Detail[' + new_id + '][quantity]" onkeyup="calculator.calculate();" style="text-align:right;" size="5"></td>\
-                <td><input type="text" class="stock_unit" name="' + app_name + 'Detail[' + new_id + '][unit]" readonly="" size="5"></td>\
-                <td><input type="text" class="stock_no_tax_price" name="' + app_name + 'Detail[' + new_id + '][no_tax_price]" style="text-align:right;" size="10"></td>\
-                <td><input type="text" class="stock_no_tax_amount" style="text-align:right;" size="10"></td>\
-            </tr>';
-        $('table#detail tbody').append(html);
+        appendItem();
         calculator.reCreateWidgets();
         rebindStockCombobox();
         //rebindQuantityBlur();

@@ -1,17 +1,22 @@
 @extends('layouts.app')
 
 @inject('PublicPresenter', 'App\Presenters\PublicPresenter')
-@inject('OrderCalculator', 'App\Presenters\OrderCalculator')
 @inject('discount', 'Sale\Discount\DiscountPresenter')
 
+@include('erp.show_button_group', [
+    'print_enabled' => true,
+    'delete_enabled' => $billOfSaleMaster['received_amount'] == 0,
+    'edit_enabled'   => $billOfSaleMaster['received_amount'] == 0,
+    'chname'         => '銷貨單',
+    'route_name'     => 'billOfSale',
+    'code'           => $billOfSaleMaster->code
+])
+
 @section('content')
-        {{ $OrderCalculator->setOrderMaster($billOfSaleMaster) }}
-        {{ $OrderCalculator->setOrderDetail($billOfSaleDetail) }}
-        {{ $OrderCalculator->calculate() }}
-        <table id="master" width="100%">
+        <table id="master" width="100%" class="table">
             <tr>
-                <td>銷貨日期</td>
-                <td>{{ $PublicPresenter->getFormatDate($billOfSaleMaster->created_at) }}</td>
+                <td>開單日期</td>
+                <td>{{ $billOfSaleMaster->date }}</td>
                 <td>銷貨單號</td>
                 <td>{{ $billOfSaleMaster->code }}</td>
                 <td>發票號碼</td>
@@ -38,34 +43,34 @@
             </tr>
         </table>
         <hr>
-        <table id="detail" width="100%">
+        <table id="detail" width="100%" class="table">
             <thead>
                 <tr>
                     <th class="string">料品編號</th>
-                    <th class="string">品名</th>
-                    <th class="string">折扣</th>
-                    <th class="numeric">數量</th>
-                    <th class="string">單位</th>
+                    <th class="string">料品名稱</th>
+                    <th class="string">優惠折扣</th>
+                    <th class="numeric">料品數量</th>
+                    <th class="string">料品單位</th>
                     <th class="numeric">稅前單價</th>
-                    <th class="numeric">小計</th>
+                    <th class="numeric">未稅金額</th>
                 </tr>
             </thead>
             <tbody>
 
     @foreach($billOfSaleDetail as $i => $value)
                 <tr>
-                    <td class="string">{{ $billOfSaleDetail[$i]['stock_code'] }}</td>
-                    <td class="string">{{ $billOfSaleDetail[$i]['stock_name'] }}</td>
+                    <td class="string">{{ $billOfSaleDetail[$i]['stock']->code }}</td>
+                    <td class="string">{{ $billOfSaleDetail[$i]['stock']->name }}</td>
                     <td class="string">
                         {{
-                            $discount->getCommentByDiscountValue(
+                            $discount->generateDiscountComment(
                                 $billOfSaleDetail[$i]['discount'])
                         }}
                     </td>
                     <td class="numeric">{{ $billOfSaleDetail[$i]['quantity'] }}</td>
-                    <td class="string">{{ $billOfSaleDetail[$i]['unit'] }}</td>
+                    <td class="string">{{ $billOfSaleDetail[$i]['stock']->unit->comment }}</td>
                     <td class="numeric">{{ $billOfSaleDetail[$i]['no_tax_price'] }}</td>
-                    <td class="numeric">{{ $OrderCalculator->getNoTaxAmount($i) }}</td>
+                    <td class="numeric">{{ $billOfSaleDetail[$i]['no_tax_amount'] }}</td>
                 </tr>
     @endforeach
 
@@ -78,41 +83,32 @@
             </p>
         </div>
         <div style="width:50%;height:100px;float:left;">
-            <table>
+            <table class="table">
                 <tr>
                     <td>稅前合計：</td>
-                    <td align="right">{{ $OrderCalculator->getTotalNoTaxAmount() }}</td>
+                    <td align="right">{{ $billOfSaleMaster['total_no_tax_amount'] }}</td>
                 </tr>
                 <tr>
                     <td>營業稅：</td>
-                    <td align="right">{{ $OrderCalculator->getTax() }}</td>
+                    <td align="right">{{ $billOfSaleMaster['tax'] }}</td>
                 </tr>
                 <tr>
-                    <td>應付總計：</td>
-                    <td align="right">{{ $OrderCalculator->getTotalAmount() }}</td>
+                    <td>金額總計：</td>
+                    <td align="right">{{ $billOfSaleMaster['total_amount'] }}</td>
                 </tr>
             </table>
         </div>
         <div style="width:50%;height:100px;float:left;">
-            <table>
+            <table class="table">
                 <tr>
                     <td>已收款：</td>
                     <td align="right">{{ $billOfSaleMaster['received_amount'] }}</td>
                 </tr>
                 <tr>
                     <td>未收款：</td>
-                    <td align="right">{{ $OrderCalculator->getTotalAmount() - $billOfSaleMaster['received_amount'] }}</td>
+                    <td align="right">{{ $billOfSaleMaster['total_amount'] - $billOfSaleMaster['received_amount'] }}</td>
                 </tr>
             </table>
         </div>
-        <a href="{{ url("/billOfSale/{$billOfSaleMaster->code}/printing") }}" target="_blank" class="btn btn-default">列印銷貨單</a>
-    @if ($billOfSaleMaster['received_amount'] == 0)
-        <a href="{{ url("/billOfSale/{$billOfSaleMaster->code}/edit") }}" class="btn btn-default">維護銷貨單</a>
-        <form action="{{ url("/billOfSale/{$billOfSaleMaster->code}") }}" class="form_of_delete" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('DELETE') }}
-
-            <button class="btn btn-danger">刪除銷貨單</button>
-        </form>
-    @endif
+    @yield('show_button_group')
 @endsection

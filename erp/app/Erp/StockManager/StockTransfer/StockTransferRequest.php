@@ -4,6 +4,7 @@ namespace StockTransfer;
 
 use App\Http\Requests\Request;
 use App\Contracts\FormRequestInterface;
+use Carbon\Carbon;
 
 class StockTransferRequest extends Request implements FormRequestInterface
 {
@@ -29,7 +30,12 @@ class StockTransferRequest extends Request implements FormRequestInterface
      */
     public function rules()
     {
+        $lastDayOfPrevMonth = Carbon::now()->subMonth()
+            ->format('Y-m-t');
+
         $rules = [
+            "{$this->orderMasterInputName}.date"
+                => "required|date|after:".$lastDayOfPrevMonth,
             //表頭驗證規則
             "{$this->orderMasterInputName}.from_warehouse_id"
                 => "required|different:{$this->orderMasterInputName}.to_warehouse_id",

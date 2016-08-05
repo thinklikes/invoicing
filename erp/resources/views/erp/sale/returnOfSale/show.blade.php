@@ -1,16 +1,20 @@
 @extends('layouts.app')
-
 @inject('PublicPresenter', 'App\Presenters\PublicPresenter')
-@inject('OrderCalculator', 'App\Presenters\OrderCalculator')
+
+@include('erp.show_button_group', [
+    'print_enabled' => true,
+    'delete_enabled' => $returnOfSaleMaster['received_amount'] == 0,
+    'edit_enabled'   => $returnOfSaleMaster['received_amount'] == 0,
+    'chname'         => '銷貨退回單',
+    'route_name'     => 'returnOfSale',
+    'code'           => $returnOfSaleMaster->code
+])
 
 @section('content')
-        {{ $OrderCalculator->setOrderMaster($returnOfSaleMaster) }}
-        {{ $OrderCalculator->setOrderDetail($returnOfSaleDetail) }}
-        {{ $OrderCalculator->calculate() }}
         <table id="master" width="100%">
             <tr>
-                <td>銷貨退回日期</td>
-                <td>{{ $PublicPresenter->getFormatDate($returnOfSaleMaster->created_at) }}</td>
+                <td>開單日期</td>
+                <td>{{ $returnOfSaleMaster->date }}</td>
                 <td>銷貨退回單號</td>
                 <td>{{ $returnOfSaleMaster->code }}</td>
                 <td>發票號碼</td>
@@ -41,23 +45,23 @@
             <thead>
                 <tr>
                     <th class="string">料品編號</th>
-                    <th class="string">品名</th>
-                    <th class="numeric">數量</th>
-                    <th class="string">單位</th>
+                    <th class="string">料品名稱</th>
+                    <th class="numeric">料品數量</th>
+                    <th class="string">料品單位</th>
                     <th class="numeric">稅前單價</th>
-                    <th class="numeric">小計</th>
+                    <th class="numeric">未稅金額</th>
                 </tr>
             </thead>
             <tbody>
 
     @foreach($returnOfSaleDetail as $i => $value)
                 <tr>
-                    <td class="string">{{ $returnOfSaleDetail[$i]['stock_code'] }}</td>
-                    <td class="string">{{ $returnOfSaleDetail[$i]['stock_name'] }}</td>
+                    <td class="string">{{ $returnOfSaleDetail[$i]['stock']->code }}</td>
+                    <td class="string">{{ $returnOfSaleDetail[$i]['stock']->name }}</td>
                     <td class="numeric">{{ $returnOfSaleDetail[$i]['quantity'] }}</td>
-                    <td class="string">{{ $returnOfSaleDetail[$i]['unit'] }}</td>
+                    <td class="string">{{ $returnOfSaleDetail[$i]['stock']->unit->comment }}</td>
                     <td class="numeric">{{ $returnOfSaleDetail[$i]['no_tax_price'] }}</td>
-                    <td class="numeric">{{ $OrderCalculator->getNoTaxAmount($i) }}</td>
+                    <td class="numeric">{{ $returnOfSaleDetail[$i]['no_tax_amount'] }}</td>
                 </tr>
     @endforeach
 
@@ -73,38 +77,30 @@
             <table>
                 <tr>
                     <td>稅前合計：</td>
-                    <td align="right">{{ $OrderCalculator->getTotalNoTaxAmount() }}</td>
+                    <td align="right">{{ $returnOfSaleMaster['total_no_tax_amount'] }}</td>
                 </tr>
                 <tr>
                     <td>營業稅：</td>
-                    <td align="right">{{ $OrderCalculator->getTax() }}</td>
+                    <td align="right">{{ $returnOfSaleMaster['tax'] }}</td>
                 </tr>
                 <tr>
-                    <td>應付總計：</td>
-                    <td align="right">{{ $OrderCalculator->getTotalAmount() }}</td>
+                    <td>金額總計：</td>
+                    <td align="right">{{ $returnOfSaleMaster['total_amount'] }}</td>
                 </tr>
             </table>
         </div>
         <div style="width:50%;height:100px;float:left;">
             <table>
                 <tr>
-                    <td>已付款：</td>
+                    <td>已收款：</td>
                     <td align="right">{{ $returnOfSaleMaster['received_amount'] }}</td>
                 </tr>
                 <tr>
-                    <td>未付款：</td>
-                    <td align="right">{{ $OrderCalculator->getTotalAmount() - $returnOfSaleMaster['received_amount'] }}</td>
+                    <td>未收款：</td>
+                    <td align="right">{{ $returnOfSaleMaster['total_amount']
+                        - $returnOfSaleMaster['received_amount'] }}</td>
                 </tr>
             </table>
         </div>
-        <a href="{{ url("/returnOfSale/{$returnOfSaleMaster->code}/printing") }}" target="_blank" class="btn btn-default">列印銷貨退回單</a>
-    @if ($returnOfSaleMaster['received_amount'] == 0)
-        <a href="{{ url("/returnOfSale/{$returnOfSaleMaster->code}/edit") }}" class="btn btn-default">維護銷貨退回單</a>
-        <form action="{{ url("/returnOfSale/{$returnOfSaleMaster->code}") }}" class="form_of_delete" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('DELETE') }}
-
-            <button class="btn btn-danger">刪除銷貨退回單</button>
-        </form>
-    @endif
+    @yield('show_button_group')
 @endsection

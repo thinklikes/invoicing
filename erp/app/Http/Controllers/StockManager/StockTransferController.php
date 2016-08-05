@@ -5,30 +5,26 @@ use App;
 use App\Contracts\FormRequestInterface;
 use App\Http\Requests\DestroyRequest;
 use App\Http\Controllers\BasicController;
-use StockTransfer\StockTransferRepository as OrderRepository;
 use StockTransfer\StockTransferService as OrderService;
 use Illuminate\Http\Request;
 
 
 class StockTransferController extends BasicController
 {
-    protected $orderRepository;
-    protected $orderService;
-    private $orderMasterInputName = 'stockTransferMaster';
-    private $orderDetailInputName = 'stockTransferDetail';
+    protected $service;
+    private $headName = 'stockTransferMaster';
+    private $bodyName = 'stockTransferDetail';
     private $routeName = 'erp.stockManager.stockTransfer';
-    private $ordersPerPage = 15;
+    private $countPerPage = 15;
     /**
      * CompanyController constructor.
      *
      * @param CompanyRepository $companyRepository
      */
     public function __construct(
-        OrderRepository $orderRepository,
-        OrderService $orderService
+        OrderService $service
     ) {
-        $this->orderRepository = $orderRepository;
-        $this->orderService    = $orderService;
+        $this->service    = $service;
         $this->setFullClassName();
     }
 
@@ -59,7 +55,7 @@ class StockTransferController extends BasicController
     public function index()
     {
         return view($this->routeName.'.index', [
-            'orders' => $this->orderRepository->getOrdersPaginated($this->ordersPerPage)
+            'orders' => $this->service->showOrders($this->countPerPage)
         ]);
     }
 
@@ -70,10 +66,18 @@ class StockTransferController extends BasicController
      */
     public function create(Request $request)
     {
+        $master = $request->old($this->headName);
+
+        $details = $request->old($this->bodyName);
+
+        $data = $this->service->getCreateFormData($master, $details);
+
         return view($this->routeName.'.create', [
-            'new_master_code'           => $this->orderRepository->getNewOrderCode(),
-            $this->orderMasterInputName => $request->old($this->orderMasterInputName),
-            $this->orderDetailInputName => $request->old($this->orderDetailInputName),
+            'new_master_code' => $data['new_master_code'],
+            'headName' => $this->headName,
+            'bodyName' => $this->bodyName,
+            $this->headName => $data['master'],
+            $this->bodyName => $data['details'],
         ]);
     }
 
@@ -92,10 +96,10 @@ class StockTransferController extends BasicController
         );
 
         //抓出使用者輸入的資料
-        $orderMaster = $request->input($this->orderMasterInputName);
-        $orderDetail = $request->input($this->orderDetailInputName);
+        $orderMaster = $request->input($this->headName);
+        $orderDetail = $request->input($this->bodyName);
 
-        return $this->orderService->create($this, $orderMaster, $orderDetail);
+        return $this->service->create($this, $orderMaster, $orderDetail);
     }
 
     /**
@@ -106,18 +110,11 @@ class StockTransferController extends BasicController
      */
     public function show($code)
     {
-        $orderMaster = $this->orderRepository->getOrderMaster($code);
-        //$orderMaster->company_code = $orderMaster->company->code;
+        $data = $this->service->getShowTableData($code);
 
-        $orderDetail = $this->orderRepository->getOrderDetail($code);
-        foreach ($orderDetail as $key => $value) {
-            $orderDetail[$key]->stock_code = $orderDetail[$key]->stock->code;
-            $orderDetail[$key]->stock_name = $orderDetail[$key]->stock->name;
-            $orderDetail[$key]->unit = $orderDetail[$key]->stock->unit->comment;
-        }
         return view($this->routeName.'.show', [
-            $this->orderMasterInputName => $orderMaster,
-            $this->orderDetailInputName => $orderDetail,
+            $this->headName => $data['master'],
+            $this->bodyName => $data['details'],
         ]);
     }
 
@@ -129,32 +126,20 @@ class StockTransferController extends BasicController
      */
     public function edit(Request $request, $code)
     {
-        if ($request->old()) {
-            $orderMaster = $request->old($this->orderMasterInputName);
+        $master = $request->old($this->headName);
 
-            $orderMaster['created_at'] = $this->orderRepository
-                ->getOrderMasterfield('created_at', $code);
+        $details = $request->old($this->bodyName);
 
-            $orderMaster['code'] = $code;
-
-            $orderDetail = $request->old($this->orderDetailInputName);
-        } else {
-            $orderMaster = $this->orderRepository->getOrderMaster($code);
-            //$orderMaster->company_code = $orderMaster->company->code;
-
-            $orderDetail = $this->orderRepository->getOrderDetail($code);
-            foreach ($orderDetail as $key => $value) {
-                $orderDetail[$key]->stock_code = $orderDetail[$key]->stock->code;
-                $orderDetail[$key]->stock_name = $orderDetail[$key]->stock->name;
-                $orderDetail[$key]->unit = $orderDetail[$key]->stock->unit->comment;
-            }
-        }
+        $data = $this->service->getEditFormData($code, $master, $details);
 
         return view($this->routeName.'.edit', [
-            $this->orderMasterInputName => $orderMaster,
-            $this->orderDetailInputName => $orderDetail,
+            'headName' => $this->headName,
+            'bodyName' => $this->bodyName,
+            $this->headName => $data['master'],
+            $this->bodyName => $data['details'],
         ]);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -171,10 +156,10 @@ class StockTransferController extends BasicController
             ['className' => $this->className]
         );
 
-        $orderMaster = $request->input($this->orderMasterInputName);
-        $orderDetail = $request->input($this->orderDetailInputName);
+        $orderMaster = $request->input($this->headName);
+        $orderDetail = $request->input($this->bodyName);
 
-        return $this->orderService->update($this, $orderMaster, $orderDetail, $code);
+        return $this->service->update($this, $orderMaster, $orderDetail, $code);
     }
 
     /**
@@ -185,14 +170,19 @@ class StockTransferController extends BasicController
      */
     public function destroy(DestroyRequest $request, $code)
     {
-        return $this->orderService->delete($this, $code);
+        return $this->service->delete($this, $code);
     }
 
     public function printing($code)
     {
-        return view($this->routeName.'.printing', [
-            $this->orderMasterInputName => $this->orderRepository->getOrderMaster($code),
-            $this->orderDetailInputName => $this->orderRepository->getOrderDetail($code),
+        $data = $this->service->getShowTableData($code);
+
+        return view('erp.purchase.order_printing', [
+            'chname' => '調整單',
+            'headName' => $this->headName,
+            'bodyName' => $this->bodyName,
+            $this->headName => $data['master'],
+            $this->bodyName => $data['details'],
         ]);
     }
 }

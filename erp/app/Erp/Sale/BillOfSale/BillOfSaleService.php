@@ -11,9 +11,6 @@ class BillOfSaleService
 {
     protected $order, $calculator, $stockOutLogs;
     protected $stock;
-    private $masterInputName = 'billOfSaleMaster';
-    private $detailInputName = 'billOfSaleDetail';
-    private $routeName = 'erp.sale.billOfSale';
 
     public function __construct(
         Order $order,
@@ -28,19 +25,40 @@ class BillOfSaleService
     }
 
     /**
-     * 攔截輸入過的表單建立資料以顯示
-     * @param  Request $request 請求的資料
-     * @return array
+     * 列出指定數量的銷貨單
+     * @param  integer $count 數量
+     * @return collection         內容是銷貨單的集合
      */
-    public function getCreateDataBeforeShown($master, $details)
+    public function showOrders($count = 0)
+    {
+        return $this->order->getOrdersPaginated($count);
+    }
+
+    public function getJsonDataByMode($data_mode, $code)
+    {
+        switch ($data_mode) {
+            case 'getReceivableByCompanyId':
+                return $this->order->getReceivableByCompanyId($code);
+                break;
+            default:
+                # code...
+                break;
+        }
+    }
+
+    /**
+     * 攔截輸入過的表單建立資料加以處理
+     * @param  array $master 表頭資料
+     * @param  array $details 表身資料
+     * @return array         處理過的資料
+     */
+    public function getCreateFormData($master, $details)
     {
         if (count($master) > 0) {
             //資料輸入計算機並且開始計算
             $this->calculator->setValuesAndCalculate([
                 'quantity'     => array_pluck($details, 'quantity'),
                 'no_tax_price' => array_pluck($details, 'no_tax_price'),
-                'discount'     => array_pluck($details, 'discount'),
-                'discount_enabled' => true,
             ]);
 
             //把未稅金額放到陣列
@@ -55,11 +73,121 @@ class BillOfSaleService
         }
         return [
             'new_master_code'  => $this->order->getNewOrderCode(),
-            $this->masterInputName => $master,
-            $this->detailInputName => $details,
+            'master' => $master,
+            'details' => $details,
         ];
     }
 
+    /**
+     * 攔截顯示詳細資料加以處理
+     * @param  array $master 表頭資料
+     * @param  array $details 表身資料
+     * @return array         處理過的資料
+     */
+    public function getShowTableData($code)
+    {
+        $master = $this->order->getOrderMaster($code);
+
+        $details = $this->order->getOrderDetail($code);
+
+        //資料輸入計算機並且開始計算
+        $this->calculator->setValuesAndCalculate([
+            'quantity'     => $details->pluck('quantity')->all(),
+            'no_tax_price' => $details->pluck('no_tax_price')->all(),
+        ]);
+
+        foreach($details as $key => $item) {
+            $item->no_tax_amount = $this->calculator->getNoTaxAmount($key);
+        }
+
+        $master->total_no_tax_amount = $this->calculator->getTotalNoTaxAmount();
+
+        $master->tax = $this->calculator->getTax();
+
+        $master->total_amount = $this->calculator->getTotalAmount();
+
+        return [
+            'master' => $master,
+            'details' => $details,
+        ];
+    }
+
+    /**
+     * 攔截輸入過的表單建立資料加以處理
+     * @param  array $master 表頭資料
+     * @param  array $details 表身資料
+     * @return array         處理過的資料
+     */
+    public function getEditFormData($code, $master, $details)
+    {
+        if (!$master) {
+            $master = $this->order->getOrderMaster($code);
+        }
+
+        $master['code'] = $code;
+
+        $master['received_amount'] = $this->order
+                ->getOrderMasterfield('received_amount', $code);
+
+        $master['company_name'] = $master['company_name']
+            ? $master['company_name']
+            : $master->company->company_name;
+
+        $master['company_code'] = $master['company_code']
+            ? $master['company_code']
+            : $master->company->company_code;
+
+        if (!$details) {
+            $details = $this->order->getOrderDetail($code);
+        }
+
+        if (gettype($details) == 'array') {
+            $quantity = array_pluck($details, 'quantity');
+            $no_tax_price = array_pluck($details, 'no_tax_price');
+        } else {
+            $quantity = $details->pluck('quantity')->all();
+            $no_tax_price = $details->pluck('no_tax_price')->all();
+        }
+
+        //資料輸入計算機並且開始計算
+        $this->calculator->setValuesAndCalculate([
+            'quantity'     => $quantity,
+            'no_tax_price' => $no_tax_price,
+        ]);
+
+        foreach ($details as $key => $value) {
+            $details[$key]['stock_code'] = $details[$key]['stock_code']
+                ? $details[$key]['stock_code']
+                : $details[$key]['stock']->code;
+
+            $details[$key]['stock_name'] = $details[$key]['stock_name']
+                ? $details[$key]['stock_name']
+                : $details[$key]['stock']->name;
+
+            $details[$key]['unit'] = $details[$key]['unit']
+                ? $details[$key]['unit']
+                : $details[$key]['stock']->unit->comment;
+
+            $details[$key]['no_tax_amount'] = $this->calculator->getNoTaxAmount($key);
+        }
+
+        $master['total_no_tax_amount'] = $this->calculator->getTotalNoTaxAmount();
+        $master['tax'] = $this->calculator->getTax();
+        $master['total_amount'] = $this->calculator->getTotalAmount();
+
+        return [
+            'master' => $master,
+            'details' => $details,
+        ];
+    }
+
+    /**
+     * 開始建立銷貨單
+     * @param  BillOfSaleController $listener 銷貨單的控制器
+     * @param  Array $master   銷貨單表頭
+     * @param  Array $details  銷貨單表身
+     * @return Session           是否成功的訊息
+     */
     public function create($listener, $master, $details)
     {
 
@@ -71,8 +199,6 @@ class BillOfSaleService
         $this->calculator->setValuesAndCalculate([
             'quantity'     => array_pluck($details, 'quantity'),
             'no_tax_price' => array_pluck($details, 'no_tax_price'),
-            'discount'     => array_pluck($details, 'discount'),
-            'discount_enabled' => true,
         ]);
 
         $master['total_amount'] = $this->calculator->getTotalAmount();
@@ -115,6 +241,8 @@ class BillOfSaleService
         );
     }
 
+
+
     public function update($listener, $master, $details, $code)
     {
         $isUpdated = true;
@@ -124,9 +252,11 @@ class BillOfSaleService
         //移除本單據的庫存出庫記錄
         $this->stockOutLogs->deleteStockOutLogsByOrderCode('billOfSale', $code);
 
-        $this->calculator->setOrderMaster($master);
-        $this->calculator->setOrderDetail($details);
-        $this->calculator->calculate();
+        //資料輸入計算機並且開始計算
+        $this->calculator->setValuesAndCalculate([
+            'quantity'     => array_pluck($details, 'quantity'),
+            'no_tax_price' => array_pluck($details, 'no_tax_price'),
+        ]);
 
         $master['total_amount'] = $this->calculator->getTotalAmount();
         //先存入表頭
@@ -196,15 +326,15 @@ class BillOfSaleService
 
     public function revertStockInventory($code) {
         //將庫存數量恢復到未開單前
-        $old_OrderMaster = $this->order->getOrderMaster($code);
-        $old_OrderDetail = $this->order->getOrderDetail($code);
+        $old_master = $this->order->getOrderMaster($code);
+        $old_details = $this->order->getOrderDetail($code);
         //因為是銷貨，把數量加回來
 
-        foreach ($old_OrderDetail as $key => $value) {
+        foreach ($old_details as $key => $value) {
             $this->stock->incrementInventory(
                 $value['quantity'],
                 $value['stock_id'],
-                $old_OrderMaster['warehouse_id']
+                $old_master['warehouse_id']
             );
         }
     }

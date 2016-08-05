@@ -4,6 +4,7 @@ namespace ReturnOfPurchase;
 
 use App\Http\Requests\Request;
 use App\Contracts\FormRequestInterface;
+use Carbon\Carbon;
 
 class ReturnOfPurchaseRequest extends Request implements FormRequestInterface
 {
@@ -28,12 +29,13 @@ class ReturnOfPurchaseRequest extends Request implements FormRequestInterface
      */
     public function rules()
     {
-        $code = $this->input("$this->orderMasterInputName.code");
+        $lastDayOfPrevMonth = Carbon::now()->subMonth()
+            ->format('Y-m-t');
 
         $rules = [
                 //表頭驗證規則
-                // "{$this->orderMasterInputName}.code"
-                //     => "required|unique:{$this->table_name},code,{$code},code",
+                "{$this->orderMasterInputName}.date"
+                    => "required|date|after:".$lastDayOfPrevMonth,
                 "{$this->orderMasterInputName}.supplier_id"
                     => "required",
                 // "{$this->orderMasterInputName}.tax_rate_code"

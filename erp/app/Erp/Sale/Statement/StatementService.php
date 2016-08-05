@@ -11,6 +11,7 @@ class StatementService
 {
     protected $billOfSale;
     protected $returnOfSale;
+    protected $company;
 
     public function __construct(
         BillOfSale $billOfSale,

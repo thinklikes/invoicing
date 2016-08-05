@@ -238,9 +238,9 @@ class BillOfSaleRepository extends BasicRepository
      * find a page of orders
      * @return array all purchases
      */
-    public function getOrdersPaginated($ordersPerPage)
+    public function getOrdersPaginated($count)
     {
-        return $this->orderMaster->orderBy('id', 'desc')->paginate($ordersPerPage);
+        return $this->orderMaster->orderBy('id', 'desc')->paginate($count);
     }
 
     public function getOrderMasterfield($field, $code)

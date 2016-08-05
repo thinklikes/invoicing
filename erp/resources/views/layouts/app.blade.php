@@ -21,6 +21,7 @@
     <script type="text/javascript" src="{{ asset('assets/js/AjaxCombobox.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/bindDatePicker.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/AjaxFetchDataByField.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/appendItem.js') }}"></script>
     {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0-rc.2/jquery-ui.min.css">

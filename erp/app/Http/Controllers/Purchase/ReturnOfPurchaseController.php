@@ -6,30 +6,25 @@ use App;
 use App\Contracts\FormRequestInterface;
 use App\Http\Requests\DestroyRequest;
 use App\Http\Controllers\BasicController;
-use ReturnOfPurchase\ReturnOfPurchaseRepository as OrderRepository;
-use ReturnOfPurchase\ReturnOfPurchaseService as orderService;
-use Config;
+use ReturnOfPurchase\ReturnOfPurchaseService as OrderService;
 use Illuminate\Http\Request;
 
 class ReturnOfPurchaseController extends BasicController
 {
-    protected $orderRepository;
-    protected $orderService;
-    private $orderMasterInputName = 'returnOfPurchaseMaster';
-    private $orderDetailInputName = 'returnOfPurchaseDetail';
+    protected $service;
+    private $headName = 'returnOfPurchaseMaster';
+    private $bodyName = 'returnOfPurchaseDetail';
     private $routeName = 'erp.purchase.returnOfPurchase';
-    private $ordersPerPage = 15;
+    private $countPerPage = 15;
     /**
      * SupplierController constructor.
      *
      * @param SupplierRepository $supplierRepository
      */
     public function __construct(
-        OrderRepository $orderRepository,
-        OrderService $orderService
+        OrderService $service
     ) {
-        $this->orderRepository = $orderRepository;
-        $this->orderService    = $orderService;
+        $this->service    = $service;
         $this->setFullClassName();
     }
 
@@ -41,15 +36,9 @@ class ReturnOfPurchaseController extends BasicController
      */
     public function json($data_mode, $code)
     {
-        switch ($data_mode) {
-            case 'getPayableBySupplierId':
-                $orderMaster = $this->orderRepository->getPayableBySupplierId($code);
-                break;
-            default:
-                # code...
-                break;
-        }
-        return response()->json($orderMaster->all());
+        $data = $this->service->getJsonDataByMode($data_mode, $code);
+
+        return response()->json($data->all());
     }
     /**
      * Display a listing of the resource.
@@ -59,7 +48,7 @@ class ReturnOfPurchaseController extends BasicController
     public function index()
     {
         return view($this->routeName.'.index', [
-            'orders' => $this->orderRepository->getOrdersPaginated($this->ordersPerPage)
+            'orders' => $this->service->showOrders($this->countPerPage)
         ]);
     }
 
@@ -70,10 +59,18 @@ class ReturnOfPurchaseController extends BasicController
      */
     public function create(Request $request)
     {
+        $master = $request->old($this->headName);
+
+        $details = $request->old($this->bodyName);
+
+        $data = $this->service->getCreateFormData($master, $details);
+
         return view($this->routeName.'.create', [
-            'new_master_code'           => $this->orderRepository->getNewOrderCode(),
-            $this->orderMasterInputName => $request->old($this->orderMasterInputName),
-            $this->orderDetailInputName => $request->old($this->orderDetailInputName),
+            'new_master_code' => $data['new_master_code'],
+            'headName' => $this->headName,
+            'bodyName' => $this->bodyName,
+            $this->headName => $data['master'],
+            $this->bodyName => $data['details'],
         ]);
     }
 
@@ -91,10 +88,10 @@ class ReturnOfPurchaseController extends BasicController
             ['className' => $this->className]
         );
         //抓出使用者輸入的資料
-        $orderMaster = $request->input($this->orderMasterInputName);
-        $orderDetail = $request->input($this->orderDetailInputName);
+        $orderMaster = $request->input($this->headName);
+        $orderDetail = $request->input($this->bodyName);
 
-        return $this->orderService->create($this, $orderMaster, $orderDetail);
+        return $this->service->create($this, $orderMaster, $orderDetail);
     }
 
     /**
@@ -105,19 +102,11 @@ class ReturnOfPurchaseController extends BasicController
      */
     public function show($code)
     {
-        $orderMaster = $this->orderRepository->getOrderMaster($code);
-        $orderMaster->supplier_code = $orderMaster->supplier->code;
-        $orderMaster->supplier_name = $orderMaster->supplier->name;
+        $data = $this->service->getShowTableData($code);
 
-        $orderDetail = $this->orderRepository->getOrderDetail($code);
-        foreach ($orderDetail as $key => $value) {
-            $orderDetail[$key]->stock_code = $orderDetail[$key]->stock->code;
-            $orderDetail[$key]->stock_name = $orderDetail[$key]->stock->name;
-            $orderDetail[$key]->unit = $orderDetail[$key]->stock->unit->comment;
-        }
         return view($this->routeName.'.show', [
-            $this->orderMasterInputName => $orderMaster,
-            $this->orderDetailInputName => $orderDetail,
+            $this->headName => $data['master'],
+            $this->bodyName => $data['details'],
         ]);
     }
 
@@ -129,31 +118,17 @@ class ReturnOfPurchaseController extends BasicController
      */
     public function edit(Request $request, $code)
     {
-        if ($request->old($this->orderMasterInputName)) {
-            $orderMaster = $request->old($this->orderMasterInputName);
-            $orderMaster['created_at'] = $this->orderRepository
-                ->getOrderMasterfield('created_at', $code);
-            $orderMaster['code'] = $code;
-        } else {
-            $orderMaster = $this->orderRepository->getOrderMaster($code);
-            $orderMaster->supplier_code = $orderMaster->supplier->code;
-            $orderMaster->supplier_name = $orderMaster->supplier->name;
-        }
+        $master = $request->old($this->headName);
 
-        if ($request->old($this->orderDetailInputName)) {
-            $orderDetail = $request->old($this->orderDetailInputName);
-        } else {
-            $orderDetail = $this->orderRepository->getOrderDetail($code);
-            foreach ($orderDetail as $key => $value) {
-                $orderDetail[$key]->stock_code = $orderDetail[$key]->stock->code;
-                $orderDetail[$key]->stock_name = $orderDetail[$key]->stock->name;
-                $orderDetail[$key]->unit = $orderDetail[$key]->stock->unit->comment;
-            }
-        }
+        $details = $request->old($this->bodyName);
+
+        $data = $this->service->getEditFormData($code, $master, $details);
 
         return view($this->routeName.'.edit', [
-            $this->orderMasterInputName => $orderMaster,
-            $this->orderDetailInputName => $orderDetail,
+            'headName' => $this->headName,
+            'bodyName' => $this->bodyName,
+            $this->headName => $data['master'],
+            $this->bodyName => $data['details'],
         ]);
     }
 
@@ -172,10 +147,10 @@ class ReturnOfPurchaseController extends BasicController
             ['className' => $this->className]
         );
 
-        $orderMaster = $request->input($this->orderMasterInputName);
-        $orderDetail = $request->input($this->orderDetailInputName);
+        $orderMaster = $request->input($this->headName);
+        $orderDetail = $request->input($this->bodyName);
 
-        return $this->orderService->update($this, $orderMaster, $orderDetail, $code);
+        return $this->service->update($this, $orderMaster, $orderDetail, $code);
     }
 
     /**
@@ -186,14 +161,19 @@ class ReturnOfPurchaseController extends BasicController
      */
     public function destroy(DestroyRequest $request, $code)
     {
-        return $this->orderService->delete($this, $code);
+        return $this->service->delete($this, $code);
     }
 
     public function printing($code)
     {
-        return view($this->routeName.'.printing', [
-            $this->orderMasterInputName => $this->orderRepository->getOrderMaster($code),
-            $this->orderDetailInputName => $this->orderRepository->getOrderDetail($code),
+        $data = $this->service->getShowTableData($code);
+
+        return view('erp.purchase.order_printing', [
+            'chname' => '進貨退回單',
+            'headName' => $this->headName,
+            'bodyName' => $this->bodyName,
+            $this->headName => $data['master'],
+            $this->bodyName => $data['details'],
         ]);
     }
 

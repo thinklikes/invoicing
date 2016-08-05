@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-{{-- 引入倉庫選項的檔案 --}}
+{{-- 注入倉庫選項的檔案 --}}
 @inject('WarehousePresenter', 'Warehouse\WarehousePresenter')
 
 {{-- 引入表身的html 檔案 --}}
-@include('erp.order_body', [
-    'app_name' => 'billOfSaleDetail',
+@include('erp.order_form_body', [
     'discount_enabled' => true
 ])
 
 {{-- 引入表尾的html 檔案 --}}
-@include('erp.sale.order_foot', [
-    'app_name' => 'billOfSaleMaster'])
+@include('erp.order_form_foot', [
+    'tax_enabled' => true
+])
 
 {{-- 主要html的區塊 --}}
 @section('content')
@@ -34,8 +34,11 @@
                         <div class="td">開單日期</div>
                         <div class="td">
                             <input type="text" class="datepicker"
-                                name="billOfSaleMaster[date]"
-                                value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
+                                name="{{ $headName }}[date]"
+                                value="{{
+                                    ${$headName}['date']
+                                        or Carbon\Carbon::now()->format('Y-m-d')
+                                }}">
                         </div>
                     </div>
                     <div class="tr">
@@ -48,46 +51,47 @@
                     <div class="tr">
                         <div class="td">發票號碼</div>
                         <div class="td">
-                            <input type="text" name="billOfSaleMaster[invoice_code]"
-                                value="{{ $billOfSaleMaster['invoice_code'] }}">
+                            <input type="text" name="{{ $headName }}[invoice_code]"
+                                value="{{ ${$headName}['invoice_code'] }}">
                         </div>
                     </div>
                     <div class="tr">
                         <div class="td">客戶</div>
                         <div class="td">
-                            <input type="hidden" name="billOfSaleMaster[company_id]"
+                            <input type="hidden" name="{{ $headName }}[company_id]"
                                 class="company_id"
-                                value="{{ $billOfSaleMaster['company_id'] }}">
-                            <input type="text" name="billOfSaleMaster[company_code]"
+                                value="{{ ${$headName}['company_id'] }}">
+                            <input type="text" name="{{ $headName }}[company_code]"
                                 class="company_code" size="5"
-                                value="{{ $billOfSaleMaster['company_code'] }}">
-                            <input type="text" name="billOfSaleMaster[company_name]"
+                                value="{{ ${$headName}['company_code'] }}">
+                            <input type="text" name="{{ $headName }}[company_name]"
                                 class="company_autocomplete" size="15"
-                                value="{{ $billOfSaleMaster['company_name'] }}">
+                                value="{{ ${$headName}['company_name'] }}">
                         </div>
                     </div>
                     <div class="tr">
                         <div class="td">銷貨單備註</div>
                         <div class="td">
-                            <textarea name="billOfSaleMaster[note]"
-                                cols="25" id="master_note">{{ $billOfSaleMaster['note'] }}</textarea>
+                            <textarea name="{{ $headName }}[note]"
+                                cols="25" id="master_note">{{ ${$headName}['note'] }}</textarea>
                         </div>
                     </div>
                    <div class="tr">
                         <div class="td">銷貨倉庫</div>
                         <div class="td">
-                            <select name="billOfSaleMaster[warehouse_id]">
+                            <select name="{{ $headName }}[warehouse_id]">
                                 <option></option>
-                                {!! $WarehousePresenter->renderOptions($billOfSaleMaster['warehouse_id']) !!}
+                                {!! $WarehousePresenter->renderOptions(${$headName}['warehouse_id']) !!}
                             </select>
                         </div>
                     </div>
                 </div>
             </div>
+
 {{-- 置入表身項目 --}}
-@yield('order_body')
+@yield('form_body')
 {{-- 置入表尾項目 --}}
-@yield('order_foot')
+@yield('form_foot')
 
             <button type="submit" class="btn btn-default">確認送出</button>
         </form>
