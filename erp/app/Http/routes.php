@@ -132,4 +132,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/stockInOutReport', 'StockInOutReportController@index');
         Route::get('/stockInOutReport/printing', 'StockInOutReportController@printing');
     });
+
+    Route::group(['namespace' => 'Erp'], function() {
+        Route::get('/company2', 'ErpController@index');
+        Route::get('/company2/printBarcode', 'ErpController@printBarcode');
+    });
 });

@@ -79,14 +79,14 @@ class FormRequestServiceProvider extends ServiceProvider
     }
 
     /**
-     * 取得提供者所提供的服務。
+     * 緩載提供者時, 取得提供者所提供的服務。
      *
      * @return array
      */
-    public function provides()
-    {
-        return [
-            'App\Contracts\FormRequestInterface'
-        ];
-    }
+    // public function provides()
+    // {
+    //     return [
+    //         'App\Contracts\FormRequestInterface'
+    //     ];
+    // }
 }

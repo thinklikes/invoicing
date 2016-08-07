@@ -27,19 +27,19 @@ $factory->define(Company\Company::class, function (Faker\Generator $faker) {
     $faker->addProvider(new Faker\Provider\zh_TW\Company($faker));
 
     return [
-        'company_name'      => $faker->company,
-        'boss'              => $faker->name,
         'company_code'      => strtoupper($faker->randomLetter).$faker->randomNumber(4),
+        'company_name'      => $faker->company,
         'mailbox'           => $faker->randomNumber(3),
         'company_abb'       => $faker->companyPrefix,
         'company_contact'   => $faker->name,
         'company_con_tel'   => $faker->phoneNumber,
         'company_con_email' => $faker->email,
-        'company_con_fax'   => $faker->phoneNumber,
+        'boss'              => $faker->name,
         'company_tel'       => $faker->phoneNumber,
         'company_fax'       => $faker->phoneNumber,
         'company_add'       => $faker->address,
         'VTA_NO'            => $faker->randomNumber(8),
+        'company_remark'    => $faker->realText,
     ];
 });
 

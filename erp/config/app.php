@@ -162,6 +162,9 @@ return [
         App\Providers\SystemConfigsServiceProvider::class,
         //IDE Helper Generator
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+
+        Erp\Providers\BarcodePrinterServiceProvider::class,
+        Erp\Providers\ErpServiceServiceProvider::class,
     ],
 
     /*

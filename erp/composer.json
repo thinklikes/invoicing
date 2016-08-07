@@ -27,6 +27,7 @@
         ],
         "psr-4": {
             "App\\"               : "app/",
+            "Erp\\"               : "app/Erp2/",
             "Page\\"              : "app/Erp/Page/",
             "Sale\\"              : "app/Erp/Sale",
             "Purchase\\"          : "app/Erp/Purchase",
