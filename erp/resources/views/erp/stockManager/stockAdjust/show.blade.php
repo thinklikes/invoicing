@@ -68,5 +68,6 @@
             </table>
         </div>
 
-        @yield('show_button_group')
+    {{-- 資料檢視頁的按鈕群組 --}}
+    @yield('show_button_group')
 @endsection

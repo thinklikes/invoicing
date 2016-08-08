@@ -2,6 +2,15 @@
 
 @inject('PublicPresenter', 'App\Presenters\PublicPresenter')
 
+@include('erp.show_button_group', [
+    'print_enabled' => false,
+    'delete_enabled' => true,
+    'edit_enabled'   => false,
+    'chname'         => '應收帳款沖銷單',
+    'route_name'     => 'receivableWriteOff',
+    'code'           => $receivableWriteOff->code
+])
+
 @section('content')
             <table id="master" width="100%">
                 <tr>
@@ -126,12 +135,7 @@
                     </tfoot>
                 </table>
             </div>
-        {{-- <a href="{{ url("/receivableWriteOff/{$receivableWriteOff->code}/edit") }}" class="btn btn-default">維護應收帳款沖銷單</a> --}}
-        <form action="{{ url("/receivableWriteOff/{$receivableWriteOff->code}") }}" class="form_of_delete" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('DELETE') }}
-
-            <button class="btn btn-danger">刪除應收帳款沖銷單</button>
-        </form>
+    {{-- 資料檢視頁的按鈕群組 --}}
+    @yield('show_button_group')
 
 @endsection

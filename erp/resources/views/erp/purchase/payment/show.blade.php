@@ -2,6 +2,15 @@
 
 @inject('PublicPresenter', 'App\Presenters\PublicPresenter')
 
+@include('erp.show_button_group', [
+    'print_enabled' => false,
+    'delete_enabled' => $payment->isWrittenOff == 0,
+    'edit_enabled'   => $payment->isWrittenOff == 0,
+    'chname'         => '付款單',
+    'route_name'     => 'payment',
+    'code'           => $payment->code
+])
+
 @section('content')
         <table id="master" width="100%">
             <tr>
@@ -62,13 +71,6 @@
             </table>
         </div>
         <hr>
-    @if ($payment->isWrittenOff == 0)
-        <a href="{{ url("/payment/{$payment->code}/edit") }}" class="btn btn-default">維護付款單</a>
-        <form action="{{ url("/payment/{$payment->code}") }}" class="form_of_delete" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('DELETE') }}
-
-            <button class="btn btn-danger">刪除付款單</button>
-        </form>
-    @endif
+    {{-- 資料檢視頁的按鈕群組 --}}
+    @yield('show_button_group')
 @endsection

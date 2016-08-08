@@ -1,18 +1,16 @@
 @extends('layouts.app')
 
 @inject('BarcodeGenerator', 'Picqer\Barcode\BarcodeGeneratorJPG')
-{{--
-@section('sidebar')
 
-<div class="panel panel-default">
-    <div class="panel-heading">條碼</div>
+@include('erp.show_button_group', [
+    'print_enabled' => false,
+    'delete_enabled' => true,
+    'edit_enabled'   => true,
+    'chname'         => '供應商',
+    'route_name'     => 'supplier',
+    'code'           => $supplier->id
+])
 
-    <div class="panel-body">
-    </div>
-</div>
-
-@endsection
---}}
 @section('content')
         <div style="float:right; margin-bottom:10px;">
             <img src="data:image/png;base64, {{ base64_encode($BarcodeGenerator->getBarcode($supplier->code, $BarcodeGenerator::TYPE_CODE_128)) }}">
@@ -67,11 +65,6 @@
                 <td>{{ $supplier->taxNumber }}</td>
             </tr>
         </table>
-        <a class="btn btn-default" href="{{ url("/supplier/$id/edit") }}">維護供應商資料</a>
-        <form action="{{ url("/supplier/$id") }}" method="POST" class="form_of_delete">
-            {{ csrf_field() }}
-            {{ method_field('DELETE') }}
-
-            <button class="btn btn-danger">刪除供應商</button>
-        </form>
+    {{-- 資料檢視頁的按鈕群組 --}}
+    @yield('show_button_group')
 @endsection

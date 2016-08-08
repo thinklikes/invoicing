@@ -1,11 +1,14 @@
 @extends('layouts.app')
-{{--
-@section('sidebar')
-    @parent
 
-    <p>這邊會附加在主要的側邊欄。</p>
-@endsection
---}}
+@include('erp.show_button_group', [
+    'print_enabled' => false,
+    'delete_enabled' => true,
+    'edit_enabled'   => true,
+    'chname'         => '付款方式',
+    'route_name'     => 'pay_way',
+    'code'           => $pay_way->id
+])
+
 @section('content')
 
         <table width="100%" class="table">
@@ -18,11 +21,6 @@
                 <td>{{ $pay_way->comment }}</td>
             </tr>
         </table>
-        <a href="{{ url("/pay_way/$id/edit") }}" class="btn btn-default">維護付款方式資料</a>
-        <form action="{{ url("/pay_way/$id") }}" class="form_of_delete" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('DELETE') }}
-
-            <button class="btn btn-danger">刪除付款方式</button>
-        </form>
+    {{-- 資料檢視頁的按鈕群組 --}}
+    @yield('show_button_group')
 @endsection

@@ -20,7 +20,9 @@
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
 
-            <button class="btn btn-danger">刪除{{ $chname }}</button>
+            <button class="btn btn-danger" onclick="return confirm('確認刪除{{ $chname }}??');">
+                刪除{{ $chname }}
+            </button>
         </form>
     @endif
 @endsection

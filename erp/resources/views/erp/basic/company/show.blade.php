@@ -1,12 +1,16 @@
 @extends('layouts.app')
 
 @inject('BarcodeGenerator', 'Picqer\Barcode\BarcodeGeneratorJPG')
-{{--
-@section('sidebar')
-    @parent
-    <p>這邊會附加在主要的側邊欄。</p>
-@endsection
---}}
+
+@include('erp.show_button_group', [
+    'print_enabled' => false,
+    'delete_enabled' => true,
+    'edit_enabled'   => true,
+    'chname'         => '客戶',
+    'route_name'     => 'company',
+    'code'           => $company->auto_id
+])
+
 @section('content')
         <div style="float:right; margin-bottom:10px;">
             <img src="data:image/png;base64,
@@ -83,11 +87,6 @@
                 {{ $company->pay_way_id != "" ? $pay_ways[$company->pay_way_id] : "" }}</td>
             </tr> --}}
         </table>
-        <a class="btn btn-default" href="{{ url("/company/".$company->auto_id."/edit") }}">維護客戶資料</a>
-        <form action="{{ url("/company/".$company->auto_id) }}" method="POST" class="form_of_delete">
-            {{ csrf_field() }}
-            {{ method_field('DELETE') }}
-
-            <button class="btn btn-danger">刪除客戶</button>
-        </form>
+    {{-- 資料檢視頁的按鈕群組 --}}
+    @yield('show_button_group')
 @endsection

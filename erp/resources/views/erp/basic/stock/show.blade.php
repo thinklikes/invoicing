@@ -1,6 +1,16 @@
 @extends('layouts.app')
 
 @inject('BarcodeGenerator', 'Picqer\Barcode\BarcodeGeneratorJPG')
+
+@include('erp.show_button_group', [
+    'print_enabled' => false,
+    'delete_enabled' => true,
+    'edit_enabled'   => true,
+    'chname'         => '料品',
+    'route_name'     => 'stock',
+    'code'           => $stock->id
+])
+
 @section('sidebar')
 
 <div class="panel panel-default">
@@ -66,11 +76,6 @@
                 <td>{{ $stock->no_tax_price_of_sold }}</td>
             </tr>
         </table>
-        <a class="btn btn-default" href="{{ url("/stock/$id/edit") }}">維護料品資料</a>
-        <form action="{{ url("/stock/$id") }}" method="POST" class="form_of_delete">
-            {{ csrf_field() }}
-            {{ method_field('DELETE') }}
-
-            <button class="btn btn-danger">刪除料品</button>
-        </form>
+    {{-- 資料檢視頁的按鈕群組 --}}
+    @yield('show_button_group')
 @endsection
