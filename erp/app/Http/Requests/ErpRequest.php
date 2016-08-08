@@ -50,10 +50,10 @@ class ErpRequest extends Request implements FormRequestInterface
             'company' => [
                 'company_code' => 'required',
                 'company_name' => 'required',
-                'boss'         => 'required',
+                //'boss'         => 'required',
                 'company_add'  => 'required',
                 'company_tel'  => 'required',
-                'VTA_NO'       => 'required|digits:8',
+                //'VTA_NO'       => 'required|digits:8',
                 // 'tax_rate_id' => 'required',
                 // 'pay_way_id'  => 'required',
             ],
