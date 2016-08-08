@@ -11,7 +11,8 @@
         "nesbot/carbon": "^1.21",
         "picqer/php-barcode-generator": "^0.2.0",
         "barryvdh/laravel-ide-helper": "^2.2",
-        "doctrine/dbal": "^2.5"
+        "doctrine/dbal": "^2.5",
+        "phpoffice/phpexcel": "^1.8"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -74,7 +75,6 @@
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan ide-helper:generate",
-            "php artisan ide-helper:meta",
             "php artisan optimize"
         ]
     },

@@ -8,6 +8,7 @@ use App\Contracts\FormRequestInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
 use App\Http\Controllers\BasicController;
+use Storage;
 
 class SystemConfigController extends BasicController
 {
@@ -97,6 +98,18 @@ class SystemConfigController extends BasicController
     public function import()
     {
         # code...
+    }
+
+    public function generataImportDemo()
+    {
+        $tables = '';
+        foreach($this->app_names as $app) {
+            $tables .= $app."\n";
+
+            //Schema::getColumnListing
+        }
+        Storage::disk('local')->put('file.txt', $tables);
+        return 'Success!!';
     }
 
 }

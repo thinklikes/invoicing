@@ -18,7 +18,9 @@ Route::group(['middleware' => 'auth'], function () {
     //首頁
     Route::get('/', 'PageController@index');
 
-    //Route::get('/test', 'AdminTestController@index');
+    Route::get('/test', function () {
+        Storage::disk('local')->put('file.txt', 'Contents');
+    });
 
     Route::get('/basic', 'PageController@basic');
 
@@ -44,7 +46,10 @@ Route::group(['middleware' => 'auth'], function () {
         //資料備份匯出
         Route::get('/system_config/export', 'SystemConfigController@export');
         //資料備份匯入
-        Route::get('/system_config/export', 'SystemConfigController@import');
+        Route::get('/system_config/import', 'SystemConfigController@import');
+        //產生匯入文件的Demo
+        Route::get('/system_config/importDemo', 'SystemConfigController@generataImportDemo');
+
 
         //客戶資料管理
         Route::get('/company/printBarcode', 'CompanyController@printBarcode');
