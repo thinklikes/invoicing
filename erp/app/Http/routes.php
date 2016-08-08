@@ -15,13 +15,10 @@ DB::enableQueryLog();
 Route::auth();
 
 Route::group(['middleware' => 'auth'], function () {
-    //系統更新記錄
-    Route::get('/updateLogs/{page?}', 'GitLoggerController@index');
-
     //首頁
     Route::get('/', 'PageController@index');
 
-    Route::get('/test', 'AdminTestController@index');
+    //Route::get('/test', 'AdminTestController@index');
 
     Route::get('/basic', 'PageController@basic');
 
@@ -30,6 +27,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/sale', 'PageController@sale');
 
     Route::get('/stockManager', 'PageController@stockManager');
+
+    Route::get('/system', 'PageController@system');
     //採購單作業
     Route::resource('/purchase_orders', 'PurchaseOrderController');
     //客戶訂單作業
@@ -40,6 +39,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/system_config', 'SystemConfigController@index');
         Route::get('/system_config/edit', 'SystemConfigController@edit');
         Route::put('/system_config/update', 'SystemConfigController@update');
+        //系統更新記錄
+        Route::get('/system_config/updateLogs/{page?}', 'SystemConfigController@updateLogs');
+        //資料備份匯出
+        Route::get('/system_config/export', 'SystemConfigController@export');
+        //資料備份匯入
+        Route::get('/system_config/export', 'SystemConfigController@import');
 
         //客戶資料管理
         Route::get('/company/printBarcode', 'CompanyController@printBarcode');

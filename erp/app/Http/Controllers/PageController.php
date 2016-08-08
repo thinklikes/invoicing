@@ -52,4 +52,9 @@ class PageController extends Controller
     {
         return view('home', ['pages' => $this->service->getSubPagesOfSubIndex($request, "stockManager")]);
     }
+
+    public function system(Request $request)
+    {
+        return view('home', ['pages' => $this->service->getSubPagesOfSubIndex($request, "system")]);
+    }
 }

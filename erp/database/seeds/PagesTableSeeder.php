@@ -558,27 +558,39 @@ class PagesTableSeeder extends Seeder
                 'enabled'    => 1,
             ],
             [
-                'name'       => '系統設定',
+                'name'       => '系統',
                 'level'      => 1,
+                'action'     => 'PageController@system',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '系統參數設定',
+                'level'      => 2,
                 'action'     => 'Basic\SystemConfigController@index',
                 'enabled'    => 1,
             ],
             [
-                'name'       => '維護系統設定',
-                'level'      => 2,
+                'name'       => '維護系統參數',
+                'level'      => 3,
                 'action'     => 'Basic\SystemConfigController@edit',
                 'enabled'    => 1,
             ],
             [
-                'name'       => '更新系統設定',
+                'name'       => '資料備份匯出',
                 'level'      => 2,
-                'action'     => 'Basic\SystemConfigController@update',
+                'action'     => 'Basic\SystemConfigController@export',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '資料備份匯入',
+                'level'      => 2,
+                'action'     => 'Basic\SystemConfigController@import',
                 'enabled'    => 1,
             ],
             [
                 'name'       => '系統更新記錄',
-                'level'      => 1,
-                'action'     => 'GitLoggerController@index',
+                'level'      => 2,
+                'action'     => 'Basic\SystemConfigController@updateLogs',
                 'enabled'    => 1,
             ]
         ];

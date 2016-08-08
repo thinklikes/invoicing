@@ -13,6 +13,27 @@ class SystemConfigController extends BasicController
 {
     private $routeName = 'erp.basic.system_config';
 
+    private $app_names = [
+        'company',              //客戶
+        'supplier',             //供應商
+        'stock',                //料品
+        'unit',                 //單位
+        'stock_class',          //料品類別
+        'pay_way',              //付款方式
+        'warehouse',            //倉庫
+        'system_config',        //系統參數設定
+        'billOfPurchase',       //進貨單
+        'returnOfPurchase',     //進貨退回單
+        'payment',              //付款單
+        'payableWriteOff',      //應付帳款沖銷單
+        'billOfSale',           //銷貨單
+        'returnOfSale',         //銷貨退回單
+        'receipt',              //收款單
+        'receivableWriteOff',   //應收帳款沖銷單
+        'stockAdjust',          //調整單
+        'stockTransfer',        //轉倉單
+    ];
+
     public function __construct()
     {
         $this->setFullClassName();
@@ -51,6 +72,31 @@ class SystemConfigController extends BasicController
 
         return redirect()->action(
                 "$this->className@index")
-            ->with(['status' => new MessageBag(['系統設定已更新'])]);
+            ->with(['status' => new MessageBag(['系統參數已更新'])]);
     }
+
+    public function updateLogs($page = 0)
+    {
+        //顯示git更新記錄
+        if (!$page) {
+            $page = 0;
+        }
+        $skip = 10 * $page;
+
+        exec('git log -10 --skip='.$skip.' --format=%cd%s --date=iso --grep="\[visiable\]"'
+            , $git_logs);
+        //exec('whoami', $output);
+        return view("$this->routeName.updateLogs", ['logs' => $git_logs]);
+    }
+
+    public function export()
+    {
+
+    }
+
+    public function import()
+    {
+        # code...
+    }
+
 }
