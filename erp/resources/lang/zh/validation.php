@@ -154,9 +154,24 @@ return [
             ],
         ],
         //客戶資料管理的表單驗證訊息
-        'customer' => [
-            'name' => [
+        'company' => [
+            'company_code' => [
+                'required'       => '我們需要知道客戶編號',
+            ],
+            'company_name' => [
                 'required'       => '我們需要知道公司名稱',
+            ],
+            'boss' => [
+                'required'       => '我們需要知道負責人',
+            ],
+            'company_add' => [
+                'required'       => '我們需要知道公司地址',
+            ],
+            'company_tel' => [
+                'required'       => '我們需要知道公司電話',
+            ],
+            'VTA_NO' => [
+                'required'       => '我們需要知道統一編號',
             ],
         ],
         'supplier' => [

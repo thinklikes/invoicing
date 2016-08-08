@@ -83,10 +83,10 @@ class FormRequestServiceProvider extends ServiceProvider
      *
      * @return array
      */
-    // public function provides()
-    // {
-    //     return [
-    //         'App\Contracts\FormRequestInterface'
-    //     ];
-    // }
+    public function provides()
+    {
+        return [
+            'App\Contracts\FormRequestInterface'
+        ];
+    }
 }

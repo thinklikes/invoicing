@@ -79,8 +79,8 @@ class ErpRequest extends Request implements FormRequestInterface
             'stock'    => [
                 'code'        => 'required',
                 'name'        => 'required',
-                'net_weight'   => 'required',
-                'gross_weight' => 'required',
+                // 'net_weight'   => 'required',
+                // 'gross_weight' => 'required',
             ],
 
             //系統設定資料表單驗證規則
