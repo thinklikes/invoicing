@@ -574,8 +574,13 @@ class PagesTableSeeder extends Seeder
                 'level'      => 2,
                 'action'     => 'Basic\SystemConfigController@update',
                 'enabled'    => 1,
+            ],
+            [
+                'name'       => '系統更新記錄',
+                'level'      => 1,
+                'action'     => 'GitLoggerController@index',
+                'enabled'    => 1,
             ]
-
         ];
         // make page code
         $i = 0;

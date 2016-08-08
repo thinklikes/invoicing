@@ -1,5 +1,5 @@
 @inject('page', 'Page\PagePresenter')
-@inject('presenter', 'App\Presenters\HomePagePresenter')
+@inject('presenter', 'App\Presenters\StatusPresenter')
 
 <!DOCTYPE html>
 <html lang="en">
@@ -50,34 +50,31 @@
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                <!-- Left Side Of Navbar -->
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/') }}">Home</a></li>
-                </ul>
-{{--
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ back()->getTargetUrl() }}">Back</a></li>
-                </ul>
---}}
+@if (Auth::guest())
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->
-@if (Auth::guest())
-                    <li><a href="{{ url('/login') }}">Login</a></li>
-                    <!--<li><a href="{{ url('/register') }}">Register</a></li>-->
+                    <li><a href="{{ url('/login') }}">使用者登入</a></li>
+                </ul>
 @else
-                    <li><a href="{{ url('/updateLogs') }}" target="_blank">更新紀錄</a></li>
+                <!-- Left Side Of Navbar -->
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url('/') }}">Home</a></li>
+                    <li><a href="{{ $page->getParentPageUrl() }}">回上一層</a></li>
+                </ul>
+                <!-- Right Side Of Navbar -->
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{{ url('/updateLogs') }}">更新紀錄</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                             {{ Auth::user()->name }} <span class="caret"></span>
                         </a>
-
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                         </ul>
                     </li>
-@endif
                 </ul>
+@endif
             </div>
         </div>
     </nav>
@@ -96,7 +93,7 @@
             <div class="col-md-8 col-md-offset-0">
                 <div class="panel panel-default">
 @if(Auth::check())
-                    <div class="panel-heading">{!! $page->getCurrentWebRoute(Route::currentRouteAction()) !!}</div>
+                    <div class="panel-heading">{!! $page->getCurrentWebRoute() !!}</div>
 @else
                     <div class="panel-heading">login</div>
 @endif

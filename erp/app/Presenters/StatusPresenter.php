@@ -2,7 +2,7 @@
 
 namespace App\Presenters;
 
-class HomePagePresenter
+class StatusPresenter
 {
     /**
      * 顯示系統訊息用

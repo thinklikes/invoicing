@@ -19,13 +19,6 @@ class GitLoggerController extends Controller
         exec('git log -10 --skip='.$skip.' --format=%cd%s --date=iso --grep="\[visiable\]"'
             , $git_logs);
         //exec('whoami', $output);
-        $logs = '';
-        $i = 0;
-        foreach ($git_logs as $line => $content) {
-            $logs .= str_replace('[visiable]', '<br>', (trim($content)))."<br><br>";
-            $i ++;
-
-        }
-        return nl2br($logs);
+        return view('updateLogs', ['logs' => $git_logs]);
     }
 }
