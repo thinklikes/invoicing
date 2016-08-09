@@ -8,32 +8,13 @@ use App\Contracts\FormRequestInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
 use App\Http\Controllers\BasicController;
-use Storage;
+use Excel;
+use Carbon\Carbon;
+use App;
 
 class SystemConfigController extends BasicController
 {
     private $routeName = 'erp.basic.system_config';
-
-    private $app_names = [
-        'company',              //客戶
-        'supplier',             //供應商
-        'stock',                //料品
-        'unit',                 //單位
-        'stock_class',          //料品類別
-        'pay_way',              //付款方式
-        'warehouse',            //倉庫
-        'system_config',        //系統參數設定
-        'billOfPurchase',       //進貨單
-        'returnOfPurchase',     //進貨退回單
-        'payment',              //付款單
-        'payableWriteOff',      //應付帳款沖銷單
-        'billOfSale',           //銷貨單
-        'returnOfSale',         //銷貨退回單
-        'receipt',              //收款單
-        'receivableWriteOff',   //應收帳款沖銷單
-        'stockAdjust',          //調整單
-        'stockTransfer',        //轉倉單
-    ];
 
     public function __construct()
     {
@@ -90,26 +71,74 @@ class SystemConfigController extends BasicController
         return view("$this->routeName.updateLogs", ['logs' => $git_logs]);
     }
 
-    public function export()
+    public function exportSettings()
     {
-
+        return view($this->routeName.'.exportSettings');
     }
 
-    public function import()
+    public function export(Request $request)
     {
-        # code...
+        if ($request->input('data_type') == 'sql') {
+            return $this->saveAndExportSqlFile();
+
+        } else {
+
+        }
+    }
+
+
+    public function importSettings()
+    {
+        return view($this->routeName.'.importSettings');
     }
 
     public function generataImportDemo()
     {
-        $tables = '';
-        foreach($this->app_names as $app) {
-            $tables .= $app."\n";
+        $excel = Excel::create('importDemo', function ($excel) {
 
-            //Schema::getColumnListing
-        }
-        Storage::disk('local')->put('file.txt', $tables);
-        return 'Success!!';
+            // Set the title
+            $excel->setTitle('Import Demo');
+
+            // Chain the setters
+            $excel->setCreator('Alfie Kuo');
+                  //->setCompany(iconv('utf-8', 'Big5', '傑瑀企業有限公司'));
+
+            // Call them separately
+            $excel->setDescription('demo table of Data to import');
+
+            $excel->sheet('sheetName', function ($sheet) {
+                // Set top, right, bottom, left
+                // $sheet->setPageMargin(array(
+                //     0.25, 0.30, 0.25, 0.30
+                // ));
+                // $sheet->with([
+                //     array('data1', 'data2'),
+                //     array('data3', 'data4'),
+                //     array('data5', 'data6')
+                // ], null, 'A1', true);
+                $a = App::make('Company\Company')->get();
+                $sheet->fromModel($a , null, 'A1', true);
+            });
+            $excel->sheet('sheetName2', function ($sheet) {
+                // Set all margins
+                $sheet->setPageMargin(0.25);
+            });
+        })
+        ->store('xls');
+
+        //return $excel;
     }
 
+    private function saveAndExportSqlFile()
+    {
+        $db = env('DB_DATABASE');
+        $db_user = env('DB_USERNAME');
+        $db_password = env('DB_PASSWORD');
+        $path = storage_path('exports');
+        $filename = $db.'_'.(Carbon::now()->format('Ymd_His')).'.sql';
+        // //儲存SQL檔案
+        $str = exec('mysqldump -u'.$db_user.' -p'.$db_password.' '.$db.' > '.$path.'/'.$filename);
+        // //開始下載
+        return response()->download($path.'/'.$filename);
+    }
 }

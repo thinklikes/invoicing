@@ -44,12 +44,11 @@ Route::group(['middleware' => 'auth'], function () {
         //系統更新記錄
         Route::get('/system_config/updateLogs/{page?}', 'SystemConfigController@updateLogs');
         //資料備份匯出
-        Route::get('/system_config/export', 'SystemConfigController@export');
+        Route::get('/system_config/export', 'SystemConfigController@exportSettings');
+        Route::post('/system_config/export', 'SystemConfigController@export');
         //資料備份匯入
-        Route::get('/system_config/import', 'SystemConfigController@import');
-        //產生匯入文件的Demo
-        Route::get('/system_config/importDemo', 'SystemConfigController@generataImportDemo');
-
+        Route::get('/system_config/import', 'SystemConfigController@importSettings');
+        Route::post('/system_config/import', 'SystemConfigController@import');
 
         //客戶資料管理
         Route::get('/company/printBarcode', 'CompanyController@printBarcode');

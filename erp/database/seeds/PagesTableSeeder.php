@@ -576,21 +576,15 @@ class PagesTableSeeder extends Seeder
                 'enabled'    => 1,
             ],
             [
-                'name'       => '產生資料備份範例',
-                'level'      => 2,
-                'action'     => 'Basic\SystemConfigController@generataImportDemo',
-                'enabled'    => 0,
-            ],
-            [
                 'name'       => '資料備份匯出',
                 'level'      => 2,
-                'action'     => 'Basic\SystemConfigController@export',
+                'action'     => 'Basic\SystemConfigController@exportSettings',
                 'enabled'    => 1,
             ],
             [
                 'name'       => '資料備份匯入',
                 'level'      => 2,
-                'action'     => 'Basic\SystemConfigController@import',
+                'action'     => 'Basic\SystemConfigController@importSettings',
                 'enabled'    => 1,
             ],
             [
