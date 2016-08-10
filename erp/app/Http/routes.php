@@ -18,10 +18,6 @@ Route::group(['middleware' => 'auth'], function () {
     //首頁
     Route::get('/', 'PageController@index');
 
-    Route::get('/test', function () {
-        Storage::disk('local')->put('file.txt', 'Contents');
-    });
-
     Route::get('/basic', 'PageController@basic');
 
     Route::get('/purchase', 'PageController@purchase');
