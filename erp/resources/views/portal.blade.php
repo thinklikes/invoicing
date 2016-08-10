@@ -9,7 +9,7 @@
                 進銷存系統
             </a>
 
-            <a class="btn btn-default" href="/CRM/company_system.php">
+            <a class="btn btn-default" href="{{ env('CRM_URL') }}">
                 客戶關係管理系統
             </a>
 
