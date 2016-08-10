@@ -16,7 +16,9 @@ Route::auth();
 
 Route::group(['middleware' => 'auth'], function () {
     //首頁
-    Route::get('/', 'PageController@index');
+    Route::get('/', 'PageController@portal');
+
+    Route::get('/erp', 'PageController@index');
 
     Route::get('/basic', 'PageController@basic');
 

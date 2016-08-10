@@ -4,10 +4,13 @@
 
     <!-- Bootstrap 樣板... -->
 
-        <p>
-            <a href="{{ action('PageController@index') }}">erp</a>
-        </p>
-        <p>
-            <a href="/CRM/company_system.php">CRM</a>
-        </p>
+
+            <a class="btn btn-default" href="{{ action('PageController@index') }}">
+                進銷存系統
+            </a>
+
+            <a class="btn btn-default" href="/CRM/company_system.php">
+                客戶關係管理系統
+            </a>
+
 @endsection

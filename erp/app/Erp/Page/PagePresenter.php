@@ -74,7 +74,8 @@ class PagePresenter
 
         if ((strlen($this_page->code)) < 2) {
             //表示此頁已經是根目錄了
-            return null;
+            //回傳首頁網址
+            return url('/');
         }
 
         return action(
