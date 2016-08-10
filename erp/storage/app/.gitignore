@@ -1,3 +1,5 @@
 *
+!exports/
+!imports/
 !public/
 !.gitignore
