@@ -16,6 +16,12 @@
                             (${$headName}['tax_rate_code'] == "I")
                             ? 'checked=""' : ''
                         }}>稅內含
+                    <input type="radio" class="tax_rate_code" value="N"
+                        name="{{ $headName }}[tax_rate_code]"
+                        {{
+                            (${$headName}['tax_rate_code'] == "N")
+                            ? 'checked=""' : ''
+                        }}>免稅
                 </p>
             </div>
             <div class="custom-table">

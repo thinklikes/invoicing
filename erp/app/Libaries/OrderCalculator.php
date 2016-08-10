@@ -7,6 +7,7 @@ use Config;
 class OrderCalculator
 {
     //設定參數
+    private $tax_rate_code           = '';
     private $tax_rate                = 0;
     private $quantity_round_off      = 0;
     private $no_tax_price_round_off  = 0;
@@ -43,6 +44,7 @@ class OrderCalculator
         $success = false;
 
         try {
+
             $ql   = count($this->quantity);
             $ntpl = count($this->no_tax_price);
             if ($ql != $ntpl) {
@@ -60,7 +62,6 @@ class OrderCalculator
 
     private function calculate()
     {
-
         //開始計算金額
         foreach ($this->quantity as $key => $value) {
             if (!($value && $this->no_tax_price[$key])) {
@@ -85,6 +86,10 @@ class OrderCalculator
             $this->tax_rate,
             $this->tax_round_off
         );
+        //若是免稅，就把稅額設定為0
+        if ($this->tax_rate_code == 'N') {
+            $this->tax = 0;
+        }
 
         //計算總金額
         $this->total_amount = round($this->total_no_tax_amount +

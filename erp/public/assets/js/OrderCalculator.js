@@ -156,9 +156,10 @@ function OrderCalculator(options, puller = new Puller(), pusher = new Pusher()) 
                     no_tax_price = no_tax_price / (100 / 100);
                 }
             }
-            //console.log("1@" + no_tax_price);
+            //再復原稅別
             if (taxEnable) {
-                if (old_tax_type == 'A') {
+                if (old_tax_type == 'A' || old_tax_type == 'N') {
+                    //將原始的稅錢單價倒推為稅內含
                     no_tax_price = no_tax_price / (1 + _tax_rate);
                 } else {
                     no_tax_price = no_tax_price;
@@ -169,7 +170,8 @@ function OrderCalculator(options, puller = new Puller(), pusher = new Pusher()) 
 
             //==========計算單價===================開始
             if (taxEnable) {
-                if (data['custom-tax-or-not'] == 'A') {
+                if (data['custom-tax-or-not'] == 'A' || data['custom-tax-or-not'] == 'N') {
+                    //稅外加以及免稅額，都使用原始的稅前單價
                     no_tax_price = no_tax_price * (1 + _tax_rate);
                 } else {
                     no_tax_price = no_tax_price;
@@ -221,6 +223,9 @@ function OrderCalculator(options, puller = new Puller(), pusher = new Pusher()) 
 
         //稅額四捨五入至指定的小數位數
         tax = total_no_tax_amount * _tax_rate;
+        if (data['custom-tax-or-not'] == 'N') {
+            tax = 0;
+        }
         var rf = _tax_round_off;
         tax = Math.round(tax * Math.pow(10, rf));
         tax = tax / Math.pow(10, rf);

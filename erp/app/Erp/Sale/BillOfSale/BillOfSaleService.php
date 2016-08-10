@@ -57,8 +57,9 @@ class BillOfSaleService
         if (count($master) > 0) {
             //資料輸入計算機並且開始計算
             $this->calculator->setValuesAndCalculate([
-                'quantity'     => array_pluck($details, 'quantity'),
-                'no_tax_price' => array_pluck($details, 'no_tax_price'),
+                'tax_rate_code' => $master['tax_rate_code'],
+                'quantity'      => array_pluck($details, 'quantity'),
+                'no_tax_price'  => array_pluck($details, 'no_tax_price'),
             ]);
 
             //把未稅金額放到陣列
@@ -92,8 +93,9 @@ class BillOfSaleService
 
         //資料輸入計算機並且開始計算
         $this->calculator->setValuesAndCalculate([
-            'quantity'     => $details->pluck('quantity')->all(),
-            'no_tax_price' => $details->pluck('no_tax_price')->all(),
+            'tax_rate_code' => $master['tax_rate_code'],
+            'quantity'      => $details->pluck('quantity')->all(),
+            'no_tax_price'  => $details->pluck('no_tax_price')->all(),
         ]);
 
         foreach($details as $key => $item) {
@@ -151,6 +153,7 @@ class BillOfSaleService
 
         //資料輸入計算機並且開始計算
         $this->calculator->setValuesAndCalculate([
+            'tax_rate_code' => $master['tax_rate_code'],
             'quantity'     => $quantity,
             'no_tax_price' => $no_tax_price,
         ]);
@@ -197,6 +200,7 @@ class BillOfSaleService
 
         //資料輸入計算機並且開始計算
         $this->calculator->setValuesAndCalculate([
+            'tax_rate_code' => $master['tax_rate_code'],
             'quantity'     => array_pluck($details, 'quantity'),
             'no_tax_price' => array_pluck($details, 'no_tax_price'),
         ]);
@@ -254,6 +258,7 @@ class BillOfSaleService
 
         //資料輸入計算機並且開始計算
         $this->calculator->setValuesAndCalculate([
+            'tax_rate_code' => $master['tax_rate_code'],
             'quantity'     => array_pluck($details, 'quantity'),
             'no_tax_price' => array_pluck($details, 'no_tax_price'),
         ]);

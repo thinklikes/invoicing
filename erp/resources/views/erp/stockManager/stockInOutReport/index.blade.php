@@ -3,8 +3,6 @@
 @inject('PublicPresenter', 'App\Presenters\PublicPresenter')
 @inject('WarehousePresenter', 'Warehouse\WarehousePresenter')
 @section('content')
-        <script type="text/javascript" src="{{ asset('assets/js/bindStockAutocomplete.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('assets/js/bindDatePicker.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/stockManager/stockInOutReport.js') }}"></script>
         <form action=" {{ url("/stockInOutReport/printing") }}" method="GET">
             {{ csrf_field() }}
