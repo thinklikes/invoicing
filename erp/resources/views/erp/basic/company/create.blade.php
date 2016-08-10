@@ -70,32 +70,6 @@
                     <td><input type="text" name="company[company_con_fax]"
                         id="company_con_fax" value="{{ $company['company_con_fax'] }}"></td>
                 </tr>
-{{--                 <tr>
-                    <th>稅別</th>
-                    <td>
-                        <select name="company[tax_rate_id]" id="tax_rate_id">
-                            <option></option>
-                            @foreach($tax_rates as $code => $comment)
-                                <option value="{{ $code }}" {{ $code == $company['tax_rate_id'] ? "selected" : "" }}>
-                                    {{ $comment }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </td>
-                </tr> --}}
-{{--                 <tr>
-                    <th>付款方式</th>
-                    <td>
-                        <select name="company[pay_way_id]" id="pay_way_id">
-                            <option></option>
-                            @foreach($pay_ways as $code => $comment)
-                                <option value="{{ $code }}" {{ $code == $company['pay_way_id'] ? "selected" : '' }}>
-                                    {{ $comment }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </td>
-                </tr> --}}
             </table>
             <button class="btn btn-default">確認送出</button>
         </form>

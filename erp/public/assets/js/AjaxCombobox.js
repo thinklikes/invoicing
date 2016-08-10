@@ -57,7 +57,7 @@ $.widget( "custom.AjaxCombobox", {
             //.attr( "title", "" )
             //.addClass( "custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )
             .autocomplete({
-                delay: 300,
+                delay: 800,
                 minLength: 2,
                 source: $.proxy( this, "_source" ),
                 open: function() {

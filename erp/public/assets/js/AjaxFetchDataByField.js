@@ -98,6 +98,9 @@ $.widget( "custom.AjaxFetchDataByField", {
         this.input.unbind("blur");
     },
     _removeIfInvalid : function(MyObj) {
+        if (MyObj.input.val() == "") {
+            return false;
+        }
         // Remove invalid value
         MyObj.input.val( "找不到" + MyObj.input.val() );
 

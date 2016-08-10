@@ -132,7 +132,19 @@
         display:block;
         width: 100%;
     }
-    .custom-table .td:before { content: attr(data-title); }
+    .custom-table .td:before { 
+        content: attr(data-title); 
+
+        top: 6px;
+        left: 6px;
+        width: 30%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+        color: #1a1a1a;
+
+    }
 }
 @media only screen and (max-width: 480px) {
 /*    .hide-column .small{

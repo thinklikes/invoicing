@@ -30,5 +30,23 @@ class PublicPresenter
             : ($tax_rate_code == "I")
                 ? "稅內含" : "免稅額";
     }
+
+    public function renderFormElement($item) {
+        switch ($item->element) {
+            case 'text':
+                return "
+                    <div class=\"form-group\">
+                        <label>".$item->title."</label>
+                        <input type=\"text\" class=\"form-control\"
+                            name=\"".$item->name."\"
+                            value=\"".$item->value."\">
+                    </div>
+                ";
+                break;
+            default:
+                # code...
+                break;
+        }
+    }
 }
 
