@@ -1,0 +1,96 @@
+﻿html{
+	height: 100%;
+}
+
+body{
+	height: 100%;
+	
+}
+
+.navbar {
+    margin-bottom: 50px;
+}
+	
+body#app-layout{
+	background: #a7cfdf;
+    background: -moz-linear-gradient(top,  #a7cfdf 0%, #23538a 100%);
+    background: -webkit-linear-gradient(top,  #a7cfdf 0%,#23538a 100%);
+    background: linear-gradient(to bottom,  #a7cfdf 0%,#23538a 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a7cfdf', endColorstr='#23538a',GradientType=0 );
+    background-attachment: fixed;
+}
+
+.navbar-default{
+	background: #1e5799;
+	background: -moz-linear-gradient(top,  #1e5799 0%, #2989d8 50%, #207cca 51%, #7db9e8 100%);
+	background: -webkit-linear-gradient(top,  #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%);
+	background: linear-gradient(to bottom,  #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=0 );
+	border-color: #1e5799;
+}
+.navbar-default .navbar-nav>li>a, .navbar-header>li>a{
+	color: #FFF;
+}
+
+.panel-default {
+    border-color: #1e5799;
+	-moz-box-shadow: 0px 4px 14px #000000;
+    -webkit-box-shadow: 0px 4px 14px #000000;
+    box-shadow: 0px 4px 14px #000000;
+}
+
+.panel-heading a{
+	color: #FFF;
+}
+
+.panel-default>.panel-heading{
+	background: #cedbe9;
+	background: -moz-linear-gradient(top,  #cedbe9 0%, #aac5de 17%, #6199c7 50%, #3a84c3 51%, #419ad6 59%, #4bb8f0 71%, #3a8bc2 84%, #26558b 100%);
+	background: -webkit-linear-gradient(top,  #cedbe9 0%,#aac5de 17%,#6199c7 50%,#3a84c3 51%,#419ad6 59%,#4bb8f0 71%,#3a8bc2 84%,#26558b 100%);
+	background: linear-gradient(to bottom,  #cedbe9 0%,#aac5de 17%,#6199c7 50%,#3a84c3 51%,#419ad6 59%,#4bb8f0 71%,#3a8bc2 84%,#26558b 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cedbe9', endColorstr='#26558b',GradientType=0 );
+	color: #FFF;
+	border-color: #1e5799;
+}
+
+.btn-default{
+    padding: 10px;
+    margin: 5px;
+	background: #e2e2e2;
+    background: -moz-linear-gradient(top,  #e2e2e2 0%, #dbdbdb 50%, #d1d1d1 51%, #fefefe 100%);
+    background: -webkit-linear-gradient(top,  #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%);
+    background: linear-gradient(to bottom,  #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe',GradientType=0 );
+
+}
+
+a.btn-default{
+	font: bold 16px "微軟正黑體", "新細明體", Arial, Helvetica, sans-serif;
+	color: #555;
+}
+
+.reflective{
+	height: 100px;
+	width: 100%;
+	border-radius: 4px;
+	background: -moz-linear-gradient(top,  rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0) 100%);
+    background: -webkit-linear-gradient(top,  rgba(255,255,255,0.45) 0%,rgba(255,255,255,0) 50%,rgba(255,255,255,0) 100%);
+    background: linear-gradient(to bottom,  rgba(255,255,255,0.45) 0%,rgba(255,255,255,0) 50%,rgba(255,255,255,0) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#73ffffff', endColorstr='#00ffffff',GradientType=0 );
+}
+
+.form_of_delete{
+	display: inline-block;
+}
+
+.form_of_delete .btn-danger{
+    font: bold 16px "微軟正黑體", "新細明體", Arial, Helvetica, sans-serif;
+	padding: 10px;
+	margin: 5px;
+}
+
+.btn-success{
+    font: bold 16px "微軟正黑體", "新細明體", Arial, Helvetica, sans-serif;
+	padding: 10px;
+	margin: 5px;
+}
