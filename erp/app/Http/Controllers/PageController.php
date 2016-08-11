@@ -19,15 +19,18 @@ class PageController extends Controller
      */
     public function __construct(Service $service)
     {
-        //記錄到PH Psession給CRM
-        // session_start();
-        // $_SESSION['MM_Username'] = Auth::user()->name;
-
         $this->service = $service;
     }
     public function portal()
     {
-        return view('portal');
+        if (env('TOP_MENU_ENABLED') == 1) {
+            //記錄到PHP session給CRM
+            session_start();
+            $_SESSION['MM_Username'] = Auth::user()->name;
+            return view('portal');
+        }
+
+        return redirect('/erp');
     }
     public function index(Request $request)
     {

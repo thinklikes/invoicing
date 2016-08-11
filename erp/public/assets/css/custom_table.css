@@ -135,14 +135,14 @@
     .custom-table .td:before { 
         content: attr(data-title); 
 
-        top: 6px;
+/*        top: 6px;
         left: 6px;
         width: 30%;
         padding-right: 10px;
         white-space: nowrap;
         text-align: left;
         font-weight: bold;
-        color: #1a1a1a;
+        color: #1a1a1a;*/
 
     }
 }

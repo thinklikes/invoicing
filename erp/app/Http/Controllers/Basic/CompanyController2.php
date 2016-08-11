@@ -12,11 +12,13 @@ use Illuminate\Http\Request;
 
 class CompanyController extends BasicController
 {
-    protected $orderRepository;
-    protected $orderService;
+    private $orderRepository;
+    private $orderService;
     private $orderMasterInputName = 'company';
     private $routeName = 'erp.basic.company';
     private $ordersPerPage = 15;
+    private $app_name = 'company';
+    private $chname = '客戶';
 
     public function __construct(
         Repository $orderRepository,
@@ -45,15 +47,50 @@ class CompanyController extends BasicController
      */
     public function index(Request $request)
     {
-        return view($this->routeName.'.index', [
-            'code' => $request->input('code'),
-            'name' => $request->input('name'),
-            'address' => $request->input('address'),
-            'company' => $this->orderRepository
-                ->getCompanyPaginated(
-                    array_except($request->input(), 'page'),
-                    $this->ordersPerPage)
-        ]);
+        $companies = $this->orderRepository
+            ->getCompanyPaginated(
+                $request->input('search'),
+                $this->ordersPerPage);
+
+        $data = [
+            'app_name' => $this->app_name,
+            'chname' => $this->chname,
+            'sidebar' => [
+                'title' => '搜尋',
+                'button_text' => '搜尋',
+                'item' => [
+                    (object)[
+                        'title' => '客戶編號',
+                        'element' => 'text',
+                        'name' => 'search[code]',
+                        'value' => $request->input('search')['code']
+                    ],
+                    (object)[
+                        'title' => '公司名稱',
+                        'element' => 'text',
+                        'name' => 'search[name]',
+                        'value' => $request->input('search')['name']
+                    ],
+                    (object)[
+                        'title' => '地址',
+                        'element' => 'text',
+                        'name' => 'search[address]',
+                        'value' => $request->input('search')['address']
+                    ],
+                ],
+            ],
+        ];
+
+        $data['master']['item'] = $companies;
+        $data['master']['title'] = [
+            'company_code' => '客戶編號',
+            'company_name' => '公司名稱',
+            'company_tel' => '公司電話',
+            'company_add' => '公司地址'
+        ];
+        $data['master']['paginated'] = $companies->render();
+
+        return view('erp.crud_index', $data);
     }
 
     /**
