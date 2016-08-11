@@ -1,7 +1,0 @@
-/vendor
-/node_modules
-/public/storage
-/public/crm
-Homestead.yaml
-Homestead.json
-.env
