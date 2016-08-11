@@ -17,12 +17,10 @@ class WarehouseSeeder extends Seeder
             [
                 'code'    => 'KS',
                 'name'    => '高雄倉',
-                'comment' => '高雄倉',
             ],
             [
                 'code'    => 'TP',
                 'name'    => '台北倉',
-                'comment' => '台北倉',
             ],
         ]);
     }

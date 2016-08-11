@@ -29,7 +29,7 @@ class WarehouseRepository
     public static function getAllWarehousesPair()
     {
         $warehouses = Warehouse::select(
-                DB::raw('concat(code, " ",comment) as full_comment, id')
+                DB::raw('concat(code, " ",name) as full_comment, id')
             )
             ->lists('full_comment', 'id');
         return $warehouses;

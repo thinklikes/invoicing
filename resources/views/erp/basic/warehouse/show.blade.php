@@ -17,8 +17,8 @@
                 <td>{{ $warehouse->code }}</td>
             </tr>
             <tr>
-                <th>倉庫說明</th>
-                <td>{{ $warehouse->comment }}</td>
+                <th>倉庫名稱</th>
+                <td>{{ $warehouse->name }}</td>
             </tr>
         </table>
     {{-- 資料檢視頁的按鈕群組 --}}

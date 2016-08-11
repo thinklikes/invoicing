@@ -104,7 +104,7 @@ class ErpRequest extends Request implements FormRequestInterface
             //倉庫資料表單驗證規則
             'warehouse'     => [
                 'code'        => 'required',
-                'comment'     => 'required',
+                'name'     => 'required',
             ],
         ];
 

@@ -216,8 +216,8 @@ return [
             'code'        => [
                 'required' => '我們需要知道倉庫代號',
             ],
-            'comment'        => [
-                'required' => '我們需要知道倉庫說明',
+            'name'        => [
+                'required' => '我們需要知道倉庫名稱',
             ],
         ],
         'pay_way' => [

@@ -11,8 +11,8 @@
                     <td><input type="text" name="warehouse[code]" id="code" value="{{ $warehouse['code'] }}"></td>
                 </tr>
                 <tr>
-                    <th>倉庫說明</th>
-                    <td><input type="text" name="warehouse[comment]" id="comment" value="{{ $warehouse['comment'] }}"></td>
+                    <th>倉庫名稱</th>
+                    <td><input type="text" name="warehouse[name]" id="name" value="{{ $warehouse['name'] }}"></td>
                 </tr>
             </table>
             <button class="btn btn-default">確認送出</button>

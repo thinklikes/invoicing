@@ -96,44 +96,44 @@ class OptionsTableSeeder extends Seeder
             ],
 
             //料品單位
-            // [
-            //     'class'   => 'units',
-            //     'code'    => 'KG',
-            //     'comment' => '公斤',
-            //     'value'   => '',
-            // ],
-            // [
-            //     'class'   => 'units',
-            //     'code'    => 'G',
-            //     'comment' => '公克',
-            //     'value'   => '',
-            // ],
-            // [
-            //     'class'   => 'units',
-            //     'code'    => 'SET',
-            //     'comment' => '組',
-            //     'value'   => '',
-            // ],
+            [
+                'class'   => 'units',
+                'code'    => 'KG',
+                'comment' => '公斤',
+                'value'   => '',
+            ],
+            [
+                'class'   => 'units',
+                'code'    => 'G',
+                'comment' => '公克',
+                'value'   => '',
+            ],
+            [
+                'class'   => 'units',
+                'code'    => 'SET',
+                'comment' => '組',
+                'value'   => '',
+            ],
 
             //料品類別
-            // [
-            //     'class'   => 'stock_classes',
-            //     'code'    => 'A',
-            //     'comment' => '軟體類',
-            //     'value'   => '',
-            // ],
-            // [
-            //     'class'   => 'stock_classes',
-            //     'code'    => 'B',
-            //     'comment' => '硬體類',
-            //     'value'   => '',
-            // ],
-            // [
-            //     'class'   => 'stock_classes',
-            //     'code'    => 'C',
-            //     'comment' => '服務類',
-            //     'value'   => '',
-            // ],
+            [
+                'class'   => 'stock_classes',
+                'code'    => 'A',
+                'comment' => '軟體類',
+                'value'   => '',
+            ],
+            [
+                'class'   => 'stock_classes',
+                'code'    => 'B',
+                'comment' => '硬體類',
+                'value'   => '',
+            ],
+            [
+                'class'   => 'stock_classes',
+                'code'    => 'C',
+                'comment' => '服務類',
+                'value'   => '',
+            ],
 
             //付款方式
             // [

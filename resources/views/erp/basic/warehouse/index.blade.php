@@ -13,14 +13,14 @@
             <thead>
                 <tr>
                     <th>倉庫代號</th>
-                    <th>倉庫說明</th>
+                    <th>倉庫名稱</th>
                 </tr>
             </thead>
             <tbody>
         @foreach ($warehouses as $warehouse)
                 <tr>
                     <td><a href="{{ url("/warehouse/$warehouse->id") }}">{{ $warehouse->code }}</a></td>
-                    <td>{{ $warehouse->comment }}</td>
+                    <td>{{ $warehouse->name }}</td>
                 </tr>
         @endforeach
             </tbody>
