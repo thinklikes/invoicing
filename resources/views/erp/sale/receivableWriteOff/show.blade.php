@@ -64,7 +64,7 @@
                                     $value->receipt->check_code : '--'}}
                             </td>
                             <td class="numeric">
-                                {{ $value->debit_amount }}
+                                {{ number_format($value->debit_amount) }}
                             </td>
                         </tr>
     @endforeach
@@ -111,12 +111,17 @@
                             <td class="string">
                                 {{ $value->{$value->credit_type}->invoice_code }}
                             </td>
-                            <td class="numeric">{{ $value->{$value->credit_type}->total_amount }}</td>
                             <td class="numeric">
-                                {{ $value->{$value->credit_type}->total_amount - $value->{$value->credit_type}->received_amount }}
+                                {{ number_format($value->{$value->credit_type}->total_amount) }}
                             </td>
                             <td class="numeric">
-                                {{ $value->credit_amount }}
+                                {{
+                                    number_format($value->{$value->credit_type}->total_amount
+                                        - $value->{$value->credit_type}->received_amount)
+                                }}
+                            </td>
+                            <td class="numeric">
+                                {{ number_format($value->credit_amount) }}
                             </td>
                         </tr>
     @endforeach
@@ -129,7 +134,7 @@
                                 <label>應收帳款沖銷總額</label>
                             </td>
                             <td class="numeric">
-                                {{ $receivableWriteOffCredit->sum('credit_amount') }}
+                                {{ number_format($receivableWriteOffCredit->sum('credit_amount')) }}
                             </td>
                         </tr>
                     </tfoot>

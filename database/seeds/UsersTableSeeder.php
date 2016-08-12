@@ -16,25 +16,25 @@ class UsersTableSeeder extends Seeder
             [ //superAdmin帳號
                 'name' => 'superAdmin',
                 'email' => 'superAdmin@ezrun.com',
-                'password' => bcrypt('123456'),
+                'password' => bcrypt('073700050'),
                 'leavl' => '9',
             ],
             [ //admin帳號
                 'name' => 'admin',
                 'email' => 'admin@ezrun.com',
-                'password' => bcrypt('123456'),
+                'password' => bcrypt('073700050'),
                 'leavl' => '1',
             ],
             [ //一般使用者帳號
                 'name' => 'user',
                 'email' => 'user@ezrun.com',
-                'password' => bcrypt('123456'),
+                'password' => bcrypt('073700050'),
                 'leavl' => '1',
             ],
             [ //測試使用者帳號
                 'name' => 'demo',
                 'email' => 'demo@ezrun.com',
-                'password' => bcrypt('123456'),
+                'password' => bcrypt('073700050'),
                 'leavl' => '-1',
             ],
         ]);

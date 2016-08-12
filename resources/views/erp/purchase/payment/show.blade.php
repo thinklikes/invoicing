@@ -66,7 +66,7 @@
             <table width="100%">
                 <tr>
                     <td>付款金額</td>
-                    <td>{{ $payment['amount'] }}</td>
+                    <td>{{ number_format($payment['amount']) }}</td>
                 </tr>
             </table>
         </div>

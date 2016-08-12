@@ -64,7 +64,7 @@
                                     $value->payment->check_code : '--'}}
                             </td>
                             <td class="numeric">
-                                {{ $value->credit_amount }}
+                                {{ number_format($value->credit_amount) }}
                             </td>
                         </tr>
     @endforeach
@@ -77,7 +77,7 @@
                                 <label>付款沖銷總額</label>
                             </td>
                             <td class="numeric">
-                                {{ $payableWriteOffCredit->sum('credit_amount') }}
+                                {{ number_format($payableWriteOffCredit->sum('credit_amount')) }}
                             </td>
                         </tr>
                     </tfoot>
@@ -111,12 +111,15 @@
                             <td>
                                 {{ $value->{$value->debit_type}->invoice_code }}
                             </td>
-                            <td class="numeric">{{ $value->{$value->debit_type}->total_amount }}</td>
                             <td class="numeric">
-                                {{ $value->{$value->debit_type}->total_amount - $value->{$value->debit_type}->paid_amount }}
+                                {{ number_format($value->{$value->debit_type}->total_amount) }}
                             </td>
                             <td class="numeric">
-                                {{ $value->debit_amount }}
+                                {{ number_format($value->{$value->debit_type}->total_amount
+                                    - $value->{$value->debit_type}->paid_amount) }}
+                            </td>
+                            <td class="numeric">
+                                {{ number_format($value->debit_amount) }}
                             </td>
                         </tr>
     @endforeach
@@ -129,7 +132,7 @@
                                 <label>應付帳款沖銷總額</label>
                             </td>
                             <td class="numeric">
-                                {{ $payableWriteOffDebit->sum('debit_amount') }}
+                                {{ number_format($payableWriteOffDebit->sum('debit_amount')) }}
                             </td>
                         </tr>
                     </tfoot>

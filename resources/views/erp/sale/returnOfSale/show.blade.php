@@ -61,7 +61,13 @@
                     <td class="numeric">{{ $returnOfSaleDetail[$i]['quantity'] }}</td>
                     <td class="string">{{ $returnOfSaleDetail[$i]['stock']->unit->comment }}</td>
                     <td class="numeric">{{ $returnOfSaleDetail[$i]['no_tax_price'] }}</td>
-                    <td class="numeric">{{ $returnOfSaleDetail[$i]['no_tax_amount'] }}</td>
+                    <td class="numeric">
+                        {{
+                            number_format($returnOfSaleDetail[$i]['no_tax_amount'],
+                                config('system_configs.no_tax_amount_round_off')
+                            )
+                        }}
+                    </td>
                 </tr>
     @endforeach
 
@@ -77,15 +83,33 @@
             <table>
                 <tr>
                     <td>稅前合計：</td>
-                    <td align="right">{{ $returnOfSaleMaster['total_no_tax_amount'] }}</td>
+                    <td align="right">
+                        {{
+                            number_format($returnOfSaleMaster['total_no_tax_amount'],
+                                config('system_configs.total_amount_round_off')
+                            )
+                        }}
+                    </td>
                 </tr>
                 <tr>
                     <td>營業稅：</td>
-                    <td align="right">{{ $returnOfSaleMaster['tax'] }}</td>
+                    <td align="right">
+                      {{
+                            number_format($returnOfSaleMaster['tax'],
+                                config('system_configs.tax_round_off')
+                            )
+                        }}
+                    </td>
                 </tr>
                 <tr>
                     <td>金額總計：</td>
-                    <td align="right">{{ $returnOfSaleMaster['total_amount'] }}</td>
+                    <td align="right">
+                        {{
+                            number_format($returnOfSaleMaster['total_amount'],
+                                config('system_configs.total_amount_round_off')
+                            )
+                        }}
+                    </td>
                 </tr>
             </table>
         </div>
@@ -93,12 +117,24 @@
             <table>
                 <tr>
                     <td>已收款：</td>
-                    <td align="right">{{ $returnOfSaleMaster['received_amount'] }}</td>
+                    <td align="right">
+                        {{
+                            number_format($returnOfSaleMaster['received_amount'],
+                                config('system_configs.total_amount_round_off')
+                            )
+                        }}
+                    </td>
                 </tr>
                 <tr>
                     <td>未收款：</td>
-                    <td align="right">{{ $returnOfSaleMaster['total_amount']
-                        - $returnOfSaleMaster['received_amount'] }}</td>
+                    <td align="right">
+                        {{
+                            number_format($returnOfSaleMaster['total_amount']
+                                - $returnOfSaleMaster['received_amount'],
+                                config('system_configs.total_amount_round_off')
+                            )
+                        }}
+                    </td>
                 </tr>
             </table>
         </div>

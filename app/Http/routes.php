@@ -65,7 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
         //料品單位管理
         Route::resource('/unit', 'UnitController');
 
-        //倉庫資料管理
+        //料品類別管理
         Route::resource('/stock_class', 'StockClassController');
 
         //付款方式管理

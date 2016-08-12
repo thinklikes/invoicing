@@ -61,7 +61,13 @@
                     <td class="numeric">{{ $returnOfPurchaseDetail[$i]['quantity'] }}</td>
                     <td class="string">{{ $returnOfPurchaseDetail[$i]['stock']->unit->comment }}</td>
                     <td class="numeric">{{ $returnOfPurchaseDetail[$i]['no_tax_price'] }}</td>
-                    <td class="numeric">{{ $returnOfPurchaseDetail[$i]['no_tax_amount'] }}</td>
+                    <td class="numeric">
+                        {{
+                            number_format($returnOfPurchaseDetail[$i]['no_tax_amount'],
+                                config('system_configs.no_tax_amount_round_off')
+                            )
+                        }}
+                    </td>
                 </tr>
     @endforeach
 
@@ -77,15 +83,33 @@
             <table>
                 <tr>
                     <td>稅前合計：</td>
-                    <td align="right">{{ $returnOfPurchaseMaster->total_no_tax_amount }}</td>
+                    <td align="right">
+                        {{
+                            number_format($returnOfPurchaseMaster['total_no_tax_amount'],
+                                config('system_configs.total_amount_round_off')
+                            )
+                        }}
+                    </td>
                 </tr>
                 <tr>
                     <td>營業稅：</td>
-                    <td align="right">{{ $returnOfPurchaseMaster->tax }}</td>
+                    <td align="right">
+                        {{
+                            number_format($returnOfPurchaseMaster['tax'],
+                                config('system_configs.tax_round_off')
+                            )
+                        }}
+                    </td>
                 </tr>
                 <tr>
                     <td>應付總計：</td>
-                    <td align="right">{{ $returnOfPurchaseMaster->total_amount }}</td>
+                    <td align="right">
+                        {{
+                            number_format($returnOfPurchaseMaster['total_amount'],
+                                config('system_configs.total_amount_round_off')
+                            )
+                        }}
+                    </td>
                 </tr>
             </table>
         </div>
@@ -93,12 +117,24 @@
             <table>
                 <tr>
                     <td>已付款：</td>
-                    <td align="right">{{ $returnOfPurchaseMaster->paid_amount }}</td>
+                    <td align="right">
+                        {{
+                            number_format($returnOfPurchaseMaster['paid_amount'],
+                                config('system_configs.total_amount_round_off')
+                            )
+                        }}
+                    </td>
                 </tr>
                 <tr>
                     <td>未付款：</td>
-                    <td align="right">{{ $returnOfPurchaseMaster->total_amount
-                        - $returnOfPurchaseMaster->paid_amount }}</td>
+                    <td align="right">
+                        {{
+                            number_format($returnOfPurchaseMaster['total_amount']
+                                - $returnOfPurchaseMaster['paid_amount'],
+                                config('system_configs.total_amount_round_off')
+                            )
+                        }}
+                    </td>
                 </tr>
             </table>
         </div>

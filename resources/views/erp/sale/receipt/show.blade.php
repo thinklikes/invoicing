@@ -66,7 +66,7 @@
             <table width="100%">
                 <tr>
                     <td>收款金額</td>
-                    <td>{{ $receipt['amount'] }}</td>
+                    <td>{{ number_format($receipt['amount']) }}</td>
                 </tr>
             </table>
         </div>

@@ -84,7 +84,13 @@
                     <td class="numeric">{{ ${$bodyName}[$i]['quantity'] }}</td>
                     <td class="numeric">{{ ${$bodyName}[$i]->stock->unit->comment }}</td>
                     <td class="numeric">{{ ${$bodyName}[$i]['no_tax_price'] }}</td>
-                    <td class="numeric">{{ ${$bodyName}[$i]['no_tax_amount'] }}</td>
+                    <td class="numeric">
+                        {{
+                            number_format(${$bodyName}[$i]['no_tax_amount'],
+                                config('system_configs.no_tax_amount_round_off')
+                            )
+                        }}
+                    </td>
                 </tr>
     @endforeach
 
@@ -97,18 +103,49 @@
                     <th></th>
                     <td></td>
                     <th>稅前合計：</th>
-                    <td class="numeric">{{ ${$headName}->total_no_tax_amount }}</td>
+                    <td class="numeric">
+                        {{
+                            number_format(${$headName}->total_no_tax_amount,
+                                config('system_configs.total_amount_round_off')
+                            )
+                        }}
+                    </td>
                 </tr>
                 <tr>
                     <th>已收金額：</th>
-                    <td class="numeric">{{ ${$headName}->received_amount }}</td>
+                    <td class="numeric">
+                        {{
+                            number_format(${$headName}->received_amount,
+                                config('system_configs.total_amount_round_off')
+                            )
+                        }}
+                    </td>
                     <th>營業稅：</th>
-                    <td class="numeric">{{ ${$headName}->tax }}</td>
+                    <td class="numeric">
+                        {{
+                            number_format(${$headName}->tax,
+                                config('system_configs.tax_round_off')
+                            )
+                        }}
+                    </td>
                 </tr><tr>
                     <th>應收金額：</th>
-                    <td class="numeric">{{ ${$headName}->total_amount - ${$headName}->received_amount}}</td>
+                    <td class="numeric">
+                        {{
+                            number_format(${$headName}->total_amount
+                                - ${$headName}->received_amount,
+                                config('system_configs.tax_round_off')
+                            )
+                        }}
+                    </td>
                     <th>金額總計：</th>
-                    <td class="numeric">{{ ${$headName}->total_amount }}</td>
+                    <td class="numeric">
+                        {{
+                            number_format(${$headName}->total_amount,
+                                config('system_configs.tax_round_off')
+                            )
+                        }}
+                    </td>
                 </tr>
             </table>
         </div>
