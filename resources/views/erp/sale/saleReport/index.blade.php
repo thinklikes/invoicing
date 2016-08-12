@@ -4,7 +4,7 @@
 @inject('WarehousePresenter', 'Warehouse\WarehousePresenter')
 @section('content')
         <script type="text/javascript" src="{{ asset('assets/js/sale/saleReport.js') }}"></script>
-        <form action=" {{ url("/saleReport/printing") }}" method="GET">
+        <form action=" {{ url("/saleReport/printing") }}" method="GET" target="_blank">
             {{ csrf_field() }}
             <table id="master" width="100%">
                 <tr>

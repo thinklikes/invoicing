@@ -163,27 +163,28 @@ class BillOfSaleRepository extends BasicRepository
      * @return BillOfSaleMaster
      */
     public function getFullOrderDetailByConditions(
-        $company_id = null, $stock_id = null, $start_date = null, $end_date = null)
+        $company_id = '', $stock_id = '', $start_date = '', $end_date = '')
     {
         return $this->orderMaster
             ->with(['orderDetail' => function ($query) use ($stock_id) {
-                if ($stock_id) {
+                if ($stock_id != '') {
                     $query->where('stock_id', '=', $stock_id);
                 }
             }])
             ->whereHas('orderDetail', function ($query) use ($stock_id) {
-                if ($stock_id) {
+                //找看看銷貨單是否符合下列條件
+                if ($stock_id != '') {
                     $query->where('stock_id', '=', $stock_id);
                 }
             })
             ->Where(function ($query) use ($company_id, $start_date, $end_date) {
-                if ($company_id) {
+                if ($company_id != '') {
+                    $query->where('company_id', '=', $company_id);
+                }
+                if ($start_date != '') {
                     $query->where('created_at', '>=', $start_date);
                 }
-                if ($start_date) {
-                    $query->where('created_at', '>=', $start_date);
-                }
-                if ($start_date) {
+                if ($start_date != '') {
                     $query->where('created_at', '<=', $end_date);
                 }
             })
@@ -196,18 +197,20 @@ class BillOfSaleRepository extends BasicRepository
      * @return array all companys
      */
     public function getReceivableByCompanyId(
-        $company_id, $start_date = null, $end_date = null)
+        $company_id = '', $start_date = '', $end_date = '')
     {
         return $this->orderMaster
             ->select('id', 'code', 'tax_rate_code', 'invoice_code',
-                'total_amount', 'received_amount', 'created_at')
-            ->where('company_id', $company_id)
-            ->Where(function ($query) use ($start_date, $end_date) {
-                if ($start_date) {
-                    $query->where('created_at', '>=', $start_date);
+                'total_amount', 'received_amount', 'date', 'company_id')
+            ->Where(function ($query) use ($company_id, $start_date, $end_date) {
+                if ($company_id != '') {
+                    $query->where('company_id', '=', $company_id);
                 }
-                if ($start_date) {
-                    $query->where('created_at', '<=', $end_date);
+                if ($start_date != '') {
+                    $query->where('date', '>=', $start_date);
+                }
+                if ($start_date != '') {
+                    $query->where('date', '<=', $end_date);
                 }
             })
             ->where('is_received', '0')

@@ -7,7 +7,7 @@
         <script type="text/javascript" src="{{ asset('assets/js/AjaxFetchDataByField.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/bindDatePicker.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/js/sale/statement.js') }}"></script>
-        <form action=" {{ url("/statement/printing") }}" method="GET">
+        <form action=" {{ url("/statement/printing") }}" method="GET" target="_blank">
             {{ csrf_field() }}
             <table id="master" width="100%">
                 <tr>

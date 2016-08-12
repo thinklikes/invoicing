@@ -25,42 +25,4 @@ class SaleReportPresenter
                 break;
         }
     }
-
-    public function makeTableBody($data = null)
-    {
-        if (count($data) == 0) {
-            return '';
-        }
-        $tbody = '<br>';
-        $tbody .= '<table width="80%" style="margin: 0px auto;">';
-        $tbody .= '<thead>';
-        $tbody .= '<tr>';
-        $tbody .= '<th class="string">產品編號</th>';
-        $tbody .= '<th class="string">產品名稱</th>';
-        $tbody .= '<th class="numeric">數量</th>';
-        $tbody .= '<th class="string">單位</th>';
-        $tbody .= '<th class="numeric">未稅單價</th>';
-        $tbody .= '<th class="numeric">小計</th>';
-        $tbody .= '</thead>';
-        $tbody .= '<tbody>';
-
-        foreach($data->orderDetail as $key => $value) {
-            $i = 0;
-
-            $tbody .= "<tr>";
-
-            $tbody .= "<td class=\"string\">".$value->stock->code."</td>";
-            $tbody .= "<td class=\"string\">".$value->stock->name."</td>";
-            $tbody .= "<td class=\"numeric\">".$value->quantity."</td>";
-            // //$tbody .= "<td class=\"string\">".$value->orderDetail->stock->code ."</td>";
-            $tbody .= "<td class=\"string\">".$value->stock->unit->comment ."</td>";
-            $tbody .= "<td class=\"numeric\">".$value->no_tax_price ."</td>";
-            $tbody .= "<td class=\"numeric\">".$value->subTotal."</td>";
-            $tbody .= "</tr>";
-
-        }
-        $tbody .= '</tbody>';
-        $tbody .= '</table>';
-        return $tbody;
-    }
 }

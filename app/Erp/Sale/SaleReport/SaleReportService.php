@@ -37,7 +37,7 @@ class SaleReportService
      * @return Collection            包含了型別為 StockInLogs或StockOutLogs的資料
      */
     public function getSaleReportByConditions(
-        $company_id = null, $stock_id = null, $start_date = null, $end_date = null)
+        $company_id = '', $stock_id = '', $start_date = '', $end_date = '')
     {
         $data = collect([]);
 

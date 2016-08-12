@@ -139,7 +139,7 @@ class SystemConfigController extends BasicController
                 $path = storage_path('app/imports');
                 //將上船的檔案移動到存放的目錄
                 $request->file('upload_file')->move($path, $filename);
-                $realPath = $path.'/'.$filename;
+                //$realPath = $path.'/'.$filename;
             } else {
                 $errors = new MessageBag(['檔案上傳失敗!!']);
                 return back()->withErrors($errors);
@@ -147,14 +147,14 @@ class SystemConfigController extends BasicController
         } else if($request->input('file') != '') {
             $filename = $request->input('file');
             $path = storage_path('app/exports');
-            $realPath = $path.'/'.$filename;
+            //$realPath = $path.'/'.$filename;
         } else {
             //如果沒有選檔案，回上一頁並顯示錯誤
             $errors = new MessageBag(['您未選擇任何檔案!!']);
             return back()->withErrors($errors);
         }
 
-        return $this->importSqlFileToMysql($realPath);
+        return $this->importSqlFileToMysql($path, $filename);
 
     }
 
@@ -197,16 +197,19 @@ class SystemConfigController extends BasicController
      * @param  string $realPath Sql檔案的位置
      * @return response   回到上一頁並且顯示錯誤或成功訊息
      */
-    private function importSqlFileToMysql($realPath)
+    private function importSqlFileToMysql($path, $filename)
     {
-
+        $realPath = $path.'/'.$filename;
         $db = env('DB_DATABASE');
         $db_user = env('DB_USERNAME');
         $db_password = env('DB_PASSWORD');
 
-        $command = 'mysql -u'.$db_user.' -p'.$db_password.' '.$db.' < '.$realPath;
+        $command = 'mysql -u'.$db_user.' -p'.$db_password.' '.$db.' < '.$realPath
+            .' 2 > '.$path.'/import_logs.txt';
         exec($command, $output);
 
+        $output = Storage::get('imports/import_logs.txt');
+        dd($command."<br>".$output);
         if (count($output) == 0) {
             $status = new MessageBag(['資料庫還原完成!!']);
             return back()->with(['status' => $status]);

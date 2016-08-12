@@ -87,3 +87,15 @@ table {
 .d_03 th{
 	width: 7%;
 }
+.reportPerPage {
+    margin-bottom: 50px;
+}
+
+.saleReport .master {
+    margin-top: 50px;
+}
+
+.saleReport .detail table {
+    margin: 0px auto;
+    border:1px dashed black;
+}

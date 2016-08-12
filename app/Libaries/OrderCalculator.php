@@ -71,7 +71,7 @@ class OrderCalculator
 
             $this->no_tax_amount[$key] = round(
                 $this->quantity[$key] * $this->no_tax_price[$key],
-                $this->no_tax_price_round_off
+                $this->no_tax_amount_round_off
             );
             $this->total_no_tax_amount += $this->no_tax_amount[$key];
         }

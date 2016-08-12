@@ -37,12 +37,20 @@ class StatementController extends BasicController
         $start_date = $request->input('statement')['start_date'];//string
 
         $end_date = $request->input('statement')['end_date'];//string
+        //抓出所有的應收帳款
+        $data = $this->orderService
+            ->getStatementByCompanyId($company_id, $start_date, $end_date);
+        //把資料中的company_id 提取出來做為新資料陣列的key
+        $data = $data->groupBy('company_id')->all();
+        //把keys提取出來為陣列
+        $keys = array_keys($data);
+        sort($keys);
 
         return view($this->routeName.".printing", [
             'start_date' => $start_date,
             'end_date' => $end_date,
-            'company' => $this->orderService->findCompanyByCompanyId($company_id),
-            'data' => $this->orderService->getStatementByCompanyId($company_id, $start_date, $end_date)
+            'keys' => $keys,
+            'data' => $data
         ]);
     }
 }

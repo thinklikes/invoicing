@@ -26,44 +26,92 @@
             </table>
         </div>
     </div>
-@foreach($data as $key => $value)
-    <table width="100%" style="border-top:solid 1px black;">
-        <thead>
+@if(count($data) > 0)
+    @foreach($keys as $company_id)
+    <div class="saleReport reportPerPage">
+        <div class="clear"></div>
+        <hr />
+        <table id="master" class="l_move width_01">
             <tr>
-                <th class="string">客戶編號</th>
-                <th class="string">客戶名稱</th>
-                <th class="string">日期</th>
-                <th class="string">單據號碼</th>
-                <th class="string">倉庫名稱</th>
-                <th class="numeric">未稅金額</th>
-                <th class="string">稅別</th>
-                <th class="numeric">稅額</th>
-                <th class="numeric">合計金額</th>
+                <th>客戶名稱：</th>
+                <td>{{ $data[$company_id][0]->company->company_name }}</td>
+                <th>客戶編號</th>
+                <td>{{ $data[$company_id][0]->company->company_code }}</td>
             </tr>
-        </thead>
-        <tbody>
             <tr>
-                <td class="string">{{ $value->company->company_code }}</td>
-                <td class="string">{{ $value->company->company_name }}</td>
-                <td class="string">{{ $value->created_at->format('Y-m-d') }}</td>
-                <td class="string">
-                    {{
-                        $presenter->getOrderLocalNameByOrderType(
-                        class_basename($value)) }}
-                    {{ $value->code}}
-                </td>
-                <td class="string">{{ $value->warehouse->name }}</td>
-                <td class="numeric">{{ $value->total_no_tax_amount }}</td>
-                <td class="string">{{ $value->tax_rate_code }}</td>
-                <td class="numeric">{{ $value->tax }}</td>
-                <td class="numeric">{{ $value->total_amount }}</td>
+                <th>統一編號：</th>
+                <td>{{ $data[$company_id][0]->company->VTA_NO }}</td>
+                <th>電話：</th>
+                <td>{{ $data[$company_id][0]->company->company_tel }}</td>
             </tr>
-        </tbody>
-    </table>
-    <div>
-    {!! $presenter->makeTableBody($value) !!}
+            <tr>
+                <th>聯絡地址：</th>
+                <td colspan="3">{{ $data[$company_id][0]->company->company_add }}</td>
+            </tr>
+        </table>
+        @foreach($data[$company_id] as $key => $value)
+        <div class="master">
+            <table width="100%" style="border-top:solid 1px black;">
+                <thead>
+                    <tr>
+                        <th class="string">日期</th>
+                        <th class="string" width="150px">單據號碼</th>
+                        <th class="string">倉庫名稱</th>
+                        <th class="numeric">未稅金額</th>
+                        <th class="string">稅別</th>
+                        <th class="numeric">稅額</th>
+                        <th class="numeric">合計金額</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="string">{{ $value->date }}</td>
+                        <td class="string">
+                            {{
+                                $presenter->getOrderLocalNameByOrderType(
+                                class_basename($value)) }}
+                            {{ $value->code}}
+                        </td>
+                        <td class="string">{{ $value->warehouse->name }}</td>
+                        <td class="numeric">{{ $value->total_no_tax_amount }}</td>
+                        <td class="string">{{ $value->tax_rate_code }}</td>
+                        <td class="numeric">{{ $value->tax }}</td>
+                        <td class="numeric">{{ $value->total_amount }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="detail">
+            <table width="80%">
+                <thead>
+                    <tr>
+                        <th class="string">產品編號</th>
+                        <th class="string">產品名稱</th>
+                        <th class="numeric">數量</th>
+                        <th class="string">單位</th>
+                        <th class="numeric">未稅單價</th>
+                        <th class="numeric">小計</th>
+                    </tr>
+                </thead>
+            <tbody>
+            @foreach($value->orderDetail as $key2 => $value2)
+                <tr>
+                    <td class="string">{{ $value2->stock->code }}</td>
+                    <td class="string">{{ $value2->stock->name }}</td>
+                    <td class="numeric">{{ $value2->quantity }}</td>
+                    <td class="string">{{ $value2->stock->unit->comment }}</td>
+                    <td class="numeric">{{ $value2->no_tax_price }}</td>
+                    <td class="numeric">{{ $value2->subTotal }}</td>
+                </tr>
+            @endforeach
+                </tbody>
+            </table>
+        </div>
+        @endforeach
     </div>
-@endforeach
+    @endforeach
+@endif
+{{-- 
     <table width="100%" style="border-top:solid 1px black;">
         <tr>
             <th class="string">合計</th>
@@ -93,5 +141,5 @@
             </td>
         </tr>
     </table>
-</div>
+</div> --}}
 

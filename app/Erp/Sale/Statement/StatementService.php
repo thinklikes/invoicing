@@ -40,7 +40,7 @@ class StatementService
      * @return Collection            包含了型別為 StockInLogs或StockOutLogs的資料
      */
     public function getStatementByCompanyId(
-        $company_id, $start_date = null, $end_date = null)
+        $company_id = '', $start_date = '', $end_date = '')
     {
         $data = collect([]);
 
