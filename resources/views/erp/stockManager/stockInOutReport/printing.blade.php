@@ -26,50 +26,76 @@
             </table>
         </div>
     </div>
-    <table width="100%">
-        <thead>
-            <tr>
-                <th class="string">日期</th>
-                <th class="string">單據號碼</th>
-                <th class="string">倉庫</th>
-                <th class="string">料品代號</th>
-                <th class="string">料品名稱</th>
-                <th class="numeric">數量</th>
-            </tr>
-        </thead>
 @if(count($data) > 0)
-        <tbody>
-    @foreach($data as $key => $value)
-            <tr>
-                <td class="string">{{ $value->created_at->format('Y-m-d') }}</td>
-                <td class="string">
-                    {{ $presenter->getOrderLocalNameByOrderType(
-                        $value->order_type, class_basename($value))
-                    }}
-                    {{ $value->order_code }}
-                </td>
-                <td class="string">{{ $value->warehouse->name }}</td>
-                <td class="string">{{ $value->stock->code }}</td>
-                <td class="string">{{ $value->stock->name }}</td>
-                <td class="numeric">{{ $value->quantity }}</td>
-            </tr>
+    @foreach($keys as $stock_id)
+    <div class="reportPerPage">
+        <div class="clear"></div>
+        <hr />
+        <div class="imformation">
+            <table class="width_01">
+                <tr>
+                    <th>料品名稱：</th>
+                    <td>{{ $data[$stock_id][0]->stock->name }}</td>
+                    <th>料品單位</th>
+                    <td>{{ $data[$stock_id][0]->stock->unit->comment }}</td>
+                </tr>
+                <tr>
+                    <th>料品代號：</th>
+                    <td>{{ $data[$stock_id][0]->stock->code }}</td>
+                    <th>料品類別</th>
+                    <td>{{ $data[$stock_id][0]->stock->stock_class->comment }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="head">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="string">日期</th>
+                        <th class="string">單據號碼</th>
+                        <th class="string">倉庫</th>
+                        <th class="numeric">數量</th>
+                    </tr>
+                </thead>
+                <tbody>
+        @foreach($data[$stock_id] as $key => $value)
+                    <tr>
+                        <td class="string">{{ $value->created_at->format('Y-m-d') }}</td>
+                        <td class="string">
+                            {{ $presenter->getOrderLocalNameByOrderType(
+                                $value->order_type, class_basename($value))
+                            }}
+                            {{ $value->order_code }}
+                        </td>
+                        <td class="string">{{ $value->warehouse->name }}</td>
+                        <td class="numeric">
+                            {{ number_format($value->quantity) }}
+                        </td>
+                    </tr>
+        @endforeach
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4"><hr></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td class="string">小計</td>
+                        <td class="numeric">
+                            {{
+                                //計算小計
+                                number_format(
+                                    $data[$stock_id]->sum(function ($item) {
+                                        return $item->quantity;
+                                    })
+                                )
+                            }}
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
     @endforeach
 @endif
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="4"></td>
-                <td class="string">小計</td>
-                <td class="numeric">
-                    {{
-                        //計算小計
-                        $data->sum(function ($item) {
-                            return $item->quantity;
-                        })
-                    }}
-                </td>
-            </tr>
-        </tfoot>
-    </table>
 </div>
-

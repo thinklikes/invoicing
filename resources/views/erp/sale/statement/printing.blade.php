@@ -31,82 +31,86 @@
     <div class="reportPerPage">
         <div class="clear"></div>
         <hr />
-        <table id="master" class="l_move width_01">
-            <tr>
-                <th>客戶名稱：</th>
-                <td>{{ $data[$company_id][0]->company->company_name }}</td>
-                <th>客戶編號</th>
-                <td>{{ $data[$company_id][0]->company->company_code }}</td>
-            </tr>
-            <tr>
-                <th>統一編號：</th>
-                <td>{{ $data[$company_id][0]->company->VTA_NO }}</td>
-                <th>電話：</th>
-                <td>{{ $data[$company_id][0]->company->company_tel }}</td>
-            </tr>
-            <tr>
-                <th>聯絡地址：</th>
-                <td colspan="3">{{ $data[$company_id][0]->company->company_add }}</td>
-            </tr>
-        </table>
+        <div class="imformation">
+            <table class="width_01">
+                <tr>
+                    <th>客戶名稱：</th>
+                    <td>{{ $data[$company_id][0]->company->company_name }}</td>
+                    <th>客戶編號</th>
+                    <td>{{ $data[$company_id][0]->company->company_code }}</td>
+                </tr>
+                <tr>
+                    <th>統一編號：</th>
+                    <td>{{ $data[$company_id][0]->company->VTA_NO }}</td>
+                    <th>電話：</th>
+                    <td>{{ $data[$company_id][0]->company->company_tel }}</td>
+                </tr>
+                <tr>
+                    <th>聯絡地址：</th>
+                    <td colspan="3">{{ $data[$company_id][0]->company->company_add }}</td>
+                </tr>
+            </table>
+        </div>
         <div class="clear"></div>
         <hr />
-        <table class="width_01">
-            <thead>
-                <tr>
-                    <th class="string">日期</th>
-                    <th class="string" width="150px">單據號碼</th>
-                    <th class="string">發票號碼</th>
-                    <th class="numeric">未稅金額</th>
-                    <th class="numeric">營業稅</th>
-                    <th class="numeric">已收金額</th>
-                    <th class="numeric">應收金額</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="head">
+            <table class="width_01">
+                <thead>
+                    <tr>
+                        <th class="string">日期</th>
+                        <th class="string" width="150px">單據號碼</th>
+                        <th class="string">發票號碼</th>
+                        <th class="numeric">稅前合計</th>
+                        <th class="numeric">營業稅</th>
+                        <th class="numeric">已收金額</th>
+                        <th class="numeric">應收金額</th>
+                    </tr>
+                </thead>
+                <tbody>
         @foreach($data[$company_id] as $key => $value)
-                <tr>
-                    <td class="string">{{ $value->date }}</td>
-                    <td class="string">
-                        {{ $presenter->getOrderLocalNameByOrderType(
-                            class_basename($value))
-                        }}
-                        {{ $value->code }}
-                    </td>
-                    <td class="string">{{ $value->invoice_code }}</td>
-                    <td class="string">
-                        {{ number_format($value->total_no_tax_amount) }}
-                    </td>
-                    <td class="string">{{ number_format($value->tax) }}</td>
-                    <td class="string">{{ number_format($value->received_amount) }}</td>
-                    <td class="numeric">
-                        {{ number_format($value->total_amount
-                            - $value->received_amount)
-                        }}
-                    </td>
-                </tr>
+                    <tr>
+                        <td class="string">{{ $value->date }}</td>
+                        <td class="string">
+                            {{ $presenter->getOrderLocalNameByOrderType(
+                                class_basename($value))
+                            }}
+                            {{ $value->code }}
+                        </td>
+                        <td class="string">{{ $value->invoice_code }}</td>
+                        <td class="string">
+                            {{ number_format($value->total_no_tax_amount) }}
+                        </td>
+                        <td class="string">{{ number_format($value->tax) }}</td>
+                        <td class="string">{{ number_format($value->received_amount) }}</td>
+                        <td class="numeric">
+                            {{ number_format($value->total_amount
+                                - $value->received_amount)
+                            }}
+                        </td>
+                    </tr>
         @endforeach
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td class="numeric" colspan="7"><hr></td>
-                </tr>
-                <tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="numeric" colspan="7"><hr></td>
+                    </tr>
+                    <tr>
 
-                    <td class="numeric" colspan="6">小計</td>
-                    <td class="numeric">
-                        {{
-                            //計算小計
-                            number_format(
-                                $data[$company_id]->sum(function ($item) {
-                                    return $item->total_amount - $item->received_amount;
-                                })
-                            )
-                        }}
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
+                        <td class="numeric" colspan="6">小計</td>
+                        <td class="numeric">
+                            {{
+                                //計算小計
+                                number_format(
+                                    $data[$company_id]->sum(function ($item) {
+                                        return $item->total_amount - $item->received_amount;
+                                    })
+                                )
+                            }}
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
     @endforeach
 @endif

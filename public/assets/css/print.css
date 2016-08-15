@@ -91,11 +91,31 @@ table {
     margin-bottom: 50px;
 }
 
-.saleReport .master {
-    margin-top: 50px;
+.reportPerPage .head {
+    padding-top: 50px;
 }
 
-.saleReport .detail table {
+.reportPerPage .head table {
+    border-top:solid 1px black;
+    margin: 0px auto;
+    width:90%;
+}
+
+.reportPerPage .body {
+    padding-top: 20px;
+}
+
+.reportPerPage .body table {
+    width: 80%;
     margin: 0px auto;
     border:1px dashed black;
+}
+
+.reportPerPage .foot {
+    padding-top: 20px;
+}
+.reportPerPage .foot table {
+    width: 90%;
+    margin: 0px auto;
+    border-top:solid 1px black;
 }

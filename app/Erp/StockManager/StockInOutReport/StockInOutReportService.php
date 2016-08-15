@@ -28,7 +28,7 @@ class StockInOutReportService
      * @return Collection            包含了型別為 StockInLogs或StockOutLogs的資料
      */
     public function getStockInOutLogsByStockId(
-        $stock_id, $warehouse_id = null, $start_date = null, $end_date = null)
+        $stock_id = '', $warehouse_id = '', $start_date = '', $end_date = '')
     {
         $data = collect([]);
         //抓出這個料品ID的入庫資料
@@ -37,6 +37,7 @@ class StockInOutReportService
         //抓出這個料品ID的出庫資料
         $data = $data->merge($this->stockOutLogs->getStockOutLogsByStockId(
             $stock_id, $warehouse_id, $start_date, $end_date));
+
         //回傳的資料用created_at這個欄位來排序
         return $data->sortBy('created_at');
     }

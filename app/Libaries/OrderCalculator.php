@@ -56,8 +56,23 @@ class OrderCalculator
             return $e->getMessage();
         }
 
+        //清除上一次計算的金額
+        $this->earseValues();
+
         $success && $this->calculate();
         return true;
+    }
+
+    /**
+     * 把金額歸零
+     * return void
+     */
+    private function earseValues()
+    {
+        $this->no_tax_amount = array();
+        $this->total_no_tax_amount = 0;
+        $this->tax = 0;
+        $this->total_amount = 0;
     }
 
     private function calculate()
@@ -96,6 +111,11 @@ class OrderCalculator
             $this->tax, $this->total_amount_round_off
         );
     }
+    /**
+     * 回傳每一個品項的未稅金額
+     * @param  integer $index 這個品項的index
+     * @return float        未稅金額
+     */
     public function getNoTaxAmount($index)
     {
         if (!isset($this->no_tax_amount[$index])) {
@@ -103,14 +123,26 @@ class OrderCalculator
         }
         return $this->no_tax_amount[$index];
     }
+    /**
+     * 回傳這張單據的未稅總金額
+     * @return integer 未稅總金額
+     */
     public function getTotalNoTaxAmount()
     {
         return $this->total_no_tax_amount;
     }
+    /**
+     * 回傳這張單據的稅額
+     * @return integer 稅額
+     */
     public function getTax()
     {
         return $this->tax;
     }
+    /**
+     * 回傳這張單據的金額總計
+     * @return integer 金額總計
+     */
     public function getTotalAmount()
     {
         return $this->total_amount;

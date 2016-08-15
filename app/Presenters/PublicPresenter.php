@@ -25,10 +25,13 @@ class PublicPresenter
 
     public function getTaxComment($tax_rate_code)
     {
+
         return ($tax_rate_code == "A")
             ? "稅外加"
-            : ($tax_rate_code == "I")
-                ? "稅內含" : "免稅額";
+            : (
+                ($tax_rate_code == "I")
+                    ? "稅內含" : "免稅額"
+            );
     }
 
     public function renderFormElement($item) {

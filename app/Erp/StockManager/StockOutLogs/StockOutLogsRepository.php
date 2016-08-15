@@ -70,21 +70,24 @@ class StockOutLogsRepository extends BasicRepository
      * @return Collection            包含了型別為 StockOutLogs的資料
      */
     public function getStockOutLogsByStockId (
-        $stock_id, $warehouse_id = null, $start_date = null, $end_date = null)
+        $stock_id = '', $warehouse_id = '', $start_date = '', $end_date = '')
     {
         return $this->mainModel
-            ->where('stock_id', $stock_id)
-            ->where(function ($query) use ($warehouse_id, $start_date, $end_date)
+            ->where(function ($query)
+                use ($stock_id, $warehouse_id, $start_date, $end_date)
             {
-                if ($warehouse_id) {
+                if ($stock_id != '') {
+                    $query->where('stock_id', '=', $stock_id);
+                }
+                if ($warehouse_id != '') {
                     $query->where('warehouse_id', '=', $warehouse_id);
                 }
 
-                if ($start_date) {
+                if ($start_date != '') {
                     $query->where('created_at', '>=', $start_date);
                 }
 
-                if ($end_date) {
+                if ($end_date != '') {
                     $query->where('created_at', '<=', $end_date);
                 }
             })

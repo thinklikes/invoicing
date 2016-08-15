@@ -72,12 +72,15 @@ class StockInLogsRepository extends BasicRepository
      * @return Collection            包含了型別為 StockInLogs的資料
      */
     public function getStockInLogsByStockId (
-        $stock_id, $warehouse_id = '', $start_date = '', $end_date = '')
+        $stock_id = '', $warehouse_id = '', $start_date = '', $end_date = '')
     {
         return $this->mainModel
-            ->where('stock_id', $stock_id)
-            ->where(function ($query) use ($warehouse_id, $start_date, $end_date)
+            ->where(function ($query) use ($stock_id, $warehouse_id, $start_date, $end_date)
             {
+                if ($stock_id != '') {
+                    $query->where('stock_id', '=', $stock_id);
+                }
+
                 if ($warehouse_id != '') {
                     $query->where('warehouse_id', '=', $warehouse_id);
                 }
@@ -92,5 +95,4 @@ class StockInLogsRepository extends BasicRepository
             })
             ->get();
     }
-
 }

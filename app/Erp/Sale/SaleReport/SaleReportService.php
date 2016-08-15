@@ -4,20 +4,24 @@ namespace SaleReport;
 use BillOfSale\BillOfSaleRepository as BillOfSale;
 use ReturnOfSale\ReturnOfSaleRepository as ReturnOfSale;
 use Illuminate\Support\MessageBag;
+use App\Libaries\OrderCalculator;
 use App;
 use DB;
 
 class SaleReportService
 {
-    protected $billOfSale;
-    protected $returnOfSale;
+    private $billOfSale;
+    private $returnOfSale;
+    private $calculator;
 
     public function __construct(
         BillOfSale $billOfSale,
-        ReturnOfSale $returnOfSale)
+        ReturnOfSale $returnOfSale,
+        OrderCalculator $calculator)
     {
         $this->billOfSale  = $billOfSale;
         $this->returnOfSale = $returnOfSale;
+        $this->calculator = $calculator;
     }
 
     /**
@@ -37,32 +41,36 @@ class SaleReportService
      * @return Collection            包含了型別為 StockInLogs或StockOutLogs的資料
      */
     public function getSaleReportByConditions(
-        $company_id = '', $stock_id = '', $start_date = '', $end_date = '')
+        $company_id = '',
+        $stock_id = '',
+        $start_date = '',
+        $end_date = '')
     {
         $data = collect([]);
 
-        $sale_tax_rate = config('system_configs.sale_tax_rate');
-        $no_tax_amount_round_off = config('system_configs.no_tax_amount_round_off');
-        $tax_round_off = config('system_configs.tax_round_off');
-
         $data = $data->merge($this->billOfSale
                 ->getFullOrderDetailByConditions($company_id, $stock_id, $start_date, $end_date)
-                ->map(function ($item, $key) use (
-                    $sale_tax_rate, $no_tax_amount_round_off, $tax_round_off)
+                ->map(function ($item, $key)
                 {
                     //從這裡開始遍歷每張銷貨單
                     //算出單張銷貨單的總金額, 稅額等
-                    $item->tax = round($item->total_amount * $sale_tax_rate, $tax_round_off);
+                    $this->calculator->setValuesAndCalculate([
+                        'tax_rate_code' => $item->tax_rate_code,
+                        'quantity'     => $item->orderDetail->pluck('quantity'),
+                        'no_tax_price' => $item->orderDetail->pluck('no_tax_price'),
+                    ]);
 
-                    $item->total_no_tax_amount = round($item->total_amount - $item->tax,
-                         $no_tax_amount_round_off);
+                    $item->tax = $this->calculator->getTax();
+
+                    $item->total_no_tax_amount = $this->calculator->getTotalNoTaxAmount();
+
+                    $item->total_amount = $this->calculator->getTotalAmount();
 
                     $item->orderDetail->map(
-                        function ($item2, $key2) use ($no_tax_amount_round_off) {
+                        function ($item2, $key2) {
                             //從這裡開始遍歷每張銷貨單的細項
                             //並算出小計
-                            $item2->subTotal = round($item2->quantity * $item2->no_tax_price
-                                , $no_tax_amount_round_off);
+                            $item2->subTotal = $this->calculator->getNoTaxAmount($key2);
                             return $item2;
                         }
                     );
@@ -72,36 +80,39 @@ class SaleReportService
         );
         $data = $data->merge($this->returnOfSale
                 ->getFullOrderDetailByConditions($company_id, $stock_id, $start_date, $end_date)
-                ->map(function ($item, $key) use (
-                    $sale_tax_rate, $no_tax_amount_round_off, $tax_round_off)
+                ->map(function ($item, $key)
                 {
                     //從這裡開始遍歷每張銷貨單
                     //算出單張銷貨單的總金額, 稅額等
                     //總金額與已收金額改為負數
-                    $item->total_amount = $item->total_amount * -1;
+                    $this->calculator->setValuesAndCalculate([
+                        'tax_rate_code' => $item->tax_rate_code,
+                        'quantity'     => $item->orderDetail->pluck('quantity'),
+                        'no_tax_price' => $item->orderDetail->pluck('no_tax_price'),
+                    ]);
 
-                    $item->received_amount = $item->received_amount * -1;
+                    $item->total_amount = $this->calculator->getTotalAmount() * -1;
+
                     //算出稅額
-                    $item->tax = round($item->total_amount * $sale_tax_rate, $tax_round_off);
+                    $item->tax = $this->calculator->getTax() * -1;
 
-                    $item->total_no_tax_amount = round($item->total_amount - $item->tax,
-                         $no_tax_amount_round_off);
+                    $item->total_no_tax_amount = $this->calculator->getTotalNoTaxAmount() * -1;
 
                     $item->orderDetail->map(
-                        function ($item2, $key2) use ($no_tax_amount_round_off) {
+                        function ($item2, $key2) {
                             //從這裡開始遍歷每張銷貨單的細項
                             //並把單價算出負數算出小計
                             $item2->no_tax_price = $item2->no_tax_price * -1;
 
-                            $item2->subTotal = round($item2->quantity * $item2->no_tax_price
-                                , $no_tax_amount_round_off);
+                            $item2->subTotal = $this->calculator->getNoTaxAmount($key2) * -1;
+
                             return $item2;
                         }
                     );
                     return $item;
                 })
         );
-        return $data->sortBy('created_at');
+        return $data->sortBy('date');
     }
 
 }
