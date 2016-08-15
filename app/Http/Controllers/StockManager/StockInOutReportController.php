@@ -5,7 +5,7 @@ use App;
 use StockInOutReport\StockInOutReportService as OrderService;
 use App\Http\Controllers\BasicController;
 use Illuminate\Http\Request;
-
+use Excel;
 class StockInOutReportController extends BasicController
 {
     private $orderMasterInputName = 'stockInOutReport';
@@ -58,12 +58,36 @@ class StockInOutReportController extends BasicController
 
         $keys = array_keys($data);
 
-        return view($this->routeName.'.printing', [
-            'start_date' => $request->input('start_date'),
-            'end_date' => $request->input('end_date'),
-            'keys' => $keys,
-            'data' => $data
-        ]);
+        //判定uri，若不是下載excel，則進入列印畫面
+        if (!$request->is('stockInOutReport/excel')) {
+            return view($this->routeName.".printing", [
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+                'keys' => $keys,
+                'data' => $data,
+            ]);
+        } else {
+            Excel::create($this->routeName, function($excel) use (
+                $start_date, $end_date, $keys, $data)
+            {
+
+                $excel->sheet('庫存異動表', function($sheet) use (
+                    $start_date, $end_date, $keys, $data)
+                {
+
+                    $sheet->loadView($this->routeName.".printing",
+                        [
+                            'start_date' => $start_date,
+                            'end_date' => $end_date,
+                            'keys' => $keys,
+                            'data' => $data,
+                        ]
+                    );
+
+                });
+
+            })->export('xls');
+        }
 
     }
 

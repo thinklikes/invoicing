@@ -9,7 +9,7 @@
                 <tr>
                     <th class="string">開單日期</th>
                     <th class="string">銷貨退回單代號</th>
-                    {{-- <th>供應商編號</th> --}}
+                    <th class="string">客戶代號</th>
                     <th class="string">客戶名稱</th>
                 </tr>
             </thead>
@@ -18,7 +18,7 @@
                 <tr>
                     <td class="string">{{ $PublicPresenter->getFormatDate($order->created_at) }}</td>
                     <td class="string"><a href="{{ url("/returnOfSale/$order->code") }}">{{ $order->code }}</a></td>
-                    {{-- <td>{{ $order->company->code }}</td> --}}
+                    <td class="string">{{ $order->company->company_code }}</td>
                     <td class="string">{{ $order->company->company_name }}</td>
                 </tr>
         @endforeach

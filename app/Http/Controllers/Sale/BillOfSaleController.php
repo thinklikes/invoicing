@@ -8,6 +8,7 @@ use App\Http\Requests\DestroyRequest;
 use App\Http\Controllers\BasicController;
 use BillOfSale\BillOfSaleService as Service;
 use Illuminate\Http\Request;
+use Excel;
 
 class BillOfSaleController extends BasicController
 {
@@ -166,17 +167,41 @@ class BillOfSaleController extends BasicController
         return $this->service->delete($this, $code);
     }
 
-    public function printing($code)
+    public function printing(Request $request, $code)
     {
         $data = $this->service->getShowTableData($code);
 
-        return view('erp.sale.order_printing', [
-            'chname' => '銷貨單',
-            'headName' => $this->headName,
-            'bodyName' => $this->bodyName,
-            $this->headName => $data['master'],
-            $this->bodyName => $data['details'],
-        ]);
+        if (!$request->is('billOfSale/'.$code.'/excel')) {
+            return view('erp.sale.order_printing', [
+                'chname' => '銷貨單',
+                'headName' => $this->headName,
+                'bodyName' => $this->bodyName,
+                $this->headName => $data['master'],
+                $this->bodyName => $data['details'],
+            ]);
+        } else {
+            Excel::create($this->routeName, function($excel) use (
+                $data)
+            {
+
+                $excel->sheet('銷貨單', function($sheet) use (
+                    $data)
+                {
+
+                    $sheet->loadView('erp.sale.order_printing',
+                        [
+                            'chname' => '銷貨單',
+                            'headName' => $this->headName,
+                            'bodyName' => $this->bodyName,
+                            $this->headName => $data['master'],
+                            $this->bodyName => $data['details'],
+                        ]
+                    );
+
+                });
+
+            })->export('xls');
+        }
     }
 
 }

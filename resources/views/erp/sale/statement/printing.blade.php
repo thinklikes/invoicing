@@ -1,5 +1,11 @@
+@extends('layouts.clean')
 {{-- 注入庫存異動報表的presenter --}}
-@inject('presenter', 'Statement\StatementPresenter')
+@inject('public', 'App\Presenters\PublicPresenter')
+
+@include('erp.print_button_group')
+
+@section('content')
+
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/print.css') }}">
 <div class="main_page">
     <div class="information_container">
@@ -71,7 +77,7 @@
                     <tr>
                         <td class="string">{{ $value->date }}</td>
                         <td class="string">
-                            {{ $presenter->getOrderLocalNameByOrderType(
+                            {{ $public->getOrderLocalNameByOrderType(
                                 class_basename($value))
                             }}
                             {{ $value->code }}
@@ -114,5 +120,6 @@
     </div>
     @endforeach
 @endif
+@yield('print_button_group')
 </div>
-
+@endsection

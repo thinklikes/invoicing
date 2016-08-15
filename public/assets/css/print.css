@@ -119,3 +119,16 @@ table {
     margin: 0px auto;
     border-top:solid 1px black;
 }
+.main_page hr {
+    border-color:#000;
+}
+
+.print_button_group {
+    margin-left:20px;
+    margin-bottom:20px
+}
+@media print {
+    .print_button_group {
+        display: none;
+    }
+}

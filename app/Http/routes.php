@@ -80,10 +80,12 @@ Route::group(['middleware' => 'auth'], function () {
         //進貨單作業
         Route::post('/billOfPurchase/json/{data_mode}/{code}', 'BillOfPurchaseController@json');
         Route::get('/billOfPurchase/{code}/printing', 'BillOfPurchaseController@printing');
+        Route::get('/billOfPurchase/{code}/excel', 'BillOfPurchaseController@printing');
         Route::resource('/billOfPurchase', 'BillOfPurchaseController');
         //進貨退回作業
         Route::post('/returnOfPurchase/json/{data_mode}/{code}', 'ReturnOfPurchaseController@json');
         Route::get('/returnOfPurchase/{code}/printing', 'ReturnOfPurchaseController@printing');
+        Route::get('/returnOfPurchase/{code}/excel', 'ReturnOfPurchaseController@printing');
         Route::resource('/returnOfPurchase', 'ReturnOfPurchaseController');
 
         Route::post('/payment/json/{data_mode}/{code}', 'PaymentController@json');
@@ -103,10 +105,12 @@ Route::group(['middleware' => 'auth'], function () {
         //銷貨單作業
         Route::post('/billOfSale/json/{data_mode}/{code}', 'BillOfSaleController@json');
         Route::get('/billOfSale/{code}/printing', 'BillOfSaleController@printing');
+        Route::get('/billOfSale/{code}/excel', 'BillOfSaleController@printing');
         Route::resource('/billOfSale', 'BillOfSaleController');
         //銷貨退回作業
         Route::post('/returnOfSale/json/{data_mode}/{code}', 'ReturnOfSaleController@json');
         Route::get('/returnOfSale/{code}/printing', 'ReturnOfSaleController@printing');
+        Route::get('/returnOfSale/{code}/excel', 'ReturnOfSaleController@printing');
         Route::resource('/returnOfSale', 'ReturnOfSaleController');
 
         Route::post('/receipt/json/{data_mode}/{code}', 'ReceiptController@json');
@@ -118,10 +122,12 @@ Route::group(['middleware' => 'auth'], function () {
             ]
         );
         //對帳單
+        Route::get('/statement/excel', 'StatementController@printing');
         Route::get('/statement', 'StatementController@index');
         Route::get('/statement/printing', 'StatementController@printing');
 
         //銷貨日報表
+        Route::get('/saleReport/excel', 'SaleReportController@printing');
         Route::get('/saleReport', 'SaleReportController@index');
         Route::get('/saleReport/printing', 'SaleReportController@printing');
     });
@@ -136,6 +142,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/stockTransfer/{code}/printing', 'StockTransferController@printing');
         Route::resource('/stockTransfer', 'StockTransferController');
         //庫存異動報表
+        Route::get('/stockInOutReport/excel', 'StockInOutReportController@printing');
         Route::get('/stockInOutReport', 'StockInOutReportController@index');
         Route::get('/stockInOutReport/printing', 'StockInOutReportController@printing');
     });

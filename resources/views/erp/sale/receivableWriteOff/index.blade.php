@@ -18,8 +18,8 @@
                 <tr>
                     <td>{{ $PublicPresenter->getFormatDate($order->created_at) }}</td>
                     <td><a href="{{ url("/receivableWriteOff/$order->code") }}">{{ $order->code }}</a></td>
-                    <td>{{ $order->company->code }}</td>
-                    <td>{{ $order->company->name }}</td>
+                    <td>{{ $order->company->company_code }}</td>
+                    <td>{{ $order->company->company_name }}</td>
                 </tr>
         @endforeach
             </tbody>

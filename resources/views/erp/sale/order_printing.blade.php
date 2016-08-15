@@ -1,3 +1,8 @@
+@extends('layouts.clean')
+
+@include('erp.print_button_group')
+
+@section('content')
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/print.css') }}">
 <div class="main_page">
     <div class="information_container">
@@ -175,5 +180,7 @@
                 </tr>
             </table>
         </div>
+    @yield('print_button_group')
 </div>
+@endsection
 <!--<script type="text/javascript">window.print();</script> -->

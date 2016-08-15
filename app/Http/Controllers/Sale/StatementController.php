@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\BasicController;
 use App\Http\Requests;
 use Statement\StatementService as OrderService;
+use Excel;
 
 class StatementController extends BasicController
 {
@@ -46,11 +47,35 @@ class StatementController extends BasicController
         $keys = array_keys($data);
         sort($keys);
 
-        return view($this->routeName.".printing", [
-            'start_date' => $start_date,
-            'end_date' => $end_date,
-            'keys' => $keys,
-            'data' => $data
-        ]);
+        //判定uri，若不是下載excel，則進入列印畫面
+        if (!$request->is('statement/excel')) {
+            return view($this->routeName.".printing", [
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+                'keys' => $keys,
+                'data' => $data
+            ]);
+        } else {
+            Excel::create($this->routeName, function($excel) use (
+                $start_date, $end_date, $keys, $data)
+            {
+
+                $excel->sheet('對帳單', function($sheet) use (
+                    $start_date, $end_date, $keys, $data)
+                {
+
+                    $sheet->loadView($this->routeName.".printing",
+                        [
+                            'start_date' => $start_date,
+                            'end_date' => $end_date,
+                            'keys' => $keys,
+                            'data' => $data
+                        ]
+                    );
+
+                });
+
+            })->export('xls');
+        }
     }
 }
