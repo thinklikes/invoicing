@@ -148,7 +148,9 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::group(['namespace' => 'Erp'], function() {
-        Route::get('/company2', 'ErpController@index');
-        Route::get('/company2/printBarcode', 'ErpController@printBarcode');
+        //使用者與權限管理
+        Route::get('/user', 'CRUDController@index');
     });
+
+    Route::get('/test', 'AdminTestController@index');
 });

@@ -181,7 +181,7 @@ class SystemConfigController extends BasicController
         //產生insert 語法後，
         //在Lock Tables的語法後面插入TRUNCATE TABLE
         $command = "mysqldump -u".$db_user." -p".$db_password." ".$db;
-        $command .= " --no-create-info --complete-insert"; 
+        $command .= " --no-create-info --complete-insert";
         $command .= " | sed -r 's/LOCK TABLES (`[^`]+`) WRITE;/";//
         $command .= "LOCK TABLES \\1 WRITE; TRUNCATE TABLE \\1;/g'";
         $command .= " > ".$realPath;

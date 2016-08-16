@@ -25,14 +25,12 @@ class ErpServiceServiceProvider extends ServiceProvider
     {
         //BarcodePrinterInterface
         $this->app->bind(
-            'Erp\Services\ErpServiceInterface',
+            "Erp\\Services\\ErpServiceInterface",
             //'Erp\BarcodePrinter\PrintBarcode'
             function ($app, $param = null) {
-                if ($param['app_name'] == 'company') {
-                    return $app->make('Erp\Service\CompanyService');
-                } else {
-                    return $app->make('Erp\BarcodePrinter\PrintNothing');
-                }
+                $service = ucfirst($param['app_name']).'Service';
+                //將介面綁定Service程式
+                return $app->make("Erp\\Services\\".$service);
             }
         );
     }

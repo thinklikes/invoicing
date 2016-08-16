@@ -9,6 +9,7 @@ use App\Http\Controllers\BasicController;
 use BillOfPurchase\BillOfPurchaseService as Service;
 use Illuminate\Http\Request;
 use Excel;
+use PDF;
 
 class BillOfPurchaseController extends BasicController
 {
@@ -170,15 +171,7 @@ class BillOfPurchaseController extends BasicController
     {
 
         $data = $this->service->getShowTableData($code);
-        if (!$request->is('billOfPurchase/'.$code.'/excel')) {
-            return view('erp.purchase.order_printing', [
-                'chname' => '進貨單',
-                'headName' => $this->headName,
-                'bodyName' => $this->bodyName,
-                $this->headName => $data['master'],
-                $this->bodyName => $data['details'],
-            ]);
-        } else {
+        if ($request->is('billOfPurchase/'.$code.'/excel')) {
             Excel::create($this->routeName, function($excel) use (
                 $data)
             {
@@ -200,6 +193,25 @@ class BillOfPurchaseController extends BasicController
                 });
 
             })->export('xls');
+        } else if ($request->is('billOfPurchase/'.$code.'/pdf')) {
+            return PDF::loadView('erp.purchase.order_printing',
+                [
+                    'chname' => '進貨單',
+                    'headName' => $this->headName,
+                    'bodyName' => $this->bodyName,
+                    $this->headName => $data['master'],
+                    $this->bodyName => $data['details'],
+                ])
+                ->stream();
+                //->download($this->routeName.'.pdf');
+        } else {
+            return view('erp.purchase.order_printing', [
+                'chname' => '進貨單',
+                'headName' => $this->headName,
+                'bodyName' => $this->bodyName,
+                $this->headName => $data['master'],
+                $this->bodyName => $data['details'],
+            ]);
         }
     }
 }
