@@ -22,7 +22,7 @@
             <button class="btn btn-info">搜尋</button>
         </form>
         <br>
-        <a class="btn btn-default" href="/company/printBarcode" target="_blank">條碼列印</a>
+        <a class="btn btn-default" href="{{ url('supplier/printBarcode') }}" target="_blank">條碼列印</a>
     </div>
 </div>
 

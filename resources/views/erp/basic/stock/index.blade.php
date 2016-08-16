@@ -6,25 +6,19 @@
     <div class="panel-heading">搜尋</div>
 
     <div class="panel-body">
-        <form action="" method="GET">
-            <table>
-                <tr>
-                    <td>料品代號</td>
-                </tr>
-                <tr>
-                    <td><input type="text" name="code" size="15" value="{{ $code }}"></td>
-                </tr>
-                <tr>
-                    <td>料品名稱</td>
-                </tr>
-                <tr>
-                    <td><input type="text" name="name" size="15" value="{{ $name }}"></td>
-                </tr>
-            </table>
-            <button>搜尋</button>
+        <form action="" method="GET" role="form">
+            <div class="form-group">
+                <label for="code">料品代號</label>
+                <input type="text" class="form-control" name="code" size="15" value="{{ $code }}">
+            </div>
+            <div class="form-group">
+                <label for="code">料品名稱</label>
+                <input type="text" class="form-control" name="name" size="15" value="{{ $name }}">
+            </div>
+            <button class="btn btn-info">搜尋</button>
         </form>
         <br>
-        <a class="btn btn-default" href="/stock/printBarcode" target="_blank">條碼列印</a>
+        <a class="btn btn-default" href="{{ url('stock/printBarcode') }}" target="_blank">條碼列印</a>
     </div>
 </div>
 
