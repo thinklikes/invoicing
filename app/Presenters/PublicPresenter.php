@@ -23,6 +23,11 @@ class PublicPresenter
         return date('Y-m-d');
     }
 
+    /**
+     * 依照傳入的稅別回傳中文說明
+     * @param  string $tax_rate_code 稅別代號
+     * @return string                稅別中文說明
+     */
     public function getTaxComment($tax_rate_code)
     {
 
@@ -34,20 +39,46 @@ class PublicPresenter
             );
     }
 
-    public function renderFormElement($item) {
-        switch ($item->element) {
+    /**
+     * 依照傳入的類型回傳HTML元素
+     * @param  string $type  HTML元素的類型
+     * @param  string $name  HTML元素的名稱
+     * @param  string $value HTML元素的數值
+     * @return string        HTML元素的文本
+     */
+    public function renderHtmlElement($type, $name = '', $value = '', $source = array()) {
+        switch ($type) {
             case 'text':
-                return "
-                    <div class=\"form-group\">
-                        <label>".$item->title."</label>
-                        <input type=\"text\" class=\"form-control\"
-                            name=\"".$item->name."\"
-                            value=\"".$item->value."\">
-                    </div>
-                ";
+                return "<input type=\"text\" class=\"form-control\"
+                    name=\"$name\" value=\"$value\">";
+                break;
+            case 'password':
+                //如果是密碼類型，則清空它
+                $value = '';
+                return "<input type=\"password\" class=\"form-control\"
+                    name=\"$name\" value=\"$value\">";
+                break;
+            case 'textarea':
+                return "<textarea class=\"form-control\"
+                    name=\"$name\">$value</textarea>";
+                break;
+            case 'date':
+                return "<input type=\"text\" class=\"form-control datepicker\"
+                    name=\"$name\" value=\"$value\">";
+                break;
+            case 'select':
+                $html = "<select name=\"$name\" class=\"form-control\">";
+                $html .= "<option></option>";
+                foreach ($source as $key => $comment) {
+                    # code...
+                    $html .= "<option value=\"$key\">$comment</option>";
+                }
+                $html .= "</select>";
+                return $html;
                 break;
             default:
-                # code...
+                return "<input type=\"text\" class=\"form-control\"
+                    name=\"$name\" value=\"$value\">";
                 break;
         }
     }

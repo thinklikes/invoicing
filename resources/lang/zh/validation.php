@@ -153,6 +153,24 @@ return [
                 'numeric' => '稅前單價請填入數字',
             ],
         ],
+        'user' => [
+            'name' => [
+                'required' => '我們需要知道使用者帳號',
+            ],
+            'password' => [
+                'required' => '我們需要知道使用者密碼',
+                'same'     => '兩次密碼輸入不一致'
+            ],
+            'employee_id' => [
+                'required' => '我們需要知道使用者代號',
+            ],
+            'leavl' => [
+                'required' => '我們需要知道使用者權限',
+            ],
+            'emp_name' => [
+                'required' => '我們需要知道使用者姓名',
+            ],
+        ],
         //客戶資料管理的表單驗證訊息
         'company' => [
             'company_code' => [

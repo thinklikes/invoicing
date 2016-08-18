@@ -4,13 +4,13 @@
 
 body{
 	height: 100%;
-	
+
 }
 
 .navbar {
     margin-bottom: 50px;
 }
-	
+
 body#app-layout{
 	background: #a7cfdf;
     background: -moz-linear-gradient(top,  #a7cfdf 0%, #23538a 100%);
@@ -93,4 +93,8 @@ a.btn-default{
     font: bold 16px "微軟正黑體", "新細明體", Arial, Helvetica, sans-serif;
 	padding: 10px;
 	margin: 5px;
+}
+
+.required {
+    
 }

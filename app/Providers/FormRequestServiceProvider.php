@@ -69,6 +69,9 @@ class FormRequestServiceProvider extends ServiceProvider
                         case 'StockManager\StockTransferController':
                             $requestMethod = 'StockTransfer\StockTransferRequest';
                             break;
+                        case 'user':
+                            $requestMethod = 'Erp\Requests\UserRequest';
+                            break;
                     }
                 } else {
                     $requestMethod = 'App\Http\Requests\ErpRequest';

@@ -8,61 +8,109 @@ use Illuminate\Support\MessageBag;
 class UserService implements ErpServiceInterface
 {
     private $user;
-    private $property = [];
+    private $chname = '使用者';
+    private $headName = 'user';
+    private $bodyName = '';
+    private $counts = 15;
+    private $levels = [
+        9 => '超級管理者',
+        1 => '系統管理者',
+        0 => '一般使用者',
+        -1 => '來賓'
+    ];
+    private $sidebarFields = [
+        'employee_id' => '使用者代號',
+        'emp_name' => '使用者姓名',
+    ];
+    private $indexFields = [
+        'employee_id' => '使用者代號',
+        'emp_name' => '使用者姓名',
+        'leavl' => '使用者權限',
+    ];
+    private $headFields = [
+        'employee_id' => ['title' => '使用者代號', 'type' => 'text'],
+        'emp_name'    => ['title' => '使用者姓名', 'type' => 'text'],
+        'name'        => ['title' => '使用者帳號', 'type' => 'text'],
+        'password'    => ['title' => '使用者密碼', 'type' => 'password'],
+        'password2'    => ['title' => '再次輸入密碼', 'type' => 'password'],
+        'email'       => ['title' => '電子郵件', 'type' => 'text'],
+
+        'phone'       => ['title' => '電話', 'type' => 'text'],
+        'out_at'      => ['title' => '離職日', 'type' => 'date'],
+        // 'leavl'       => [
+        //     'title' => '使用者權限',
+        //     'type' => 'select',
+        //     'source' => [
+        //         'admin' => '系統管理者',
+        //         'user' => '一般使用者',
+        //         'demo' => '來賓'
+        //     ]
+        // ],
+        'remark'      => ['title' => '備註', 'type' => 'textarea'],
+    ];
+    public static $required = [
+        'user' => ['employee_id', 'emp_name', 'name', 'password', 'password2']
+    ];
 
     public function __construct(User $user)
     {
         $this->user = $user;
-
-        $this->property = [
-            'chname' => '使用者',
-            'title' => [
-                'employee_id' => '使用者代號',
-                'emp_name' => '使用者姓名',
-                'level' => '使用者權限',
-            ]
-        ];
     }
 
     public function getProperty($key)
     {
-        return $this->property[$key];
+        if ($key == 'required') {
+            return self::$required;
+        }
+        return $this->{$key};
     }
-
-    public function getAllItemNamesAndCodes() {
-        //return $this->company->getAllItemNamesAndCodes();
-    }
-
-    public function getAppIndexPage($value='')
+    /**
+     * 取得首頁資料
+     * @param  [type] $param [description]
+     * @return [type]        [description]
+     */
+    public function getAppIndexData($param)
     {
-        // return view($this->routeName.'.index', [
-        //     'code' => $request->input('code'),
-        //     'name' => $request->input('name'),
-        //     'address' => $request->input('address'),
-        //     'company' => $this->Company
-        //         ->getCompanyPaginated(
-        //             array_except($request->input(), 'page'),
-        //             $this->ordersPerPage)
-        // ]);
+        $data = $this->user->getUsersPaginated($this->counts, $param);
+
+        $data->map(function ($item, $key) {
+            $item->leavl = $this->levels[$item->leavl];
+            return $item;
+        });
+
+        return $data;
     }
 
-
-    public function create($master, $details = null)
+    public function getAppShowData($employee_id)
     {
-        // $isCreated = true;
-        // //新增表頭資料
-        // $reuslt = $this->company->storeCompany($orderMaster);
+        $data = $this->user->getUserByEmployeeId($employee_id);
 
-        // $isCreated = $isCreated && $reuslt[0];
+        //不顯示密碼
+        return $data->toArray();
+        // $data->code = $data->employee_id;
 
-        // //return $isCreated;
-        // if (!$isCreated) {
-        //     return ['error' => new MessageBag(['客戶開單失敗!'])];
+        // return $data;
+    }
 
-        // }
-        // return [
-        //     'success' => new MessageBag(['客戶已新增!']), $reuslt[1]
-        // ];
+    public function create($listener, $master, $details = null)
+    {
+        $isCreated = true;
+        //密碼設定為雜湊
+        $master['password'] = bcrypt($master['password']);
+
+        //新增表頭資料
+        $reuslt = $this->user->store($master);
+
+        $isCreated = $isCreated && $reuslt[0];
+
+        //return $isCreated;
+        if (!$isCreated) {
+            return $listener->orderCreatedErrors(
+                new MessageBag([$this->chname.'新增失敗!']));
+
+        }
+        return $listener->orderCreated(
+            new MessageBag([$this->chname.'新增成功!']), $reuslt[1]);
     }
 
     public function update($key, $value, $master, $details = null)
