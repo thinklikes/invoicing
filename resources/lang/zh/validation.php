@@ -161,6 +161,9 @@ return [
                 'required' => '我們需要知道使用者密碼',
                 'same'     => '兩次密碼輸入不一致'
             ],
+            'password2' => [
+                'required' => '請再次輸入密碼',
+            ],
             'employee_id' => [
                 'required' => '我們需要知道使用者代號',
             ],

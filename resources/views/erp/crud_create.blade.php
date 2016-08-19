@@ -8,7 +8,7 @@
             {{ csrf_field() }}
     @foreach ($head['fields'] as $key => $item)
             <div class="form-group">
-                <label {{ in_array($key, $required[$headName]) ? 'class=required' : '' }}>
+                <label {{ in_array($key, $required['head']) ? 'class=required' : '' }}>
                     {{ $item['title'] }}
                 </label>
                 {!!

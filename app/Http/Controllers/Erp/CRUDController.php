@@ -15,11 +15,21 @@ use Illuminate\Http\Request;
 class CRUDController extends BasicController
 {
     private $service;
+    /**
+     * 引入的App名稱
+     * @var string
+     */
     private $app_name = '';
+    /**
+     * 表單表頭的陣列名稱
+     * @var string
+     */
     private $headName = '';
+    /**
+     * 表單表身的陣列名稱
+     * @var string
+     */
     private $bodyName = '';
-    //private $routeName = 'erp.basic.company';
-    private $barcodePrinter;
 
     public function __construct(Request $request)
     {
@@ -50,7 +60,7 @@ class CRUDController extends BasicController
     //     return $this->orderRepository->getCompanyJson($param);
     // }
     /**
-     * Display a listing of the resource.
+     * 首頁
      *
      * @return \Illuminate\Http\Response
      */
@@ -69,54 +79,60 @@ class CRUDController extends BasicController
             ],
             'master' => [
                 'fields' => $this->service->getProperty('indexFields'),
-                'data' => $this->service->getAppIndexData($param)
+                'data' => $this->service->getDataPaginated($param)
             ]
         ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * 資料建立界面
      *
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
     {
+        $data = $this->service->reformDataBeforeCreate(
+            $request->old($this->headName));
+
         return view('erp.crud_create', [
             'chname' => $this->service->getProperty('chname'),
             'app_name' => $this->app_name,
             'headName' => $this->headName,
+            'bodyName' => $this->bodyName,
+            //將必填欄位的陣列轉為一維陣列
             'required' => $this->service->getProperty('required'),
             'head' => [
-                'fields' => $this->service->getProperty('headFields'),
-                'data' => $request->old($this->headName),
+                'fields' => $this->service->getProperty('formFields')['head'],
+                'data' => $data,
             ],
             'body' => []
         ]);
     }
 
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    //  */
+    /**
+     * 存入資料
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function store()
     {
         $request = App::make(
             FormRequestInterface::class,
             ['className' => $this->app_name]);
         //抓出使用者輸入的資料
-        $master = $request->input($this->headName);
+        $head = $request->input($this->headName);
 
-        return $this->service->create($this, $master);
+        $body = $request->input($this->bodyName);
+
+        return $this->service->create($this, $head, $body);
     }
 
-    // /**
-    //  * Display the specified resource.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
+    /**
+     * 檢視資料界面
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($code)
     {
         $data = $this->service->getDataByCode($code);
@@ -126,60 +142,72 @@ class CRUDController extends BasicController
             'chname' => $this->service->getProperty('chname'),
             'app_name' => $this->app_name,
             'headName' => $this->headName,
-            'required' => $this->service->getProperty('required'),
+            'bodyName' => $this->bodyName,
             'head' => [
-                'fields' => $this->service->getProperty('headFields'),
+                'fields' => $this->service->getProperty('showFields')['head'],
                 'data' => $data,
             ],
             'body' => []
         ]);
     }
 
-    // *
-    //  * Show the form for editing the specified resource.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-
-    public function edit(Request $request, $id)
+    /**
+     * 資料編輯界面
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+    */
+    public function edit(Request $request, $code)
     {
-        $data = $this->service->getDataByCode($code);
-        return view('erp.crud_create', [
+        $data = $request->old()
+            ? $request->old($this->headName)
+            : $this->service->getDataByCode($code);
+
+        $data = $this->service->reformDataBeforeEdit($data);
+
+        return view('erp.crud_edit', [
+            'code' => $code,
             'chname' => $this->service->getProperty('chname'),
             'app_name' => $this->app_name,
             'headName' => $this->headName,
+            'bodyName' => $this->bodyName,
             'required' => $this->service->getProperty('required'),
             'head' => [
-                'fields' => $this->service->getProperty('headFields'),
-                'data' => $request->old($this->headName),
+                'fields' => $this->service->getProperty('formFields')['head'],
+                'data' => $data,
             ],
             'body' => []
         ]);
     }
 
-    // /**
-    //  * Update the specified resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function update(FormRequestInterface $request, $id)
-    // {
+    /**
+     * 更新資料
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update($code)
+    {
+        $request = App::make(
+            FormRequestInterface::class,
+            ['className' => $this->app_name]);
 
-    //     $orderMaster = $request->input($this->orderMasterInputName);
+        $head = $request->input($this->headName);
 
-    //     return $this->service->update($this, $orderMaster, $id);
-    // }
+        $body = $request->input($this->bodyName);
 
-    // /**
-    //  * Remove the specified resource from storage.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function destroy(DestroyRequest $request, $code)
-    // {
-    //     return $this->service->delete($this, $code);
-    // }
+        return $this->service->update($code, $this, $head, $body);
+    }
+
+    /**
+     * 刪除資料
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(DestroyRequest $request, $code)
+    {
+        return $this->service->delete($this, $code);
+    }
 }

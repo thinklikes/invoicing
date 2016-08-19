@@ -4,9 +4,9 @@ namespace Erp\Services;
 
 interface ErpServiceInterface
 {
-    public function create($listener, $master, $details = null);
+    public function create($listener, $head, $body = null);
 
-    public function update($key, $value, $master, $details = null);
+    public function update($code, $listener, $head, $body = null);
 
-    public function delete($key, $value);
+    public function delete($code, $listener);
 }

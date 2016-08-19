@@ -4,13 +4,13 @@
 
 @section('content')
 
-        <form action="{{ url("/".$app_name) }}" method="POST" role="form">
+        <form action="{{ url("/".$app_name."/".$code) }}" method="POST" role="form">
             {{ csrf_field() }}
+            {{ method_field('PUT') }}
     @foreach ($head['fields'] as $key => $item)
             <div class="form-group">
-                <label {{ in_array($key, $required[$headName]) ? 'class=required' : '' }}>
+                <label {{ in_array($key, $required['head']) ? 'class=required' : '' }}>
                     {{ $item['title'] }}
-                    {{ method_field('PUT') }}
                 </label>
                 {!!
                     $public->renderHtmlElement(

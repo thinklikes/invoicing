@@ -30,7 +30,7 @@ class UserRequest extends Request implements FormRequestInterface
         $rules = [];
         $required = UserService::$required;
 
-        foreach ($required['user'] as $key => $value) {
+        foreach ($required['head'] as $key => $value) {
             $rules['user.'.$value] = 'required';
         }
 

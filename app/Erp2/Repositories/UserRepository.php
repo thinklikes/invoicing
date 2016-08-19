@@ -43,4 +43,54 @@ class UserRepository extends BasicRepository
         //開始存入表頭
         return [$this->user->save(), $this->user->employee_id];
     }
+
+    public function updateAccount($employee_id, $name)
+    {
+        $this_user = $this->getUserByEmployeeId($employee_id);
+
+        if ($this_user->name != $name) {
+            $this_user->name = $name;
+            $this_user->save();
+        }
+    }
+    public function updatePassword($employee_id, $password)
+    {
+        $this_user = $this->getUserByEmployeeId($employee_id);
+
+        if ($this_user->password != $password) {
+            $this_user->password = $password;
+            $this_user->save();
+        }
+    }
+
+
+    /**
+     * 更新除了帳號密碼以外的資訊
+     * @param  integer $id The id of purchase
+     * @return void
+     */
+    public function update($employee_id, $user)
+    {
+
+        $this->user = $this->user
+            ->where('employee_id', $employee_id)
+            ->first();
+
+        $this->user->fill($user);
+
+        //開始存入資料
+        return $this->user->save();
+    }
+    /**
+     * 刪除一個使用者資料
+     * @param  integer $id The id of purchase
+     * @return void
+     */
+    public function delete($employee_id)
+    {
+        return $this->user
+            ->where('employee_id', $employee_id)
+            ->first()
+            ->delete();
+    }
 }

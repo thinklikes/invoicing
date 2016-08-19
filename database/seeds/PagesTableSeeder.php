@@ -228,30 +228,6 @@ class PagesTableSeeder extends Seeder
                 'enabled'    => 1,
             ],
             [
-                'name'       => '使用者與權限管理',
-                'level'      => 2,
-                'action'     => 'Erp\CRUDController@index',
-                'enabled'    => 1,
-            ],
-            [
-                'name'       => '新增使用者資料',
-                'level'      => 3,
-                'action'     => 'Erp\CRUDController@create',
-                'enabled'    => 1,
-            ],
-            [
-                'name'       => '檢視使用者資料',
-                'level'      => 3,
-                'action'     => 'Erp\CRUDController@show',
-                'enabled'    => 1,
-            ],
-            [
-                'name'       => '維護使用者資料',
-                'level'      => 3,
-                'action'     => 'Erp\CRUDController@edit',
-                'enabled'    => 1,
-            ],
-            [
                 'name'       => '進貨作業',
                 'level'      => 1,
                 'action'     => 'PageController@purchase',
@@ -597,6 +573,30 @@ class PagesTableSeeder extends Seeder
                 'name'       => '維護系統參數',
                 'level'      => 3,
                 'action'     => 'Basic\SystemConfigController@edit',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '使用者資料管理',
+                'level'      => 2,
+                'action'     => 'Erp\CRUDController@index',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '新增使用者資料',
+                'level'      => 3,
+                'action'     => 'Erp\CRUDController@create',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '檢視使用者資料',
+                'level'      => 3,
+                'action'     => 'Erp\CRUDController@show',
+                'enabled'    => 1,
+            ],
+            [
+                'name'       => '維護使用者資料',
+                'level'      => 3,
+                'action'     => 'Erp\CRUDController@edit',
                 'enabled'    => 1,
             ],
             [

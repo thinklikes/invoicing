@@ -28,14 +28,14 @@
 
     <div id="haed" class="custom-table">
     @foreach ($head['fields'] as $key => $item)
-        @if (isset($head['data'][$key]))
+
         <div class="tr">
             <div class="th">{{ $item['title'] }}</div>
             <div class="td" data-title="{{ $item['title'] }}">
                 {{ $head['data'][$key] }}
             </div>
         </div>
-        @endif
+
     @endforeach
     </div>
     @yield('show_button_group')

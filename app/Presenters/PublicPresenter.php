@@ -54,7 +54,6 @@ class PublicPresenter
                 break;
             case 'password':
                 //如果是密碼類型，則清空它
-                $value = '';
                 return "<input type=\"password\" class=\"form-control\"
                     name=\"$name\" value=\"$value\">";
                 break;
