@@ -26,4 +26,13 @@ class Page extends Model
     protected $table = 'erp_pages';
 
     public $timestamps = false;
+
+    /**
+     * 定義多對多關聯，找出目前USER可以瀏覽的頁面
+     * @return [type] [description]
+     */
+    public function auths()
+    {
+        return $this->belongsToMany('App\Auth', 'erp_page_auths', 'code', 'auth_level');
+    }
 }

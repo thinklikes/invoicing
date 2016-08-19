@@ -46,4 +46,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token', 'leavl', 'status'
     ];
+
+    /**
+     * 定義多對多關聯，找出目前權限可以瀏覽的頁面
+     * @return [type] [description]
+     */
+    public function auth()
+    {
+        return $this->belongsTo('App\Auth', 'leavl', 'level');
+    }
+
 }

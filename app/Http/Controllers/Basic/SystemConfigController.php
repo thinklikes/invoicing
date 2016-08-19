@@ -8,10 +8,11 @@ use Carbon\Carbon;
 use Storage;
 use Option\OptionRepository;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\BasicController;
 use App\Contracts\FormRequestInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
-use App\Http\Controllers\BasicController;
+
 
 
 class SystemConfigController extends BasicController
