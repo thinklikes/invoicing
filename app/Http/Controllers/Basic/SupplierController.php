@@ -20,6 +20,7 @@ class SupplierController extends BasicController
      */
     public function __construct(SupplierRepository $supplierRepository)
     {
+        $this->middleware('page_auth');
         $this->supplierRepository = $supplierRepository;
         $this->setFullClassName();
     }
@@ -136,7 +137,7 @@ class SupplierController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DestroyRequest $request, $id)
+    public function destroy($id)
     {
         $this->supplierRepository->deleteSupplier($id);
         return redirect()->action("$this->className@index")

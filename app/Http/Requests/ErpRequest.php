@@ -15,7 +15,7 @@ class ErpRequest extends Request implements FormRequestInterface
     public function authorize()
     {
         //非Demo使用者才能新增與更新
-        return !$this->user()->can('isDemoUser');
+        return true;
     }
 
     /**

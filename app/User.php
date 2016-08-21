@@ -53,7 +53,7 @@ class User extends Authenticatable
      */
     public function auth()
     {
-        return $this->belongsTo('App\Auth', 'leavl', 'level');
+        return $this->belongsTo('Erp\Auth', 'leavl', 'level');
     }
 
 }

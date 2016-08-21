@@ -24,7 +24,8 @@ use Illuminate\Database\Eloquent\Model;
 class Page extends Model
 {
     protected $table = 'erp_pages';
-
+    //設定主鍵是code欄位
+    protected $primaryKey = 'code';
     public $timestamps = false;
 
     /**
@@ -33,6 +34,6 @@ class Page extends Model
      */
     public function auths()
     {
-        return $this->belongsToMany('App\Auth', 'erp_page_auths', 'code', 'auth_level');
+        return $this->belongsToMany('Erp\Auth', 'erp_page_auths', 'page_code', 'auth_level');
     }
 }

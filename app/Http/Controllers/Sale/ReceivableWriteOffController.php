@@ -38,6 +38,7 @@ class ReceivableWriteOffController extends BasicController
         BillOfSale $billOfSale,
         ReturnOfSale $returnOfSale
     ) {
+        $this->middleware('page_auth');
         $this->orderRepository = $orderRepository;
         $this->orderService    = $orderService;
         $this->receipt = $receipt;
@@ -119,7 +120,7 @@ class ReceivableWriteOffController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DestroyRequest $request, $code)
+    public function destroy($code)
     {
         return $this->orderService->delete($this, $code);
     }

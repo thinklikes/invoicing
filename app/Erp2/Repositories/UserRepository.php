@@ -28,6 +28,12 @@ class UserRepository extends BasicRepository
         ->paginate($counts);
     }
 
+    public function getUsersWithOutSuperAdmin()
+    {
+        return $this->user->where('leavl', '!=', 9)->get();
+    }
+
+
     public function getUserByEmployeeId($employee_id)
     {
         return $this->user->where('employee_id', $employee_id)->firstOrFail();

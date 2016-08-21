@@ -32,32 +32,50 @@ class PageController extends Controller
 
         return redirect('/erp');
     }
+    /**
+     * show出進銷存首頁
+     * @param  Request $request 使用者的請求
+     * @return Response           回應的頁面
+     */
     public function index(Request $request)
     {
-        return view('home', ['pages' => $this->service->getSubPagesOfIndex($request)]);
+        return view('home', [
+            'pages' => $this->service->getSubPagesOfIndex($request->user())
+        ]);
     }
+
     public function basic(Request $request)
     {
-        return view('home', ['pages' => $this->service->getSubPagesOfSubIndex($request, "basic")]);
+        return view('home', [
+            'pages' => $this->service->getSubPagesOfSubIndex($request->user(), "basic")
+        ]);
     }
 
     public function purchase(Request $request)
     {
-        return view('home', ['pages' => $this->service->getSubPagesOfSubIndex($request, "purchase")]);
+        return view('home', [
+            'pages' => $this->service->getSubPagesOfSubIndex($request->user(), "purchase")
+        ]);
     }
 
     public function sale(Request $request)
     {
-        return view('home', ['pages' => $this->service->getSubPagesOfSubIndex($request, "sale")]);
+        return view('home', [
+            'pages' => $this->service->getSubPagesOfSubIndex($request->user(), "sale")
+        ]);
     }
 
     public function stockManager(Request $request)
     {
-        return view('home', ['pages' => $this->service->getSubPagesOfSubIndex($request, "stockManager")]);
+        return view('home', [
+            'pages' => $this->service->getSubPagesOfSubIndex($request->user(), "stockManager")
+        ]);
     }
 
     public function system(Request $request)
     {
-        return view('home', ['pages' => $this->service->getSubPagesOfSubIndex($request, "system")]);
+        return view('home', [
+            'pages' => $this->service->getSubPagesOfSubIndex($request->user(), "system")
+        ]);
     }
 }

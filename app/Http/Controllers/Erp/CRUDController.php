@@ -33,6 +33,7 @@ class CRUDController extends BasicController
 
     public function __construct(Request $request)
     {
+        $this->middleware('page_auth');
 
         $this->app_name = explode("/", $request->path())[0];
 
@@ -206,7 +207,7 @@ class CRUDController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DestroyRequest $request, $code)
+    public function destroy($code)
     {
         return $this->service->delete($this, $code);
     }

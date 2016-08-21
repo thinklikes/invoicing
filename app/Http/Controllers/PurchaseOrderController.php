@@ -27,6 +27,7 @@ class PurchaseOrderController extends Controller
     public function __construct(PurchaseOrderRepository $purchaseOrderRepository,
         RequestFactory $requestFactory)
     {
+        $this->middleware('page_auth');
         $this->purchaseOrderRepository = $purchaseOrderRepository;
         $this->requestFactory          = $requestFactory;
 
@@ -183,7 +184,7 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DestroyRequest $request, $code)
+    public function destroy($code)
     {
         $this->purchaseOrderRepository->deletePurchaseOrder($code);
         return redirect()->action('PurchaseOrderController@index')

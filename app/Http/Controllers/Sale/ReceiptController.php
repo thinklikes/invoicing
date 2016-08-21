@@ -26,6 +26,7 @@ class ReceiptController extends BasicController
         OrderRepository $orderRepository,
         OrderService $orderService
     ) {
+        $this->middleware('page_auth');
         $this->orderRepository = $orderRepository;
         $this->orderService    = $orderService;
         $this->setFullClassName();
@@ -164,7 +165,7 @@ class ReceiptController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DestroyRequest $request, $code)
+    public function destroy($code)
     {
         return $this->orderService->delete($this, $code);
     }

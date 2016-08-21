@@ -7,6 +7,8 @@ use Excel;
 use Carbon\Carbon;
 use Storage;
 use Option\OptionRepository;
+use Erp\Repositories\UserRepository as User;
+use Erp\Repositories\UserRepository as User;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\BasicController;
 use App\Contracts\FormRequestInterface;
@@ -18,9 +20,12 @@ use Illuminate\Support\MessageBag;
 class SystemConfigController extends BasicController
 {
     private $routeName = 'erp.basic.system_config';
+    private $user;
 
-    public function __construct()
+    public function __construct(User $user)
     {
+        $this->middleware('page_auth');
+        $this->user = $user;
         $this->setFullClassName();
     }
     /**
@@ -210,7 +215,7 @@ class SystemConfigController extends BasicController
         exec($command, $output);
 
         $output = Storage::get('imports/import_logs.txt');
-        dd($command."<br>".$output);
+
         if (count($output) == 0) {
             $status = new MessageBag(['資料庫還原完成!!']);
             return back()->with(['status' => $status]);
@@ -218,5 +223,14 @@ class SystemConfigController extends BasicController
             $errors = new MessageBag(['資料庫還原失敗!!']);
             return back()->withErrors($errors);
         }
+    }
+
+    public function auth() {
+        $users = $this->user->getUsersWithOutSuperAdmin();
+        $auths = $this->auth->getAuthsWithOutSuperAdmin();
+        return view($this->routeName.'.auth', ['users' => $users]);
+    }
+
+    public function updateAuth() {
     }
 }

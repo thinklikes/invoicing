@@ -21,6 +21,7 @@ class ReturnOfSaleController extends BasicController
     public function __construct(
         Service $service
     ) {
+        $this->middleware('page_auth');
         $this->service    = $service;
         $this->setFullClassName();
     }
@@ -157,7 +158,7 @@ class ReturnOfSaleController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DestroyRequest $request, $code)
+    public function destroy($code)
     {
         return $this->service->delete($this, $code);
     }

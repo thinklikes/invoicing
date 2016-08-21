@@ -15,6 +15,7 @@ class StockController extends BasicController
 
     public function __construct(Stock $stock)
     {
+        $this->middleware('page_auth');
         $this->stock = $stock;
         $this->setFullClassName();
     }
@@ -132,7 +133,7 @@ class StockController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DestroyRequest $request, $id)
+    public function destroy($id)
     {
         //檢查是否還有庫存量，若有則導回去詳細資料頁，並顯示不能刪除
         if ($this->stock->hasStockInventory($id)) {

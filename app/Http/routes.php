@@ -41,6 +41,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/system_config/update', 'SystemConfigController@update');
         //使用者權限管理
         Route::get('/system_config/auth', 'SystemConfigController@auth');
+        Route::post('/system_config/auth', 'SystemConfigController@updateAuth');
         //系統更新記錄
         Route::get('/system_config/updateLogs/{page?}', 'SystemConfigController@updateLogs');
         //資料備份匯出

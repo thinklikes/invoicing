@@ -15,6 +15,7 @@ class UnitController extends BasicController
 
     public function __construct()
     {
+        $this->middleware('page_auth');
         $this->setFullClassName();
     }
     /**
@@ -105,7 +106,7 @@ class UnitController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DestroyRequest $request, $id)
+    public function destroy($id)
     {
         OptionRepository::deleteOption($this->option_class, $id);
         return redirect()->action("$this->className@index")

@@ -14,6 +14,7 @@ class WarehouseController extends BasicController
 
     public function __construct()
     {
+        $this->middleware('page_auth');
         $this->setFullClassName();
     }
     /**
@@ -104,7 +105,7 @@ class WarehouseController extends BasicController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DestroyRequest $request, $id)
+    public function destroy($id)
     {
         WarehouseRepository::deleteWarehouse($id);
         return redirect()->action("$this->className@index")
