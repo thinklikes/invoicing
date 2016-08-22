@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/printtag.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/printTag.css') }}">
 <div class="tag_container">
 @foreach($companies as $company)
 
