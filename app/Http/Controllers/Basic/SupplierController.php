@@ -25,10 +25,17 @@ class SupplierController extends BasicController
         $this->setFullClassName();
     }
 
-    public function printBarcode()
+    public function printBarcode($id = '')
     {
+        if ($id) {
+            $suppliers = collect([
+                $this->supplierRepository->getSupplierDetail($id)
+            ]);
+        } else {
+            $suppliers = $this->supplierRepository->getAllSuppliers();
+        }
         return view($this->routeName.'.printBarcode', [
-            'suppliers' => $this->supplierRepository->getAllSupplierNameAndCode()
+            'suppliers' => $suppliers
         ]);
     }
     /**

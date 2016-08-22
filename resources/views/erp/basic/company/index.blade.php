@@ -23,6 +23,7 @@
         </form>
         <br>
         <a class="btn btn-default" href="{{ url('company/printBarcode') }}" target="_blank">條碼列印</a>
+        <a class="btn btn-default" href="{{ url('company/printTag') }}" target="_blank">名條列印</a>
     </div>
 </div>
 

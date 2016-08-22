@@ -63,7 +63,7 @@ class SupplierRepository extends BasicRepository
      * 取得所有的供應商編號與名稱
      * @return collection     內容是Supplier\Supplier的集合
      */
-    public function getAllSupplierNameAndCode()
+    public function getAllSuppliers()
     {
         return $this->supplier
             ->select('code', 'name')
@@ -76,7 +76,7 @@ class SupplierRepository extends BasicRepository
      */
     public function getSupplierDetail($id)
     {
-        return $this->supplier->find($id);
+        return $this->supplier->where('id', $id)->firstOrFail();
     }
 
     /**

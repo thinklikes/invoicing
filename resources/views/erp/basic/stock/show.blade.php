@@ -3,12 +3,13 @@
 @inject('BarcodeGenerator', 'Picqer\Barcode\BarcodeGeneratorJPG')
 
 @include('erp.show_button_group', [
-    'print_enabled' => false,
-    'delete_enabled' => true,
-    'edit_enabled'   => true,
-    'chname'         => '料品',
-    'route_name'     => 'stock',
-    'code'           => $stock->id
+    'printBarcode_enabled' => true,
+    'print_enabled'        => false,
+    'delete_enabled'       => true,
+    'edit_enabled'         => true,
+    'chname'               => '料品',
+    'route_name'           => 'stock',
+    'code'                 => $stock->id
 ])
 
 @section('sidebar')

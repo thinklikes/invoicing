@@ -81,10 +81,9 @@ class StockRepository
      * 取得所有的料品編號與名稱
      * @return collection     內容是Stock\Stock的集合
      */
-    public function getAllStockNameAndCode()
+    public function getAllStocks()
     {
-        return Stock::select('id', 'code', 'name')
-            ->orderBy('id', 'desc')->get();
+        return Stock::orderBy('id', 'desc')->get();
     }
 
     /**
