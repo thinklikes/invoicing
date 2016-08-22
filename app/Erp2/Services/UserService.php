@@ -3,6 +3,7 @@ namespace Erp\Services;
 
 use Erp\Services\ErpServiceInterface;
 use Erp\Repositories\UserRepository as User;
+use Erp\Repositories\AuthRepository as Auth;
 use Illuminate\Support\MessageBag;
 
 class UserService implements ErpServiceInterface
@@ -12,12 +13,7 @@ class UserService implements ErpServiceInterface
     private $headName = 'user';
     private $bodyName = '';
     private $counts = 15;
-    private $levels = [
-        9 => '超級管理者',
-        1 => '系統管理者',
-        0 => '一般使用者',
-        -1 => '來賓'
-    ];
+    private $levels;
     /**
      * sidebar顯示的欄位
      * @var array
@@ -33,7 +29,7 @@ class UserService implements ErpServiceInterface
     private $indexFields = [
         'employee_id' => '使用者代號',
         'emp_name' => '使用者姓名',
-        'leavl' => '使用者權限',
+        'leavl_comment' => '使用者權限',
     ];
     /**
      * show page顯示的欄位
@@ -41,13 +37,14 @@ class UserService implements ErpServiceInterface
      */
     private $showFields = [
         'head' => [
-            'employee_id' => ['title' => '使用者代號', 'type' => 'text'],
-            'emp_name'    => ['title' => '使用者姓名', 'type' => 'text'],
+            'employee_id'   => ['title' => '使用者代號'],
+            'emp_name'      => ['title' => '使用者姓名'],
             //'name'        => ['title' => '使用者帳號', 'type' => 'text'],
-            'email'       => ['title' => '電子郵件', 'type' => 'text'],
-            'phone'       => ['title' => '電話', 'type' => 'text'],
-            'out_at'      => ['title' => '離職日', 'type' => 'date'],
-            'remark'      => ['title' => '備註', 'type' => 'textarea'],
+            'leavl_comment' => ['title' => '使用者權限'],
+            'email'         => ['title' => '電子郵件'],
+            'phone'         => ['title' => '電話'],
+            'out_at'        => ['title' => '離職日'],
+            'remark'        => ['title' => '備註'],
         ]
     ];
     /**
@@ -60,20 +57,15 @@ class UserService implements ErpServiceInterface
             'emp_name'    => ['title' => '使用者姓名', 'type' => 'text'],
             'name'        => ['title' => '使用者帳號', 'type' => 'text'],
             'password'    => ['title' => '使用者密碼', 'type' => 'password'],
-            'password2'    => ['title' => '再次輸入密碼', 'type' => 'password'],
+            'password2'   => ['title' => '再次輸入密碼', 'type' => 'password'],
             'email'       => ['title' => '電子郵件', 'type' => 'text'],
 
             'phone'       => ['title' => '電話', 'type' => 'text'],
             'out_at'      => ['title' => '離職日', 'type' => 'date'],
-            // 'leavl'       => [
-            //     'title' => '使用者權限',
-            //     'type' => 'select',
-            //     'source' => [
-            //         'admin' => '系統管理者',
-            //         'user' => '一般使用者',
-            //         'demo' => '來賓'
-            //     ]
-            // ],
+            'leavl'       => [
+                'title' => '使用者權限',
+                'type' => 'select',
+            ],
             'remark'      => ['title' => '備註', 'type' => 'textarea'],
         ]
     ];
@@ -82,12 +74,22 @@ class UserService implements ErpServiceInterface
      * @var array
      */
     public static $required = [
-        'head' => ['employee_id', 'emp_name', 'name', 'password', 'password2']
+        'head' => [
+            'employee_id', 'emp_name', 'name',
+            'password', 'password2', 'leavl'
+        ]
     ];
 
-    public function __construct(User $user)
+    public function __construct(User $user, Auth $auth)
     {
         $this->user = $user;
+        $this->auth = $auth;
+        //把除了超級管理員的權限抓出來
+        $this->levels = $this->auth->getAuthsWithOutSuperAdmin()
+            ->pluck('comment', 'level');
+
+        $this->formFields['head']['leavl']['source']
+            = $this->levels;
     }
 
     public function getProperty($key)
@@ -107,7 +109,7 @@ class UserService implements ErpServiceInterface
         $data = $this->user->getUsersPaginated($this->counts, $param);
 
         $data->map(function ($item, $key) {
-            $item->leavl = $this->levels[$item->leavl];
+            $item->leavl_comment = $this->levels[$item->leavl];
             return $item;
         });
 
@@ -121,7 +123,11 @@ class UserService implements ErpServiceInterface
      */
     public function getDataByCode($employee_id)
     {
-        return $this->user->getUserByEmployeeId($employee_id);
+        $data = $this->user->getUserByEmployeeId($employee_id);
+
+        $data->leavl_comment = $this->levels[$data->leavl];
+
+        return $data;
     }
 
     /**
@@ -182,6 +188,8 @@ class UserService implements ErpServiceInterface
         $this->user->updateAccount($reuslt[1], $head['name']);
         //更新密碼
         $this->user->updatePassword($reuslt[1], $head['password']);
+        //更新權限
+        $this->user->updateLevel($reuslt[1], $head['leavl']);
 
         //return $isCreated;
         if (!$isCreated) {
@@ -211,6 +219,8 @@ class UserService implements ErpServiceInterface
         $this->user->updateAccount($employee_id, $head['name']);
         //更新密碼
         $this->user->updatePassword($employee_id, $head['password']);
+        //更新權限
+        $this->user->updateLevel($employee_id, $head['leavl']);
 
         //return $isUpdated;
         if (!$isUpdated) {

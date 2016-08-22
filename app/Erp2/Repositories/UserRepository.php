@@ -49,7 +49,12 @@ class UserRepository extends BasicRepository
         //開始存入表頭
         return [$this->user->save(), $this->user->employee_id];
     }
-
+    /**
+     * 更新使用者帳號，若沒有異動則不更新
+     * @param  string $employee_id 使用者的代號
+     * @param  string $name        使用者的帳號
+     * @return void
+     */
     public function updateAccount($employee_id, $name)
     {
         $this_user = $this->getUserByEmployeeId($employee_id);
@@ -59,6 +64,12 @@ class UserRepository extends BasicRepository
             $this_user->save();
         }
     }
+    /**
+     * 更新使用者密碼，若沒有異動則不更新
+     * @param  string $employee_id 使用者的代號
+     * @param  string $password    使用者的密碼
+     * @return void
+     */
     public function updatePassword($employee_id, $password)
     {
         $this_user = $this->getUserByEmployeeId($employee_id);
@@ -69,6 +80,21 @@ class UserRepository extends BasicRepository
         }
     }
 
+    /**
+     * 更新使用者等級，若沒有異動則不更新
+     * @param  string $employee_id 使用者的密碼
+     * @param  string $level        使用者的等級
+     * @return void
+     */
+    public function updateLevel($employee_id, $level)
+    {
+        $this_user = $this->getUserByEmployeeId($employee_id);
+
+        if ($this_user->leavl != $level) {
+            $this_user->leavl = $level;
+            $this_user->save();
+        }
+    }
 
     /**
      * 更新除了帳號密碼以外的資訊

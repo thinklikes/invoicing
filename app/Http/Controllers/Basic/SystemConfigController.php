@@ -7,8 +7,6 @@ use Excel;
 use Carbon\Carbon;
 use Storage;
 use Option\OptionRepository;
-use Erp\Repositories\UserRepository as User;
-use Erp\Repositories\AuthRepository as Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\BasicController;
 use App\Contracts\FormRequestInterface;
@@ -224,18 +222,5 @@ class SystemConfigController extends BasicController
             $errors = new MessageBag(['資料庫還原失敗!!']);
             return back()->withErrors($errors);
         }
-    }
-
-    public function auth() {
-        $users = $this->user->getUsersWithOutSuperAdmin();
-        $auths = $this->auth->getAuthsWithOutSuperAdmin();
-        return view($this->routeName.'.auth', [
-            'users' => $users,
-            'auths' => $auths
-        ]);
-    }
-
-    public function updateAuth(Reqeust $request) {
-        
     }
 }
