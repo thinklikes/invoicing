@@ -1,6 +1,3 @@
-//供應商自動完成所需資訊
-var stock_url    = '/stock/json';
-
 $(function() {
 
     $( "input.stock_autocomplete" ).each(function () {

@@ -1,12 +1,12 @@
 <?php
 namespace Erp\Services;
 
-use Erp\Services\ErpServiceInterface;
+use Erp\Services\CRUDServiceInterface;
 use Erp\Repositories\UserRepository as User;
 use Erp\Repositories\AuthRepository as Auth;
 use Illuminate\Support\MessageBag;
 
-class UserService implements ErpServiceInterface
+class UserService implements CRUDServiceInterface
 {
     private $user;
     private $chname = '使用者';

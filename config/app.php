@@ -169,7 +169,8 @@ return [
         //Barryvdh Snappy
         Barryvdh\Snappy\ServiceProvider::class,
         Erp\Providers\BarcodePrinterServiceProvider::class,
-        Erp\Providers\ErpServiceServiceProvider::class,
+        Erp\Providers\CRUDServiceFactoryProvider::class,
+        Erp\Providers\ReportServiceFactoryProvider::class,
     ],
 
     /*

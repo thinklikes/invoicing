@@ -158,6 +158,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['namespace' => 'Erp'], function() {
         //使用者與權限管理
         Route::resource('/user', 'CRUDController');
+
+        //庫存總表
+        Route::get('/stockAmountReport', 'ReportController@index');
+        Route::get('/stockAmountReport/printing', 'ReportController@printing');
     });
 
     Route::get('/test', 'AdminTestController@index');
