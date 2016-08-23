@@ -19,21 +19,25 @@ class StockWarehouseRepository
     }
 
     /**
-     * get all records of stock warehouse by stock id
-     * @return array all purchases
+     * 取得所有庫存數量大於零的資料
+     * @param  string $stock_id     料品的id
+     * @param  string $warehouse_id 倉庫的id
+     * @return collection           內容是StockWarehouse的資料
      */
-    public function getAllRecordsOfStockWarehouseByStockId($stock_id)
+    public function getAllData($stock_id = '', $warehouse_id = '')
     {
-        return $this->stockWarehouse->where('stock_id', $stock_id)->get();
-    }
 
-    /**
-     * get all records of stock warehouse by warehouse id
-     * @return array all purchases
-     */
-    public function getAllRecordsOfStockWarehouseByWarehouseId($warehouse_id)
-    {
-        return $this->stockWarehouse->where('warehouse_id', $warehouse_id)->get();
+        return $this->stockWarehouse->where('inventory', '!=', '0')
+            ->where(function ($query) use ($stock_id, $warehouse_id) {
+                if ($stock_id != '') {
+                    $query->where('stock_id', $stock_id);
+                }
+                if ($warehouse_id != '') {
+                    $query->where('warehouse_id', $warehouse_id);
+                }
+            })
+            ->get();
+
     }
 
     /**

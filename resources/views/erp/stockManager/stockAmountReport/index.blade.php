@@ -66,22 +66,9 @@
             {{ csrf_field() }}
             <table id="master" width="100%">
                 <tr>
-                    <th>開始日期</th>
-                    <td>
-                        <input type="text" class="start_date datepicker"
-                            name="start_date" size="10"
-                            value="{{ ${$app_name}['start_date'] }}">
-                    </td>
-                </tr>
-                <tr>
-                    <th>結束日期</th>
-                    <td><input type="text" class="start_date datepicker" name="end_date"
-                            value="{{ ${$app_name}['end_date'] }}" size="10"></td>
-                </tr>
-                <tr>
                     <th>倉庫</th>
                     <td colspan="3">
-                        <select name="warehouse_id]">
+                        <select name="warehouse_id">
                             <option></option>
                             {!! $WarehousePresenter->renderOptions(${$app_name}['warehouse_id']) !!}
                         </select>
