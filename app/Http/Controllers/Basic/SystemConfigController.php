@@ -13,18 +13,13 @@ use App\Contracts\FormRequestInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
 
-
-
 class SystemConfigController extends BasicController
 {
     private $routeName = 'erp.basic.system_config';
-    private $user, $auth;
 
-    public function __construct(User $user, Auth $auth)
+    public function __construct()
     {
         $this->middleware('page_auth');
-        $this->user = $user;
-        $this->auth = $auth;
         $this->setFullClassName();
     }
     /**

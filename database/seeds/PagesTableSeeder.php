@@ -169,7 +169,7 @@ class PagesTableSeeder extends Seeder
             ['code' => '1050204', 'name' => '維護使用者資料', 'level' => 3, 'action' => 'Erp\CRUDController@edit', 'enabled' => 1],
             ['code' => '1050205', 'name' => '更新使用者資料', 'level' => 3, 'action' => 'Erp\CRUDController@update', 'enabled' => 1],
             ['code' => '1050206', 'name' => '刪除使用者資料', 'level' => 3, 'action' => 'Erp\CRUDController@destroy', 'enabled' => 1],
-            ['code' => '1050401', 'name' => '資料備份匯出', 'level' => 2, 'action' => 'Basic\SystemConfigController@exportSettings', 'enabled' => 1],
+            ['code' => '10504', 'name' => '資料備份匯出', 'level' => 2, 'action' => 'Basic\SystemConfigController@exportSettings', 'enabled' => 1],
             ['code' => '10505', 'name' => '資料備份匯入', 'level' => 2, 'action' => 'Basic\SystemConfigController@importSettings', 'enabled' => 1],
             ['code' => '10506', 'name' => '系統更新記錄', 'level' => 2, 'action' => 'Basic\SystemConfigController@updateLogs', 'enabled' => 1]
         ];
