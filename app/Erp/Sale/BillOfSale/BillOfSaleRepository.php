@@ -182,10 +182,10 @@ class BillOfSaleRepository extends BasicRepository
                     $query->where('company_id', '=', $company_id);
                 }
                 if ($start_date != '') {
-                    $query->where('created_at', '>=', $start_date);
+                    $query->where('date', '>=', $start_date);
                 }
                 if ($start_date != '') {
-                    $query->where('created_at', '<=', $end_date);
+                    $query->where('date', '<=', $end_date);
                 }
             })
             ->orderBy('code')
@@ -211,6 +211,23 @@ class BillOfSaleRepository extends BasicRepository
                 }
                 if ($start_date != '') {
                     $query->where('date', '<=', $end_date);
+                }
+            })
+            ->where('is_received', '0')
+            ->orderBy('code')
+            ->get();
+    }
+
+    public function getReceivableData($param = [])
+    {
+        return $this->orderMaster
+            ->select('id', 'code', 'tax_rate_code', 'invoice_code',
+                'total_amount', 'received_amount', 'date', 'company_id')
+            ->Where(function ($query) use ($param) {
+                if (count($param) > 0) {
+                    foreach ($param as $key => $value) {
+                        $query->where($key, '=', $value);
+                    }
                 }
             })
             ->where('is_received', '0')

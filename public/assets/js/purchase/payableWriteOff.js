@@ -160,7 +160,7 @@ function renderPayableHtml(data, type)
     var prefix = (type == 'billOfPurchase') ? '進' : '退';
     var positive = (type == 'billOfPurchase') ? 1 : -1;
     for (key in data) {
-        var date = new Date(data[key]['created_at']);
+        var date = new Date(data[key]['date']);
         date = date.toISOString().substring(0, 10);
         content += '<tr>\
                         <td>\

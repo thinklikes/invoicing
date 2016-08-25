@@ -116,8 +116,9 @@ function renderReceivableHtml(data, type)
     var prefix = (type == 'billOfSale') ? '銷' : '退';
     var positive = (type == 'billOfSale') ? 1 : -1;
     for (key in data) {
-        var date = new Date(data[key]['created_at']);
+        var date = new Date(data[key]['date']);
         date = date.toISOString().substring(0, 10);
+
         content += '<tr>\
                         <td>\
                             <input class="credit_checked" type="checkbox" name="receivableWriteOffCredit['+index+'][credit_checked]" onclick="fill_amount('+index+');writeOffCalculator.calculate();" value="1">\

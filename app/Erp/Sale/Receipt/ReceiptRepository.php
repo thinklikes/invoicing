@@ -24,10 +24,16 @@ class ReceiptRepository extends BasicRepository
      * 找出輸入的客戶id未沖銷的的所有收款
      * @return array all companys
      */
-    public function getReceiptByCompanyId($company_id)
+    public function getReceiptData($param = [])
     {
         return $this->orderMaster->select('id', 'code', 'receive_date', 'type', 'check_code', 'amount')
-            ->where('company_id', $company_id)
+            ->where(function ($query) use ($param) {
+                if (count($param) > 0) {
+                    foreach ($param as $key => $value) {
+                        $query->where($key, '=', $value);
+                    }
+                }
+            })
             ->where('isWrittenOff', '0')
             ->orderBy('code')
             ->get();

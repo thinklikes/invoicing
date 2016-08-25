@@ -86,17 +86,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['namespace' => 'Purchase'], function() {
 
         //進貨單作業
-        Route::post('/billOfPurchase/json/{data_mode}/{code}', 'BillOfPurchaseController@json');
+        Route::post('/billOfPurchase/json', 'BillOfPurchaseController@json');
         Route::get('/billOfPurchase/{code}/printing', 'BillOfPurchaseController@printing');
         Route::get('/billOfPurchase/{code}/excel', 'BillOfPurchaseController@printing');
         Route::resource('/billOfPurchase', 'BillOfPurchaseController');
         //進貨退回作業
-        Route::post('/returnOfPurchase/json/{data_mode}/{code}', 'ReturnOfPurchaseController@json');
+        Route::post('/returnOfPurchase/json/', 'ReturnOfPurchaseController@json');
         Route::get('/returnOfPurchase/{code}/printing', 'ReturnOfPurchaseController@printing');
         Route::get('/returnOfPurchase/{code}/excel', 'ReturnOfPurchaseController@printing');
         Route::resource('/returnOfPurchase', 'ReturnOfPurchaseController');
 
-        Route::post('/payment/json/{data_mode}/{code}', 'PaymentController@json');
+        Route::post('/payment/json', 'PaymentController@json');
         Route::resource('/payment', 'PaymentController');
 
         //應付帳款沖銷單管理
@@ -111,17 +111,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['namespace' => 'Sale'], function() {
 
         //銷貨單作業
-        Route::post('/billOfSale/json/{data_mode}/{code}', 'BillOfSaleController@json');
+        Route::post('/billOfSale/json', 'BillOfSaleController@json');
         Route::get('/billOfSale/{code}/printing', 'BillOfSaleController@printing');
         Route::get('/billOfSale/{code}/excel', 'BillOfSaleController@printing');
         Route::resource('/billOfSale', 'BillOfSaleController');
         //銷貨退回作業
-        Route::post('/returnOfSale/json/{data_mode}/{code}', 'ReturnOfSaleController@json');
+        Route::post('/returnOfSale/json', 'ReturnOfSaleController@json');
         Route::get('/returnOfSale/{code}/printing', 'ReturnOfSaleController@printing');
         Route::get('/returnOfSale/{code}/excel', 'ReturnOfSaleController@printing');
         Route::resource('/returnOfSale', 'ReturnOfSaleController');
 
-        Route::post('/receipt/json/{data_mode}/{code}', 'ReceiptController@json');
+        Route::post('/receipt/json', 'ReceiptController@json');
         Route::resource('/receipt', 'ReceiptController');
         //應收帳款沖銷單管理
         Route::resource('/receivableWriteOff', 'ReceivableWriteOffController',

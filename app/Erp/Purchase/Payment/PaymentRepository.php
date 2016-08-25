@@ -24,10 +24,16 @@ class PaymentRepository extends BasicRepository
      * 找出輸入的供應商id未沖銷的的所有付款
      * @return array all suppliers
      */
-    public function getPaymentBySupplierId($suppier_id)
+    public function getPaymentData($param = [])
     {
         return $this->orderMaster->select('id', 'code', 'pay_date', 'type', 'check_code', 'amount')
-            ->where('supplier_id', $suppier_id)
+            ->where(function ($query) use ($param) {
+                if (count($param) > 0) {
+                    foreach ($param as $key => $value) {
+                        $query->where($key, '=', $value);
+                    }
+                }
+            })
             ->where('isWrittenOff', '0')
             ->orderBy('code')
             ->get();

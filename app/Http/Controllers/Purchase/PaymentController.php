@@ -38,17 +38,13 @@ class PaymentController extends BasicController
      * @param  string $code      搜尋的鍵值
      * @return Json            Json格式的資料
      */
-    public function json($data_mode, $code)
+    public function json(Request $request)
     {
-        switch ($data_mode) {
-            case 'getPaymentBySupplierId':
-                $orderMaster = $this->orderRepository->getPaymentBySupplierId($code);
-                break;
-            default:
-                # code...
-                break;
-        }
-        return response()->json($orderMaster->all());
+        $param = $request->input();
+
+        $data = $this->orderService->getJsonData($param);
+
+        return response()->json($data->toArray());
     }
 
     /**

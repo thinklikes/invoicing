@@ -34,16 +34,9 @@ class ReturnOfPurchaseService
         return $this->order->getOrdersPaginated($count);
     }
 
-    public function getJsonDataByMode($data_mode, $code)
+    public function getJsonData($param = [])
     {
-        switch ($data_mode) {
-            case 'getPayableBySupplierId':
-                return $this->order->getPayableBySupplierId($code);
-                break;
-            default:
-                # code...
-                break;
-        }
+        return $this->order->getPayableData($param);
     }
 
 

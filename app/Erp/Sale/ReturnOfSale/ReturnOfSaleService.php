@@ -34,16 +34,9 @@ class ReturnOfSaleService
         return $this->order->getOrdersPaginated($count);
     }
 
-    public function getJsonDataByMode($data_mode, $code)
+    public function getJsonData($param = [])
     {
-        switch ($data_mode) {
-            case 'getReceivableByCompanyId':
-                return $this->order->getReceivableByCompanyId($code);
-                break;
-            default:
-                # code...
-                break;
-        }
+        return $this->order->getReceivableData($param);
     }
     /**
      * 攔截輸入過的表單建立資料加以處理

@@ -34,7 +34,7 @@ class SaleReportService
     }
 
     /**
-     * 用客戶的id取得銷貨記錄，並且以created_at來排序
+     * 用客戶的id取得銷貨記錄，並且以date來排序
      * @param  integer $stock_id     料品的ID
      * @param  string $start_date    查詢的起始日期
      * @param  string $end_date      查詢的結束日期
