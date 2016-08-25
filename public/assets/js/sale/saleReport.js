@@ -5,7 +5,7 @@ $(function() {
      * @type {AjaxCombobox}
      */
     $('.company_autocomplete').AjaxCombobox({
-        url: '/company/json',
+        url: company_json_url,
         afterSelect : function (event, ui) {
             $('input.company_id').val(ui.item.id);
             $('input.company_code').val(ui.item.code);
@@ -21,7 +21,7 @@ $(function() {
     });
 
     $('.company_code').AjaxFetchDataByField({
-        url: '/company/json',
+        url: company_json_url,
         field_name : 'code',
         afterFetch : function (event, data) {
             $('input.company_id').val(data[0].auto_id);
@@ -34,7 +34,7 @@ $(function() {
     });
     //console.log($(this));
     $( "input.stock_autocomplete" ).AjaxCombobox({
-        url: '/stock/json',
+        url: stock_json_url,
         afterSelect : function (event, ui) {
             $('input.stock_code').val(ui.item.code);
             $('input.stock_id').val(ui.item.id);
@@ -50,7 +50,7 @@ $(function() {
     });
 
     $( "input.stock_code" ).AjaxFetchDataByField({
-        url: '/stock/json',
+        url: stock_json_url,
         field_name : 'code',
         triggered_by : $('.stock_code'),
         afterFetch : function (event, data) {

@@ -5,7 +5,7 @@ $(function() {
      * @type {AjaxCombobox}
      */
     $('.company_autocomplete').AjaxCombobox({
-        url: '/company/json',
+        url: company_json_url,
         afterSelect : function (event, ui) {
 
             $('input.company_id').val(ui.item.id);
@@ -23,7 +23,7 @@ $(function() {
     });
 
     $('.company_code').AjaxFetchDataByField({
-        url: '/company/json',
+        url: company_json_url,
         field_name : 'code',
         afterFetch : function (event, data) {
             $('input.company_id').val(data[0].auto_id);

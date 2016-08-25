@@ -12,7 +12,7 @@
                     }
                     //console.log($(this));
                     $(this).AjaxCombobox({
-                        url: '/stock/json',
+                        url: stock_json_url,
                         afterSelect : function (event, ui) {
 
                             $('input.stock_code').val(ui.item.code);
@@ -39,7 +39,7 @@
                     }
 
                     $(this).AjaxFetchDataByField({
-                        url: '/stock/json',
+                        url: stock_json_url,
                         field_name : 'code',
                         triggered_by : $('.stock_code'),
                         afterFetch : function (event, data) {

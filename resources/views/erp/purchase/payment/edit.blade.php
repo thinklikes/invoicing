@@ -15,7 +15,7 @@
                  */
 
                 $('.supplier_autocomplete').AjaxCombobox({
-                    url: '/supplier/json',
+                    url: supplier_json_url,
                     afterSelect : function (event, ui) {
                         $('input.supplier_id').val(ui.item.id);
                         $('input.supplier_code').val(ui.item.code);
@@ -30,7 +30,7 @@
                     }
                 });
                 $('.supplier_code').AjaxFetchDataByField({
-                    url: '/supplier/json',
+                    url: supplier_json_url,
                     field_name : 'code',
                     triggered_by : $('.supplier_code'),
                     afterFetch : function (event, data) {

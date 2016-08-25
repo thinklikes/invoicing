@@ -45,6 +45,17 @@
             margin-right: 6px;
         }
     </style>
+    <script type="text/javascript">
+        var supplier_json_url = '{{ url('supplier/json') }}';
+        var stock_json_url = '{{ url('stock/json') }}';
+        var company_json_url = '{{ url('company/json') }}';
+        var billOfPurchase_json_url = '{{ url('billOfPurchase/json') }}';
+        var returnOfPurchase_json_url = '{{ url('returnOfPurchase/json') }}';
+        var payment_json_url = '{{ url('payment/json') }}';
+        var billOfSale_json_url = '{{ url('billOfSale/json') }}';
+        var returnOfSale_json_url = '{{ url('returnOfSale/json') }}';
+        var receipt_json_url = '{{ url('receipt/json') }}';
+    </script>
 </head>
 <body id="app-layout">
     <nav class="navbar navbar-default navbar-static-top">
