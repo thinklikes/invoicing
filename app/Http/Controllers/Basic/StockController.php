@@ -30,10 +30,17 @@ class StockController extends BasicController
         return response()->json($stocks);
     }
     //條碼列印
-    public function printBarcode()
+    public function printBarcode($id = '')
     {
+        if ($id) {
+            $stocks = collect([
+                $this->stock->getStockDetail($id)
+            ]);
+        } else {
+            $stocks = $this->stock->getAllStocks();
+        }
         return view($this->routeName.'.printBarcode', [
-            'stocks' => $this->stock->getAllStockNameAndCode()
+            'stocks' => $stocks
         ]);
     }
     /**

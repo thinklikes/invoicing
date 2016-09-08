@@ -42,7 +42,7 @@ $(function () {
      */
 
     $('.supplier_autocomplete').AjaxCombobox({
-        url: '/supplier/json',
+        url: supplier_json_url,
         afterSelect : function (event, ui) {
             $('input.supplier_id').val(ui.item.id);
             $('input.supplier_code').val(ui.item.code);
@@ -67,7 +67,7 @@ $(function () {
         }
     });
     $('.supplier_code').AjaxFetchDataByField({
-        url: '/supplier/json',
+        url: supplier_json_url,
         field_name : 'code',
         triggered_by : $('.supplier_code'),
         afterFetch : function (event, data) {
@@ -115,7 +115,7 @@ function getPayableBySupplierId(supplier_id)
 
     $.ajax({
         method: "POST",
-        url: '/billOfPurchase/json/getPayableBySupplierId/' + supplier_id,
+        url: billOfPurchase_json_url,
         dataType: "json",
         data: {
             'supplier_id' : supplier_id,
@@ -128,7 +128,7 @@ function getPayableBySupplierId(supplier_id)
     //抓出進貨退回單的應付帳款
     $.ajax({
         method: "POST",
-        url: '/returnOfPurchase/json/getPayableBySupplierId/' + supplier_id,
+        url: returnOfPurchase_json_url,
         dataType: "json",
         data: {
             'supplier_id' : supplier_id,
@@ -160,7 +160,7 @@ function renderPayableHtml(data, type)
     var prefix = (type == 'billOfPurchase') ? '進' : '退';
     var positive = (type == 'billOfPurchase') ? 1 : -1;
     for (key in data) {
-        var date = new Date(data[key]['created_at']);
+        var date = new Date(data[key]['date']);
         date = date.toISOString().substring(0, 10);
         content += '<tr>\
                         <td>\
@@ -215,7 +215,7 @@ function getPaymentBySupplierId(supplier_id)
     clearPaymentHtml();
     $.ajax({
         method: "POST",
-        url: '/payment/json/getPaymentBySupplierId/' + supplier_id,
+        url: payment_json_url,
         dataType: "json",
         data: {
             'supplier_id' : supplier_id,

@@ -28,13 +28,20 @@ class ReturnOfPurchaseRepository extends BasicRepository
     }
 
     /**
-     * 找出輸入的供應商id未付清的所有應付帳款
-     * @return array all suppliers
+     * 找出輸入條件的未付清的所有應付帳款
+     * @param  array $param 輸入的條件
+     * @return collection   內容是BillOfPurchase\BillOfPurchase的集合
      */
-    public function getPayableBySupplierId($suppier_id)
+    public function getPayableData($param = [])
     {
-        return $this->orderMaster->select('id', 'code', 'invoice_code','total_amount', 'paid_amount', 'created_at')
-            ->where('supplier_id', $suppier_id)
+        return $this->orderMaster->select('id', 'code', 'invoice_code','total_amount', 'paid_amount', 'date')
+            ->where(function ($query) use ($param) {
+                if (count($param) > 0) {
+                    foreach ($param as $key => $value) {
+                        $query->where($key, '=', $value);
+                    }
+                }
+            })
             ->where('is_paid', '0')
             ->orderBy('code')
             ->get();

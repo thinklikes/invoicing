@@ -32,11 +32,13 @@ class ReturnOfSaleController extends BasicController
      * @param  string $code      搜尋的鍵值
      * @return Json            Json格式的資料
      */
-    public function json($data_mode, $code)
+    public function json(Request $request)
     {
-        $data = $this->service->getJsonDataByMode($data_mode, $code);
+        $param = $request->input();
 
-        return response()->json($data->all());
+        $data = $this->service->getJsonData($param);
+
+        return response()->json($data->toArray());
     }
     /**
      * Display a listing of the resource.

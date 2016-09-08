@@ -156,6 +156,8 @@ class PagesTableSeeder extends Seeder
             ['code' => '1040206', 'name' => '刪除轉倉單', 'level' => 3, 'action' => 'StockManager\StockTransferController@destroy', 'enabled' => 1],
             ['code' => '10403'  , 'name' => '庫存異動表', 'level' => 2, 'action' => 'StockManager\StockInOutReportController@index', 'enabled' => 1],
             ['code' => '1040301', 'name' => '庫存異動表-列出查詢結果', 'level' => 3, 'action' => 'StockManager\StockInOutReportController@show', 'enabled' => 1],
+            ['code' => '10404'  , 'name' => '庫存總表', 'level' => 2, 'action' => 'Erp\ReportController@index', 'enabled' => 1],
+            ['code' => '1040401', 'name' => '庫存總表-列出查詢結果', 'level' => 3, 'action' => 'Erp\ReportController@show', 'enabled' => 1],
             ['code' => '105'    , 'name' => '系統', 'level' => 1, 'action' => 'PageController@system', 'enabled' => 1],
             ['code' => '10501'  , 'name' => '系統參數設定', 'level' => 2, 'action' => 'Basic\SystemConfigController@index', 'enabled' => 1],
             ['code' => '1050101', 'name' => '維護系統參數', 'level' => 3, 'action' => 'Basic\SystemConfigController@edit', 'enabled' => 1],
@@ -167,7 +169,7 @@ class PagesTableSeeder extends Seeder
             ['code' => '1050204', 'name' => '維護使用者資料', 'level' => 3, 'action' => 'Erp\CRUDController@edit', 'enabled' => 1],
             ['code' => '1050205', 'name' => '更新使用者資料', 'level' => 3, 'action' => 'Erp\CRUDController@update', 'enabled' => 1],
             ['code' => '1050206', 'name' => '刪除使用者資料', 'level' => 3, 'action' => 'Erp\CRUDController@destroy', 'enabled' => 1],
-            ['code' => '1050401', 'name' => '資料備份匯出', 'level' => 2, 'action' => 'Basic\SystemConfigController@exportSettings', 'enabled' => 1],
+            ['code' => '10504', 'name' => '資料備份匯出', 'level' => 2, 'action' => 'Basic\SystemConfigController@exportSettings', 'enabled' => 1],
             ['code' => '10505', 'name' => '資料備份匯入', 'level' => 2, 'action' => 'Basic\SystemConfigController@importSettings', 'enabled' => 1],
             ['code' => '10506', 'name' => '系統更新記錄', 'level' => 2, 'action' => 'Basic\SystemConfigController@updateLogs', 'enabled' => 1]
         ];

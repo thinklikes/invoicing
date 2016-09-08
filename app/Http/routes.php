@@ -52,15 +52,20 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/system_config/import', 'SystemConfigController@import');
 
         //客戶資料管理
+        Route::get('/company/{id}/printTag', 'CompanyController@printTag');
+        Route::get('/company/printTag', 'CompanyController@printTag');
+        Route::get('/company/{id}/printBarcode', 'CompanyController@printBarcode');
         Route::get('/company/printBarcode', 'CompanyController@printBarcode');
         Route::post('/company/json', 'CompanyController@json');
         Route::resource('/company', 'CompanyController');
         //供應商資料管理
+        Route::get('/supplier/{id}/printBarcode', 'SupplierController@printBarcode');
         Route::get('/supplier/printBarcode', 'SupplierController@printBarcode');
         Route::post('/supplier/json', 'SupplierController@json');
         Route::resource('/supplier', 'SupplierController');
 
         //料品資料管理
+        Route::get('/stock/{id}/printBarcode', 'StockController@printBarcode');
         Route::get('/stock/printBarcode', 'StockController@printBarcode');
         Route::post('/stock/json', 'StockController@json');
         Route::resource('/stock', 'StockController');
@@ -81,17 +86,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['namespace' => 'Purchase'], function() {
 
         //進貨單作業
-        Route::post('/billOfPurchase/json/{data_mode}/{code}', 'BillOfPurchaseController@json');
+        Route::post('/billOfPurchase/json', 'BillOfPurchaseController@json');
         Route::get('/billOfPurchase/{code}/printing', 'BillOfPurchaseController@printing');
         Route::get('/billOfPurchase/{code}/excel', 'BillOfPurchaseController@printing');
         Route::resource('/billOfPurchase', 'BillOfPurchaseController');
         //進貨退回作業
-        Route::post('/returnOfPurchase/json/{data_mode}/{code}', 'ReturnOfPurchaseController@json');
+        Route::post('/returnOfPurchase/json/', 'ReturnOfPurchaseController@json');
         Route::get('/returnOfPurchase/{code}/printing', 'ReturnOfPurchaseController@printing');
         Route::get('/returnOfPurchase/{code}/excel', 'ReturnOfPurchaseController@printing');
         Route::resource('/returnOfPurchase', 'ReturnOfPurchaseController');
 
-        Route::post('/payment/json/{data_mode}/{code}', 'PaymentController@json');
+        Route::post('/payment/json', 'PaymentController@json');
         Route::resource('/payment', 'PaymentController');
 
         //應付帳款沖銷單管理
@@ -106,17 +111,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['namespace' => 'Sale'], function() {
 
         //銷貨單作業
-        Route::post('/billOfSale/json/{data_mode}/{code}', 'BillOfSaleController@json');
+        Route::post('/billOfSale/json', 'BillOfSaleController@json');
         Route::get('/billOfSale/{code}/printing', 'BillOfSaleController@printing');
         Route::get('/billOfSale/{code}/excel', 'BillOfSaleController@printing');
         Route::resource('/billOfSale', 'BillOfSaleController');
         //銷貨退回作業
-        Route::post('/returnOfSale/json/{data_mode}/{code}', 'ReturnOfSaleController@json');
+        Route::post('/returnOfSale/json', 'ReturnOfSaleController@json');
         Route::get('/returnOfSale/{code}/printing', 'ReturnOfSaleController@printing');
         Route::get('/returnOfSale/{code}/excel', 'ReturnOfSaleController@printing');
         Route::resource('/returnOfSale', 'ReturnOfSaleController');
 
-        Route::post('/receipt/json/{data_mode}/{code}', 'ReceiptController@json');
+        Route::post('/receipt/json', 'ReceiptController@json');
         Route::resource('/receipt', 'ReceiptController');
         //應收帳款沖銷單管理
         Route::resource('/receivableWriteOff', 'ReceivableWriteOffController',
@@ -153,6 +158,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['namespace' => 'Erp'], function() {
         //使用者與權限管理
         Route::resource('/user', 'CRUDController');
+
+        //庫存總表
+        Route::get('/stockAmountReport', 'ReportController@index');
+        Route::get('/stockAmountReport/printing', 'ReportController@printing');
     });
 
     Route::get('/test', 'AdminTestController@index');

@@ -79,14 +79,13 @@ class CompanyRepository extends BasicRepository
     }
 
     /**
-     * 取得所有的客戶編號與名稱
-     * @return collection     內容是Company\Company的集合
+     * 取得所有的客戶
+     * @param  array  $param 過濾的參數，只顯示陣列所帶的欄位
+     * @return [type]        [description]
      */
-    public function getAllCompanyNameAndCode()
+    public function getAllCompanies()
     {
-        return $this->company
-            ->select('company_code', 'company_name')
-            ->orderBy('auto_id', 'desc')->get();
+        return $this->company->orderBy('auto_id', 'desc')->get();
     }
 
     /**

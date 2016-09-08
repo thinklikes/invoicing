@@ -170,6 +170,48 @@
         </div>
     </div>
     @endforeach
+    <div class="clear"></div>
+    <hr />
+    <div class="reportPerPage">
+        <div class="total">
+            <table>
+                <tr>
+                    <th class="string" colspan="3" width="60%">總計</th>
+                    <td class="numeric" width="10%">
+                        {{
+                            //計算稅前合計的合計
+                            number_format(
+                                collect($data)->sum(function ($item) {
+                                    return $item->sum('total_no_tax_amount');
+                                })
+                            )
+                        }}
+                    </td>
+                    <td width="10%"></td>
+                    <td class="numeric" width="10%">
+                        {{
+                            //計算營業稅的合計
+                            number_format(
+                                collect($data)->sum(function ($item) {
+                                    return $item->sum('tax');
+                                })
+                            )
+                        }}
+                    </td>
+                    <td class="numeric" width="10%">
+                        {{
+                            //計算小計
+                            number_format(
+                                collect($data)->sum(function ($item) {
+                                    return $item->sum('total_amount');
+                                })
+                            )
+                        }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 @endif
 @yield('print_button_group')
 </div>

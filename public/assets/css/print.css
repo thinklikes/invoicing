@@ -119,6 +119,10 @@ table {
     margin: 0px auto;
     border-top:solid 1px black;
 }
+.reportPerPage .total table {
+    width: 90%;
+    margin: 0px auto;
+}
 .main_page hr {
     border-color:#000;
 }

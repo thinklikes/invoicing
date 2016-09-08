@@ -15,6 +15,11 @@ class PaymentService
         $this->orderRepository = $orderRepository;
     }
 
+    public function getJsonData($param = [])
+    {
+        return $this->orderRepository->getPaymentData($param);
+    }
+
     public function create($listener, $orderMaster)
     {
         $isCreated = true;

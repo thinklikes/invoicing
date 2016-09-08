@@ -10,7 +10,7 @@ $(function () {
      * @type {AjaxCombobox}
      */
     $('.company_autocomplete').AjaxCombobox({
-        url: '/company/json',
+        url: company_json_url,
         afterSelect : function (ecent, ui) {
             $('input.company_id').val(ui.item.id);
             $('input.company_code').val(ui.item.code);
@@ -33,7 +33,7 @@ $(function () {
         }
     });
     $('.company_code').AjaxFetchDataByField({
-        url: '/company/json',
+        url: company_json_url,
         field_name : 'code',
         afterFetch : function (event, data) {
             $('input.company_id').val(data[0].auto_id);
@@ -71,7 +71,7 @@ function getReceivableByCompanyId(company_id)
 
     $.ajax({
         method: "POST",
-        url: '/billOfSale/json/getReceivableByCompanyId/' + company_id,
+        url: billOfSale_json_url,
         dataType: "json",
         data: {
             'company_id' : company_id,
@@ -84,7 +84,7 @@ function getReceivableByCompanyId(company_id)
     //抓出銷貨退回單的應收帳款
     $.ajax({
         method: "POST",
-        url: '/returnOfSale/json/getReceivableByCompanyId/' + company_id,
+        url: returnOfSale_json_url,
         dataType: "json",
         data: {
             'company_id' : company_id,
@@ -116,8 +116,9 @@ function renderReceivableHtml(data, type)
     var prefix = (type == 'billOfSale') ? '銷' : '退';
     var positive = (type == 'billOfSale') ? 1 : -1;
     for (key in data) {
-        var date = new Date(data[key]['created_at']);
+        var date = new Date(data[key]['date']);
         date = date.toISOString().substring(0, 10);
+
         content += '<tr>\
                         <td>\
                             <input class="credit_checked" type="checkbox" name="receivableWriteOffCredit['+index+'][credit_checked]" onclick="fill_amount('+index+');writeOffCalculator.calculate();" value="1">\
@@ -172,7 +173,7 @@ function getReceiptByCompanyId(company_id)
 
     $.ajax({
         method: "POST",
-        url: '/receipt/json/getReceiptByCompanyId/' + company_id,
+        url: receipt_json_url,
         dataType: "json",
         data: {
             'company_id' : company_id,

@@ -1,0 +1,16 @@
+.tag_container {
+    width: 700px;
+}
+.tag_content {
+    border: 1px black solid;
+    margin: 5px;
+    padding-left:5px;
+    width: 300px;
+    float: left;
+    display: inline;
+    font-size:14px;
+}
+
+.tag_content p.boss {
+    padding-left:15px;
+}

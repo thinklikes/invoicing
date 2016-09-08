@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Erp;
 use App;
 //use Erp\BarcodePrinter\BarcodePrinterInterface;
 //use Erp\Services\ErpServiceInterface;
-use Erp\Services\ErpServiceInterface as Service;
+use Erp\Services\CRUDServiceInterface as Service;
 use App\Contracts\FormRequestInterface;
 use Schema;
 use App\Http\Requests\DestroyRequest;

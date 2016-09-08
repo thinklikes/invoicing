@@ -4,7 +4,7 @@ namespace Erp\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class ErpServiceServiceProvider extends ServiceProvider
+class ReportServiceFactoryProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -23,9 +23,8 @@ class ErpServiceServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //BarcodePrinterInterface
         $this->app->bind(
-            "Erp\\Services\\ErpServiceInterface",
+            "Erp\\Services\\ReportServiceInterface",
             //'Erp\BarcodePrinter\PrintBarcode'
             function ($app, $param = null) {
                 $service = ucfirst($param['app_name']).'Service';
@@ -34,16 +33,4 @@ class ErpServiceServiceProvider extends ServiceProvider
             }
         );
     }
-
-    /**
-     * 緩載提供者時, 取得提供者所提供的服務。
-     *
-     * @return array
-     */
-    // public function provides()
-    // {
-    //     return [
-    //         //'Erp\BarcodePrinter\PrintBarcodeInterface'
-    //     ];
-    // }
 }

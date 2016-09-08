@@ -27,10 +27,31 @@ class CompanyController extends BasicController
         $this->orderService = $orderService;
         $this->setFullClassName();
     }
-    public function printBarcode()
+    public function printBarcode($id = '')
     {
+        if ($id) {
+            $companies = collect([
+                $this->orderRepository->getCompanyById($id)
+            ]);
+        } else {
+            $companies = $this->orderRepository->getAllCompanies();
+        }
         return view($this->routeName.'.printBarcode', [
-            'companies' => $this->orderRepository->getAllCompanyNameAndCode()
+            'companies' => $companies
+        ]);
+    }
+
+    public function printTag($id = '')
+    {
+        if ($id) {
+            $companies = collect([
+                $this->orderRepository->getCompanyById($id)
+            ]);
+        } else {
+            $companies = $this->orderRepository->getAllCompanies();
+        }
+        return view($this->routeName.'.printTag', [
+            'companies' => $companies
         ]);
     }
 

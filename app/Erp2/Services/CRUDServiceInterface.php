@@ -2,7 +2,7 @@
 
 namespace Erp\Services;
 
-interface ErpServiceInterface
+interface CRUDServiceInterface
 {
     public function create($listener, $head, $body = null);
 

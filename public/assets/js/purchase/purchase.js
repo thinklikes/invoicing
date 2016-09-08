@@ -19,7 +19,7 @@ $(function() {
      * @type {AjaxCombobox}
      */
     $('.supplier_autocomplete').AjaxCombobox({
-        url: '/supplier/json',
+        url: supplier_json_url,
         afterSelect : function (event, ui) {
             $('input.supplier_id').val(ui.item.id);
             $('input.supplier_code').val(ui.item.code);
@@ -35,7 +35,7 @@ $(function() {
     });
 
     $('.supplier_code').AjaxFetchDataByField({
-        url: '/supplier/json',
+        url: supplier_json_url,
         field_name : 'code',
         triggered_by : $('.supplier_code'),
         afterFetch : function (event, data) {
@@ -71,7 +71,7 @@ function rebindStockCombobox() {
         }
         //console.log($(this));
         $(this).AjaxCombobox({
-            url: '/stock/json',
+            url: stock_json_url,
             afterSelect : function (event, ui) {
 
                 var index = event.target.name.match(/\d+/g)[0];
@@ -101,7 +101,7 @@ function rebindStockCombobox() {
         }
         var index = $(this).index(".stock_code");
         $(this).AjaxFetchDataByField({
-            url: '/stock/json',
+            url: stock_json_url,
             field_name : 'code',
             triggered_by : $('.stock_code').eq(index),
             afterFetch : function (event, data) {

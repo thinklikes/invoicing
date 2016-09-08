@@ -69,7 +69,7 @@ class PublicPresenter
                 $html = "<select name=\"$name\" class=\"form-control\">";
                 $html .= "<option></option>";
                 foreach ($source as $key => $comment) {
-                    $selected = ($key === $value) ? "selected" : "";
+                    $selected = ($key == $value && !is_null($value)) ? "selected" : "";
                     $html .= "<option value=\"$key\" $selected>$comment</option>";
                 }
                 $html .= "</select>";

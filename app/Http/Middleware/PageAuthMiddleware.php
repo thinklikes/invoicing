@@ -21,7 +21,7 @@ class PageAuthMiddleware
 
         $result = $request->user()->auth->pages->contains('action', $action);
 
-        if (preg_match("/(json|printing|printBarcode)$/", $action)) {
+        if (preg_match("/(json|printing|printBarcode|printTag)$/", $action)) {
             $result = true;
         }
 
