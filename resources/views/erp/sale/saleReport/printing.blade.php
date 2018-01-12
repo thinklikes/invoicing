@@ -41,19 +41,19 @@
             <table class="width_01">
                 <tr>
                     <th>客戶名稱：</th>
-                    <td>{{ $data[$company_id][0]->company->company_name }}</td>
+                    <td>{{ $data[$company_id][0]->company->company_name or null }}</td>
                     <th>客戶編號</th>
-                    <td>{{ $data[$company_id][0]->company->company_code }}</td>
+                    <td>{{ $data[$company_id][0]->company->company_code or null }}</td>
                 </tr>
                 <tr>
                     <th>統一編號：</th>
-                    <td>{{ $data[$company_id][0]->company->VTA_NO }}</td>
+                    <td>{{ $data[$company_id][0]->company->VTA_NO or null }}</td>
                     <th>電話：</th>
-                    <td>{{ $data[$company_id][0]->company->company_tel }}</td>
+                    <td>{{ $data[$company_id][0]->company->company_tel or null }}</td>
                 </tr>
                 <tr>
                     <th>聯絡地址：</th>
-                    <td colspan="3">{{ $data[$company_id][0]->company->company_add }}</td>
+                    <td colspan="3">{{ $data[$company_id][0]->company->company_add or null }}</td>
                 </tr>
             </table>
         </div>
@@ -81,7 +81,7 @@
                             {{ $value->code}}
                         </td>
                         <td class="string">
-                            {{ $value->warehouse->name }}
+                            {{ $value->warehouse->name or null }}
                         </td>
                         <td class="numeric">
                             {{ number_format($value->total_no_tax_amount) }}
@@ -116,10 +116,10 @@
             <tbody>
             @foreach($value->orderDetail as $key2 => $value2)
                 <tr>
-                    <td class="string">{{ $value2->stock->code }}</td>
-                    <td class="string">{{ $value2->stock->name }}</td>
+                    <td class="string">{{ $value2->stock->code or null }}</td>
+                    <td class="string">{{ $value2->stock->name or null }}</td>
                     <td class="numeric">{{ $value2->quantity }}</td>
-                    <td class="string">{{ $value2->stock->unit->comment }}</td>
+                    <td class="string">{{ $value2->stock->unit->comment or null }}</td>
                     <td class="numeric">{{ $value2->no_tax_price }}</td>
                     <td class="numeric">
                         {{ number_format($value2->subTotal) }}
@@ -209,6 +209,64 @@
                         }}
                     </td>
                 </tr>
+            </table>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <hr />
+    <div class="reportPerPage">
+        <div class="body">
+            <table>
+                <caption>料品小計</caption>
+                <thead>
+                    <tr>
+                        <th class="string">料品代碼</th>
+                        <th class="string">料品名稱</th>
+                        <th class="numeric" width="10%">數量</th>
+                        <th class="numeric" width="10%">未稅金額</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach($stockSubTotal as $stock_id => $detail)
+                        <tr>
+                            <td>{{ $detail[0]->stock->code or null }}</td>
+                            <td>{{ $detail[0]->stock->name or null }}</td>
+                            <td class="numeric">
+                                {{
+                                    $detail->sum(function ($item) {
+                                        return $item->quantity;
+                                    })
+                                 }}
+                            </td>
+                            <td class="numeric">
+                                {{
+                                    number_format(
+                                        $detail->sum(function ($item) {
+                                            return $item->subTotal;
+                                        })
+                                    )
+                                 }}
+                            </td>
+                        </tr>
+
+                    @endforeach
+                    <tfoot>
+                        <td colspan="3">總計</td>
+                        <td class="numeric">
+                            {{
+                                number_format(
+                                    $stockSubTotal->sum(function ($item) {
+                                        return $item->sum(function ($item2) {
+                                            return $item2->subTotal;
+                                        });
+                                    })
+                                )
+
+                            }}
+                        </td>
+                    </tfoot>
+                </tbody>
             </table>
         </div>
     </div>

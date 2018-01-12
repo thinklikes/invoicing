@@ -27,10 +27,12 @@
         </thead>
         <tbody>
     @foreach ($stock->stocks_warehouses as $values)
+        @if ($values->warehouse)
             <tr>
-                <td>{{ $values->warehouse->code.' '.$values->warehouse->comment }}</td>
-                <td align="right">{{ $values->inventory }}</td>
+                <td>{{ $values->warehouse->code or null }} {{ $values->warehouse->comment or null}}</td>
+                <td align="right">{{ $values->inventory or null}}</td>
             </tr>
+        @endif
     @endforeach
         </tbody>
 
@@ -41,7 +43,11 @@
 
 @section('content')
         <div style="float:right; margin-bottom:10px;">
-            <img src="data:image/png;base64, {{ base64_encode($BarcodeGenerator->getBarcode($stock->code, $BarcodeGenerator::TYPE_CODE_128)) }}">
+            <img class="barcode" src="data:image/png;base64, {{
+                base64_encode(
+                    $BarcodeGenerator->getBarcode(
+                        $stock->code, $BarcodeGenerator::TYPE_CODE_128))
+            }}">
         </div>
         <table width="100%" class="table">
             <tr>
@@ -62,11 +68,23 @@
             </tr>
             <tr>
                 <th>料品類別</th>
-                <td>{{ $stock->stock_class->code.' '.$stock->stock_class->comment }}</td>
+                <td>
+                    {{ 
+                        ($stock->stock_class) 
+                            ? $stock->stock_class->code.' '.$stock->stock_class->comment 
+                            : ""
+                    }}
+                </td>
             </tr>
             <tr>
                 <th>料品單位</th>
-                <td>{{ $stock->unit->code.' '.$stock->unit->comment }}</td>
+                <td>
+                    {{ 
+                        ($stock->unit) 
+                            ? $stock->unit->code.' '.$stock->unit->comment 
+                            : ""
+                    }}
+                </td>
             </tr>
             <tr>
                 <th>進貨價格</th>

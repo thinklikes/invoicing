@@ -1,4 +1,4 @@
-@inject('page', 'Page\PagePresenter')
+@inject('page', 'App\Presenters\PagePresenter')
 @inject('presenter', 'App\Presenters\StatusPresenter')
 
 <!DOCTYPE html>
@@ -22,6 +22,7 @@
     <script type="text/javascript" src="{{ asset('assets/js/bindDatePicker.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/AjaxFetchDataByField.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/appendItem.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/NewCombox.js') }}"></script>
     {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0-rc.2/jquery-ui.min.css">
@@ -55,19 +56,23 @@
         var billOfSale_json_url = '{{ url('billOfSale/json') }}';
         var returnOfSale_json_url = '{{ url('returnOfSale/json') }}';
         var receipt_json_url = '{{ url('receipt/json') }}';
+        $(function () {
+            $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+            });
+        });
     </script>
 </head>
 <body id="app-layout">
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
-            <div class="navbar-header">
-              <a class="navbar-brand" href="#">{{ config('system_configs.website_title') }}</a>
-            </div>
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="{{ url('/') }}">{{ config('system_configs.website_title') }}</a>
+                </div>
 @if (Auth::guest())
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/') }}">首頁</a></li>
-                </ul>
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->
@@ -76,8 +81,8 @@
 @else
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/') }}">首頁</a></li>
                     <li><a href="{{ $page->getParentPageUrl() }}">回上一層</a></li>
+                    {!! $page->getMenu() !!}
                 </ul>
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
@@ -123,7 +128,10 @@
 @yield('content')
                     </div>
                 </div>
-            <div class="reflective"></div>
+                <div class="reflective"></div>
+            </div>
+            <div class="col-md-2 col-md-offset-0">
+@yield('sidebar-right')
             </div>
         </div>
     </div>

@@ -14,7 +14,11 @@
 
 @section('content')
         <div style="float:right; margin-bottom:10px;">
-            <img src="data:image/png;base64, {{ base64_encode($BarcodeGenerator->getBarcode($supplier->code, $BarcodeGenerator::TYPE_CODE_128)) }}">
+            <img class="barcode" src="data:image/png;base64, {{
+                base64_encode(
+                    $BarcodeGenerator->getBarcode(
+                        $supplier->code, $BarcodeGenerator::TYPE_CODE_128))
+            }}">
         </div>
         <table width="100%" class="table">
             <tr>
@@ -26,7 +30,7 @@
                 <td>{{ $supplier->name }}</td>
             </tr>
             <tr>
-                <th>供應商簡稱</th>
+                <th>供應商品</th>
                 <td>{{ $supplier->shortName }}</td>
             </tr>
             <tr>
@@ -64,6 +68,18 @@
             <tr>
                 <th>統一編號</th>
                 <td>{{ $supplier->taxNumber }}</td>
+            </tr>
+            <tr>
+                <th>匯款戶名</th>
+                <td>{{ $supplier->remName }}</td>
+            </tr>
+            <tr>
+                <th>匯款局號</th>
+                <td>{{ $supplier->remBureau }}</td>
+            </tr>
+            <tr>
+                <th>匯款帳號</th>
+                <td>{{ $supplier->remAccount }}</td>
             </tr>
         </table>
     {{-- 資料檢視頁的按鈕群組 --}}

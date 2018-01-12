@@ -44,6 +44,6 @@ class StockInLogs extends Model
      */
     public function stock()
     {
-        return $this->belongsTo('Stock\Stock', 'stock_id', 'id');
+        return $this->belongsTo('Stock\Stock', 'stock_id', 'id')->withTrashed();
     }
 }

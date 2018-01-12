@@ -55,7 +55,7 @@
                     <td>{{ $stockTransferDetail[$i]['stock']->code }}</td>
                     <td>{{ $stockTransferDetail[$i]['stock']->name }}</td>
                     <td class="numeric">{{ $stockTransferDetail[$i]['quantity'] }}</td>
-                    <td class="string">{{ $stockTransferDetail[$i]['stock']->unit->comment }}</td>
+                    <td class="string">{{ $stockTransferDetail[$i]['stock']->unit->comment or null }}</td>
                     <td class="numeric">{{ $stockTransferDetail[$i]['no_tax_price'] }}</td>
                     <td class="numeric">{{ $stockTransferDetail[$i]['no_tax_amount'] }}</td>
                 </tr>

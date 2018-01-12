@@ -216,6 +216,12 @@ return [
             'gross_weight' => [
                 'required'       => '我們需要知道料品毛重',
             ],
+          	'stock_class_id' => [
+                'required'       => '我們需要知道料品類別',
+            ],
+          	'unit_id' => [
+                'required'       => '我們需要知道料品單位',
+            ],
         ],
         'unit' => [
             'code'        => [
@@ -383,6 +389,15 @@ return [
             'to_warehouse_id' => [
                 'required' => '我們需要知道調入倉庫'
             ]
+        ],
+        'orderTranslater' => [
+            'platform_name' => [
+                'required' => '我們需要知道平台名稱',
+            ],
+            'upload_file' => [
+                'required' => '請選定一個EXCEL檔案上傳!!',
+                'mimes' => '請選定一個EXCEL檔案上傳!!',
+            ],
         ]
     ],
     /*

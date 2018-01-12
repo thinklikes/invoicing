@@ -29,11 +29,13 @@ class PayableWriteOffDebit extends Model
 
     public function billOfPurchase()
     {
-        return $this->belongsTo('BillOfPurchase\BillOfPurchaseMaster', 'debit_code', 'code');
+        return $this->belongsTo('BillOfPurchase\BillOfPurchaseMaster', 'debit_code', 'code'
+            )->withTrashed();
     }
 
     public function returnOfPurchase()
     {
-        return $this->belongsTo('ReturnOfPurchase\ReturnOfPurchaseMaster', 'debit_code', 'code');
+        return $this->belongsTo('ReturnOfPurchase\ReturnOfPurchaseMaster', 'debit_code', 'code')
+            ->withTrashed();
     }
 }

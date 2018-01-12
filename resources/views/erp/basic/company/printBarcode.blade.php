@@ -4,7 +4,7 @@
 @foreach($companies as $company)
 
         <div class="barcode_content">
-            <img src="data:image/png;base64,
+            <img class="barcode" src="data:image/png;base64,
                 {{
                     base64_encode(
                         $BarcodeGenerator->getBarcode(

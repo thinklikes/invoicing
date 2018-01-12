@@ -62,7 +62,8 @@ class ReturnOfSaleMaster extends Model
      */
     public function company()
     {
-        return $this->belongsTo('Company\Company', 'company_id', 'auto_id');
+        return $this->belongsTo('Company\Company', 'company_id', 'auto_id')
+            ->withTrashed();
     }
 
     /**

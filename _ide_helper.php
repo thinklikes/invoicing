@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.2.44 on 2016-08-24.
+ * Generated for Laravel 5.2.45 on 2017-03-22.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -4843,7 +4843,7 @@ namespace {
          * Retrieve the minimum value of a given column.
          *
          * @param string $column
-         * @return float|int 
+         * @return mixed 
          * @static 
          */
         public static function min($column){
@@ -4854,7 +4854,7 @@ namespace {
          * Retrieve the maximum value of a given column.
          *
          * @param string $column
-         * @return float|int 
+         * @return mixed 
          * @static 
          */
         public static function max($column){
@@ -4865,7 +4865,7 @@ namespace {
          * Retrieve the sum of the values of a given column.
          *
          * @param string $column
-         * @return float|int 
+         * @return mixed 
          * @static 
          */
         public static function sum($column){
@@ -4876,7 +4876,7 @@ namespace {
          * Retrieve the average of the values of a given column.
          *
          * @param string $column
-         * @return float|int 
+         * @return mixed 
          * @static 
          */
         public static function avg($column){
@@ -4887,7 +4887,7 @@ namespace {
          * Alias for the "avg" method.
          *
          * @param string $column
-         * @return float|int 
+         * @return mixed 
          * @static 
          */
         public static function average($column){
@@ -11388,6 +11388,7 @@ namespace {
          * @param callback|null $callback
          * @param string|null $encoding
          * @param bool $noBasePath
+         * @param callback|null $callbackConfigReader
          * @return \Maatwebsite\Excel\LaravelExcelReader 
          * @static 
          */
@@ -11735,8 +11736,8 @@ namespace {
          * @return static 
          * @static 
          */
-        public static function save($filename){
-            return \Barryvdh\Snappy\ImageWrapper::save($filename);
+        public static function save($filename, $overwrite = false){
+            return \Barryvdh\Snappy\ImageWrapper::save($filename, $overwrite);
         }
         
         /**
@@ -11765,4 +11766,6 @@ namespace {
 
 
 }
+
+
 

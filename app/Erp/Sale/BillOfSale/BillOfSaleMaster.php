@@ -46,7 +46,9 @@ class BillOfSaleMaster extends Model
     protected $table = 'erp_bill_of_sale_master';
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
-
+    protected $fillable = [
+        'customerOrderCode',
+    ];
     /**
      * 回傳這個表頭所屬的表身細項
      * @return [type] [description]
@@ -62,7 +64,7 @@ class BillOfSaleMaster extends Model
      */
     public function company()
     {
-        return $this->belongsTo('Company\Company', 'company_id', 'auto_id');
+        return $this->belongsTo('Company\Company', 'company_id', 'auto_id')->withTrashed();
     }
 
     /**

@@ -52,7 +52,12 @@ class Stock extends Model
      * @var array
      */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = [
+        'code', 'name', 'stock_class_id', 'unit_id', 'net_weight',
+        'gross_weight', 'note', 'no_tax_price_of_purchased',
+        'no_tax_price_of_sold'
 
+    ];
     /**
      * 回傳這個料品所有的庫存數量
      * @return [type] [description]

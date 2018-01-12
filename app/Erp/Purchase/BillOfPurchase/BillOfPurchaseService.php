@@ -161,7 +161,7 @@ class BillOfPurchaseService
 
             $details[$key]['unit'] = $details[$key]['unit']
                 ? $details[$key]['unit']
-                : $details[$key]['stock']->unit->comment;
+                : ($details[$key]['stock']->unit ? $details[$key]['stock']->unit->comment : null);
 
             $details[$key]['no_tax_amount'] = $this->calculator->getNoTaxAmount($key);
         }
@@ -200,8 +200,7 @@ class BillOfPurchaseService
             }
             $value['master_code'] = $code;
             //存入表身
-            $isCreated = $isCreated && $this->order
-                ->storeOrderDetail($value);
+            $isCreated = $isCreated && $this->order->storeOrderDetail($value);
             //更新倉庫數量
             $this->stock->incrementInventory(
                 $value['quantity'],
@@ -246,9 +245,7 @@ class BillOfPurchaseService
         $master['total_amount'] = $this->calculator->getTotalAmount();
 
         //先存入表頭
-        $isUpdated = $isUpdated && $this->order->updateOrderMaster(
-            $master, $code
-        );
+        $isUpdated = $isUpdated && $this->order->updateOrderMaster($master, $code);
         //dd($isUpdated);
         //清空表身
         $this->order->deleteOrderDetail($code);

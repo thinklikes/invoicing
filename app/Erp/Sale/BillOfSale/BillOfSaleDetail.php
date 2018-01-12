@@ -26,7 +26,10 @@ class BillOfSaleDetail extends Model
     protected $table = 'erp_bill_of_sale_detail';
 
     public $timestamps = false;
-
+    protected $fillable = [
+        'quantity',
+        'price_tax',
+    ];
     /**
      * 這個表身細項的表頭資料
      * @return [type] [description]
@@ -37,6 +40,6 @@ class BillOfSaleDetail extends Model
     }
 
     public function stock() {
-        return $this->belongsTo('Stock\Stock', 'stock_id', 'id');
+        return $this->belongsTo('Stock\Stock', 'stock_id', 'id')->withTrashed();
     }
 }

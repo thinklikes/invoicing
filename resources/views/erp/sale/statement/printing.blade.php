@@ -41,19 +41,19 @@
             <table class="width_01">
                 <tr>
                     <th>客戶名稱：</th>
-                    <td>{{ $data[$company_id][0]->company->company_name }}</td>
+                    <td>{{ $data[$company_id][0]->company->company_name or null }}</td>
                     <th>客戶編號</th>
-                    <td>{{ $data[$company_id][0]->company->company_code }}</td>
+                    <td>{{ $data[$company_id][0]->company->company_code or null }}</td>
                 </tr>
                 <tr>
                     <th>統一編號：</th>
-                    <td>{{ $data[$company_id][0]->company->VTA_NO }}</td>
+                    <td>{{ $data[$company_id][0]->company->VTA_NO or null }}</td>
                     <th>電話：</th>
-                    <td>{{ $data[$company_id][0]->company->company_tel }}</td>
+                    <td>{{ $data[$company_id][0]->company->company_tel or null }}</td>
                 </tr>
                 <tr>
                     <th>聯絡地址：</th>
-                    <td colspan="3">{{ $data[$company_id][0]->company->company_add }}</td>
+                    <td colspan="3">{{ $data[$company_id][0]->company->company_add or null }}</td>
                 </tr>
             </table>
         </div>

@@ -39,34 +39,34 @@ class FormRequestServiceProvider extends ServiceProvider
                 $requestMethod = '';
                 if (!empty($param)) {
                     switch ($param['className']) {
-                        case 'Purchase\BillOfPurchaseController':
+                        case 'BillOfPurchaseController':
                             $requestMethod = 'BillOfPurchase\BillOfPurchaseRequest';
                             break;
-                        case 'Purchase\ReturnOfPurchaseController':
+                        case 'ReturnOfPurchaseController':
                             $requestMethod = 'ReturnOfPurchase\ReturnOfPurchaseRequest';
                             break;
-                        case 'Purchase\PaymentController':
+                        case 'PaymentController':
                             $requestMethod = 'Payment\PaymentRequest';
                             break;
-                        case 'Purchase\PayableWriteOffController':
+                        case 'PayableWriteOffController':
                             $requestMethod = 'PayableWriteOff\PayableWriteOffRequest';
                             break;
-                        case 'Sale\BillOfSaleController':
+                        case 'BillOfSaleController':
                             $requestMethod = 'BillOfSale\BillOfSaleRequest';
                             break;
-                        case 'Sale\ReturnOfSaleController':
+                        case 'ReturnOfSaleController':
                             $requestMethod = 'ReturnOfSale\ReturnOfSaleRequest';
                             break;
-                        case 'Sale\ReceiptController':
+                        case 'ReceiptController':
                             $requestMethod = 'Receipt\ReceiptRequest';
                             break;
-                        case 'Sale\ReceivableWriteOffController':
+                        case 'ReceivableWriteOffController':
                             $requestMethod = 'ReceivableWriteOff\ReceivableWriteOffRequest';
                             break;
-                        case 'StockManager\StockAdjustController':
+                        case 'StockAdjustController':
                             $requestMethod = 'StockAdjust\StockAdjustRequest';
                             break;
-                        case 'StockManager\StockTransferController':
+                        case 'StockTransferController':
                             $requestMethod = 'StockTransfer\StockTransferRequest';
                             break;
                         case 'user':

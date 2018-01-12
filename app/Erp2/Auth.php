@@ -23,6 +23,6 @@ class Auth extends Model
      */
     public function pages()
     {
-        return $this->belongsToMany('Page\Page', 'erp_page_auths', 'auth_level', 'page_code');
+        return $this->belongsToMany('App\Page', 'erp_page_auths', 'auth_level', 'page_code');
     }
 }

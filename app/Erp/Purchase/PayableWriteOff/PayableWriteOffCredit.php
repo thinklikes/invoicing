@@ -26,6 +26,7 @@ class PayableWriteOffCredit extends Model
 
     public function Payment()
     {
-        return $this->belongsTo('Payment\Payment', 'credit_code', 'code');
+        return $this->belongsTo('Payment\Payment', 'credit_code', 'code')
+            ->withTrashed();
     }
 }

@@ -15,7 +15,7 @@
 
 @section('content')
         <div style="float:right; margin-bottom:10px;">
-            <img src="data:image/png;base64,
+            <img  class="barcode" src="data:image/png;base64,
                 {{
                     base64_encode(
                         $BarcodeGenerator->getBarcode(

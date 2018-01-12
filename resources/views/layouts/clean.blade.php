@@ -1,4 +1,4 @@
-@inject('page', 'Page\PagePresenter')
+@inject('page', 'App\Presenters\PagePresenter')
 @inject('presenter', 'App\Presenters\StatusPresenter')
 
 <!DOCTYPE html>

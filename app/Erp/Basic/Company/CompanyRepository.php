@@ -4,12 +4,10 @@ namespace Company;
 
 use App;
 use App\Repositories\BasicRepository;
-use DB;
+use Company\Company;
 
 class CompanyRepository extends BasicRepository
 {
-    protected $company;
-
     public $countsPerPage = 15;
     /**
      * UserRepository constructor.
@@ -18,7 +16,7 @@ class CompanyRepository extends BasicRepository
      */
     public function __construct(Company $company)
     {
-        $this->company = $company;
+        $this->mainModel = $company;
     }
 
     /**
@@ -27,8 +25,7 @@ class CompanyRepository extends BasicRepository
      */
     public function getCompanyJson($param)
     {
-        return $this->company
-            ->select('auto_id', 'company_code', 'company_abb', 'company_name')
+        return $this->mainModel
             ->where(function ($query) use($param) {
                 if (isset($param['name'])) {
                     $query->orWhere(
@@ -47,7 +44,7 @@ class CompanyRepository extends BasicRepository
 
     public function getCompanyById($id)
     {
-        return $this->company
+        return $this->mainModel
             ->where('auto_id', $id)
             ->firstOrFail();
     }
@@ -58,7 +55,7 @@ class CompanyRepository extends BasicRepository
      */
     public function getCompanyPaginated($param, $ordersPerPage)
     {
-        return $this->company->where(function ($query) use($param) {
+        return $this->mainModel->where(function ($query) use($param) {
             if (isset($param['name']) && $param['name'] != "") {
                 $query->orWhere('company_name', 'like', "%".trim($param['name'])."%");
             }
@@ -75,7 +72,7 @@ class CompanyRepository extends BasicRepository
 
     public function getCompanyfieldById($field, $id)
     {
-        return $this->company->where('auto_id', $id)->value($field);
+        return $this->mainModel->where('auto_id', $id)->value($field);
     }
 
     /**
@@ -85,7 +82,7 @@ class CompanyRepository extends BasicRepository
      */
     public function getAllCompanies()
     {
-        return $this->company->orderBy('auto_id', 'desc')->get();
+        return $this->mainModel->orderBy('auto_id', 'desc')->get();
     }
 
     /**
@@ -95,17 +92,12 @@ class CompanyRepository extends BasicRepository
      */
     public function storeCompany($company)
     {
-        $columnsOfMaster = $this->getTableColumnList($this->company);
-        $this->company = App::make('Company\Company');
+        $columnsOfMaster = $this->getTableColumnList($this->mainModel);
+        $mainModel = $this->getNew();
         //判斷request傳來的欄位是否存在，有才存入此欄位數值
-        foreach($columnsOfMaster as $key) {
-            if (isset($company[$key])) {
-                $this->company->{$key} = $company[$key];
-            }
-        }
-
+        $mainModel->fill($company);
         //開始存入表頭
-        return [$this->company->save(), $this->company->auto_id];
+        return [$mainModel->save(), $mainModel->auto_id];
     }
 
     /**
@@ -115,21 +107,21 @@ class CompanyRepository extends BasicRepository
      */
     public function updateCompany($company, $id)
     {
-        $columnsOfMaster = $this->getTableColumnList($this->company);
+        $columnsOfMaster = $this->getTableColumnList($this->mainModel);
 
-        $this->company = $this->company
+        $this->mainModel = $this->mainModel
             ->where('auto_id', $id)
             ->first();
 
         //有這個欄位才存入
         foreach($columnsOfMaster as $key) {
             if (isset($company[$key])) {
-                $this->company->{$key} = $company[$key];
+                $this->mainModel->{$key} = $company[$key];
             }
         }
-        //$this->company->code = $code;
+        //$this->mainModel->code = $code;
         //開始存入表頭
-        return $this->company->save();
+        return $this->mainModel->save();
     }
 
     /**
@@ -139,9 +131,24 @@ class CompanyRepository extends BasicRepository
      */
     public function deleteCompany($id)
     {
-        return $this->company
+        return $this->mainModel
             ->where('auto_id', $id)
             ->first()
             ->delete();
+    }
+
+    /**
+     * 檢查電商平台上傳的內容，其中的客戶是否有存在
+     * @param  arrray $dataRow 電商平台文件中的一個excel row
+     * @return boolean 是否已有這個客戶
+     */
+    public function checkCompanyExistsForB2C($dataRow)
+    {
+        $company = $this->mainModel->where('company_name', '=', $dataRow['company_name'])
+            ->where('company_tel', '=', $dataRow['company_tel'])
+            ->where('company_add', '=', $dataRow['company_add'])
+            ->first();
+
+        return $company ? $company : false;
     }
 }

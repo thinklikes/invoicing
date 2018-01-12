@@ -35,8 +35,8 @@ class BillOfPurchaseRequest extends Request implements FormRequestInterface
 
         $rules = [
                 //表頭驗證規則
-                "{$this->orderMasterInputName}.date"
-                    => "required|date|after:".$lastDayOfPrevMonth,
+//                "{$this->orderMasterInputName}.date"
+//                    => "required|date|after:".$lastDayOfPrevMonth,
                 "{$this->orderMasterInputName}.supplier_id"
                     => "required",
                 // "{$this->orderMasterInputName}.tax_rate_code"

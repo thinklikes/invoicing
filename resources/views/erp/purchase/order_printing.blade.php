@@ -26,25 +26,25 @@
         <table id="master" class="l_move d_01">
             <tr>
                 <th>供應商名稱：</th>
-                <td>{{ ${$headName}->supplier->name }}</td>
+                <td>{{ ${$headName}->supplier->name or null }}</td>
                 <th>供應商編號：</th>
                 <td>
-                    {{ ${$headName}->supplier->code }}
+                    {{ ${$headName}->supplier->code or null }}
                 </td>
             </tr>
             <tr>
                 <th>統一編號：</th>
-                <td>{{ ${$headName}->supplier->taxNumber }}</td>
+                <td>{{ ${$headName}->supplier->taxNumber or null }}</td>
                 <th>電話：</th>
-                <td>{{ ${$headName}->supplier->telphone }}</td>
+                <td>{{ ${$headName}->supplier->telphone or null }}</td>
             </tr>
             <tr>
                 <th>聯絡地址：</th>
-                <td colspan="3">{{ ${$headName}->supplier->address }}</td>
+                <td colspan="3">{{ ${$headName}->supplier->address or null }}</td>
             </tr>
             <tr>
                 <th>送貨地址：</th>
-                <td colspan="3">{{ ${$headName}->supplier->address }}</td>
+                <td colspan="3">{{ ${$headName}->supplier->address or null }}</td>
             </tr>
         </table>
         <table class="r_move">
@@ -63,7 +63,7 @@
           <tr>
              <th>倉庫：</th>
               <td colspan="3">
-                 {{ ${$headName}->warehouse->name }}
+                 {{ ${$headName}->warehouse->name or null }}
               </td>
           </tr>
         </table>
@@ -84,10 +84,10 @@
 
     @foreach(${$bodyName} as $i => $value)
                 <tr>
-                    <td>{{ ${$bodyName}[$i]->stock->code }}</td>
-                    <td>{{ ${$bodyName}[$i]->stock->name }}</td>
+                    <td>{{ ${$bodyName}[$i]->stock->code or null }}</td>
+                    <td>{{ ${$bodyName}[$i]->stock->name or null }}</td>
                     <td class="numeric">{{ ${$bodyName}[$i]['quantity'] }}</td>
-                    <td class="numeric">{{ ${$bodyName}[$i]->stock->unit->comment }}</td>
+                    <td class="numeric">{{ ${$bodyName}[$i]->stock->unit->comment or null }}</td>
                     <td class="numeric">{{ ${$bodyName}[$i]['no_tax_price'] }}</td>
                     <td class="numeric">
                         {{

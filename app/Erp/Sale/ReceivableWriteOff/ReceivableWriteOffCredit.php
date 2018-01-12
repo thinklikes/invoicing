@@ -29,11 +29,13 @@ class ReceivableWriteOffCredit extends Model
 
     public function billOfSale()
     {
-        return $this->belongsTo('BillOfSale\BillOfSaleMaster', 'credit_code', 'code');
+        return $this->belongsTo('BillOfSale\BillOfSaleMaster', 'credit_code', 'code')
+            ->withTrashed();
     }
 
     public function returnOfSale()
     {
-        return $this->belongsTo('ReturnOfSale\ReturnOfSaleMaster', 'credit_code', 'code');
+        return $this->belongsTo('ReturnOfSale\ReturnOfSaleMaster', 'credit_code', 'code')
+            ->withTrashed();
     }
 }

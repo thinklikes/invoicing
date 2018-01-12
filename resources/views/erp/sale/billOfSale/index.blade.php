@@ -16,7 +16,7 @@
             <tbody>
         @foreach ($orders as $order)
                 <tr>
-                    <td class="string">{{ $PublicPresenter->getFormatDate($order->created_at) }}</td>
+                    <td class="string">{{ $order->date }}</td>
                     <td class="string"><a href="{{ url("/billOfSale/$order->code") }}">{{ $order->code }}</a></td>
                     <td class="string">{{ $order->company->company_code }}</td>
                     <td class="string">{{ $order->company->company_name }}</td>

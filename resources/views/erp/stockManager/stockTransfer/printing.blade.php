@@ -31,11 +31,11 @@
             <tr>
                 <th>調出倉庫</th>
                 <td>
-                    {{ $stockTransferMaster->from_warehouse->name }}
+                    {{ $stockTransferMaster->from_warehouse->name or null }}
                 </td>
                 <th>調入倉庫</th>
                 <td>
-                    {{ $stockTransferMaster->to_warehouse->name }}
+                    {{ $stockTransferMaster->to_warehouse->name or null }}
                 </td>
             </tr>
             <tr>
@@ -64,7 +64,7 @@
                     <td class="string">{{ $stockTransferDetail[$i]->stock->code }}</td>
                     <td class="string">{{ $stockTransferDetail[$i]->stock->name }}</td>
                     <td class="numeric">{{ $stockTransferDetail[$i]['quantity'] }}</td>
-                    <td class="string">{{ $stockTransferDetail[$i]->stock->unit->comment }}</td>
+                    <td class="string">{{ $stockTransferDetail[$i]->stock->unit->comment or null }}</td>
                     <td class="numeric">{{ $stockTransferDetail[$i]['no_tax_price'] }}</td>
                     <td class="numeric">{{ $OrderCalculator->getNoTaxAmount($i) }}</td>
                 </tr>

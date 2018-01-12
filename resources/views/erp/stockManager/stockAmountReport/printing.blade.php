@@ -40,15 +40,15 @@
             <table class="width_01">
                 <tr>
                     <th>料品名稱：</th>
-                    <td>{{ $data[$stock_id][0]->stock->name }}</td>
+                    <td>{{ $data[$stock_id][0]->stock->name or null }}</td>
                     <th>料品單位</th>
-                    <td>{{ $data[$stock_id][0]->stock->unit->comment }}</td>
+                    <td>{{ $data[$stock_id][0]->stock->unit->comment or null }}</td>
                 </tr>
                 <tr>
                     <th>料品代號：</th>
-                    <td>{{ $data[$stock_id][0]->stock->code }}</td>
+                    <td>{{ $data[$stock_id][0]->stock->code or null }}</td>
                     <th>料品類別</th>
-                    <td>{{ $data[$stock_id][0]->stock->stock_class->comment }}</td>
+                    <td>{{ $data[$stock_id][0]->stock->stock_class->comment or null }}</td>
                 </tr>
             </table>
         </div>
@@ -65,12 +65,12 @@
                 <tbody>
         @foreach($data[$stock_id] as $key => $value)
                     <tr>
-                        <td class="string">{{ $value->warehouse->name }}</td>
+                        <td class="string">{{ $value->warehouse->name or null }}</td>
                         <td class="numeric">
                             {{ number_format($value->inventory) }}
                         </td>
                         <td class="numeric">
-                            {{ $value->stock->no_tax_price_of_purchased }}
+                            {{ $value->stock->no_tax_price_of_purchased or null }}
                         </td>
                         <td class="numeric">
                             {{

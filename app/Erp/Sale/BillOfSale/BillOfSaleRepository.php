@@ -10,7 +10,6 @@ use DB;
 
 class BillOfSaleRepository extends BasicRepository
 {
-    protected $orderMaster;
     protected $orderDetail;
     /**
      * BillOfSaleRepository constructor.
@@ -20,7 +19,7 @@ class BillOfSaleRepository extends BasicRepository
     public function __construct(
         OrderMaster $orderMaster, OrderDetail $orderDetail)
     {
-        $this->orderMaster = $orderMaster;//$OrderMaster;
+        $this->mainModel = $orderMaster;//$OrderMaster;
         $this->orderDetail = $orderDetail;
     }
 
@@ -31,7 +30,8 @@ class BillOfSaleRepository extends BasicRepository
      */
     public function getOrderMaster($code)
     {
-        return $this->orderMaster->where('code', $code)->firstOrFail();
+        return $this->mainModel->with('company', 'warehouse')
+            ->where('code', $code)->firstOrFail();
     }
 
     /**
@@ -41,7 +41,7 @@ class BillOfSaleRepository extends BasicRepository
      */
     public function getOrderDetail($code)
     {
-        return $this->orderDetail->where('master_code', $code)->get();
+        return $this->orderDetail->with('stock')->where('master_code', $code)->get();
     }
 
     /**
@@ -51,17 +51,17 @@ class BillOfSaleRepository extends BasicRepository
      */
     public function storeOrderMaster($orderMaster)
     {
-        $columnsOfMaster = $this->getTableColumnList($this->orderMaster);
-        $this->orderMaster = App::make(OrderMaster::class);
+        $columnsOfMaster = $this->getTableColumnList($this->mainModel);
+        $this->mainModel = App::make(OrderMaster::class);
         //判斷request傳來的欄位是否存在，有才存入此欄位數值
         foreach($columnsOfMaster as $key) {
             if (isset($orderMaster[$key])) {
-                $this->orderMaster->{$key} = $orderMaster[$key];
+                $this->mainModel->{$key} = $orderMaster[$key];
             }
         }
 
         //開始存入表頭
-        return $this->orderMaster->save();
+        return $this->mainModel->save();
     }
 
     /**
@@ -93,21 +93,21 @@ class BillOfSaleRepository extends BasicRepository
      */
     public function updateOrderMaster($orderMaster, $code)
     {
-        $columnsOfMaster = $this->getTableColumnList($this->orderMaster);
+        $columnsOfMaster = $this->getTableColumnList($this->mainModel);
 
-        $this->orderMaster = $this->orderMaster
+        $this->mainModel = $this->mainModel
             ->where('code', $code)
             ->first();
 
         //有這個欄位才存入
         foreach($columnsOfMaster as $key) {
             if (isset($orderMaster[$key])) {
-                $this->orderMaster->{$key} = $orderMaster[$key];
+                $this->mainModel->{$key} = $orderMaster[$key];
             }
         }
-        $this->orderMaster->code = $code;
+        $this->mainModel->code = $code;
         //開始存入表頭
-        return $this->orderMaster->save();
+        return $this->mainModel->save();
     }
 
     /**
@@ -118,7 +118,7 @@ class BillOfSaleRepository extends BasicRepository
      */
     public function incrementReceivedAmount($amount, $code)
     {
-        return $this->orderMaster->where('code', $code)
+        return $this->mainModel->where('code', $code)
             ->increment('received_amount', $amount);
     }
 
@@ -130,7 +130,7 @@ class BillOfSaleRepository extends BasicRepository
      */
     public function setIsReceived($is_received, $code)
     {
-        return $this->orderMaster->where('code', $code)
+        return $this->mainModel->where('code', $code)
             ->update(['is_received' => $is_received]);
     }
 
@@ -141,7 +141,7 @@ class BillOfSaleRepository extends BasicRepository
      */
     public function deleteOrderMaster($code)
     {
-        return $this->orderMaster
+        return $this->mainModel
             ->where('code', $code)
             ->first()
             ->delete();
@@ -165,7 +165,7 @@ class BillOfSaleRepository extends BasicRepository
     public function getFullOrderDetailByConditions(
         $company_id = '', $stock_id = '', $start_date = '', $end_date = '')
     {
-        return $this->orderMaster
+        return $this->mainModel
             ->with(['orderDetail' => function ($query) use ($stock_id) {
                 if ($stock_id != '') {
                     $query->where('stock_id', '=', $stock_id);
@@ -199,7 +199,7 @@ class BillOfSaleRepository extends BasicRepository
     public function getReceivableByCompanyId(
         $company_id = '', $start_date = '', $end_date = '')
     {
-        return $this->orderMaster
+        return $this->mainModel
             ->select('id', 'code', 'tax_rate_code', 'invoice_code',
                 'total_amount', 'received_amount', 'date', 'company_id')
             ->Where(function ($query) use ($company_id, $start_date, $end_date) {
@@ -220,7 +220,7 @@ class BillOfSaleRepository extends BasicRepository
 
     public function getReceivableData($param = [])
     {
-        return $this->orderMaster
+        return $this->mainModel
             ->select('id', 'code', 'tax_rate_code', 'invoice_code',
                 'total_amount', 'received_amount', 'date', 'company_id')
             ->Where(function ($query) use ($param) {
@@ -241,7 +241,7 @@ class BillOfSaleRepository extends BasicRepository
      */
     public function getNewOrderCode()
     {
-        $code = $this->orderMaster->select('code')
+        $code = $this->mainModel->select('code')
             ->where('code', 'like', date('Ymd').'%')
             ->orderBy('code', 'desc')
             ->withTrashed()
@@ -260,19 +260,30 @@ class BillOfSaleRepository extends BasicRepository
      */
     public function getOrdersPaginated($count)
     {
-        return $this->orderMaster->orderBy('id', 'desc')->paginate($count);
+        return $this->mainModel->orderBy('id', 'desc')->paginate($count);
     }
 
     public function getOrderMasterfield($field, $code)
     {
-        return $this->orderMaster->where('code', $code)->value($field);
+        return $this->mainModel->where('code', $code)->value($field);
     }
 
     public function getNotReceivedAmount($code)
     {
-        return $this->orderMaster->select(DB::raw('(total_amount - received_amount) as not_received_amount'))
+        return $this->mainModel->select(DB::raw('(total_amount - received_amount) as not_received_amount'))
             ->where('code', $code)->value('not_received_amount');
     }
 
+    /**
+     * 檢查電商平台上傳的內容，其中的訂單號是否有存在
+     * @param  arrray $dataRow 電商平台文件中的一個excel row
+     * @return boolean 是否已有這個客戶
+     */
+    public function checkBillExistsForB2C($dataRow)
+    {
+        $bill = $this->mainModel->where('customerOrderCode', '=', $dataRow['customerOrderCode'])
+            ->first();
 
+        return $bill ? $bill : false;
+    }
 }

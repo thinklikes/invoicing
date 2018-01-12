@@ -60,7 +60,7 @@
                     <td>{{ $billOfPurchaseDetail[$i]['stock']->code }}</td>
                     <td>{{ $billOfPurchaseDetail[$i]['stock']->name }}</td>
                     <td class="numeric">{{ $billOfPurchaseDetail[$i]['quantity'] }}</td>
-                    <td class="string">{{ $billOfPurchaseDetail[$i]['stock']->unit->comment }}</td>
+                    <td class="string">{{ $billOfPurchaseDetail[$i]['stock']->unit->comment or null}}</td>
                     <td class="numeric">{{ $billOfPurchaseDetail[$i]['no_tax_price'] }}</td>
                     <td class="numeric">
                         {{

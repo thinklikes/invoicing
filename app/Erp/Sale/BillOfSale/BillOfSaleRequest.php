@@ -31,13 +31,13 @@ class BillOfSaleRequest extends Request implements FormRequestInterface
     public function rules()
     {
 
-        $lastDayOfPrevMonth = Carbon::now()->subMonth()
+        $lastDayOfPrevMonth = Carbon::now()->subMonth(1)
             ->format('Y-m-t');
 
         $rules = [
                 //表頭驗證規則
-                "{$this->masterInputName}.date"
-                    => "required|date|after:".$lastDayOfPrevMonth,
+//                "{$this->masterInputName}.date"
+//                    => "required|date|after:".$lastDayOfPrevMonth,
                 "{$this->masterInputName}.company_id"
                     => "required",
                 // "{$this->masterInputName}.tax_rate_code"

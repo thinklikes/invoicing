@@ -15,13 +15,12 @@ class PageAuthMiddleware
      */
     public function handle($request, Closure $next)
     {
-        //取得目前執行的控制器方法
-        $action = str_replace("App\\Http\\Controllers\\", "",
-            $request->route()->getActionName());
+        //取得目前執行的路由名稱
+        $route_name = $request->route()->getName();
 
-        $result = $request->user()->auth->pages->contains('action', $action);
+        $result = $request->user()->auth->pages->contains('route_name', $route_name);
 
-        if (preg_match("/(json|printing|printBarcode|printTag)$/", $action)) {
+        if (preg_match("/(json|printing|printBarcode|printTag)$/", $route_name)) {
             $result = true;
         }
 

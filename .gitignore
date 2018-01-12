@@ -8,4 +8,6 @@
 Homestead.yaml
 Homestead.json
 .env
-
+/.bash_profile
+/.vscode/settings.json
+/.idea/*

@@ -15,18 +15,22 @@
 @section('content')
         <table id="master" width="100%" class="table">
             <tr>
-                <td>開單日期</td>
+                <th>開單日期</th>
                 <td>{{ $billOfSaleMaster->date }}</td>
-                <td>銷貨單號</td>
+                <th>銷貨單號</th>
                 <td>{{ $billOfSaleMaster->code }}</td>
-                <td>發票號碼</td>
+                <th>發票號碼</th>
                 <td>{{ $billOfSaleMaster->invoice_code }}</td>
             </tr>
             <tr>
                 <th>客戶</th>
-                <td colspan="5">
+                <td colspan="3">
                     {{ $billOfSaleMaster->company->company_code }}
                     {{ $billOfSaleMaster->company->company_name }}
+                </td>
+                <th>客戶訂單號碼</th>
+                <td colspan="5">
+                    {{ $billOfSaleMaster->customerOrderCode }}
                 </td>
             </tr>
             <tr>
@@ -68,8 +72,8 @@
                         }}
                     </td>
                     <td class="numeric">{{ $billOfSaleDetail[$i]['quantity'] }}</td>
-                    <td class="string">{{ $billOfSaleDetail[$i]['stock']->unit->comment }}</td>
-                    <td class="numeric">{{ $billOfSaleDetail[$i]['no_tax_price'] }}</td>
+                    <td class="string">{{ $billOfSaleDetail[$i]['stock']->unit->comment or null}}</td>
+                    <td class="numeric">{{ $billOfSaleDetail[$i]['no_tax_price']}}</td>
                     <td class="numeric">
                         {{
                             number_format($billOfSaleDetail[$i]['no_tax_amount'],

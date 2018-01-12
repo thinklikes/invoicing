@@ -21,25 +21,25 @@
         <table id="master" class="l_move d_01">
             <tr>
                 <th>客戶名稱：</th>
-                <td>{{ ${$headName}->company->company_name }}</td>
+                <td>{{ ${$headName}->company->company_name or null }}</td>
                 <th>客戶編號：</th>
                 <td>
-                    {{ ${$headName}->company->company_code }}
+                    {{ ${$headName}->company->company_code or null }}
                 </td>
             </tr>
             <tr>
                 <th>統一編號：</th>
-                <td>{{ ${$headName}->company->VTA_NO }}</td>
+                <td>{{ ${$headName}->company->VTA_NO or null }}</td>
                 <th>電話：</th>
-                <td>{{ ${$headName}->company->company_tel }}</td>
+                <td>{{ ${$headName}->company->company_tel or null }}</td>
             </tr>
             <tr>
                 <th>聯絡地址：</th>
-                <td colspan="3">{{ ${$headName}->company->company_add }}</td>
+                <td colspan="3">{{ ${$headName}->company->company_add or null }}</td>
             </tr>
             <tr>
                 <th>送貨地址：</th>
-                <td colspan="3">{{ ${$headName}->company->company_add }}</td>
+                <td colspan="3">{{ ${$headName}->company->company_add or null }}</td>
             </tr>
         </table>
         <table class="r_move">
@@ -79,10 +79,10 @@
 
     @foreach(${$bodyName} as $i => $value)
                 <tr>
-                    <td>{{ ${$bodyName}[$i]->stock->code }}</td>
-                    <td>{{ ${$bodyName}[$i]->stock->name }}</td>
+                    <td>{{ ${$bodyName}[$i]->stock->code or null }}</td>
+                    <td>{{ ${$bodyName}[$i]->stock->name or null }}</td>
                     <td class="numeric">{{ ${$bodyName}[$i]['quantity'] }}</td>
-                    <td class="numeric">{{ ${$bodyName}[$i]->stock->unit->comment }}</td>
+                    <td class="numeric">{{ ${$bodyName}[$i]->stock->unit->comment or null }}</td>
                     <td class="numeric">{{ ${$bodyName}[$i]['no_tax_price'] }}</td>
                     <td class="numeric">{{ ${$bodyName}[$i]['no_tax_amount'] }}</td>
                 </tr>

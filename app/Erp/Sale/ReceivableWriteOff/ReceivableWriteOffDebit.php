@@ -26,6 +26,7 @@ class ReceivableWriteOffDebit extends Model
 
     public function Receipt()
     {
-        return $this->belongsTo('Receipt\Receipt', 'debit_code', 'code');
+        return $this->belongsTo('Receipt\Receipt', 'debit_code', 'code')
+            ->withTrashed();
     }
 }

@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-use Page\PageService as Service;
+use App\Services\PageService as Service;
 use Gate;
 use Auth;
 
@@ -30,52 +30,19 @@ class PageController extends Controller
             return view('portal');
         }
 
-        return redirect('/erp');
+        return redirect('/menu/erp');
     }
     /**
-     * show出進銷存首頁
+     * show出菜單
      * @param  Request $request 使用者的請求
      * @return Response           回應的頁面
      */
-    public function index(Request $request)
+    public function menu(Request $request)
     {
-        return view('home', [
-            'pages' => $this->service->getSubPagesOfIndex($request->user())
-        ]);
-    }
+        $method = \Route::current()->getName();
 
-    public function basic(Request $request)
-    {
         return view('home', [
-            'pages' => $this->service->getSubPagesOfSubIndex($request->user(), "basic")
-        ]);
-    }
-
-    public function purchase(Request $request)
-    {
-        return view('home', [
-            'pages' => $this->service->getSubPagesOfSubIndex($request->user(), "purchase")
-        ]);
-    }
-
-    public function sale(Request $request)
-    {
-        return view('home', [
-            'pages' => $this->service->getSubPagesOfSubIndex($request->user(), "sale")
-        ]);
-    }
-
-    public function stockManager(Request $request)
-    {
-        return view('home', [
-            'pages' => $this->service->getSubPagesOfSubIndex($request->user(), "stockManager")
-        ]);
-    }
-
-    public function system(Request $request)
-    {
-        return view('home', [
-            'pages' => $this->service->getSubPagesOfSubIndex($request->user(), "system")
+            'pages' => $this->service->getSubPagesByUser($request->user(), $method)
         ]);
     }
 }

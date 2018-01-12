@@ -15,7 +15,7 @@
                     <td><input type="text" name="supplier[name]" id="name" value="{{ $supplier['name'] }}"></td>
                 </tr>
                 <tr>
-                    <th>供應商簡稱</th>
+                    <th>供應商品</th>
                     <td><input type="text" name="supplier[shortName]" id="shortName" value="{{ $supplier['shortName'] }}"></td>
                 </tr>
                 <tr>
@@ -57,6 +57,18 @@
                 <tr>
                     <th>統一編號</th>
                     <td><input type="text" name="supplier[taxNumber]" id="taxNumber" value="{{ $supplier['taxNumber'] }}"></td>
+                </tr>
+                <tr>
+                    <th>匯款戶名</th>
+                    <td><input type="text" name="supplier[remName]" id="taxNumber" value="{{ $supplier['remName'] }}"></td>
+                </tr>
+                <tr>
+                    <th>匯款局號</th>
+                    <td><input type="text" name="supplier[remBureau]" id="taxNumber" value="{{ $supplier['remBureau'] }}"></td>
+                </tr>
+                <tr>
+                    <th>匯款帳號</th>
+                    <td><input type="text" name="supplier[remAccount]" id="taxNumber" value="{{ $supplier['remAccount'] }}"></td>
                 </tr>
             </table>
             <button class="btn btn-default">確認送出</button>

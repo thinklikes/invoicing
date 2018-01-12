@@ -163,7 +163,7 @@ class ReturnOfPurchaseService
 
             $details[$key]['unit'] = $details[$key]['unit']
                 ? $details[$key]['unit']
-                : $details[$key]['stock']->unit->comment;
+                : ($details[$key]['stock']->unit ? $details[$key]['stock']->unit->comment : null);
 
             $details[$key]['no_tax_amount'] = $this->calculator->getNoTaxAmount($key);
         }

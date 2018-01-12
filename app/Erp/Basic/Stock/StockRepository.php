@@ -2,11 +2,20 @@
 
 namespace Stock;
 
-use DB;
+use Stock\Stock as mainModel;
+use App\Repositories\BasicRepository;
 use Warehouse\WarehouseRepository as Warehouse;
-
-class StockRepository
+class StockRepository extends BasicRepository
 {
+    /**
+     * UserRepository constructor.
+     *
+     * @param User $user
+     */
+    public function __construct(Stock $stock)
+    {
+        $this->mainModel = $stock;
+    }
     /**
      * find 15 Stocks to JSON
      * @return array all suppliers
@@ -94,9 +103,7 @@ class StockRepository
     public function storeStock($stock)
     {
         $new_stock = new Stock;
-        foreach($stock as $key => $value) {
-            $new_stock->{$key} = $value;
-        }
+        $new_stock->fill($stock);
         $new_stock->save();
 
         //寫入stocks_warehouses, 多對多關聯
@@ -129,5 +136,28 @@ class StockRepository
     {
         $tmp_stock = Stock::find($id);
         $tmp_stock->delete();
+    }
+
+    /**
+     * 取得所有的料品編號與名稱
+     * @return collection     內容是Stock\Stock的集合
+     */
+    public function getAllStockNameAndCode()
+    {
+        return Stock::select('id', 'code', 'name')
+            ->orderBy('id', 'desc')->get();
+    }
+
+    /**
+     * 檢查電商平台上傳的內容，其中的品項是否有存在
+     * @param  arrray $dataRow 電商平台文件中的一個excel row
+     * @return boolean 是否已有這個客戶
+     */
+    public function checkStockExistsForB2C($dataRow)
+    {
+        $stock = Stock::where('name', '=', $dataRow['name'])
+            ->first();
+
+        return $stock ? $stock : false;
     }
 }

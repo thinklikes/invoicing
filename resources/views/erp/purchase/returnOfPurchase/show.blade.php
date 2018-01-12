@@ -59,7 +59,7 @@
                     <td>{{ $returnOfPurchaseDetail[$i]['stock']->code }}</td>
                     <td>{{ $returnOfPurchaseDetail[$i]['stock']->name }}</td>
                     <td class="numeric">{{ $returnOfPurchaseDetail[$i]['quantity'] }}</td>
-                    <td class="string">{{ $returnOfPurchaseDetail[$i]['stock']->unit->comment }}</td>
+                    <td class="string">{{ $returnOfPurchaseDetail[$i]['stock']->unit->comment or null }}</td>
                     <td class="numeric">{{ $returnOfPurchaseDetail[$i]['no_tax_price'] }}</td>
                     <td class="numeric">
                         {{

@@ -59,7 +59,7 @@
                         <div class="td" data-title="料品單位">
                             <input type="text" class="stock_unit" size="5"
                             name="{{ $bodyName }}[{{ $i }}][unit]"
-                            value="{{ $value['unit'] }}" readonly="">
+                            value="{{ $value['unit'] or null}}" readonly="">
                         </div>
                         <div class="td" data-title="稅前單價">
                             <input type="text" class="stock_no_tax_price numeric" size="10"

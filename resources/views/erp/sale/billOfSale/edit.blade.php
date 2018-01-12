@@ -43,6 +43,13 @@
                         <div class="td">{{ ${$headName}['code'] }}</div>
                     </div>
                     <div class="tr">
+                        <div class="td">客戶訂單號碼</div>
+                        <div class="td">
+                            <input type="text" name="{{ $headName }}[customerOrderCode]"
+                                value="{{ ${$headName}['customerOrderCode'] }}">
+                        </div>
+                    </div>
+                    <div class="tr">
                         <div class="td">發票號碼</div>
                         <div class="td">
                             <input type="text" name="{{ $headName }}[invoice_code]"
@@ -56,7 +63,7 @@
                                 class="company_id"
                                 value="{{ ${$headName}['company_id'] }}">
                             <input type="text" name="{{ $headName }}[company_code]"
-                                class="company_code" size="5"
+                                class="company_code"
                                 value="{{ ${$headName}['company_code'] }}">
                             <input type="text" name="{{ $headName }}[company_name]"
                                 class="company_autocomplete" size="15"

@@ -42,6 +42,6 @@ class PayableWriteOffMaster extends Model
      */
     public function supplier()
     {
-        return $this->belongsTo('Supplier\Supplier', 'supplier_id', 'id');
+        return $this->belongsTo('Supplier\Supplier', 'supplier_id', 'id')->withTrashed();
     }
 }

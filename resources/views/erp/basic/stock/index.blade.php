@@ -32,8 +32,8 @@
                 <tr>
                     <th class="string">料品代號</th>
                     <th class="string">料品名稱</th>
-                    <th class="numeric">淨重</th>
-                    <th class="numeric">毛重</th>
+                    <th class="numeric">進貨價格</th>
+                    <th class="numeric">銷貨價格</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,8 +41,8 @@
                 <tr>
                     <td class="string"><a href="{{ url("/stock/$stock->id") }}">{{ $stock->code }}</a></td>
                     <td class="string">{{ $stock->name }}</td>
-                    <td class="numeric">{{ $stock->net_weight }}</td>
-                    <td class="numeric">{{ $stock->gross_weight }}</td>
+                    <td class="numeric">{{ $stock->no_tax_price_of_purchased }}</td>
+                    <td class="numeric">{{ $stock->no_tax_price_of_sold }}</td>
                 </tr>
         @endforeach
             </tbody>
