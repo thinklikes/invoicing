@@ -1,18 +1,19 @@
 <?php
 
 return [
-    'enabled' => true, //env('APP_DEBUG') === true,
+    'enabled' => env('APP_DEBUG') === true,
     'showBar' => env('APP_ENV') !== 'production',
-    'accepts' => [
+    'accepts'      => [
         'text/html',
     ],
+    // appendTo: body | html
+    'appendTo' => 'body',
     'editor' => 'subl://open?url=file://%file&line=%line',
     'maxDepth' => 4,
     'maxLength' => 1000,
     'scream' => true,
     'showLocation' => true,
     'strictMode' => true,
-    'editorMapping' => [],
     'panels' => [
         'routing' => true,
         'database' => true,
@@ -21,7 +22,7 @@ return [
         'session' => true,
         'request' => true,
         'auth' => true,
-        'html-validator' => false,
+        'html-validator' => true,
         'terminal' => true,
     ],
 ];

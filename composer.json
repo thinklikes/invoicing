@@ -10,7 +10,6 @@
         "illuminate/html": "5.0.*",
         "nesbot/carbon": "^1.21",
         "picqer/php-barcode-generator": "^0.2.0",
-        "barryvdh/laravel-ide-helper": "^2.2",
         "doctrine/dbal": "^2.5",
         "maatwebsite/excel": "^2.1",
         "laravelcollective/bus": "^5.2",
@@ -23,7 +22,8 @@
         "phpunit/phpunit": "~4.0",
         "symfony/css-selector": "2.8.*|3.0.*",
         "symfony/dom-crawler": "2.8.*|3.0.*",
-        "recca0120/laravel-tracy": "^1.7"
+        "recca0120/laravel-tracy": "^1.7",
+        "barryvdh/laravel-ide-helper": "^2.2",
     },
     "autoload": {
         "classmap": [

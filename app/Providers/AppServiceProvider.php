@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 use App\SystemConfig;
+use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Support\ServiceProvider;
+use Recca0120\LaravelTracy\LaravelTracyServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if ($this->app->environment() == 'local')
+        {
+            $this->app->register(LaravelTracyServiceProvider::class);
+            $this->app->register(IdeHelperServiceProvider::class);
+        }
     }
 }

@@ -159,8 +159,7 @@ return [
         App\Providers\ComposerServiceProvider::class,
         App\Providers\FormRequestServiceProvider::class,
         App\Providers\SystemConfigsServiceProvider::class,
-        //IDE Helper Generator
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+
         //laravelcollective
         Collective\Bus\BusServiceProvider::class,
         //Maatwebsite Excel
@@ -170,8 +169,6 @@ return [
         Erp\Providers\BarcodePrinterServiceProvider::class,
         Erp\Providers\CRUDServiceFactoryProvider::class,
         Erp\Providers\ReportServiceFactoryProvider::class,
-
-        Recca0120\LaravelTracy\LaravelTracyServiceProvider::class,
     ],
 
     /*
