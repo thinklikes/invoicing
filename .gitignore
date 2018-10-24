@@ -11,3 +11,4 @@ Homestead.json
 /.bash_profile
 /.vscode/settings.json
 /.idea/*
+/_ide_helper.php
