@@ -84,6 +84,21 @@ return [
             'schema' => 'public',
         ],
 
+
+        'heroku' => [
+            'driver' => 'mysql',
+            'host' => parse_url(env('CLEARDB_DATABASE_URL'), PHP_URL_HOST),
+            'port' => env('DB_PORT', '3306'),
+            'database' => substr(parse_url(env('CLEARDB_DATABASE_URL'), PHP_URL_PATH), 1),
+            'username' => parse_url(env('CLEARDB_DATABASE_URL'), PHP_URL_USER),
+            'password' => parse_url(env('CLEARDB_DATABASE_URL'), PHP_URL_PASS),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
     ],
 
     /*
