@@ -160,8 +160,6 @@ return [
         App\Providers\FormRequestServiceProvider::class,
         App\Providers\SystemConfigsServiceProvider::class,
 
-        //laravelcollective
-        Collective\Bus\BusServiceProvider::class,
         //Maatwebsite Excel
         Maatwebsite\Excel\ExcelServiceProvider::class,
         //Barryvdh Snappy
