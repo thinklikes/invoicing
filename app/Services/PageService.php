@@ -26,11 +26,11 @@ class PageService
 
         //判斷是否為Admin
         $isSuperAdmin = $user->can('isSuperAdmin', $user->leavl);
-        //找出首頁的子頁面，whereLoose非嚴格比對
-        $pages = $user->auth->pages->whereLoose('level', 1);
+        //找出首頁的子頁面
+        $pages = $user->auth->pages->where('level', 1);
 
         if (!$isSuperAdmin) {
-            $pages = $pages->whereLoose('enabled', 1);
+            $pages = $pages->where('enabled', 1);
         } else {
             $pages = $pages->map(function ($item, $key) {
                 if ($item->enabled == 0) {
@@ -64,15 +64,14 @@ class PageService
         $parent_code = $parent_page->code;
 
         $parent_level = $parent_page->level;
-        //找出此頁面的子頁面，whereLoose非嚴格比對
-
+        //找出此頁面的子頁面
         $pages = $user->auth->pages()->where('level', intval($parent_level) + 1)
             ->where('code', 'like', $parent_code.'%')
             ->get();
 
 
         if (!$isSuperAdmin) {
-            return $pages->whereLoose('enabled', 1);
+            return $pages->where('enabled', 1);
 
         }
         return $pages->map(function ($item, $key) {

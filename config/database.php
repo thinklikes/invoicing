@@ -84,6 +84,20 @@ return [
             'schema' => 'public',
         ],
 
+        'testing' => [
+            'driver' => 'mysql',
+            'host' => env('DB_TESTING_HOST', 'localhost'),
+            'port' => env('DB_TESTING_PORT', '3306'),
+            'database' => env('DB_TESTING_DATABASE', 'forge'),
+            'username' => env('DB_TESTING_USERNAME', 'forge'),
+            'password' => env('DB_TESTING_PASSWORD', ''),
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
+            'strict' => false,
+            'engine' => null,
+        ],
+
 
         'heroku' => [
             'driver' => 'mysql',

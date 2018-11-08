@@ -68,12 +68,6 @@ class OptionRepositoryTest extends TestCase
 
     }
 
-    public function testGetWebSiteTitle()
-    {
-        $type = gettype($this->repository->getWebSiteTitle());
-        $this->assertEquals('string', $type);
-    }
-
     public function testStoreOption()
     {
 

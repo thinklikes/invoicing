@@ -6,14 +6,15 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
+        "barryvdh/laravel-snappy": "^0.4.0",
+        "doctrine/dbal": "^2.5",
         "fideloper/proxy": "~3.3",
         "guzzlehttp/guzzle": "~6.0",
+        "h4cc/wkhtmltopdf-amd64": "^0.12.3",
         "laravel/framework": "5.5.*",
-        "picqer/php-barcode-generator": "^0.2.0",
-        "maatwebsite/excel": "^2.1",
         "laravel/tinker": "~1.0",
-        "barryvdh/laravel-snappy": "^0.4.0",
-        "h4cc/wkhtmltopdf-amd64": "^0.12.3"
+        "maatwebsite/excel": "^2.1",
+        "picqer/php-barcode-generator": "^0.2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

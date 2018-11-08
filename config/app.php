@@ -158,7 +158,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
         App\Providers\FormRequestServiceProvider::class,
-        App\Providers\SystemConfigsServiceProvider::class,
 
         //Maatwebsite Excel
         Maatwebsite\Excel\ExcelServiceProvider::class,

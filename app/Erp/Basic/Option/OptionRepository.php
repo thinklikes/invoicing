@@ -37,17 +37,6 @@ class OptionRepository
     }
 
     /**
-     * 找出網站標題
-     * @return string 網站標題的內容
-     */
-    public static function getWebSiteTitle()
-    {
-        $website_title = Option::select('value')
-            ->where('code', 'website_title')
-            ->value('value');
-        return $website_title;
-    }
-    /**
      * 更新所有SystemConfigs
      * @param [type] $configs [description]
      */
