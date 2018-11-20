@@ -1,16 +1,18 @@
 <?php
 
 namespace App\Repositories;
+use App\BaseRepository\BaseRepository;
 use App\Page;
 
-class PageRepository
+class PageRepository extends BaseRepository
 {
     protected $page;
 
-    public function __construct(Page $page)
+    protected function model()
     {
-        $this->page = $page;
+        return Page::class;
     }
+
     public function getPageByRouteName($name)
     {
         if (empty($name)) {

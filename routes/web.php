@@ -8,7 +8,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['middleware' => 'auth'], function () {
     //首頁
     Route::get('/', 'PageController@portal')->name('portal');
-    Route::group(['as' => 'menu::'], function () {
+    Route::group(['as' => 'menu-'], function () {
         Route::get('/menu/erp', 'PageController@menu')->name('erp');
         Route::get('/menu/basic', 'PageController@menu')->name('basic');
         Route::get('/menu/purchase', 'PageController@menu')->name('purchase');
@@ -24,7 +24,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/sale_orders', 'SaleOrderController');
 
     //客戶資料管理
-    Route::group(['as' => 'company::'], function () {
+    Route::group(['as' => 'company-'], function () {
         Route::get('/company/{id}/printTag', 'CompanyController@printTag')->name('printTag');
         Route::get('/company/printTag', 'CompanyController@printTag')->name('printTagAll');
         Route::get('/company/{id}/printBarcode', 'CompanyController@printBarcode')->name('printBarcode');
@@ -39,7 +39,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/company/{id?}', 'CompanyController@destroy')->name('destroy');
     });
     //供應商資料管理
-    Route::group(['as' => 'supplier::'], function () {
+    Route::group(['as' => 'supplier-'], function () {
         Route::get('/supplier/{id}/printBarcode', 'SupplierController@printBarcode')->name('printBarcode');
         Route::get('/supplier/printBarcode', 'SupplierController@printBarcode')->name('printBarcode');
         Route::post('/supplier/json', 'SupplierController@json')->name('json');
@@ -52,7 +52,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/supplier/{id?}', 'SupplierController@destroy')->name('destroy');
     });
     //料品資料管理
-    Route::group(['as' => 'stock::'], function () {
+    Route::group(['as' => 'stock-'], function () {
         Route::get('/stock/{id}/printBarcode', 'StockController@printBarcode')->name('printBarcode');
         Route::get('/stock/printBarcode', 'StockController@printBarcode')->name('printBarcode');
         Route::post('/stock/json', 'StockController@json')->name('json');
@@ -65,7 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/stock/{id?}', 'StockController@destroy')->name('destroy');
     });
     //料品單位管理
-    Route::group(['as' => 'unit::'], function () {
+    Route::group(['as' => 'unit-'], function () {
         Route::get('/unit', 'UnitController@index')->name('index');
         Route::get('/unit/create', 'UnitController@create')->name('create');
         Route::post('/unit', 'UnitController@store')->name('store');
@@ -76,7 +76,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     //料品類別管理
-    Route::group(['as' => 'stockClass::'], function () {
+    Route::group(['as' => 'stockClass-'], function () {
         Route::get('/stock_class', 'StockClassController@index')->name('index');
         Route::get('/stock_class/create', 'StockClassController@create')->name('create');
         Route::post('/stock_class', 'StockClassController@store')->name('store');
@@ -86,7 +86,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/stock_class/{id?}', 'StockClassController@destroy')->name('destroy');
     });
     //付款方式管理
-    Route::group(['as' => 'payWay::'], function () {
+    Route::group(['as' => 'payWay-'], function () {
         Route::get('/pay_way', 'PayWayController@index')->name('index');
         Route::get('/pay_way/create', 'PayWayController@create')->name('create');
         Route::post('/pay_way', 'PayWayController@store')->name('store');
@@ -96,7 +96,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/pay_way/{id?}', 'PayWayController@destroy')->name('destroy');
     });
     //倉庫資料管理
-    Route::group(['as' => 'warehouse::'], function () {
+    Route::group(['as' => 'warehouse-'], function () {
         Route::get('/warehouse', 'WarehouseController@index')->name('index');
         Route::get('/warehouse/create', 'WarehouseController@create')->name('create');
         Route::post('/warehouse', 'WarehouseController@store')->name('store');
@@ -107,7 +107,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     //系統設定維護
-    Route::group(['as' => 'systemConfig::'], function () {
+    Route::group(['as' => 'systemConfig-'], function () {
         Route::get('/system_config', 'SystemConfigController@index')->name('index');
         Route::get('/system_config/edit', 'SystemConfigController@edit')->name('edit');
         Route::put('/system_config/update', 'SystemConfigController@update')->name('update');
@@ -125,7 +125,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     //進貨單作業
-    Route::group(['as' => 'billOfPurchase::'], function () {
+    Route::group(['as' => 'billOfPurchase-'], function () {
         Route::post('/billOfPurchase/json', 'BillOfPurchaseController@json')->name('json');
         Route::get('/billOfPurchase/{code}/printing', 'BillOfPurchaseController@printing')->name('printing');
         Route::get('/billOfPurchase/{code}/excel', 'BillOfPurchaseController@printing')->name('excel');
@@ -138,7 +138,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/billOfPurchase/{id?}', 'BillOfPurchaseController@destroy')->name('destroy');
     });
     //進貨退回作業
-    Route::group(['as' => 'returnOfPurchase::'], function () {
+    Route::group(['as' => 'returnOfPurchase-'], function () {
         Route::post('/returnOfPurchase/json/', 'ReturnOfPurchaseController@json')->name('json');
         Route::get('/returnOfPurchase/{code}/printing', 'ReturnOfPurchaseController@printing')->name('printing');
         Route::get('/returnOfPurchase/{code}/excel', 'ReturnOfPurchaseController@printing')->name('excel');
@@ -151,7 +151,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/returnOfPurchase/{id?}', 'ReturnOfPurchaseController@destroy')->name('destroy');
     });
 
-    Route::group(['as' => 'payment::'], function () {
+    Route::group(['as' => 'payment-'], function () {
         Route::post('/payment/json', 'PaymentController@json')->name('json');
         Route::get('/payment', 'PaymentController@index')->name('index');
         Route::get('/payment/create', 'PaymentController@create')->name('create');
@@ -162,7 +162,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/payment/{id?}', 'PaymentController@destroy')->name('destroy');
     });
     //應付帳款沖銷單管理
-    Route::group(['as' => 'payableWriteOff::'], function () {
+    Route::group(['as' => 'payableWriteOff-'], function () {
         Route::get('/payableWriteOff', 'PayableWriteOffController@index')->name('index');
         Route::get('/payableWriteOff/create', 'PayableWriteOffController@create')->name('create');
         Route::post('/payableWriteOff', 'PayableWriteOffController@store')->name('store');
@@ -173,7 +173,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     //銷貨單作業
-    Route::group(['as' => 'billOfSale::'], function () {
+    Route::group(['as' => 'billOfSale-'], function () {
         Route::post('/billOfSale/json', 'BillOfSaleController@json')->name('json');
         Route::get('/billOfSale/{code}/printing', 'BillOfSaleController@printing')->name('printing');
         Route::get('/billOfSale/{code}/excel', 'BillOfSaleController@printing')->name('excel');
@@ -186,7 +186,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/billOfSale/{id?}', 'BillOfSaleController@destroy')->name('destroy');
     });
     //銷貨退回作業
-    Route::group(['as' => 'returnOfSale::'], function () {
+    Route::group(['as' => 'returnOfSale-'], function () {
         Route::post('/returnOfSale/json', 'ReturnOfSaleController@json')->name('json');
         Route::get('/returnOfSale/{code}/printing', 'ReturnOfSaleController@printing')->name('printing');
         Route::get('/returnOfSale/{code}/excel', 'ReturnOfSaleController@printing')->name('excel');
@@ -199,7 +199,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/returnOfSale/{id?}', 'ReturnOfSaleController@destroy')->name('destroy');
     });
 
-    Route::group(['as' => 'receipt::'], function () {
+    Route::group(['as' => 'receipt-'], function () {
         Route::post('/receipt/json', 'ReceiptController@json');
         Route::get('/receipt', 'ReceiptController@index')->name('index');
         Route::get('/receipt/create', 'ReceiptController@create')->name('create');
@@ -210,7 +210,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/receipt/{id?}', 'ReceiptController@destroy')->name('destroy');
     });
     //應收帳款沖銷單管理
-    Route::group(['as' => 'receivableWriteOff::'], function () {
+    Route::group(['as' => 'receivableWriteOff-'], function () {
         Route::get('/receivableWriteOff', 'ReceivableWriteOffController@index')->name('index');
         Route::get('/receivableWriteOff/create', 'ReceivableWriteOffController@create')->name('create');
         Route::post('/receivableWriteOff', 'ReceivableWriteOffController@store')->name('store');
@@ -220,21 +220,21 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/receivableWriteOff/{id?}', 'ReceivableWriteOffController@destroy')->name('destroy');
     });
     //對帳單
-    Route::group(['as' => 'statement::'], function () {
+    Route::group(['as' => 'statement-'], function () {
         Route::get('/statement/excel', 'StatementController@printing')->name('excel');
         Route::get('/statement', 'StatementController@index')->name('index');
         Route::get('/statement/printing', 'StatementController@printing')->name('printing');
     });
 
     //銷貨日報表
-    Route::group(['as' => 'saleReport::'], function () {
+    Route::group(['as' => 'saleReport-'], function () {
         Route::get('/saleReport/excel', 'SaleReportController@printing')->name('excel');
         Route::get('/saleReport', 'SaleReportController@index')->name('index');
         Route::get('/saleReport/printing', 'SaleReportController@printing')->name('printing');
     });
 
     //調整單作業
-    Route::group(['as' => 'stockAdjust::'], function () {
+    Route::group(['as' => 'stockAdjust-'], function () {
         Route::get('/stockAdjust/{code}/printing', 'StockAdjustController@printing');
         Route::get('/stockAdjust', 'StockAdjustController@index')->name('index');
         Route::get('/stockAdjust/create', 'StockAdjustController@create')->name('create');
@@ -245,7 +245,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/stockAdjust/{id?}', 'StockAdjustController@destroy')->name('destroy');
     });
     //轉倉單作業
-    Route::group(['as' => 'stockTransfer::'], function () {
+    Route::group(['as' => 'stockTransfer-'], function () {
         Route::get('/stockTransfer/{code}/printing', 'StockTransferController@printing')->name('printing');
         Route::get('/stockTransfer', 'StockTransferController@index')->name('index');
         Route::get('/stockTransfer/create', 'StockTransferController@create')->name('create');
@@ -256,14 +256,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/stockTransfer/{id?}', 'StockTransferController@destroy')->name('destroy');
     });
     //庫存異動報表
-    Route::group(['as' => 'stockInOutReport::'], function () {
+    Route::group(['as' => 'stockInOutReport-'], function () {
         Route::get('/stockInOutReport/excel', 'StockInOutReportController@printing')->name('excel');
         Route::get('/stockInOutReport', 'StockInOutReportController@index')->name('index');
         Route::get('/stockInOutReport/printing', 'StockInOutReportController@printing')->name('printing');
     });
 
     //使用者與權限管理
-    Route::group(['as' => 'CRUD::'], function () {
+    Route::group(['as' => 'CRUD-'], function () {
         Route::get('/user', 'CRUDController@index')->name('index');
         Route::get('/user/create', 'CRUDController@create')->name('create');
         Route::post('/user', 'CRUDController@store')->name('store');
@@ -273,7 +273,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/user/{id?}', 'CRUDController@destroy')->name('destroy');
     });
     //庫存總表
-    Route::group(['as' => 'report::'], function () {
+    Route::group(['as' => 'report-'], function () {
         Route::get('/stockAmountReport', 'ReportController@index')->name('index');
         Route::get('/stockAmountReport/printing', 'ReportController@printing')->name('printing');
     });
@@ -283,13 +283,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/orderUploader/save', 'OrderUploader@save')->name('orderUploader::save');
 
     // 電商平台品名對照表編輯器
-    Route::group(['as' => 'itemMappingEditor::'], function() {
+    Route::group(['as' => 'itemMappingEditor-'], function() {
         Route::get('/itemMappingEditor', 'ItemMappingEditor@index')->name('index');
         Route::get('/itemMappingEditor/{platform}', 'ItemMappingEditor@subIndex')->name('subIndex');
         Route::post('/itemMappingEditor', 'ItemMappingEditor@save')->name('save');
     });
 
-    Route::group(['as' => 'B2COrder::'], function() {
+    Route::group(['as' => 'B2COrder-'], function() {
         Route::get('/b2cOrder', 'B2COrderController@index')->name('index');
         Route::get('/b2cOrder/{platform}', 'B2COrderController@subIndex')->name('subIndex');
         Route::get('/b2cOrder/detail/{platform}', 'B2COrderController@detail')->name('detail');
