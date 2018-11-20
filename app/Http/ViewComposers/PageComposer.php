@@ -3,7 +3,7 @@
 namespace App\Http\ViewComposers;
 
 use Illuminate\Contracts\View\View;
-use App\Repositories\PageRepository as PageRepository;
+use App\Repositories\PageRepository;
 
 class PageComposer
 {
@@ -12,7 +12,7 @@ class PageComposer
      *
      * @var PageRepository
      */
-    protected $users;
+    protected $pages;
 
     /**
      * 建立一個新的個人資料視圖組件。
@@ -23,7 +23,7 @@ class PageComposer
     public function __construct(PageRepository $pages)
     {
         // 所有依賴都會自動地被服務容器解析...
-        $this->users = $users;
+        $this->pages = $pages;
     }
 
     /**
@@ -34,6 +34,6 @@ class PageComposer
      */
     public function compose(View $view)
     {
-        $view->with('count', $this->users->count());
+        $view->with('pages', $this->pages->all());
     }
 }

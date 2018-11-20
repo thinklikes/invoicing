@@ -1,5 +1,3 @@
-@include('layouts.menu')
-
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -72,7 +70,10 @@
                 </div>
             </div>
         </nav>
-
+        @guest
+        @else
+            @include('layouts.menu');
+        @endguest
         @yield('content')
     </div>
 
